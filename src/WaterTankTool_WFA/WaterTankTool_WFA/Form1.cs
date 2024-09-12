@@ -26,4 +26,24 @@ public partial class Form1 : Form
     {
 
     }
+
+    private void toolStripContainer1_ContentPanel_Load(object sender, EventArgs e)
+    {
+
+    }
+
+    private void splitContainer2_Panel2_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+
+    private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
+    {
+
+    }
+
+    private void splitContainer3_Panel2_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
 }

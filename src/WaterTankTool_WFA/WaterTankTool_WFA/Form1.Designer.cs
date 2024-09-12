@@ -34,27 +34,38 @@ partial class Form1
         toolStripMenuItem1 = new ToolStripMenuItem();
         filesToolStripMenuItem = new ToolStripMenuItem();
         toolStripMenuItem2 = new ToolStripMenuItem();
-        flowLayoutPanel1 = new FlowLayoutPanel();
-        flowLayoutPanel2 = new FlowLayoutPanel();
-        flowLayoutPanel3 = new FlowLayoutPanel();
-        flowLayoutPanel4 = new FlowLayoutPanel();
-        flowLayoutPanel5 = new FlowLayoutPanel();
-        flowLayoutPanel6 = new FlowLayoutPanel();
+        toolStrip1 = new ToolStrip();
+        toolStripButton1 = new ToolStripButton();
+        toolStripButton2 = new ToolStripButton();
+        toolStripButton3 = new ToolStripButton();
+        toolStripButton4 = new ToolStripButton();
+        toolStrip2 = new ToolStrip();
+        splitContainer1 = new SplitContainer();
+        splitContainer2 = new SplitContainer();
+        splitContainer3 = new SplitContainer();
         menuStrip1.SuspendLayout();
+        toolStrip1.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
+        splitContainer1.Panel2.SuspendLayout();
+        splitContainer1.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
+        splitContainer2.Panel1.SuspendLayout();
+        splitContainer2.SuspendLayout();
+        ((System.ComponentModel.ISupportInitialize)splitContainer3).BeginInit();
+        splitContainer3.SuspendLayout();
         SuspendLayout();
         // 
         // menuStrip1
         // 
-        menuStrip1.BackColor = SystemColors.Control;
+        menuStrip1.BackColor = SystemColors.ControlLight;
         menuStrip1.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-        menuStrip1.GripStyle = ToolStripGripStyle.Visible;
         menuStrip1.ImageScalingSize = new Size(24, 24);
         menuStrip1.ImeMode = ImeMode.NoControl;
         menuStrip1.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, filesToolStripMenuItem, toolStripMenuItem2 });
         menuStrip1.Location = new Point(0, 0);
         menuStrip1.Name = "menuStrip1";
-        menuStrip1.RenderMode = ToolStripRenderMode.Professional;
-        menuStrip1.Size = new Size(938, 29);
+        menuStrip1.RenderMode = ToolStripRenderMode.System;
+        menuStrip1.Size = new Size(943, 29);
         menuStrip1.TabIndex = 0;
         menuStrip1.Text = "menuStrip1";
         // 
@@ -78,67 +89,117 @@ partial class Form1
         toolStripMenuItem2.Text = "Display";
         toolStripMenuItem2.Click += toolStripMenuItem2_Click;
         // 
-        // flowLayoutPanel1
+        // toolStrip1
         // 
-        flowLayoutPanel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        flowLayoutPanel1.BackColor = SystemColors.Control;
-        flowLayoutPanel1.BorderStyle = BorderStyle.FixedSingle;
-        flowLayoutPanel1.Location = new Point(49, 99);
-        flowLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
-        flowLayoutPanel1.Name = "flowLayoutPanel1";
-        flowLayoutPanel1.Size = new Size(684, 317);
-        flowLayoutPanel1.TabIndex = 1;
+        toolStrip1.BackColor = SystemColors.ControlLight;
+        toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
+        toolStrip1.ImageScalingSize = new Size(24, 24);
+        toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3, toolStripButton4 });
+        toolStrip1.Location = new Point(0, 29);
+        toolStrip1.Name = "toolStrip1";
+        toolStrip1.RenderMode = ToolStripRenderMode.System;
+        toolStrip1.Size = new Size(943, 33);
+        toolStrip1.TabIndex = 7;
+        toolStrip1.Text = "toolStrip1";
         // 
-        // flowLayoutPanel2
+        // toolStripButton1
         // 
-        flowLayoutPanel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-        flowLayoutPanel2.BorderStyle = BorderStyle.FixedSingle;
-        flowLayoutPanel2.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-        flowLayoutPanel2.Location = new Point(739, 99);
-        flowLayoutPanel2.Margin = new Padding(1);
-        flowLayoutPanel2.Name = "flowLayoutPanel2";
-        flowLayoutPanel2.Size = new Size(186, 342);
-        flowLayoutPanel2.TabIndex = 0;
+        toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
+        toolStripButton1.ImageTransparentColor = Color.Magenta;
+        toolStripButton1.Name = "toolStripButton1";
+        toolStripButton1.Size = new Size(34, 28);
+        toolStripButton1.Text = "toolStripButton1";
         // 
-        // flowLayoutPanel3
+        // toolStripButton2
         // 
-        flowLayoutPanel3.BackColor = SystemColors.Control;
-        flowLayoutPanel3.BorderStyle = BorderStyle.FixedSingle;
-        flowLayoutPanel3.Location = new Point(12, 73);
-        flowLayoutPanel3.Margin = new Padding(3, 4, 3, 4);
-        flowLayoutPanel3.Name = "flowLayoutPanel3";
-        flowLayoutPanel3.Size = new Size(31, 369);
-        flowLayoutPanel3.TabIndex = 2;
+        toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
+        toolStripButton2.ImageTransparentColor = Color.Magenta;
+        toolStripButton2.Name = "toolStripButton2";
+        toolStripButton2.Size = new Size(34, 28);
+        toolStripButton2.Text = "toolStripButton2";
         // 
-        // flowLayoutPanel4
+        // toolStripButton3
         // 
-        flowLayoutPanel4.BackColor = SystemColors.Control;
-        flowLayoutPanel4.BorderStyle = BorderStyle.FixedSingle;
-        flowLayoutPanel4.Location = new Point(49, 423);
-        flowLayoutPanel4.Margin = new Padding(3, 4, 3, 4);
-        flowLayoutPanel4.Name = "flowLayoutPanel4";
-        flowLayoutPanel4.Size = new Size(684, 19);
-        flowLayoutPanel4.TabIndex = 3;
+        toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
+        toolStripButton3.ImageTransparentColor = Color.Magenta;
+        toolStripButton3.Name = "toolStripButton3";
+        toolStripButton3.Size = new Size(34, 28);
+        toolStripButton3.Text = "toolStripButton3";
         // 
-        // flowLayoutPanel5
+        // toolStripButton4
         // 
-        flowLayoutPanel5.BackColor = SystemColors.Control;
-        flowLayoutPanel5.BorderStyle = BorderStyle.FixedSingle;
-        flowLayoutPanel5.Location = new Point(49, 71);
-        flowLayoutPanel5.Margin = new Padding(3, 4, 3, 4);
-        flowLayoutPanel5.Name = "flowLayoutPanel5";
-        flowLayoutPanel5.Size = new Size(878, 21);
-        flowLayoutPanel5.TabIndex = 4;
+        toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
+        toolStripButton4.ImageTransparentColor = Color.Magenta;
+        toolStripButton4.Name = "toolStripButton4";
+        toolStripButton4.Size = new Size(34, 28);
+        toolStripButton4.Text = "toolStripButton4";
         // 
-        // flowLayoutPanel6
+        // toolStrip2
         // 
-        flowLayoutPanel6.BackColor = SystemColors.Control;
-        flowLayoutPanel6.BorderStyle = BorderStyle.FixedSingle;
-        flowLayoutPanel6.Location = new Point(12, 45);
-        flowLayoutPanel6.Margin = new Padding(3, 4, 3, 4);
-        flowLayoutPanel6.Name = "flowLayoutPanel6";
-        flowLayoutPanel6.Size = new Size(914, 22);
-        flowLayoutPanel6.TabIndex = 5;
+        toolStrip2.BackColor = SystemColors.ControlLight;
+        toolStrip2.GripStyle = ToolStripGripStyle.Hidden;
+        toolStrip2.ImageScalingSize = new Size(24, 24);
+        toolStrip2.Location = new Point(0, 62);
+        toolStrip2.Name = "toolStrip2";
+        toolStrip2.RenderMode = ToolStripRenderMode.System;
+        toolStrip2.Size = new Size(943, 25);
+        toolStrip2.TabIndex = 9;
+        toolStrip2.Text = "toolStrip2";
+        // 
+        // splitContainer1
+        // 
+        splitContainer1.Dock = DockStyle.Fill;
+        splitContainer1.Location = new Point(0, 87);
+        splitContainer1.Name = "splitContainer1";
+        // 
+        // splitContainer1.Panel1
+        // 
+        splitContainer1.Panel1.BackColor = SystemColors.ControlLight;
+        // 
+        // splitContainer1.Panel2
+        // 
+        splitContainer1.Panel2.Controls.Add(splitContainer2);
+        splitContainer1.Size = new Size(943, 460);
+        splitContainer1.SplitterDistance = 44;
+        splitContainer1.TabIndex = 10;
+        // 
+        // splitContainer2
+        // 
+        splitContainer2.Dock = DockStyle.Fill;
+        splitContainer2.Location = new Point(0, 0);
+        splitContainer2.Name = "splitContainer2";
+        splitContainer2.Orientation = Orientation.Horizontal;
+        // 
+        // splitContainer2.Panel1
+        // 
+        splitContainer2.Panel1.Controls.Add(splitContainer3);
+        // 
+        // splitContainer2.Panel2
+        // 
+        splitContainer2.Panel2.BackColor = SystemColors.ControlLight;
+        splitContainer2.Panel2.Paint += splitContainer2_Panel2_Paint;
+        splitContainer2.Size = new Size(895, 460);
+        splitContainer2.SplitterDistance = 431;
+        splitContainer2.TabIndex = 0;
+        splitContainer2.SplitterMoved += splitContainer2_SplitterMoved;
+        // 
+        // splitContainer3
+        // 
+        splitContainer3.Dock = DockStyle.Fill;
+        splitContainer3.Location = new Point(0, 0);
+        splitContainer3.Name = "splitContainer3";
+        // 
+        // splitContainer3.Panel2
+        // 
+        splitContainer3.Panel2.BackColor = SystemColors.ControlLight;
+        splitContainer3.Panel2.Paint += splitContainer3_Panel2_Paint;
+        splitContainer3.Size = new Size(895, 431);
+        splitContainer3.SplitterDistance = 682;
+        splitContainer3.TabIndex = 0;
         // 
         // Form1
         // 
@@ -146,13 +207,10 @@ partial class Form1
         AutoScaleMode = AutoScaleMode.Font;
         AutoSize = true;
         BackColor = SystemColors.Control;
-        ClientSize = new Size(938, 454);
-        Controls.Add(flowLayoutPanel6);
-        Controls.Add(flowLayoutPanel5);
-        Controls.Add(flowLayoutPanel4);
-        Controls.Add(flowLayoutPanel3);
-        Controls.Add(flowLayoutPanel2);
-        Controls.Add(flowLayoutPanel1);
+        ClientSize = new Size(943, 547);
+        Controls.Add(splitContainer1);
+        Controls.Add(toolStrip2);
+        Controls.Add(toolStrip1);
         Controls.Add(menuStrip1);
         Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
         FormBorderStyle = FormBorderStyle.Fixed3D;
@@ -167,6 +225,16 @@ partial class Form1
         Click += Form1_Click;
         menuStrip1.ResumeLayout(false);
         menuStrip1.PerformLayout();
+        toolStrip1.ResumeLayout(false);
+        toolStrip1.PerformLayout();
+        splitContainer1.Panel2.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
+        splitContainer1.ResumeLayout(false);
+        splitContainer2.Panel1.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
+        splitContainer2.ResumeLayout(false);
+        ((System.ComponentModel.ISupportInitialize)splitContainer3).EndInit();
+        splitContainer3.ResumeLayout(false);
         ResumeLayout(false);
         PerformLayout();
     }
@@ -178,10 +246,13 @@ partial class Form1
     private ToolStripMenuItem filesToolStripMenuItem;
     private ToolStripMenuItem toolStripMenuItem2;
     private ToolStripMenuItem toolToolStripMenuItem;
-    private FlowLayoutPanel flowLayoutPanel1;
-    private FlowLayoutPanel flowLayoutPanel2;
-    private FlowLayoutPanel flowLayoutPanel3;
-    private FlowLayoutPanel flowLayoutPanel4;
-    private FlowLayoutPanel flowLayoutPanel5;
-    private FlowLayoutPanel flowLayoutPanel6;
+    private ToolStrip toolStrip1;
+    private ToolStrip toolStrip2;
+    private SplitContainer splitContainer1;
+    private SplitContainer splitContainer2;
+    private SplitContainer splitContainer3;
+    private ToolStripButton toolStripButton1;
+    private ToolStripButton toolStripButton2;
+    private ToolStripButton toolStripButton3;
+    private ToolStripButton toolStripButton4;
 }
