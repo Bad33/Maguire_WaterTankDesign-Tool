@@ -46,4 +46,53 @@ public partial class Form1 : Form
     {
 
     }
+
+    private void splitContainer3_Panel1_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+
+    private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+
+    private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
+    {
+
+    }
+
+    private void addSegmentToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        SegmentDialogBox dialog = new SegmentDialogBox();
+
+        dialog.ShowDialog();
+    }
+
+    private void materialToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Define_Materials dialog = new Define_Materials();
+
+        dialog.ShowDialog();
+    }
+
+    private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void toolStrip3_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+    {
+
+    }
+
+    private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+    {
+
+    }
+
+    private void toolStripButton1_Click(object sender, EventArgs e)
+    {
+
+    }
 }

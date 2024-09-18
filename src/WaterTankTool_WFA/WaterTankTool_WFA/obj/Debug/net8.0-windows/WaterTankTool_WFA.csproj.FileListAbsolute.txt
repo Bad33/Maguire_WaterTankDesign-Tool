@@ -16,3 +16,6 @@ C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\Water
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Form1.resources
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.csproj.GenerateResource.cache
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Properties.Resources.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.SegmentDialogBox.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Define_Materials.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Material_Property_Data.resources
