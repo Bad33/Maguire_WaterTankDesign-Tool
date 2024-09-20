@@ -4,6 +4,9 @@
     <Compile Update="Define Materials.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Define Segments.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Form1.cs">
       <SubType>Form</SubType>
     </Compile>

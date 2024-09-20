@@ -102,6 +102,7 @@
             Save.TabIndex = 11;
             Save.Text = "Save";
             Save.UseVisualStyleBackColor = false;
+            Save.Click += Save_Click;
             // 
             // button2
             // 
@@ -170,6 +171,7 @@
             richTextBox1.Size = new Size(164, 29);
             richTextBox1.TabIndex = 4;
             richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // groupBox2
             // 

@@ -52,9 +52,7 @@ partial class Form1
         toolStripSeparator6 = new ToolStripSeparator();
         selectAllToolStripMenuItem = new ToolStripMenuItem();
         toolsToolStripMenuItem = new ToolStripMenuItem();
-        customizeToolStripMenuItem = new ToolStripMenuItem();
         optionsToolStripMenuItem = new ToolStripMenuItem();
-        addSegmentToolStripMenuItem = new ToolStripMenuItem();
         loadToolStripMenuItem = new ToolStripMenuItem();
         windLoadToolStripMenuItem = new ToolStripMenuItem();
         seismicLoadToolStripMenuItem = new ToolStripMenuItem();
@@ -78,6 +76,7 @@ partial class Form1
         toolStripButton1 = new ToolStripButton();
         toolStripButton2 = new ToolStripButton();
         toolStripSeparator7 = new ToolStripSeparator();
+        toolStripButton4 = new ToolStripButton();
         statusStrip2 = new StatusStrip();
         toolStrip2 = new ToolStrip();
         toolStripLabel1 = new ToolStripLabel();
@@ -120,7 +119,7 @@ partial class Form1
         newToolStripMenuItem.ImageTransparentColor = Color.Magenta;
         newToolStripMenuItem.Name = "newToolStripMenuItem";
         newToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
-        newToolStripMenuItem.Size = new Size(206, 34);
+        newToolStripMenuItem.Size = new Size(270, 34);
         newToolStripMenuItem.Text = "&New";
         // 
         // openToolStripMenuItem
@@ -251,37 +250,24 @@ partial class Form1
         // 
         // toolsToolStripMenuItem
         // 
-        toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { customizeToolStripMenuItem, optionsToolStripMenuItem, loadToolStripMenuItem, materialToolStripMenuItem, solveToolStripMenuItem });
+        toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { optionsToolStripMenuItem, loadToolStripMenuItem, materialToolStripMenuItem, solveToolStripMenuItem });
         toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
         toolsToolStripMenuItem.Size = new Size(71, 25);
         toolsToolStripMenuItem.Text = "&Define";
         toolsToolStripMenuItem.Click += toolsToolStripMenuItem_Click;
         // 
-        // customizeToolStripMenuItem
-        // 
-        customizeToolStripMenuItem.Name = "customizeToolStripMenuItem";
-        customizeToolStripMenuItem.Size = new Size(183, 34);
-        customizeToolStripMenuItem.Text = "&Customize";
-        // 
         // optionsToolStripMenuItem
         // 
-        optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { addSegmentToolStripMenuItem });
         optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-        optionsToolStripMenuItem.Size = new Size(183, 34);
+        optionsToolStripMenuItem.Size = new Size(270, 34);
         optionsToolStripMenuItem.Text = "&Geometry";
-        // 
-        // addSegmentToolStripMenuItem
-        // 
-        addSegmentToolStripMenuItem.Name = "addSegmentToolStripMenuItem";
-        addSegmentToolStripMenuItem.Size = new Size(204, 34);
-        addSegmentToolStripMenuItem.Text = "Add Segment";
-        addSegmentToolStripMenuItem.Click += addSegmentToolStripMenuItem_Click;
+        optionsToolStripMenuItem.Click += optionsToolStripMenuItem_Click;
         // 
         // loadToolStripMenuItem
         // 
         loadToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { windLoadToolStripMenuItem, seismicLoadToolStripMenuItem, snowLoadToolStripMenuItem });
         loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-        loadToolStripMenuItem.Size = new Size(183, 34);
+        loadToolStripMenuItem.Size = new Size(270, 34);
         loadToolStripMenuItem.Text = "Load";
         // 
         // windLoadToolStripMenuItem
@@ -305,14 +291,14 @@ partial class Form1
         // materialToolStripMenuItem
         // 
         materialToolStripMenuItem.Name = "materialToolStripMenuItem";
-        materialToolStripMenuItem.Size = new Size(183, 34);
+        materialToolStripMenuItem.Size = new Size(270, 34);
         materialToolStripMenuItem.Text = "Material";
         materialToolStripMenuItem.Click += materialToolStripMenuItem_Click;
         // 
         // solveToolStripMenuItem
         // 
         solveToolStripMenuItem.Name = "solveToolStripMenuItem";
-        solveToolStripMenuItem.Size = new Size(183, 34);
+        solveToolStripMenuItem.Size = new Size(270, 34);
         solveToolStripMenuItem.Text = "Solve";
         // 
         // toolStrip1
@@ -415,7 +401,7 @@ partial class Form1
         toolStrip3.Dock = DockStyle.Left;
         toolStrip3.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip3.ImageScalingSize = new Size(24, 24);
-        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton1, toolStripButton2, toolStripSeparator7 });
+        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton1, toolStripSeparator7, toolStripButton4, toolStripButton2 });
         toolStrip3.Location = new Point(0, 62);
         toolStrip3.Name = "toolStrip3";
         toolStrip3.RightToLeft = RightToLeft.No;
@@ -466,6 +452,16 @@ partial class Form1
         // 
         toolStripSeparator7.Name = "toolStripSeparator7";
         toolStripSeparator7.Size = new Size(31, 6);
+        // 
+        // toolStripButton4
+        // 
+        toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
+        toolStripButton4.ImageTransparentColor = Color.Magenta;
+        toolStripButton4.Name = "toolStripButton4";
+        toolStripButton4.Size = new Size(31, 28);
+        toolStripButton4.Text = "Add Geometry";
+        toolStripButton4.Click += toolStripButton4_Click;
         // 
         // statusStrip2
         // 
@@ -672,7 +668,6 @@ partial class Form1
     private ToolStripSeparator toolStripSeparator6;
     private ToolStripMenuItem selectAllToolStripMenuItem;
     private ToolStripMenuItem toolsToolStripMenuItem;
-    private ToolStripMenuItem customizeToolStripMenuItem;
     private ToolStripMenuItem optionsToolStripMenuItem;
     private ToolStripButton newToolStripButton;
     private ToolStripButton openToolStripButton;
@@ -686,7 +681,6 @@ partial class Form1
     private ToolStripButton helpToolStripButton;
     private ToolStripMenuItem loadToolStripMenuItem;
     private ToolStripMenuItem materialToolStripMenuItem;
-    private ToolStripMenuItem addSegmentToolStripMenuItem;
     private ToolStripMenuItem windLoadToolStripMenuItem;
     private ToolStripMenuItem seismicLoadToolStripMenuItem;
     private ToolStripMenuItem snowLoadToolStripMenuItem;
@@ -705,4 +699,5 @@ partial class Form1
     private ToolStripLabel toolStripLabel2;
     private ToolStripTextBox toolStripTextBox2;
     private TableLayoutPanel tableLayoutPanel1;
+    private ToolStripButton toolStripButton4;
 }

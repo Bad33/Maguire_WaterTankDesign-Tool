@@ -95,4 +95,16 @@ public partial class Form1 : Form
     {
 
     }
+
+    private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Define_Segments define_Segments = new Define_Segments();
+        define_Segments.ShowDialog();
+    }
+
+    private void toolStripButton4_Click(object sender, EventArgs e)
+    {
+        Define_Segments define_Segments = new Define_Segments();
+        define_Segments.ShowDialog();
+    }
 }
