@@ -14,6 +14,8 @@ namespace WaterTankTool_WFA
     public partial class Define_Segments : Form
     {
         private WaterTankDbContext _context;
+        MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
+        DialogResult result;
         public Define_Segments()
         {
             InitializeComponent();
@@ -46,5 +48,50 @@ namespace WaterTankTool_WFA
 
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+                int segmentNumber = (int)selectedRow.Cells[0].Value;
+                string segmentName = selectedRow.Cells[1].Value.ToString();
+
+                result = MessageBox.Show("Do you want to delete " + segmentName + ".", "Confirm Delete");
+
+                if (result == DialogResult.OK)
+                {
+                    using (var context = new WaterTankDbContext())
+                    {
+                        var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == segmentNumber);
+
+                        if (segmentProperties != null)
+                        {
+                            context.SegmentProperties.Remove(segmentProperties);
+                            context.SaveChanges();
+                            MessageBox.Show("Segment " + segmentName + " Deleted.");
+
+                        }
+                        else
+                        {
+                            MessageBox.Show("Selected Segment not found");
+                        }
+                    }
+                }
+            }
+
+            else
+            {
+                MessageBox.Show("Please Select a Row to Delete");
+            }
+
+
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

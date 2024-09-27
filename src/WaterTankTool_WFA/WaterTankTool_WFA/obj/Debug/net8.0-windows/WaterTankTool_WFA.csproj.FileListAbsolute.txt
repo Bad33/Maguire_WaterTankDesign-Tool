@@ -126,3 +126,9 @@ C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\Water
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Debug\net8.0-windows\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Debug\net8.0-windows\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Debug\net8.0-windows\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Wind_Load.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Dead_Load.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Live_Load.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Seismic.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Water_Load.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.AddSegmentSection.resources

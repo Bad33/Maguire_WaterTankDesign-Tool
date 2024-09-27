@@ -47,7 +47,7 @@
             groupBox1.Controls.Add(button1);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(776, 94);
+            groupBox1.Size = new Size(776, 111);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Segments Action";
@@ -60,6 +60,7 @@
             button3.TabIndex = 2;
             button3.Text = "Delete";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // button2
             // 
@@ -69,6 +70,7 @@
             button2.TabIndex = 1;
             button2.Text = "Modify";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // button1
             // 
@@ -86,7 +88,7 @@
             groupBox2.Controls.Add(dataGridView1);
             groupBox2.Location = new Point(12, 122);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(776, 316);
+            groupBox2.Size = new Size(776, 327);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Segment List";
@@ -101,6 +103,7 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowHeadersWidth = 62;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(734, 255);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;

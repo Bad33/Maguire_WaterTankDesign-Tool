@@ -1,3 +1,6 @@
+using System.Windows.Forms;
+using WaterTankTool_WFA.Load;
+
 namespace WaterTankTool_WFA;
 
 public partial class Form1 : Form
@@ -98,13 +101,59 @@ public partial class Form1 : Form
 
     private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Define_Segments define_Segments = new Define_Segments();
-        define_Segments.ShowDialog();
+        AddSegmentSection addSegmentSection = new AddSegmentSection(); 
+        addSegmentSection.ShowDialog();
+
+        //Define_Segments define_Segments = new Define_Segments();
+        //define_Segments.ShowDialog();
     }
 
     private void toolStripButton4_Click(object sender, EventArgs e)
     {
-        Define_Segments define_Segments = new Define_Segments();
-        define_Segments.ShowDialog();
+        AddSegmentSection addSegmentSection = new AddSegmentSection();  
+        addSegmentSection.ShowDialog();
+        //Define_Segments define_Segments = new Define_Segments();
+        //define_Segments.ShowDialog();
+    }
+
+    private void windLoadToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Wind_Load wind_Load = new Wind_Load();
+        wind_Load.ShowDialog();
+    }
+
+    private void liveLoadToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Live_Load live_Load = new Live_Load();
+        live_Load.ShowDialog();
+    }
+
+    private void deadLoadToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Dead_Load dead_Load = new Dead_Load();
+        dead_Load.ShowDialog();
+    }
+
+    private void waterLoadToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Water_Load water_Load = new Water_Load();
+        water_Load.ShowDialog();
+    }
+
+    private void seismicLoadToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Seismic seismic = new Seismic();
+        seismic.ShowDialog();
+    }
+
+    private void pasteToolStripButton1_Click(object sender, EventArgs e)
+    {
+        //tableLayoutPanel1.ZoomFactor += 0.1f;
+        //tableLayoutPanel1.Refresh();
+    }
+
+    private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+    {
+        
     }
 }
