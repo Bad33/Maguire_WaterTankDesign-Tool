@@ -21,8 +21,16 @@ namespace WaterTankTool_WFA
         public double HeightInitial { get; set; }
         public double HeightFinal { get; set; }
         public double AverageHeight { get; set; }
+
+        private string _segmentType;
         public SegmentDialogBox()
         {
+            InitializeComponent();
+        }
+
+        public SegmentDialogBox(string segmentType)
+        {
+            _segmentType = segmentType;
             InitializeComponent();
         }
 
@@ -43,13 +51,14 @@ namespace WaterTankTool_WFA
 
         private void Save_Click(object sender, EventArgs e)
         {
+            var gg = SegmentType;
 
-            using (var context = new WaterTankDbContext()) 
+            using (var context = new WaterTankDbContext())
             {
                 var segmentProperties = new SegmentProperties()
                 {
                     SegmentName = richTextBox1.Text,
-                    SegmentType = comboBox1.Text,
+                    SegmentType = _segmentType,
                     Diameter = Double.Parse(maskedTextBox2.Text),
                     Thickness = Double.Parse(maskedTextBox3.Text),
                     HeightInitial = Double.Parse(maskedTextBox1.Text),
@@ -61,16 +70,29 @@ namespace WaterTankTool_WFA
 
                 if (rowsAffected > 0)
                 {
-                    MessageBox.Show("Data saved successfully!");
+                    DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+                    if (result == DialogResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
                 else
                 {
-                    MessageBox.Show("Data might not have been saved.");
+                    DialogResult result = MessageBox.Show("Data might not have been saved!", "Confirmation", MessageBoxButtons.OK);
+                    if (result == DialogResult.OK)
+                    {
+                        this.Close();
+                    }
                 }
             }
         }
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

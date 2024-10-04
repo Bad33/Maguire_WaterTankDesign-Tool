@@ -105,7 +105,7 @@ partial class Form1
         menuStrip1.Location = new Point(0, 0);
         menuStrip1.Name = "menuStrip1";
         menuStrip1.Padding = new Padding(0, 2, 0, 2);
-        menuStrip1.Size = new Size(829, 32);
+        menuStrip1.Size = new Size(829, 29);
         menuStrip1.TabIndex = 0;
         menuStrip1.Text = "menuStrip1";
         // 
@@ -113,7 +113,7 @@ partial class Form1
         // 
         fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, openToolStripMenuItem, toolStripSeparator2, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator3, printToolStripMenuItem, printPreviewToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
         fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-        fileToolStripMenuItem.Size = new Size(50, 28);
+        fileToolStripMenuItem.Size = new Size(50, 25);
         fileToolStripMenuItem.Text = "&File";
         // 
         // newToolStripMenuItem
@@ -191,7 +191,7 @@ partial class Form1
         // 
         editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator5, cutToolStripMenuItem, copyToolStripMenuItem, pasteToolStripMenuItem, toolStripSeparator6, selectAllToolStripMenuItem });
         editToolStripMenuItem.Name = "editToolStripMenuItem";
-        editToolStripMenuItem.Size = new Size(52, 28);
+        editToolStripMenuItem.Size = new Size(52, 25);
         editToolStripMenuItem.Text = "&Edit";
         // 
         // undoToolStripMenuItem
@@ -255,7 +255,7 @@ partial class Form1
         // 
         toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { optionsToolStripMenuItem, loadToolStripMenuItem, materialToolStripMenuItem, solveToolStripMenuItem });
         toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-        toolsToolStripMenuItem.Size = new Size(71, 28);
+        toolsToolStripMenuItem.Size = new Size(71, 25);
         toolsToolStripMenuItem.Text = "&Define";
         toolsToolStripMenuItem.Click += toolsToolStripMenuItem_Click;
         // 
@@ -333,7 +333,7 @@ partial class Form1
         toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip1.ImageScalingSize = new Size(24, 24);
         toolStrip1.Items.AddRange(new ToolStripItem[] { newToolStripButton, openToolStripButton, saveToolStripButton, printToolStripButton, toolStripSeparator, cutToolStripButton, copyToolStripButton, pasteToolStripButton, toolStripSeparator1, helpToolStripButton });
-        toolStrip1.Location = new Point(0, 32);
+        toolStrip1.Location = new Point(0, 29);
         toolStrip1.Name = "toolStrip1";
         toolStrip1.Size = new Size(829, 33);
         toolStrip1.TabIndex = 7;
@@ -428,10 +428,10 @@ partial class Form1
         toolStrip3.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip3.ImageScalingSize = new Size(24, 24);
         toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton1, toolStripSeparator7, toolStripButton4, toolStripButton2 });
-        toolStrip3.Location = new Point(0, 65);
+        toolStrip3.Location = new Point(0, 62);
         toolStrip3.Name = "toolStrip3";
         toolStrip3.RightToLeft = RightToLeft.No;
-        toolStrip3.Size = new Size(36, 461);
+        toolStrip3.Size = new Size(36, 464);
         toolStrip3.TabIndex = 12;
         toolStrip3.Text = "toolStrip3";
         // 
@@ -494,7 +494,7 @@ partial class Form1
         // 
         statusStrip2.Dock = DockStyle.Top;
         statusStrip2.ImageScalingSize = new Size(24, 24);
-        statusStrip2.Location = new Point(36, 65);
+        statusStrip2.Location = new Point(36, 62);
         statusStrip2.Name = "statusStrip2";
         statusStrip2.Size = new Size(793, 22);
         statusStrip2.TabIndex = 17;
@@ -597,7 +597,7 @@ partial class Form1
         tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
         tableLayoutPanel1.Dock = DockStyle.Fill;
         tableLayoutPanel1.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-        tableLayoutPanel1.Location = new Point(36, 87);
+        tableLayoutPanel1.Location = new Point(36, 84);
         tableLayoutPanel1.Name = "tableLayoutPanel1";
         tableLayoutPanel1.RowCount = 30;
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
@@ -630,7 +630,7 @@ partial class Form1
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
         tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.Size = new Size(793, 408);
+        tableLayoutPanel1.Size = new Size(793, 411);
         tableLayoutPanel1.TabIndex = 20;
         tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
         // 

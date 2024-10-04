@@ -26,8 +26,10 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SegmentDialogBox segmentDialogBox = new SegmentDialogBox();
-            segmentDialogBox.ShowDialog();
+            AddSegmentSection addSegmentSection = new AddSegmentSection();
+            addSegmentSection.ShowDialog();
+            //SegmentDialogBox segmentDialogBox = new SegmentDialogBox();
+            //segmentDialogBox.ShowDialog();
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)

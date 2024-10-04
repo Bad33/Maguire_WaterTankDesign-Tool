@@ -15,6 +15,7 @@ namespace WaterTankTool_WFA
     {
 
         private PictureBox _selectedPictureBox;
+        private String SegmentType;
         public AddSegmentSection()
         {
             InitializeComponent();
@@ -22,12 +23,14 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SegmentDialogBox segmentDialogBox = new SegmentDialogBox();
+            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType);
+            this.Close();
             segmentDialogBox.ShowDialog();
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            SegmentType = "Cylinder";
 
             if (_selectedPictureBox != null)
             {
@@ -38,6 +41,33 @@ namespace WaterTankTool_WFA
             _selectedPictureBox = (PictureBox)sender;
             _selectedPictureBox.BorderStyle = BorderStyle.Fixed3D;
 
+        }
+
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            SegmentType = "Cone";
+
+            if (_selectedPictureBox != null)
+            {
+                _selectedPictureBox.BorderStyle = BorderStyle.None;
+            }
+
+            _selectedPictureBox = (PictureBox)sender;
+            _selectedPictureBox.BorderStyle = BorderStyle.Fixed3D;
+
+        }
+
+        private void pictureBox3_Click(object sender, EventArgs e)
+        {
+            SegmentType = "Spheriod";
+
+            if (_selectedPictureBox != null)
+            {
+                _selectedPictureBox.BorderStyle = BorderStyle.None;
+            }
+
+            _selectedPictureBox = (PictureBox)sender;
+            _selectedPictureBox.BorderStyle = BorderStyle.Fixed3D;
         }
     }
 }

@@ -112,10 +112,13 @@
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             ClientSize = new Size(800, 450);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Name = "Define_Segments";
+            ShowIcon = false;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Define Segments";
             groupBox1.ResumeLayout(false);
             groupBox2.ResumeLayout(false);

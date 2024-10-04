@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            comboBox1 = new ComboBox();
             maskedTextBox2 = new MaskedTextBox();
             maskedTextBox3 = new MaskedTextBox();
             maskedTextBox4 = new MaskedTextBox();
@@ -36,9 +35,6 @@
             Save = new Button();
             button2 = new Button();
             groupBox1 = new GroupBox();
-            comboBox2 = new ComboBox();
-            label9 = new Label();
-            label2 = new Label();
             label1 = new Label();
             richTextBox1 = new RichTextBox();
             groupBox2 = new GroupBox();
@@ -54,16 +50,6 @@
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             SuspendLayout();
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "Cylinder", "Cone", "Spheroid" });
-            comboBox1.Location = new Point(198, 67);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(164, 33);
-            comboBox1.TabIndex = 0;
-            comboBox1.Text = "Cylinder";
             // 
             // maskedTextBox2
             // 
@@ -116,12 +102,8 @@
             // 
             // groupBox1
             // 
-            groupBox1.Controls.Add(comboBox2);
-            groupBox1.Controls.Add(label9);
-            groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(richTextBox1);
-            groupBox1.Controls.Add(comboBox1);
             groupBox1.Location = new Point(12, 21);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(596, 110);
@@ -129,46 +111,21 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Segment";
             // 
-            // comboBox2
-            // 
-            comboBox2.FormattingEnabled = true;
-            comboBox2.Location = new Point(498, 31);
-            comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(85, 33);
-            comboBox2.TabIndex = 7;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(410, 32);
-            label9.Name = "label9";
-            label9.Size = new Size(75, 25);
-            label9.TabIndex = 6;
-            label9.Text = "Material";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(16, 70);
-            label2.Name = "label2";
-            label2.Size = new Size(125, 25);
-            label2.TabIndex = 5;
-            label2.Text = "Segment Type";
-            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(16, 33);
+            label1.Location = new Point(16, 44);
             label1.Name = "label1";
             label1.Size = new Size(135, 25);
             label1.TabIndex = 0;
             label1.Text = "Segment Name";
+            label1.Click += label1_Click;
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(198, 30);
+            richTextBox1.Location = new Point(200, 44);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(164, 29);
+            richTextBox1.Size = new Size(252, 29);
             richTextBox1.TabIndex = 4;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -270,6 +227,7 @@
             AcceptButton = Save;
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoSize = true;
             CancelButton = button2;
             ClientSize = new Size(620, 471);
             Controls.Add(groupBox4);
@@ -281,7 +239,7 @@
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "SegmentDialogBox";
             StartPosition = FormStartPosition.CenterParent;
-            Text = "SegmentDialogBox";
+            Text = "Segment Property";
             Load += SegmentDialogBox_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -293,8 +251,6 @@
         }
 
         #endregion
-
-        private ComboBox comboBox1;
         private MaskedTextBox maskedTextBox2;
         private MaskedTextBox maskedTextBox3;
         private MaskedTextBox maskedTextBox4;
@@ -306,15 +262,12 @@
         private GroupBox groupBox2;
         private GroupBox groupBox3;
         private Label label1;
-        private Label label2;
         private Label label6;
         private Label label5;
         private Label label4;
         private Label label3;
         private Label label8;
         private Label label7;
-        private ComboBox comboBox2;
-        private Label label9;
         private GroupBox groupBox4;
     }
 }

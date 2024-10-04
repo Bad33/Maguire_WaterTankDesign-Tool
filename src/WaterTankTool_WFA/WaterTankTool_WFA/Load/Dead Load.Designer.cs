@@ -103,6 +103,7 @@
             Controls.Add(textBox1);
             Controls.Add(label1);
             Name = "Dead_Load";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Dead Load";
             groupBox1.ResumeLayout(false);
             ResumeLayout(false);

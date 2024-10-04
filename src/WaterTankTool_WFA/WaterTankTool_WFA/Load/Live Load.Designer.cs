@@ -102,6 +102,7 @@
             Controls.Add(textBox1);
             Controls.Add(label1);
             Name = "Live_Load";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Live Load";
             groupBox1.ResumeLayout(false);
             ResumeLayout(false);

@@ -31,9 +31,9 @@
             label1 = new Label();
             textBox1 = new TextBox();
             groupBox1 = new GroupBox();
+            richTextBox1 = new RichTextBox();
             button1 = new Button();
             button2 = new Button();
-            richTextBox1 = new RichTextBox();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -64,6 +64,14 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Notes";
             // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(16, 39);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(312, 49);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "";
+            // 
             // button1
             // 
             button1.Location = new Point(155, 261);
@@ -82,14 +90,6 @@
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
             // 
-            // richTextBox1
-            // 
-            richTextBox1.Location = new Point(16, 39);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(312, 49);
-            richTextBox1.TabIndex = 0;
-            richTextBox1.Text = "";
-            // 
             // Water_Load
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
@@ -101,6 +101,7 @@
             Controls.Add(textBox1);
             Controls.Add(label1);
             Name = "Water_Load";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Water Load";
             Load += Water_Load_Load;
             groupBox1.ResumeLayout(false);

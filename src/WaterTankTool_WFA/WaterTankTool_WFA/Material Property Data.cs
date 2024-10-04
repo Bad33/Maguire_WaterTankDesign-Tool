@@ -26,5 +26,10 @@ namespace WaterTankTool_WFA
         {
 
         }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
