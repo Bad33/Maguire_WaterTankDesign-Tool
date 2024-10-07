@@ -1,5 +1,6 @@
 using System.Windows.Forms;
 using WaterTankTool_WFA.Load;
+using WaterTankTool_WFA.Solver;
 
 namespace WaterTankTool_WFA;
 
@@ -150,6 +151,18 @@ public partial class Form1 : Form
 
     private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
     {
-        
+
+    }
+
+    private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        About about = new About();
+        about.ShowDialog();
+    }
+
+    private void solveToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Solver_Output solver_Output = new Solver_Output();
+        solver_Output.ShowDialog();
     }
 }

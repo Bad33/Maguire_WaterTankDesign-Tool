@@ -8,18 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WaterTankTool_WFA.Load
+namespace WaterTankTool_WFA.Solver
 {
-    public partial class Wind_Load : Form
+    public partial class Solver_Output : Form
     {
-        public Wind_Load()
+        public Solver_Output()
         {
             InitializeComponent();
-        }
-
-        private void richTextBox2_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

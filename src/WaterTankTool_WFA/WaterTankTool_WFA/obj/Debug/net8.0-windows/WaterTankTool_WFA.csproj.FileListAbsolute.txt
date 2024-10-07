@@ -132,3 +132,7 @@ C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\Water
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Seismic.resources
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Water_Load.resources
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.AddSegmentSection.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.About.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.TanksList.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.TankProperty.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Solver.Solver_Output.resources

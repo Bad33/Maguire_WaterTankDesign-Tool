@@ -8,18 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WaterTankTool_WFA.Load
+namespace WaterTankTool_WFA
 {
-    public partial class Wind_Load : Form
+    public partial class TanksList : Form
     {
-        public Wind_Load()
+        public TanksList()
         {
             InitializeComponent();
         }
 
-        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-
+            TankProperty tankProperty = new TankProperty();
+            tankProperty.ShowDialog();
         }
     }
 }

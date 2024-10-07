@@ -8,16 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace WaterTankTool_WFA.Load
+namespace WaterTankTool_WFA
 {
-    public partial class Wind_Load : Form
+    public partial class TankProperty : Form
     {
-        public Wind_Load()
+        public TankProperty()
         {
             InitializeComponent();
         }
 
-        private void richTextBox2_TextChanged(object sender, EventArgs e)
+        private void groupBox3_Enter(object sender, EventArgs e)
         {
 
         }

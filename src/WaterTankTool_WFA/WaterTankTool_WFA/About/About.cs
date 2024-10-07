@@ -10,18 +10,28 @@ using System.Windows.Forms;
 
 namespace WaterTankTool_WFA
 {
-    public partial class Define_Materials : Form
+    public partial class About : Form
     {
-        public Define_Materials()
+        public About()
         {
             InitializeComponent();
+
+
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void About_Load(object sender, EventArgs e)
         {
-            Material_Property_Data dialog = new Material_Property_Data();
 
-            dialog.ShowDialog();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

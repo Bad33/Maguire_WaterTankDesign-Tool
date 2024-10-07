@@ -33,35 +33,27 @@
             textBox1 = new TextBox();
             label2 = new Label();
             label1 = new Label();
-            groupBox2 = new GroupBox();
+            groupBox3 = new GroupBox();
+            numericUpDown4 = new NumericUpDown();
+            label10 = new Label();
+            label9 = new Label();
+            label8 = new Label();
             label4 = new Label();
             label3 = new Label();
-            groupBox3 = new GroupBox();
             numericUpDown3 = new NumericUpDown();
             numericUpDown2 = new NumericUpDown();
             numericUpDown1 = new NumericUpDown();
             label7 = new Label();
             label6 = new Label();
             label5 = new Label();
-            groupBox4 = new GroupBox();
-            numericUpDown5 = new NumericUpDown();
-            numericUpDown4 = new NumericUpDown();
-            label9 = new Label();
-            label8 = new Label();
             button1 = new Button();
             button2 = new Button();
-            groupBox5 = new GroupBox();
-            comboBox1 = new ComboBox();
             groupBox1.SuspendLayout();
-            groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            groupBox4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown5).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown4).BeginInit();
-            groupBox5.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
@@ -72,7 +64,7 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(25, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(523, 123);
+            groupBox1.Size = new Size(483, 123);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "General Data";
@@ -80,16 +72,18 @@
             // comboBox2
             // 
             comboBox2.FormattingEnabled = true;
+            comboBox2.Items.AddRange(new object[] { "Steel" });
             comboBox2.Location = new Point(264, 75);
             comboBox2.Name = "comboBox2";
-            comboBox2.Size = new Size(213, 33);
+            comboBox2.Size = new Size(193, 33);
             comboBox2.TabIndex = 3;
+            comboBox2.Text = "Steel";
             // 
             // textBox1
             // 
             textBox1.Location = new Point(263, 30);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(214, 31);
+            textBox1.Size = new Size(194, 31);
             textBox1.TabIndex = 2;
             textBox1.TextChanged += textBox1_TextChanged;
             // 
@@ -112,147 +106,138 @@
             label1.Text = "Material Name";
             label1.Click += label1_Click;
             // 
-            // groupBox2
-            // 
-            groupBox2.Controls.Add(label4);
-            groupBox2.Controls.Add(label3);
-            groupBox2.Location = new Point(25, 141);
-            groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(371, 119);
-            groupBox2.TabIndex = 1;
-            groupBox2.TabStop = false;
-            groupBox2.Text = "Weight and Mass";
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new Point(25, 78);
-            label4.Name = "label4";
-            label4.Size = new Size(186, 25);
-            label4.TabIndex = 1;
-            label4.Text = "Mass per Unit Volume";
-            // 
-            // label3
-            // 
-            label3.AutoSize = true;
-            label3.Location = new Point(25, 40);
-            label3.Name = "label3";
-            label3.Size = new Size(201, 25);
-            label3.TabIndex = 0;
-            label3.Text = "Weight per Unit Volume";
-            // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(numericUpDown4);
+            groupBox3.Controls.Add(label10);
+            groupBox3.Controls.Add(label9);
+            groupBox3.Controls.Add(label8);
+            groupBox3.Controls.Add(label4);
+            groupBox3.Controls.Add(label3);
             groupBox3.Controls.Add(numericUpDown3);
             groupBox3.Controls.Add(numericUpDown2);
             groupBox3.Controls.Add(numericUpDown1);
             groupBox3.Controls.Add(label7);
             groupBox3.Controls.Add(label6);
             groupBox3.Controls.Add(label5);
-            groupBox3.Location = new Point(25, 280);
+            groupBox3.Location = new Point(25, 141);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(523, 161);
+            groupBox3.Size = new Size(483, 221);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
-            groupBox3.Text = "Isotropic Property Data";
-            // 
-            // numericUpDown3
-            // 
-            numericUpDown3.Location = new Point(340, 118);
-            numericUpDown3.Name = "numericUpDown3";
-            numericUpDown3.Size = new Size(151, 31);
-            numericUpDown3.TabIndex = 11;
-            // 
-            // numericUpDown2
-            // 
-            numericUpDown2.Location = new Point(340, 74);
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(151, 31);
-            numericUpDown2.TabIndex = 10;
-            // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Location = new Point(340, 30);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(151, 31);
-            numericUpDown1.TabIndex = 9;
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(28, 118);
-            label7.Name = "label7";
-            label7.Size = new Size(131, 25);
-            label7.TabIndex = 8;
-            label7.Text = "Sheer Modulus";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(28, 80);
-            label6.Name = "label6";
-            label6.Size = new Size(271, 25);
-            label6.TabIndex = 7;
-            label6.Text = "Coefficient of Thermal Expansion";
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(28, 37);
-            label5.Name = "label5";
-            label5.Size = new Size(176, 25);
-            label5.TabIndex = 6;
-            label5.Text = "Modulus of Elasticity";
-            // 
-            // groupBox4
-            // 
-            groupBox4.Controls.Add(numericUpDown5);
-            groupBox4.Controls.Add(numericUpDown4);
-            groupBox4.Controls.Add(label9);
-            groupBox4.Controls.Add(label8);
-            groupBox4.Location = new Point(25, 447);
-            groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(523, 122);
-            groupBox4.TabIndex = 3;
-            groupBox4.TabStop = false;
-            groupBox4.Text = "Other Properties for Steel Materials";
-            // 
-            // numericUpDown5
-            // 
-            numericUpDown5.Location = new Point(340, 77);
-            numericUpDown5.Name = "numericUpDown5";
-            numericUpDown5.Size = new Size(151, 31);
-            numericUpDown5.TabIndex = 3;
+            groupBox3.Text = "Property Data";
             // 
             // numericUpDown4
             // 
-            numericUpDown4.Location = new Point(340, 30);
+            numericUpDown4.Location = new Point(264, 164);
+            numericUpDown4.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numericUpDown4.Name = "numericUpDown4";
-            numericUpDown4.Size = new Size(96, 31);
-            numericUpDown4.TabIndex = 2;
+            numericUpDown4.Size = new Size(151, 31);
+            numericUpDown4.TabIndex = 17;
+            numericUpDown4.Value = new decimal(new int[] { 46, 0, 0, 0 });
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(428, 166);
+            label10.Name = "label10";
+            label10.Size = new Size(34, 25);
+            label10.TabIndex = 16;
+            label10.Text = "Ksi";
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(25, 79);
+            label9.Location = new Point(428, 120);
             label9.Name = "label9";
-            label9.Size = new Size(185, 25);
-            label9.TabIndex = 1;
-            label9.Text = "Effective Tensile Stress";
-            label9.Click += label9_Click;
+            label9.Size = new Size(34, 25);
+            label9.TabIndex = 15;
+            label9.Text = "Ksi";
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(25, 36);
+            label8.Location = new Point(428, 76);
             label8.Name = "label8";
-            label8.Size = new Size(195, 25);
-            label8.TabIndex = 0;
-            label8.Text = "Minimum Tensile Stress";
+            label8.Size = new Size(34, 25);
+            label8.TabIndex = 14;
+            label8.Text = "Ksi";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(428, 33);
+            label4.Name = "label4";
+            label4.Size = new Size(35, 25);
+            label4.TabIndex = 13;
+            label4.Text = "Pcf";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(25, 170);
+            label3.Name = "label3";
+            label3.Size = new Size(185, 25);
+            label3.TabIndex = 12;
+            label3.Text = "Tensile Ultimate Stress";
+            // 
+            // numericUpDown3
+            // 
+            numericUpDown3.Location = new Point(264, 118);
+            numericUpDown3.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numericUpDown3.Name = "numericUpDown3";
+            numericUpDown3.Size = new Size(151, 31);
+            numericUpDown3.TabIndex = 11;
+            numericUpDown3.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            // 
+            // numericUpDown2
+            // 
+            numericUpDown2.Location = new Point(264, 74);
+            numericUpDown2.Maximum = new decimal(new int[] { 40000, 0, 0, 0 });
+            numericUpDown2.Name = "numericUpDown2";
+            numericUpDown2.Size = new Size(151, 31);
+            numericUpDown2.TabIndex = 10;
+            numericUpDown2.Value = new decimal(new int[] { 29000, 0, 0, 0 });
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Location = new Point(263, 31);
+            numericUpDown1.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(151, 31);
+            numericUpDown1.TabIndex = 9;
+            numericUpDown1.Value = new decimal(new int[] { 490, 0, 0, 0 });
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(25, 124);
+            label7.Name = "label7";
+            label7.Size = new Size(157, 25);
+            label7.TabIndex = 8;
+            label7.Text = "Tensile Yield Stress";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(25, 80);
+            label6.Name = "label6";
+            label6.Size = new Size(198, 25);
+            label6.TabIndex = 7;
+            label6.Text = "Modulus of Elasticity Es";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(25, 37);
+            label5.Name = "label5";
+            label5.Size = new Size(71, 25);
+            label5.TabIndex = 6;
+            label5.Text = "Density";
             // 
             // button1
             // 
-            button1.Location = new Point(430, 593);
+            button1.Location = new Point(396, 391);
             button1.Name = "button1";
             button1.Size = new Size(112, 34);
             button1.TabIndex = 4;
@@ -261,30 +246,12 @@
             // 
             // button2
             // 
-            button2.Location = new Point(302, 593);
+            button2.Location = new Point(269, 391);
             button2.Name = "button2";
             button2.Size = new Size(112, 34);
             button2.TabIndex = 5;
             button2.Text = "Ok";
             button2.UseVisualStyleBackColor = true;
-            // 
-            // groupBox5
-            // 
-            groupBox5.Controls.Add(comboBox1);
-            groupBox5.Location = new Point(414, 141);
-            groupBox5.Name = "groupBox5";
-            groupBox5.Size = new Size(134, 119);
-            groupBox5.TabIndex = 6;
-            groupBox5.TabStop = false;
-            groupBox5.Text = "Units";
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(6, 49);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(122, 33);
-            comboBox1.TabIndex = 0;
             // 
             // Material_Property_Data
             // 
@@ -292,13 +259,10 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button1;
-            ClientSize = new Size(569, 639);
-            Controls.Add(groupBox5);
+            ClientSize = new Size(531, 458);
             Controls.Add(button2);
             Controls.Add(button1);
-            Controls.Add(groupBox4);
             Controls.Add(groupBox3);
-            Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "Material_Property_Data";
@@ -306,46 +270,36 @@
             Text = "Material Property Data";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
-            groupBox2.ResumeLayout(false);
-            groupBox2.PerformLayout();
             groupBox3.ResumeLayout(false);
             groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown4).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            groupBox4.ResumeLayout(false);
-            groupBox4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown5).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown4).EndInit();
-            groupBox5.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
         private GroupBox groupBox1;
-        private GroupBox groupBox2;
         private GroupBox groupBox3;
-        private GroupBox groupBox4;
         private Button button1;
         private Button button2;
         private Label label2;
         private Label label1;
-        private Label label4;
-        private Label label3;
         private Label label7;
         private Label label6;
         private Label label5;
-        private Label label9;
-        private Label label8;
         private NumericUpDown numericUpDown3;
         private NumericUpDown numericUpDown2;
         private NumericUpDown numericUpDown1;
-        private GroupBox groupBox5;
-        private ComboBox comboBox1;
         private ComboBox comboBox2;
         private TextBox textBox1;
-        private NumericUpDown numericUpDown5;
+        private Label label8;
+        private Label label4;
+        private Label label3;
         private NumericUpDown numericUpDown4;
+        private Label label10;
+        private Label label9;
     }
 }

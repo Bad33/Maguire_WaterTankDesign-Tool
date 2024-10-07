@@ -98,9 +98,9 @@
             label4.AutoSize = true;
             label4.Location = new Point(418, 178);
             label4.Name = "label4";
-            label4.Size = new Size(67, 25);
+            label4.Size = new Size(55, 25);
             label4.TabIndex = 5;
-            label4.Text = "Sphere";
+            label4.Text = "Tanks";
             // 
             // label3
             // 
@@ -183,6 +183,7 @@
             Controls.Add(button1);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            MaximizeBox = false;
             Name = "AddSegmentSection";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;

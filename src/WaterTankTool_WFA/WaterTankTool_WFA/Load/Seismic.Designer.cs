@@ -51,11 +51,23 @@
             label1 = new Label();
             button1 = new Button();
             button2 = new Button();
+            label11 = new Label();
+            label12 = new Label();
+            label13 = new Label();
+            label14 = new Label();
+            label15 = new Label();
+            label16 = new Label();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label16);
+            groupBox1.Controls.Add(label15);
+            groupBox1.Controls.Add(label14);
+            groupBox1.Controls.Add(label13);
+            groupBox1.Controls.Add(label12);
+            groupBox1.Controls.Add(label11);
             groupBox1.Controls.Add(comboBox1);
             groupBox1.Controls.Add(textBox10);
             groupBox1.Controls.Add(textBox9);
@@ -76,9 +88,9 @@
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(32, 36);
+            groupBox1.Location = new Point(25, 26);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(335, 547);
+            groupBox1.Size = new Size(342, 544);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Properties";
@@ -86,10 +98,12 @@
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "A", "B", "C", "D", "E", "F" });
             comboBox1.Location = new Point(126, 155);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(150, 33);
             comboBox1.TabIndex = 20;
+            comboBox1.Text = "A";
             // 
             // textBox10
             // 
@@ -222,9 +236,9 @@
             label3.AutoSize = true;
             label3.Location = new Point(20, 158);
             label3.Name = "label3";
-            label3.Size = new Size(83, 25);
+            label3.Size = new Size(86, 25);
             label3.TabIndex = 2;
-            label3.Text = "Soil Type";
+            label3.Text = "Site Class";
             // 
             // label2
             // 
@@ -248,7 +262,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(98, 616);
+            button1.Location = new Point(119, 596);
             button1.Name = "button1";
             button1.Size = new Size(112, 34);
             button1.TabIndex = 1;
@@ -257,12 +271,66 @@
             // 
             // button2
             // 
-            button2.Location = new Point(244, 616);
+            button2.Location = new Point(255, 596);
             button2.Name = "button2";
             button2.Size = new Size(112, 34);
             button2.TabIndex = 2;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(293, 63);
+            label11.Name = "label11";
+            label11.Size = new Size(38, 25);
+            label11.TabIndex = 21;
+            label11.Text = "%g";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(294, 110);
+            label12.Name = "label12";
+            label12.Size = new Size(38, 25);
+            label12.TabIndex = 22;
+            label12.Text = "%g";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(283, 298);
+            label13.Name = "label13";
+            label13.Size = new Size(38, 25);
+            label13.TabIndex = 23;
+            label13.Text = "%g";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(283, 342);
+            label14.Name = "label14";
+            label14.Size = new Size(38, 25);
+            label14.TabIndex = 24;
+            label14.Text = "%g";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(287, 388);
+            label15.Name = "label15";
+            label15.Size = new Size(37, 25);
+            label15.TabIndex = 25;
+            label15.Text = "sec";
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(286, 443);
+            label16.Name = "label16";
+            label16.Size = new Size(38, 25);
+            label16.TabIndex = 26;
+            label16.Text = "%g";
             // 
             // Seismic
             // 
@@ -270,7 +338,7 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(396, 680);
+            ClientSize = new Size(396, 655);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
@@ -307,5 +375,11 @@
         private Label label3;
         private Label label2;
         private ComboBox comboBox1;
+        private Label label11;
+        private Label label16;
+        private Label label15;
+        private Label label14;
+        private Label label13;
+        private Label label12;
     }
 }

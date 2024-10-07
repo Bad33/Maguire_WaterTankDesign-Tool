@@ -113,6 +113,7 @@
             button1.TabIndex = 0;
             button1.Text = "Add New Material...";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // groupBox2
             // 
