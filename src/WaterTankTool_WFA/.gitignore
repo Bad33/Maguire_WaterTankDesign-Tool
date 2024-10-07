@@ -1,2 +1,20 @@
+# Ignore IDE-specific files
+.idea/
 .vs/
-[Bb]in/
+*.suo
+*.user
+
+# Ignore build output directories
+bin/
+obj/
+
+# Ignore auto-generated files
+*.vsidx
+*.cache
+*.json
+*.v9.bin
+*.dtbcache.v2
+
+# Ignore SQLite database files if generated during runtime
+*.sqlite
+*.db
