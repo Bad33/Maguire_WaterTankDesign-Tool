@@ -14,6 +14,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = WaterTankTool_WFA
-build_property.ProjectDir = C:\Users\Union Loaner\Desktop\Nikhil\Maguire Project\src\WaterTankTool_WFA\WaterTankTool_WFA\
+build_property.ProjectDir = C:\Users\Union Loaner\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

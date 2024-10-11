@@ -21,15 +21,28 @@ namespace WaterTankTool_WFA
             InitializeComponent();
 
             _context = new WaterTankDbContext();
+            LoadData();
+        }
+
+        private void LoadData()
+        {
             dataGridView1.DataSource = _context.SegmentProperties.ToList();
+            foreach (DataGridViewColumn column in dataGridView1.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.Programmatic;
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             AddSegmentSection addSegmentSection = new AddSegmentSection();
-            addSegmentSection.ShowDialog();
-            //SegmentDialogBox segmentDialogBox = new SegmentDialogBox();
-            //segmentDialogBox.ShowDialog();
+            var result = addSegmentSection.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                LoadData();
+            }
+
         }
 
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -42,7 +55,6 @@ namespace WaterTankTool_WFA
         {
             dataGridView1.DataSource = _context.SegmentProperties.ToList();
 
-            // Enable sorting for all columns
             foreach (DataGridViewColumn column in dataGridView1.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.Programmatic;
@@ -52,16 +64,15 @@ namespace WaterTankTool_WFA
 
         private void button3_Click(object sender, EventArgs e)
         {
-
             if (dataGridView1.SelectedRows.Count > 0)
             {
                 DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
                 int segmentNumber = (int)selectedRow.Cells[0].Value;
                 string segmentName = selectedRow.Cells[1].Value.ToString();
 
-                result = MessageBox.Show("Do you want to delete " + segmentName + ".", "Confirm Delete");
+                result = MessageBox.Show($"Do you want to delete {segmentName}?", "Confirm Delete", buttons, MessageBoxIcon.Question);
 
-                if (result == DialogResult.OK)
+                if (result == DialogResult.Yes)
                 {
                     using (var context = new WaterTankDbContext())
                     {
@@ -71,8 +82,8 @@ namespace WaterTankTool_WFA
                         {
                             context.SegmentProperties.Remove(segmentProperties);
                             context.SaveChanges();
-                            MessageBox.Show("Segment " + segmentName + " Deleted.");
-
+                            MessageBox.Show($"Segment {segmentName} deleted successfully.");
+                            LoadData(); 
                         }
                         else
                         {
@@ -81,19 +92,31 @@ namespace WaterTankTool_WFA
                     }
                 }
             }
-
             else
             {
-                MessageBox.Show("Please Select a Row to Delete");
+                MessageBox.Show("Please select a row to delete");
             }
-
-
-
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+                int segmentNumber = (int)selectedRow.Cells[0].Value;
 
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(segmentNumber, "Modify");
+                var result = segmentDialogBox.ShowDialog();
+
+                if (result == DialogResult.OK)
+                {
+                    LoadData();
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a row to modify");
+            }
         }
     }
 }
