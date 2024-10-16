@@ -1,4 +1,6 @@
 using System.Windows.Forms;
+using WaterTankTool_WFA.Custom_Design_Control;
+using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Load;
 using WaterTankTool_WFA.Solver;
 
@@ -6,9 +8,66 @@ namespace WaterTankTool_WFA;
 
 public partial class Form1 : Form
 {
+
+     TankDesign tankDesign = new TankDesign();
+
     public Form1()
     {
         InitializeComponent();
+
+        tankDesign.Dock = DockStyle.None;
+        tankDesign.Anchor = AnchorStyles.None;
+        tankDesign.Size = new Size(150, 150); // Adjust as needed
+
+        tableLayoutPanel1.SetCellPosition(tankDesign, new TableLayoutPanelCellPosition(0, 0));
+        tableLayoutPanel1.SetColumnSpan(tankDesign, tableLayoutPanel1.ColumnCount);
+        tableLayoutPanel1.SetRowSpan(tankDesign, tableLayoutPanel1.RowCount);
+        tableLayoutPanel1.Controls.Add(tankDesign,0,0);
+        tankDesign.BringToFront();
+        tankDesign.Segments = GetSegmentsFromDatabase();
+
+        tankDesign.Invalidate();
+
+
+    }
+
+    public void OnSegmentAdded(SegmentProperties newSegment)
+    {
+        if (InvokeRequired)
+        {
+            this.Invoke(new Action(() => OnSegmentAdded(newSegment)));
+            return;
+        }
+        tankDesign.Segments = GetSegmentsFromDatabase();
+
+        tableLayoutPanel1.PerformLayout();
+        tankDesign.PerformLayout();
+
+        tankDesign.Redraw();
+    }
+
+    public void OnSegmentDeleted()
+    {
+        tankDesign.Segments = GetSegmentsFromDatabase();
+
+        tableLayoutPanel1.PerformLayout();
+        tankDesign.PerformLayout();
+
+        tankDesign.Redraw();
+
+    }
+
+
+    public List<SegmentProperties> GetSegmentsFromDatabase()
+    {
+        List<SegmentProperties> segments = new List<SegmentProperties>();
+
+        using (var context = new WaterTankDbContext())
+        {
+            segments = context.SegmentProperties.ToList();
+        }
+
+        return segments;
     }
 
     private void Form1_Click(object sender, EventArgs e)
@@ -164,5 +223,27 @@ public partial class Form1 : Form
     {
         Solver_Output solver_Output = new Solver_Output();
         solver_Output.ShowDialog();
+    }
+
+    private void newToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void toolStripButton5_Click(object sender, EventArgs e)
+    {
+        Solver_Output solver = new Solver_Output();
+        solver.ShowDialog();
+    }
+
+    private void toolStripButton6_Click(object sender, EventArgs e)
+    {
+        Define_Materials define_Materials = new Define_Materials();
+        define_Materials.ShowDialog();
+    }
+
+    private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+    {
+
     }
 }

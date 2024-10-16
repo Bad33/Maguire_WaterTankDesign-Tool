@@ -16,6 +16,7 @@ namespace WaterTankTool_WFA
         private WaterTankDbContext _context;
         MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
         DialogResult result;
+        Form1 form1 = new Form1();
         public Define_Segments()
         {
             InitializeComponent();
@@ -83,7 +84,8 @@ namespace WaterTankTool_WFA
                             context.SegmentProperties.Remove(segmentProperties);
                             context.SaveChanges();
                             MessageBox.Show($"Segment {segmentName} deleted successfully.");
-                            LoadData(); 
+                            LoadData();
+                            form1.OnSegmentDeleted();
                         }
                         else
                         {
