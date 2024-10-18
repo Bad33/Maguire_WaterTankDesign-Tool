@@ -35,7 +35,7 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             Name = "TankDesign";
-
+            Load += TankDesign_Load_1;
             ResumeLayout(false);
         }
 

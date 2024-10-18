@@ -1,0 +1,39 @@
+{
+    "tanks": [
+        {
+            "type": "100 K",
+            "capacity": "50,000 liters",
+            "height": "10 meters",
+            "diameter": "5 meters",
+            "thickness": "0.1 meters"
+        },
+        {
+            "type": "250 K",
+            "capacity": "100,000 liters",
+            "height": "8 meters",
+            "diameter": "8 meters",
+            "thickness": "0.15 meters"
+        },
+        {
+            "type": "500 K",
+            "capacity": "30,000 liters",
+            "height": "4 meters",
+            "diameter": "N/A",
+            "thickness": "0.08 meters"
+        },
+        {
+            "type": "750 K",
+            "capacity": "75,000 liters",
+            "height": "6 meters",
+            "diameter": "4 meters",
+            "thickness": "0.12 meters"
+        },
+        {
+            "type": "1 M",
+            "capacity": "60,000 liters",
+            "height": "7 meters",
+            "diameter": "6 meters",
+            "thickness": "0.1 meters"
+        }
+    ]
+}
