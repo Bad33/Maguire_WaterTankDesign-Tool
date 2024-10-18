@@ -5,8 +5,10 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Tanks;
 
 namespace WaterTankTool_WFA
@@ -34,7 +36,83 @@ namespace WaterTankTool_WFA
 
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
-            
+
+        }
+
+        private void successDialog(int rowsAffected)
+        {
+            if (rowsAffected > 0)
+            {
+                DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+                if (result == DialogResult.OK)
+                {
+                    this.Close(); // Close the dialog on success
+                }
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show("Data might not have been saved!", "Confirmation", MessageBoxButtons.OK);
+                if (result == DialogResult.OK)
+                {
+                    this.Close(); // Close the dialog even if no rows were affected
+                }
+            }
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBox1.Text) ||
+                 string.IsNullOrWhiteSpace(textBox2.Text) ||
+                 string.IsNullOrWhiteSpace(textBox3.Text))
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            string diameterS = Regex.Match(_properties.Diameter, @"\d+").Value;
+            string thichnessS = Regex.Match(_properties.Thickness, @"\d+").Value;
+
+            double diameter = double.Parse(diameterS);
+            double thickness = double.Parse(thichnessS);
+
+            // Try parsing numeric fields for Diameter, Thickness, and Heights
+            if (
+                !double.TryParse(textBox2.Text, out double heightInitial) ||
+                !double.TryParse(textBox3.Text, out double heightFinal))
+            {
+                MessageBox.Show("Please enter valid numbers for Diameter, Thickness, and Heights.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (var context = new WaterTankDbContext())
+            {
+                SegmentProperties segmentProperties;
+
+                segmentProperties = new SegmentProperties()
+                {
+                    SegmentName = textBox1.Text,
+                    SegmentType = "Tanks",
+                    Diameter = diameter,
+                    Thickness = thickness,
+                    HeightInitial = heightInitial,
+                    HeightFinal = heightFinal
+                };
+
+                context.SegmentProperties.Add(segmentProperties);
+
+
+                try
+                {
+                    int rowsAffected = context.SaveChanges();
+                    successDialog(rowsAffected);
+                    Form1 form1 = new Form1();
+                    form1.OnSegmentAdded(segmentProperties);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

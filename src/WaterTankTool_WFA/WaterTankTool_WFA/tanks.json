@@ -10,9 +10,9 @@
         {
             "type": "250 K",
             "capacity": "100,000 liters",
-            "height": "8 meters",
-            "diameter": "8 meters",
-            "thickness": "0.15 meters"
+            "height": "80 meters",
+            "diameter": "100 meters",
+            "thickness": "15 meters"
         },
         {
             "type": "500 K",
