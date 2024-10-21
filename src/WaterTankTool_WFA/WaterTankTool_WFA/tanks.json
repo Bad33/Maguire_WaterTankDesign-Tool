@@ -1,0 +1,39 @@
+{
+    "tanks": [
+        {
+            "type": "100,000 gallon",
+            "capacity": "50,000 liters",
+            "height": "10 meters",
+            "diameter": "5 meters",
+            "thickness": "0.1 meters"
+        },
+        { 
+            "type": "250,000 gallon",
+            "capacity": "100,000 liters",
+            "height": "80 meters",
+            "diameter": "100 meters",
+            "thickness": "15 meters"
+        },
+        {
+            "type": "500,000 gallon",
+            "capacity": "30,000 liters",
+            "height": "4 meters",
+            "diameter": "N/A",
+            "thickness": "0.08 meters"
+        },
+        {
+            "type": "750,000 gallon",
+            "capacity": "75,000 liters",
+            "height": "6 meters",
+            "diameter": "4 meters",
+            "thickness": "0.12 meters"
+        },
+        {
+            "type": "1,000,000 gallon",
+            "capacity": "60,000 liters",
+            "height": "7 meters",
+            "diameter": "6 meters",
+            "thickness": "0.1 meters"
+        }
+    ]
+}

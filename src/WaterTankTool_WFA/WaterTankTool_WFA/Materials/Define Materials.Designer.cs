@@ -144,6 +144,7 @@
             ClientSize = new Size(599, 437);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "Define_Materials";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Define Materials";

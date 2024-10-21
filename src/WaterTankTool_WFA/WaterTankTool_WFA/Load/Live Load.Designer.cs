@@ -34,6 +34,7 @@
             richTextBox1 = new RichTextBox();
             button1 = new Button();
             button2 = new Button();
+            label2 = new Label();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -89,6 +90,16 @@
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label2.Location = new Point(331, 40);
+            label2.Name = "label2";
+            label2.Size = new Size(30, 22);
+            label2.TabIndex = 5;
+            label2.Text = "Psi";
+            // 
             // Live_Load
             // 
             AcceptButton = button1;
@@ -96,11 +107,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
             ClientSize = new Size(445, 259);
+            Controls.Add(label2);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
+            MaximizeBox = false;
             Name = "Live_Load";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Live Load";
@@ -117,5 +130,6 @@
         private RichTextBox richTextBox1;
         private Button button1;
         private Button button2;
+        private Label label2;
     }
 }

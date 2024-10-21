@@ -29,18 +29,23 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
-            groupBox2 = new GroupBox();
-            groupBox3 = new GroupBox();
-            label1 = new Label();
             textBox1 = new TextBox();
-            label2 = new Label();
-            label3 = new Label();
-            textBox2 = new TextBox();
+            label1 = new Label();
+            groupBox2 = new GroupBox();
             textBox3 = new TextBox();
+            textBox2 = new TextBox();
+            label3 = new Label();
+            label2 = new Label();
+            groupBox3 = new GroupBox();
+            textBox4 = new TextBox();
+            label4 = new Label();
             button1 = new Button();
             button2 = new Button();
+            label5 = new Label();
+            label6 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
+            groupBox3.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
@@ -54,8 +59,26 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Tank";
             // 
+            // textBox1
+            // 
+            textBox1.Location = new Point(172, 38);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(221, 31);
+            textBox1.TabIndex = 1;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(17, 38);
+            label1.Name = "label1";
+            label1.Size = new Size(113, 25);
+            label1.TabIndex = 0;
+            label1.Text = "Tank Name : ";
+            // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(label6);
+            groupBox2.Controls.Add(label5);
             groupBox2.Controls.Add(textBox3);
             groupBox2.Controls.Add(textBox2);
             groupBox2.Controls.Add(label3);
@@ -67,31 +90,28 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Input";
             // 
-            // groupBox3
+            // textBox3
             // 
-            groupBox3.Location = new Point(28, 281);
-            groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(411, 277);
-            groupBox3.TabIndex = 2;
-            groupBox3.TabStop = false;
-            groupBox3.Text = "Properties";
-            groupBox3.Enter += groupBox3_Enter;
+            textBox3.Location = new Point(172, 95);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(167, 31);
+            textBox3.TabIndex = 3;
             // 
-            // label1
+            // textBox2
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(17, 38);
-            label1.Name = "label1";
-            label1.Size = new Size(113, 25);
-            label1.TabIndex = 0;
-            label1.Text = "Tank Name : ";
+            textBox2.Location = new Point(172, 47);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(167, 31);
+            textBox2.TabIndex = 2;
             // 
-            // textBox1
+            // label3
             // 
-            textBox1.Location = new Point(172, 38);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(221, 31);
-            textBox1.TabIndex = 1;
+            label3.AutoSize = true;
+            label3.Location = new Point(17, 101);
+            label3.Name = "label3";
+            label3.Size = new Size(106, 25);
+            label3.TabIndex = 1;
+            label3.Text = "Height Final";
             // 
             // label2
             // 
@@ -102,28 +122,35 @@
             label2.TabIndex = 0;
             label2.Text = "Height Initial";
             // 
-            // label3
+            // groupBox3
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(23, 101);
-            label3.Name = "label3";
-            label3.Size = new Size(106, 25);
-            label3.TabIndex = 1;
-            label3.Text = "Height Final";
+            groupBox3.Controls.Add(textBox4);
+            groupBox3.Controls.Add(label4);
+            groupBox3.Location = new Point(28, 281);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(411, 277);
+            groupBox3.TabIndex = 2;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "Properties";
+            groupBox3.Enter += groupBox3_Enter;
             // 
-            // textBox2
+            // textBox4
             // 
-            textBox2.Location = new Point(172, 47);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(167, 31);
-            textBox2.TabIndex = 2;
+            textBox4.Location = new Point(172, 53);
+            textBox4.Name = "textBox4";
+            textBox4.ReadOnly = true;
+            textBox4.Size = new Size(167, 31);
+            textBox4.TabIndex = 1;
+            textBox4.TextChanged += textBox4_TextChanged;
             // 
-            // textBox3
+            // label4
             // 
-            textBox3.Location = new Point(172, 95);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(167, 31);
-            textBox3.TabIndex = 3;
+            label4.AutoSize = true;
+            label4.Location = new Point(21, 53);
+            label4.Name = "label4";
+            label4.Size = new Size(79, 25);
+            label4.TabIndex = 0;
+            label4.Text = "Capacity";
             // 
             // button1
             // 
@@ -133,6 +160,7 @@
             button1.TabIndex = 3;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
             // 
             // button2
             // 
@@ -142,6 +170,26 @@
             button2.TabIndex = 4;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label5.Location = new Point(350, 53);
+            label5.Name = "label5";
+            label5.Size = new Size(18, 22);
+            label5.TabIndex = 4;
+            label5.Text = "ft";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label6.Location = new Point(350, 95);
+            label6.Name = "label6";
+            label6.Size = new Size(18, 22);
+            label6.TabIndex = 5;
+            label6.Text = "ft";
             // 
             // TankProperty
             // 
@@ -155,12 +203,16 @@
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            MaximizeBox = false;
             Name = "TankProperty";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Tank Property";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
+            groupBox3.ResumeLayout(false);
+            groupBox3.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -177,5 +229,9 @@
         private Label label2;
         private Button button1;
         private Button button2;
+        private Label label4;
+        private TextBox textBox4;
+        private Label label5;
+        private Label label6;
     }
 }

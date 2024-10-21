@@ -34,6 +34,7 @@
             richTextBox1 = new RichTextBox();
             button1 = new Button();
             button2 = new Button();
+            label2 = new Label();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -53,6 +54,7 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(150, 31);
             textBox1.TabIndex = 1;
+            textBox1.Text = "62.4";
             // 
             // groupBox1
             // 
@@ -90,11 +92,22 @@
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label2.Location = new Point(317, 50);
+            label2.Name = "label2";
+            label2.Size = new Size(31, 22);
+            label2.TabIndex = 5;
+            label2.Text = "Pcf";
+            // 
             // Water_Load
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(440, 313);
+            Controls.Add(label2);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
@@ -117,5 +130,6 @@
         private RichTextBox richTextBox1;
         private Button button1;
         private Button button2;
+        private Label label2;
     }
 }

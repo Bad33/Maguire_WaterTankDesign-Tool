@@ -45,7 +45,7 @@ namespace WaterTankTool_WFA
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
-            SegmentType = "Cone";
+            SegmentType = "Base";
 
             if (_selectedPictureBox != null)
             {
@@ -59,7 +59,7 @@ namespace WaterTankTool_WFA
 
         private void pictureBox3_Click(object sender, EventArgs e)
         {
-            SegmentType = "Spheriod";
+            SegmentType = "Tanks";
 
             if (_selectedPictureBox != null)
             {

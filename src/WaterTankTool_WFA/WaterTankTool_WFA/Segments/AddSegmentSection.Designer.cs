@@ -96,7 +96,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(418, 178);
+            label4.Location = new Point(421, 178);
             label4.Name = "label4";
             label4.Size = new Size(55, 25);
             label4.TabIndex = 5;
@@ -105,11 +105,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(235, 178);
+            label3.Location = new Point(246, 178);
             label3.Name = "label3";
-            label3.Size = new Size(88, 25);
+            label3.Size = new Size(48, 25);
             label3.TabIndex = 4;
-            label3.Text = "Trapezoid";
+            label3.Text = "Base";
             // 
             // label2
             // 

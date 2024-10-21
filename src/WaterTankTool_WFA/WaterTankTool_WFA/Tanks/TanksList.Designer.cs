@@ -37,12 +37,13 @@
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "150 K", "250 K", "500 K", "700 K", "1 M" });
+            comboBox1.Items.AddRange(new object[] { "150,000 gallon", "250,000 gallon", "500,000 gallon", "700,000 gallon", "1,000,000 gallon" });
             comboBox1.Location = new Point(209, 46);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(216, 33);
             comboBox1.TabIndex = 0;
-            comboBox1.Text = "250 K";
+            comboBox1.Text = "Select Tank Capacity";
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // label1
             // 
@@ -83,9 +84,11 @@
             Controls.Add(button1);
             Controls.Add(label1);
             Controls.Add(comboBox1);
+            MaximizeBox = false;
             Name = "TanksList";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Tanks List";
+            Load += TanksList_Load;
             ResumeLayout(false);
             PerformLayout();
         }

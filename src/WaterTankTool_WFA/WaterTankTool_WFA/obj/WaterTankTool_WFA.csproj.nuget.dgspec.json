@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Project\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj": {}
+    "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Project\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj": {
+    "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Project\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
+        "projectUniqueName": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
         "projectName": "WaterTankTool_WFA",
-        "projectPath": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Project\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
+        "projectPath": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
         "packagesPath": "C:\\Users\\Union Loaner\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Project\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\obj\\",
+        "outputPath": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
