@@ -4,6 +4,9 @@
     <Compile Update="About\About.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Custom Design Control\StructuralDrawingForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Custom Design Control\TankDesign.cs">
       <SubType>UserControl</SubType>
     </Compile>

@@ -39,7 +39,7 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(dimensions != null)
+            if (dimensions != null)
             {
                 TankProperty tankProperty = new TankProperty(dimensions);
                 tankProperty.ShowDialog();
@@ -51,7 +51,7 @@ namespace WaterTankTool_WFA
         {
             _selectedTankCapacity = comboBox1.SelectedItem.ToString();
 
-            if(tankData?.Tanks != null )
+            if (tankData?.Tanks != null)
             {
                 dimensions = tankData.Tanks.FirstOrDefault(data => data.Type == _selectedTankCapacity);
             }
@@ -59,6 +59,11 @@ namespace WaterTankTool_WFA
             {
                 Console.WriteLine("No tanks found in the JSON file.");
             }
+        }
+
+        private void TanksList_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

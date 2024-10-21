@@ -90,7 +90,7 @@ partial class Form1
         toolStripSeparator8 = new ToolStripSeparator();
         toolStripLabel2 = new ToolStripLabel();
         toolStripTextBox2 = new ToolStripTextBox();
-        tableLayoutPanel1 = new TableLayoutPanel();
+        panel1 = new Panel();
         menuStrip1.SuspendLayout();
         toolStrip1.SuspendLayout();
         toolStrip3.SuspendLayout();
@@ -445,7 +445,7 @@ partial class Form1
         toolStrip3.Location = new Point(0, 62);
         toolStrip3.Name = "toolStrip3";
         toolStrip3.RightToLeft = RightToLeft.No;
-        toolStrip3.Size = new Size(36, 464);
+        toolStrip3.Size = new Size(48, 464);
         toolStrip3.TabIndex = 12;
         toolStrip3.Text = "toolStrip3";
         // 
@@ -456,7 +456,7 @@ partial class Form1
         toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
         toolStripButton3.ImageTransparentColor = Color.Magenta;
         toolStripButton3.Name = "toolStripButton3";
-        toolStripButton3.Size = new Size(31, 28);
+        toolStripButton3.Size = new Size(43, 28);
         toolStripButton3.Text = "&Zoom Out";
         // 
         // pasteToolStripButton1
@@ -466,7 +466,7 @@ partial class Form1
         pasteToolStripButton1.Image = (Image)resources.GetObject("pasteToolStripButton1.Image");
         pasteToolStripButton1.ImageTransparentColor = Color.Magenta;
         pasteToolStripButton1.Name = "pasteToolStripButton1";
-        pasteToolStripButton1.Size = new Size(31, 28);
+        pasteToolStripButton1.Size = new Size(43, 28);
         pasteToolStripButton1.Text = "&Zoom In";
         pasteToolStripButton1.Click += pasteToolStripButton1_Click;
         // 
@@ -476,14 +476,14 @@ partial class Form1
         toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
         toolStripButton1.ImageTransparentColor = Color.Magenta;
         toolStripButton1.Name = "toolStripButton1";
-        toolStripButton1.Size = new Size(31, 28);
+        toolStripButton1.Size = new Size(43, 28);
         toolStripButton1.Text = "toolStripButton1";
         toolStripButton1.Click += toolStripButton1_Click;
         // 
         // toolStripSeparator7
         // 
         toolStripSeparator7.Name = "toolStripSeparator7";
-        toolStripSeparator7.Size = new Size(31, 6);
+        toolStripSeparator7.Size = new Size(43, 6);
         // 
         // toolStripButton4
         // 
@@ -491,7 +491,7 @@ partial class Form1
         toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
         toolStripButton4.ImageTransparentColor = Color.Magenta;
         toolStripButton4.Name = "toolStripButton4";
-        toolStripButton4.Size = new Size(31, 28);
+        toolStripButton4.Size = new Size(43, 28);
         toolStripButton4.Text = "Add Geometry";
         toolStripButton4.Click += toolStripButton4_Click;
         // 
@@ -501,7 +501,7 @@ partial class Form1
         toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
         toolStripButton2.ImageTransparentColor = Color.Magenta;
         toolStripButton2.Name = "toolStripButton2";
-        toolStripButton2.Size = new Size(31, 28);
+        toolStripButton2.Size = new Size(43, 28);
         toolStripButton2.Text = "Load";
         // 
         // toolStripButton6
@@ -510,7 +510,7 @@ partial class Form1
         toolStripButton6.Image = (Image)resources.GetObject("toolStripButton6.Image");
         toolStripButton6.ImageTransparentColor = Color.Magenta;
         toolStripButton6.Name = "toolStripButton6";
-        toolStripButton6.Size = new Size(31, 28);
+        toolStripButton6.Size = new Size(43, 28);
         toolStripButton6.Text = "toolStripButton6";
         toolStripButton6.ToolTipText = "Materials";
         toolStripButton6.Click += toolStripButton6_Click;
@@ -521,7 +521,7 @@ partial class Form1
         toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
         toolStripButton5.ImageTransparentColor = Color.Magenta;
         toolStripButton5.Name = "toolStripButton5";
-        toolStripButton5.Size = new Size(31, 28);
+        toolStripButton5.Size = new Size(43, 28);
         toolStripButton5.Text = "toolStripButton5";
         toolStripButton5.ToolTipText = "Solve";
         toolStripButton5.Click += toolStripButton5_Click;
@@ -530,9 +530,9 @@ partial class Form1
         // 
         statusStrip2.Dock = DockStyle.Top;
         statusStrip2.ImageScalingSize = new Size(24, 24);
-        statusStrip2.Location = new Point(36, 62);
+        statusStrip2.Location = new Point(48, 62);
         statusStrip2.Name = "statusStrip2";
-        statusStrip2.Size = new Size(793, 22);
+        statusStrip2.Size = new Size(781, 22);
         statusStrip2.TabIndex = 17;
         statusStrip2.Text = "statusStrip2";
         // 
@@ -543,9 +543,9 @@ partial class Form1
         toolStrip2.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip2.ImageScalingSize = new Size(24, 24);
         toolStrip2.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripTextBox1, toolStripSeparator8, toolStripLabel2, toolStripTextBox2 });
-        toolStrip2.Location = new Point(36, 495);
+        toolStrip2.Location = new Point(48, 495);
         toolStrip2.Name = "toolStrip2";
-        toolStrip2.Size = new Size(793, 31);
+        toolStrip2.Size = new Size(781, 31);
         toolStrip2.TabIndex = 18;
         toolStrip2.Text = "toolStrip2";
         // 
@@ -576,101 +576,14 @@ partial class Form1
         toolStripTextBox2.Name = "toolStripTextBox2";
         toolStripTextBox2.Size = new Size(100, 31);
         // 
-        // tableLayoutPanel1
+        // panel1
         // 
-        tableLayoutPanel1.AutoSize = true;
-        tableLayoutPanel1.BackgroundImageLayout = ImageLayout.None;
-        tableLayoutPanel1.ColumnCount = 1;
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.Cursor = Cursors.Hand;
-        tableLayoutPanel1.Dock = DockStyle.Fill;
-        tableLayoutPanel1.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
-        tableLayoutPanel1.ImeMode = ImeMode.NoControl;
-        tableLayoutPanel1.Location = new Point(36, 84);
-        tableLayoutPanel1.Name = "tableLayoutPanel1";
-        tableLayoutPanel1.RowCount = 1;
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-        tableLayoutPanel1.Size = new Size(793, 411);
-        tableLayoutPanel1.TabIndex = 20;
-        tableLayoutPanel1.Paint += tableLayoutPanel1_Paint;
+        panel1.Dock = DockStyle.Fill;
+        panel1.Location = new Point(48, 84);
+        panel1.Name = "panel1";
+        panel1.Size = new Size(781, 411);
+        panel1.TabIndex = 20;
+        panel1.Paint += panel1_Paint_1;
         // 
         // Form1
         // 
@@ -679,7 +592,7 @@ partial class Form1
         AutoSize = true;
         BackColor = SystemColors.Control;
         ClientSize = new Size(829, 526);
-        Controls.Add(tableLayoutPanel1);
+        Controls.Add(panel1);
         Controls.Add(toolStrip2);
         Controls.Add(statusStrip2);
         Controls.Add(toolStrip3);
@@ -764,7 +677,6 @@ partial class Form1
     private ToolStripSeparator toolStripSeparator8;
     private ToolStripLabel toolStripLabel2;
     private ToolStripTextBox toolStripTextBox2;
-    private TableLayoutPanel tableLayoutPanel1;
     private ToolStripButton toolStripButton4;
     private ToolStripMenuItem liveLoadToolStripMenuItem;
     private ToolStripMenuItem deadLoadToolStripMenuItem;
@@ -772,4 +684,5 @@ partial class Form1
     private ToolStripMenuItem aboutToolStripMenuItem;
     private ToolStripButton toolStripButton5;
     private ToolStripButton toolStripButton6;
+    private Panel panel1;
 }

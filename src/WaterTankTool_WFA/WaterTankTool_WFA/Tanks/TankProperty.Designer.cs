@@ -41,6 +41,8 @@
             label4 = new Label();
             button1 = new Button();
             button2 = new Button();
+            label5 = new Label();
+            label6 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -75,6 +77,8 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(label6);
+            groupBox2.Controls.Add(label5);
             groupBox2.Controls.Add(textBox3);
             groupBox2.Controls.Add(textBox2);
             groupBox2.Controls.Add(label3);
@@ -167,6 +171,26 @@
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label5.Location = new Point(350, 53);
+            label5.Name = "label5";
+            label5.Size = new Size(18, 22);
+            label5.TabIndex = 4;
+            label5.Text = "ft";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label6.Location = new Point(350, 95);
+            label6.Name = "label6";
+            label6.Size = new Size(18, 22);
+            label6.TabIndex = 5;
+            label6.Text = "ft";
+            // 
             // TankProperty
             // 
             AcceptButton = button1;
@@ -207,5 +231,7 @@
         private Button button2;
         private Label label4;
         private TextBox textBox4;
+        private Label label5;
+        private Label label6;
     }
 }

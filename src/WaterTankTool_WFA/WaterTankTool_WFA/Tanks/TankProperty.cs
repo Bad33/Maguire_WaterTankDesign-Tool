@@ -88,30 +88,40 @@ namespace WaterTankTool_WFA
             {
                 SegmentProperties segmentProperties;
 
-                segmentProperties = new SegmentProperties()
+                if(context.SegmentProperties.ToList().Any(x => x.SegmentType == "Tanks"))
                 {
-                    SegmentName = textBox1.Text,
-                    SegmentType = "Tanks",
-                    Diameter = diameter,
-                    Thickness = thickness,
-                    HeightInitial = heightInitial,
-                    HeightFinal = heightFinal
-                };
-
-                context.SegmentProperties.Add(segmentProperties);
-
-
-                try
-                {
-                    int rowsAffected = context.SaveChanges();
-                    successDialog(rowsAffected);
-                    Form1 form1 = new Form1();
-                    form1.OnSegmentAdded(segmentProperties);
+                    MessageBox.Show("You Have to delete the existing tank to add new one.Alternatively you can modify the existing tank","Error");
+                    return;
                 }
-                catch (Exception ex)
+                else
                 {
-                    MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    segmentProperties = new SegmentProperties()
+                    {
+                        SegmentName = textBox1.Text,
+                        SegmentType = "Tanks",
+                        Diameter = diameter,
+                        Thickness = thickness,
+                        HeightInitial = heightInitial,
+                        HeightFinal = heightFinal
+                    };
+
+                    context.SegmentProperties.Add(segmentProperties);
+
+
+                    try
+                    {
+                        int rowsAffected = context.SaveChanges();
+                        successDialog(rowsAffected);
+                        Form1 form1 = new Form1();
+                        form1.OnSegmentAdded(segmentProperties);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
+
+
             }
         }
     }

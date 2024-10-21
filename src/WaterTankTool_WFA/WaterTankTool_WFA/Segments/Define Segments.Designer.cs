@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             button3 = new Button();
             button2 = new Button();
@@ -42,20 +42,21 @@
             // 
             // groupBox1
             // 
+            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox1.AutoSize = true;
             groupBox1.Controls.Add(button3);
             groupBox1.Controls.Add(button2);
             groupBox1.Controls.Add(button1);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(776, 111);
+            groupBox1.Size = new Size(845, 140);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Segments Action";
             // 
             // button3
             // 
-            button3.Location = new Point(547, 47);
+            button3.Location = new Point(566, 47);
             button3.Name = "button3";
             button3.Size = new Size(166, 34);
             button3.TabIndex = 2;
@@ -65,7 +66,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(283, 47);
+            button2.Location = new Point(305, 47);
             button2.Name = "button2";
             button2.Size = new Size(167, 34);
             button2.TabIndex = 1;
@@ -85,11 +86,12 @@
             // 
             // groupBox2
             // 
+            groupBox2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox2.AutoSize = true;
             groupBox2.Controls.Add(dataGridView1);
             groupBox2.Location = new Point(12, 122);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(776, 327);
+            groupBox2.Size = new Size(845, 356);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Segment List";
@@ -97,31 +99,34 @@
             // dataGridView1
             // 
             dataGridView1.AllowUserToOrderColumns = true;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView1.BackgroundColor = SystemColors.ControlLight;
             dataGridView1.BorderStyle = BorderStyle.Fixed3D;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(20, 42);
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(3, 27);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowHeadersWidth = 62;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.RowTemplate.ReadOnly = true;
             dataGridView1.RowTemplate.Resizable = DataGridViewTriState.False;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(734, 255);
+            dataGridView1.Size = new Size(839, 326);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             // 
             // Define_Segments
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
-            AutoScaleMode = AutoScaleMode.Font;
+            AutoScaleMode = AutoScaleMode.Inherit;
             AutoSize = true;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(878, 494);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            MinimumSize = new Size(850, 450);
             Name = "Define_Segments";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;

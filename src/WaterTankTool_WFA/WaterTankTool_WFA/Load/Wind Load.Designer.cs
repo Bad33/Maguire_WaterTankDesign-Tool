@@ -55,6 +55,7 @@
             button3 = new Button();
             groupBox3 = new GroupBox();
             richTextBox1 = new RichTextBox();
+            label11 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -80,6 +81,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label11);
             groupBox1.Controls.Add(textBox8);
             groupBox1.Controls.Add(textBox7);
             groupBox1.Controls.Add(label10);
@@ -101,7 +103,7 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(12, 30);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(345, 496);
+            groupBox1.Size = new Size(304, 496);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Properties";
@@ -110,14 +112,14 @@
             // 
             textBox8.Location = new Point(139, 443);
             textBox8.Name = "textBox8";
-            textBox8.Size = new Size(150, 31);
+            textBox8.Size = new Size(104, 31);
             textBox8.TabIndex = 18;
             // 
             // textBox7
             // 
             textBox7.Location = new Point(139, 399);
             textBox7.Name = "textBox7";
-            textBox7.Size = new Size(147, 31);
+            textBox7.Size = new Size(104, 31);
             textBox7.TabIndex = 17;
             // 
             // label10
@@ -134,16 +136,17 @@
             label9.AutoSize = true;
             label9.Location = new Point(23, 399);
             label9.Name = "label9";
-            label9.Size = new Size(31, 25);
+            label9.Size = new Size(33, 25);
             label9.TabIndex = 15;
-            label9.Text = "Zy";
+            label9.Text = "Zg";
             // 
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(290, 352);
+            label8.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label8.Location = new Point(249, 352);
             label8.Name = "label8";
-            label8.Size = new Size(49, 25);
+            label8.Size = new Size(38, 22);
             label8.TabIndex = 14;
             label8.Text = "mph";
             // 
@@ -153,7 +156,7 @@
             comboBox1.Items.AddRange(new object[] { "C", "D" });
             comboBox1.Location = new Point(139, 45);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(150, 33);
+            comboBox1.Size = new Size(104, 33);
             comboBox1.TabIndex = 13;
             comboBox1.Text = "C";
             // 
@@ -161,7 +164,7 @@
             // 
             textBox6.Location = new Point(139, 349);
             textBox6.Name = "textBox6";
-            textBox6.Size = new Size(150, 31);
+            textBox6.Size = new Size(104, 31);
             textBox6.TabIndex = 12;
             textBox6.Text = "90";
             // 
@@ -169,7 +172,7 @@
             // 
             textBox5.Location = new Point(139, 297);
             textBox5.Name = "textBox5";
-            textBox5.Size = new Size(150, 31);
+            textBox5.Size = new Size(104, 31);
             textBox5.TabIndex = 11;
             textBox5.Text = "1.15";
             // 
@@ -177,7 +180,7 @@
             // 
             textBox4.Location = new Point(139, 247);
             textBox4.Name = "textBox4";
-            textBox4.Size = new Size(150, 31);
+            textBox4.Size = new Size(104, 31);
             textBox4.TabIndex = 10;
             textBox4.Text = "1.0";
             // 
@@ -185,7 +188,7 @@
             // 
             textBox3.Location = new Point(139, 194);
             textBox3.Name = "textBox3";
-            textBox3.Size = new Size(150, 31);
+            textBox3.Size = new Size(104, 31);
             textBox3.TabIndex = 9;
             textBox3.Text = "0.85";
             // 
@@ -193,7 +196,7 @@
             // 
             textBox2.Location = new Point(139, 144);
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(150, 31);
+            textBox2.Size = new Size(104, 31);
             textBox2.TabIndex = 8;
             textBox2.Text = "1.0";
             // 
@@ -201,7 +204,7 @@
             // 
             textBox1.Location = new Point(139, 94);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
+            textBox1.Size = new Size(104, 31);
             textBox1.TabIndex = 7;
             textBox1.Text = "1.0";
             // 
@@ -273,9 +276,9 @@
             // 
             groupBox2.Controls.Add(richTextBox2);
             groupBox2.Controls.Add(button3);
-            groupBox2.Location = new Point(363, 30);
+            groupBox2.Location = new Point(322, 30);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(182, 255);
+            groupBox2.Size = new Size(223, 255);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
             groupBox2.Text = "Calculation";
@@ -284,7 +287,7 @@
             // 
             richTextBox2.Location = new Point(16, 125);
             richTextBox2.Name = "richTextBox2";
-            richTextBox2.Size = new Size(150, 81);
+            richTextBox2.Size = new Size(188, 81);
             richTextBox2.TabIndex = 1;
             richTextBox2.Text = "";
             richTextBox2.TextChanged += richTextBox2_TextChanged;
@@ -293,7 +296,7 @@
             // 
             button3.Location = new Point(16, 59);
             button3.Name = "button3";
-            button3.Size = new Size(147, 34);
+            button3.Size = new Size(188, 34);
             button3.TabIndex = 0;
             button3.Text = "Calculate";
             button3.UseVisualStyleBackColor = true;
@@ -301,9 +304,9 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(richTextBox1);
-            groupBox3.Location = new Point(363, 291);
+            groupBox3.Location = new Point(322, 291);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(182, 235);
+            groupBox3.Size = new Size(223, 235);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
             groupBox3.Text = "Notes";
@@ -312,9 +315,19 @@
             // 
             richTextBox1.Location = new Point(16, 40);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(150, 144);
+            richTextBox1.Size = new Size(188, 144);
             richTextBox1.TabIndex = 7;
             richTextBox1.Text = "";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label11.Location = new Point(251, 403);
+            label11.Name = "label11";
+            label11.Size = new Size(18, 22);
+            label11.TabIndex = 19;
+            label11.Text = "ft";
             // 
             // Wind_Load
             // 
@@ -329,6 +342,7 @@
             Controls.Add(groupBox1);
             Controls.Add(button2);
             Controls.Add(button1);
+            MaximizeBox = false;
             Name = "Wind_Load";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Wind Load";
@@ -368,5 +382,6 @@
         private Label label9;
         private Label label8;
         private TextBox textBox8;
+        private Label label11;
     }
 }

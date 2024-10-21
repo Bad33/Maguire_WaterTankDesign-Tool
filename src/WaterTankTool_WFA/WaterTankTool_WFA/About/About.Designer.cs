@@ -37,8 +37,6 @@
             label4 = new Label();
             label5 = new Label();
             label6 = new Label();
-            label7 = new Label();
-            label8 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
@@ -107,7 +105,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label5.Location = new Point(198, 403);
+            label5.Location = new Point(196, 332);
             label5.Name = "label5";
             label5.Size = new Size(374, 25);
             label5.TabIndex = 7;
@@ -116,7 +114,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(61, 467);
+            label6.Location = new Point(61, 401);
             label6.MaximumSize = new Size(660, 400);
             label6.Name = "label6";
             label6.Size = new Size(644, 75);
@@ -124,33 +122,11 @@
             label6.Text = resources.GetString("label6.Text");
             label6.Click += label6_Click;
             // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label7.Location = new Point(230, 319);
-            label7.Name = "label7";
-            label7.Size = new Size(284, 25);
-            label7.TabIndex = 9;
-            label7.Text = "Supervisor : Dr. Akram Jawdhari";
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label8.Location = new Point(230, 360);
-            label8.Name = "label8";
-            label8.Size = new Size(319, 25);
-            label8.TabIndex = 10;
-            label8.Text = "Structural Analysis : Ahmed Hussien";
-            // 
             // About
             // 
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(753, 600);
-            Controls.Add(label8);
-            Controls.Add(label7);
+            ClientSize = new Size(753, 506);
             Controls.Add(label6);
             Controls.Add(label5);
             Controls.Add(label4);
@@ -180,7 +156,5 @@
         private Label label4;
         private Label label5;
         private Label label6;
-        private Label label7;
-        private Label label8;
     }
 }

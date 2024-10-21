@@ -275,3 +275,4 @@ C:\Users\Union Loaner\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTan
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.genruntimeconfig.cache
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\ref\WaterTankTool_WFA.dll
 C:\Users\Union Loaner\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Custom_Design_Control.TankDesign.resources
+C:\Users\Union Loaner\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Custom_Design_Control.StructuralDrawingForm.resources
