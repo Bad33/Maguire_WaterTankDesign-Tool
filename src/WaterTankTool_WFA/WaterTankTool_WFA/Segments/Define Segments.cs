@@ -37,12 +37,9 @@ namespace WaterTankTool_WFA
         private void button1_Click(object sender, EventArgs e)
         {
             AddSegmentSection addSegmentSection = new AddSegmentSection();
-            var result = addSegmentSection.ShowDialog();
+            addSegmentSection.ShowDialog();
+            LoadData();
 
-            if (result == DialogResult.OK)
-            {
-                LoadData();
-            }
 
         }
 
