@@ -48,6 +48,8 @@
             label5 = new Label();
             button1 = new Button();
             button2 = new Button();
+            label11 = new Label();
+            label12 = new Label();
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown4).BeginInit();
@@ -237,7 +239,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(396, 391);
+            button1.Location = new Point(396, 465);
             button1.Name = "button1";
             button1.Size = new Size(112, 34);
             button1.TabIndex = 4;
@@ -246,12 +248,33 @@
             // 
             // button2
             // 
-            button2.Location = new Point(269, 391);
+            button2.Location = new Point(272, 465);
             button2.Name = "button2";
             button2.Size = new Size(112, 34);
             button2.TabIndex = 5;
             button2.Text = "Ok";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            label11.Location = new Point(39, 388);
+            label11.Name = "label11";
+            label11.Size = new Size(55, 21);
+            label11.TabIndex = 6;
+            label11.Text = "Note : ";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            label12.Location = new Point(100, 388);
+            label12.Name = "label12";
+            label12.Size = new Size(279, 21);
+            label12.TabIndex = 7;
+            label12.Text = "Pre Loaded values are Standard values";
             // 
             // Material_Property_Data
             // 
@@ -259,7 +282,9 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button1;
-            ClientSize = new Size(531, 458);
+            ClientSize = new Size(531, 511);
+            Controls.Add(label12);
+            Controls.Add(label11);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox3);
@@ -277,6 +302,7 @@
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -301,5 +327,7 @@
         private NumericUpDown numericUpDown4;
         private Label label10;
         private Label label9;
+        private Label label11;
+        private Label label12;
     }
 }

@@ -26,7 +26,14 @@ namespace WaterTankTool_WFA
 
         private void FillTextBoxValues()
         {
+            textBox1.Text = _properties.Type.ToString();
             textBox4.Text = _properties.Type.ToString();
+            textBox7.Text = _properties.Total_Weight.ToString();
+            textBox6.Text = _properties.Weight_of_Steel.ToString();
+            textBox5.Text = _properties.Weight_of_Water.ToString();
+            textBox8.Text = _properties.Projected_Area.ToString();
+
+
         }
 
         private void groupBox3_Enter(object sender, EventArgs e)
@@ -36,7 +43,7 @@ namespace WaterTankTool_WFA
 
         private void textBox4_TextChanged(object sender, EventArgs e)
         {
-
+            textBox4.Text = _properties.Type.ToString();
         }
 
         private void successDialog(int rowsAffected)
@@ -88,9 +95,9 @@ namespace WaterTankTool_WFA
             {
                 SegmentProperties segmentProperties;
 
-                if(context.SegmentProperties.ToList().Any(x => x.SegmentType == "Tanks"))
+                if (context.SegmentProperties.ToList().Any(x => x.SegmentType == "Tanks"))
                 {
-                    MessageBox.Show("You Have to delete the existing tank to add new one.Alternatively you can modify the existing tank","Error");
+                    MessageBox.Show("You Have to delete the existing tank to add new one.Alternatively you can modify the existing tank", "Error");
                     return;
                 }
                 else
@@ -112,7 +119,7 @@ namespace WaterTankTool_WFA
                     {
                         int rowsAffected = context.SaveChanges();
                         successDialog(rowsAffected);
-                        Form1 form1 = new Form1();
+                        WaterTank form1 = new WaterTank();
                         form1.OnSegmentAdded(segmentProperties);
                     }
                     catch (Exception ex)
@@ -123,6 +130,22 @@ namespace WaterTankTool_WFA
 
 
             }
+        }
+
+        private void textBox8_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
         }
     }
 }

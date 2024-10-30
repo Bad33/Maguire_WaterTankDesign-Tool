@@ -31,6 +31,7 @@
             button1 = new Button();
             button2 = new Button();
             groupBox1 = new GroupBox();
+            label11 = new Label();
             textBox8 = new TextBox();
             textBox7 = new TextBox();
             label10 = new Label();
@@ -55,7 +56,6 @@
             button3 = new Button();
             groupBox3 = new GroupBox();
             richTextBox1 = new RichTextBox();
-            label11 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -108,6 +108,16 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Properties";
             // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label11.Location = new Point(251, 403);
+            label11.Name = "label11";
+            label11.Size = new Size(18, 22);
+            label11.TabIndex = 19;
+            label11.Text = "ft";
+            // 
             // textBox8
             // 
             textBox8.Location = new Point(139, 443);
@@ -121,6 +131,7 @@
             textBox7.Name = "textBox7";
             textBox7.Size = new Size(104, 31);
             textBox7.TabIndex = 17;
+            textBox7.TextChanged += textBox7_TextChanged;
             // 
             // label10
             // 
@@ -158,7 +169,8 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(104, 33);
             comboBox1.TabIndex = 13;
-            comboBox1.Text = "C";
+            comboBox1.Text = "Select Exposure";
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // textBox6
             // 
@@ -318,16 +330,6 @@
             richTextBox1.Size = new Size(188, 144);
             richTextBox1.TabIndex = 7;
             richTextBox1.Text = "";
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label11.Location = new Point(251, 403);
-            label11.Name = "label11";
-            label11.Size = new Size(18, 22);
-            label11.TabIndex = 19;
-            label11.Text = "ft";
             // 
             // Wind_Load
             // 

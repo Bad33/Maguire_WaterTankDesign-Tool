@@ -36,7 +36,7 @@
             button2 = new Button();
             button1 = new Button();
             groupBox2 = new GroupBox();
-            listView1 = new ListView();
+            listBox1 = new ListBox();
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -117,7 +117,7 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(listView1);
+            groupBox2.Controls.Add(listBox1);
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox2.Location = new Point(16, 30);
             groupBox2.Name = "groupBox2";
@@ -126,13 +126,15 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Materials";
             // 
-            // listView1
+            // listBox1
             // 
-            listView1.Location = new Point(15, 30);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(249, 313);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 25;
+            listBox1.Location = new Point(6, 30);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(259, 329);
+            listBox1.TabIndex = 0;
+            listBox1.SelectedIndexChanged += listBox1_SelectedIndexChanged;
             // 
             // Define_Materials
             // 
@@ -164,6 +166,6 @@
         private Button button3;
         private Button button2;
         private Button button1;
-        private ListView listView1;
+        private ListBox listBox1;
     }
 }

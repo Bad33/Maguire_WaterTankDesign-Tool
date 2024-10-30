@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WaterTankTool_WFA.Entity;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WaterTankTool_WFA
 {
@@ -30,6 +32,83 @@ namespace WaterTankTool_WFA
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(textBox1.Text) ||
+                 string.IsNullOrWhiteSpace(comboBox2.Text) ||
+                 string.IsNullOrWhiteSpace(numericUpDown1.Text) ||
+                 string.IsNullOrWhiteSpace(numericUpDown2.Text) ||
+                 string.IsNullOrWhiteSpace(numericUpDown3.Text) ||
+                 string.IsNullOrWhiteSpace(numericUpDown4.Text) )
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (
+                !int.TryParse(numericUpDown1.Text, out int _density) ||
+                !int.TryParse(numericUpDown2.Text, out int _modulusOfElasticity) ||
+                !int.TryParse(numericUpDown3.Text, out int _tensileYieldStress) ||
+                !int.TryParse(numericUpDown4.Text, out int _tensileUltimateStress))
+            {
+                MessageBox.Show("Please enter valid numbers ", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            using (var context = new WaterTankDbContext())
+            {
+                MaterialProperties materialProperties;
+
+
+                materialProperties = new MaterialProperties()
+                {
+                    MaterialName = textBox1.Text,
+                    MaterialType = comboBox2.Text,
+                    Density = _density,
+                    ModulusOfElasticity = _modulusOfElasticity,
+                    TensileYieldStress = _tensileYieldStress,
+                    TensileUltimateStress = _tensileUltimateStress,
+                };
+
+                context.MaterialProperties.Add(materialProperties);
+
+
+                try
+                {
+                    int rowsAffected = context.SaveChanges();
+                    successDialog(rowsAffected);
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+
+
+            }
+        }
+
+        private void successDialog(int rowsAffected)
+        {
+            if (rowsAffected > 0)
+            {
+                DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+                if (result == DialogResult.OK)
+                {
+                    this.Close();
+                }
+            }
+            else
+            {
+                DialogResult result = MessageBox.Show("Data might not have been saved!", "Confirmation", MessageBoxButtons.OK);
+                if (result == DialogResult.OK)
+                {
+                    this.Close();
+                }
+            }
         }
     }
 }

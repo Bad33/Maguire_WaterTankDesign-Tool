@@ -12,8 +12,17 @@ namespace WaterTankTool_WFA.Tanks
         [JsonPropertyName("type")]
         public string Type { get; set; }
 
-        [JsonPropertyName("capacity")]
-        public string Capacity { get; set; }
+        [JsonPropertyName("Weight_of_Water")]
+        public string Weight_of_Water { get; set; }
+
+        [JsonPropertyName("Weight_of_Steel")]
+        public string Weight_of_Steel { get; set; }
+
+        [JsonPropertyName("Total_Weight")]
+        public string Total_Weight { get; set; }
+
+        [JsonPropertyName("Projected_Area")]
+        public string Projected_Area { get; set; }
 
         [JsonPropertyName("height")]
         public string Height { get; set; }

@@ -16,7 +16,7 @@ namespace WaterTankTool_WFA
         private WaterTankDbContext _context;
         MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
         DialogResult result;
-        Form1 form1 = new Form1();
+        WaterTank form1 = new WaterTank();
         public Define_Segments()
         {
             InitializeComponent();

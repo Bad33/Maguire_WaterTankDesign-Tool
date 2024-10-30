@@ -32,17 +32,25 @@
             textBox1 = new TextBox();
             label1 = new Label();
             groupBox2 = new GroupBox();
+            label6 = new Label();
+            label5 = new Label();
             textBox3 = new TextBox();
             textBox2 = new TextBox();
             label3 = new Label();
             label2 = new Label();
             groupBox3 = new GroupBox();
+            textBox8 = new TextBox();
+            textBox7 = new TextBox();
+            textBox6 = new TextBox();
+            textBox5 = new TextBox();
+            label10 = new Label();
+            label9 = new Label();
+            label8 = new Label();
+            label7 = new Label();
             textBox4 = new TextBox();
             label4 = new Label();
             button1 = new Button();
             button2 = new Button();
-            label5 = new Label();
-            label6 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -63,7 +71,8 @@
             // 
             textBox1.Location = new Point(172, 38);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(221, 31);
+            textBox1.ReadOnly = true;
+            textBox1.Size = new Size(167, 31);
             textBox1.TabIndex = 1;
             // 
             // label1
@@ -89,6 +98,26 @@
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Input";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label6.Location = new Point(350, 95);
+            label6.Name = "label6";
+            label6.Size = new Size(18, 22);
+            label6.TabIndex = 5;
+            label6.Text = "ft";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label5.Location = new Point(350, 53);
+            label5.Name = "label5";
+            label5.Size = new Size(18, 22);
+            label5.TabIndex = 4;
+            label5.Text = "ft";
             // 
             // textBox3
             // 
@@ -124,6 +153,14 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(textBox8);
+            groupBox3.Controls.Add(textBox7);
+            groupBox3.Controls.Add(textBox6);
+            groupBox3.Controls.Add(textBox5);
+            groupBox3.Controls.Add(label10);
+            groupBox3.Controls.Add(label9);
+            groupBox3.Controls.Add(label8);
+            groupBox3.Controls.Add(label7);
             groupBox3.Controls.Add(textBox4);
             groupBox3.Controls.Add(label4);
             groupBox3.Location = new Point(28, 281);
@@ -134,9 +171,81 @@
             groupBox3.Text = "Properties";
             groupBox3.Enter += groupBox3_Enter;
             // 
+            // textBox8
+            // 
+            textBox8.Location = new Point(172, 229);
+            textBox8.Name = "textBox8";
+            textBox8.ReadOnly = true;
+            textBox8.Size = new Size(167, 31);
+            textBox8.TabIndex = 9;
+            textBox8.TextChanged += textBox8_TextChanged;
+            // 
+            // textBox7
+            // 
+            textBox7.Location = new Point(172, 184);
+            textBox7.Name = "textBox7";
+            textBox7.ReadOnly = true;
+            textBox7.Size = new Size(167, 31);
+            textBox7.TabIndex = 8;
+            textBox7.TextChanged += textBox7_TextChanged;
+            // 
+            // textBox6
+            // 
+            textBox6.Location = new Point(172, 139);
+            textBox6.Name = "textBox6";
+            textBox6.ReadOnly = true;
+            textBox6.Size = new Size(167, 31);
+            textBox6.TabIndex = 7;
+            textBox6.TextChanged += textBox6_TextChanged;
+            // 
+            // textBox5
+            // 
+            textBox5.Location = new Point(172, 90);
+            textBox5.Name = "textBox5";
+            textBox5.ReadOnly = true;
+            textBox5.Size = new Size(167, 31);
+            textBox5.TabIndex = 6;
+            textBox5.TextChanged += textBox5_TextChanged;
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(21, 229);
+            label10.Name = "label10";
+            label10.Size = new Size(127, 25);
+            label10.TabIndex = 5;
+            label10.Text = "Projected Area";
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(21, 184);
+            label9.Name = "label9";
+            label9.Size = new Size(110, 25);
+            label9.TabIndex = 4;
+            label9.Text = "Total Weight";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(21, 139);
+            label8.Name = "label8";
+            label8.Size = new Size(132, 25);
+            label8.TabIndex = 3;
+            label8.Text = "Weight of Steel";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(21, 96);
+            label7.Name = "label7";
+            label7.Size = new Size(141, 25);
+            label7.TabIndex = 2;
+            label7.Text = "Weight of Water";
+            // 
             // textBox4
             // 
-            textBox4.Location = new Point(172, 53);
+            textBox4.Location = new Point(172, 44);
             textBox4.Name = "textBox4";
             textBox4.ReadOnly = true;
             textBox4.Size = new Size(167, 31);
@@ -146,7 +255,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(21, 53);
+            label4.Location = new Point(21, 47);
             label4.Name = "label4";
             label4.Size = new Size(79, 25);
             label4.TabIndex = 0;
@@ -170,26 +279,6 @@
             button2.TabIndex = 4;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label5.Location = new Point(350, 53);
-            label5.Name = "label5";
-            label5.Size = new Size(18, 22);
-            label5.TabIndex = 4;
-            label5.Text = "ft";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label6.Location = new Point(350, 95);
-            label6.Name = "label6";
-            label6.Size = new Size(18, 22);
-            label6.TabIndex = 5;
-            label6.Text = "ft";
             // 
             // TankProperty
             // 
@@ -233,5 +322,13 @@
         private TextBox textBox4;
         private Label label5;
         private Label label6;
+        private Label label10;
+        private Label label9;
+        private Label label8;
+        private Label label7;
+        private TextBox textBox8;
+        private TextBox textBox7;
+        private TextBox textBox6;
+        private TextBox textBox5;
     }
 }

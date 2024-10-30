@@ -171,7 +171,7 @@ namespace WaterTankTool_WFA
                 {
                     int rowsAffected = context.SaveChanges();
                     successDialog(rowsAffected);
-                    Form1 form1 = new Form1();
+                    WaterTank form1 = new WaterTank();
                     form1.OnSegmentAdded(segmentProperties);
                 }
                 catch (Exception ex)
