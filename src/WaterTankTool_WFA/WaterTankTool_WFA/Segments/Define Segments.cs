@@ -16,7 +16,7 @@ namespace WaterTankTool_WFA
         private WaterTankDbContext _context;
         MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
         DialogResult result;
-        Form1 form1 = new Form1();
+        WaterTank form1 = new WaterTank();
         public Define_Segments()
         {
             InitializeComponent();
@@ -37,12 +37,9 @@ namespace WaterTankTool_WFA
         private void button1_Click(object sender, EventArgs e)
         {
             AddSegmentSection addSegmentSection = new AddSegmentSection();
-            var result = addSegmentSection.ShowDialog();
+            addSegmentSection.ShowDialog();
+            LoadData();
 
-            if (result == DialogResult.OK)
-            {
-                LoadData();
-            }
 
         }
 

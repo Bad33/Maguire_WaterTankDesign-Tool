@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             button5 = new Button();
             button4 = new Button();
@@ -36,10 +39,13 @@
             button2 = new Button();
             button1 = new Button();
             groupBox2 = new GroupBox();
-            listView1 = new ListView();
+            dataGridView1 = new DataGridView();
+            materialPropertiesBindingSource = new BindingSource(components);
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)materialPropertiesBindingSource).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
@@ -51,7 +57,7 @@
             groupBox1.Controls.Add(groupBox2);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(575, 410);
+            groupBox1.Size = new Size(575, 391);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -94,6 +100,7 @@
             button3.TabIndex = 2;
             button3.Text = "Delete Material";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // button2
             // 
@@ -117,22 +124,54 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(listView1);
+            groupBox2.Controls.Add(dataGridView1);
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox2.Location = new Point(16, 30);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(283, 360);
+            groupBox2.Size = new Size(283, 343);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Materials";
             // 
-            // listView1
+            // dataGridView1
             // 
-            listView1.Location = new Point(15, 30);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(249, 313);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridView1.BackgroundColor = SystemColors.ControlLight;
+            dataGridView1.BorderStyle = BorderStyle.Fixed3D;
+            dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Raised;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = SystemColors.Control;
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle1.NullValue = "NA";
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = SystemColors.Window;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(3, 27);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersWidth = 62;
+            dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView1.Size = new Size(277, 313);
+            dataGridView1.TabIndex = 0;
+            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            // 
+            // materialPropertiesBindingSource
+            // 
+            materialPropertiesBindingSource.DataSource = typeof(Entity.MaterialProperties);
             // 
             // Define_Materials
             // 
@@ -141,7 +180,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             CancelButton = button5;
-            ClientSize = new Size(599, 437);
+            ClientSize = new Size(599, 420);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -151,6 +190,8 @@
             groupBox1.ResumeLayout(false);
             groupBox3.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)materialPropertiesBindingSource).EndInit();
             ResumeLayout(false);
         }
 
@@ -164,6 +205,7 @@
         private Button button3;
         private Button button2;
         private Button button1;
-        private ListView listView1;
+        private DataGridView dataGridView1;
+        private BindingSource materialPropertiesBindingSource;
     }
 }

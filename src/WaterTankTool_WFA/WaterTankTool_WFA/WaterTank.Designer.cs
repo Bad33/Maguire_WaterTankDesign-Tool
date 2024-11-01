@@ -1,6 +1,6 @@
 ﻿namespace WaterTankTool_WFA;
 
-partial class Form1
+partial class WaterTank
 {
     /// <summary>
     ///  Required designer variable.
@@ -29,7 +29,7 @@ partial class Form1
     /// </summary>
     private void InitializeComponent()
     {
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WaterTank));
         menuStrip1 = new MenuStrip();
         fileToolStripMenuItem = new ToolStripMenuItem();
         newToolStripMenuItem = new ToolStripMenuItem();
@@ -109,7 +109,7 @@ partial class Form1
         menuStrip1.Location = new Point(0, 0);
         menuStrip1.Name = "menuStrip1";
         menuStrip1.Padding = new Padding(0, 2, 0, 2);
-        menuStrip1.Size = new Size(829, 29);
+        menuStrip1.Size = new Size(1112, 29);
         menuStrip1.Stretch = false;
         menuStrip1.TabIndex = 0;
         menuStrip1.Text = "menuStrip1";
@@ -349,7 +349,7 @@ partial class Form1
         toolStrip1.Items.AddRange(new ToolStripItem[] { newToolStripButton, openToolStripButton, saveToolStripButton, printToolStripButton, toolStripSeparator, cutToolStripButton, copyToolStripButton, pasteToolStripButton, toolStripSeparator1, helpToolStripButton });
         toolStrip1.Location = new Point(0, 29);
         toolStrip1.Name = "toolStrip1";
-        toolStrip1.Size = new Size(829, 33);
+        toolStrip1.Size = new Size(1112, 33);
         toolStrip1.TabIndex = 7;
         toolStrip1.Text = "toolStrip1";
         // 
@@ -445,7 +445,7 @@ partial class Form1
         toolStrip3.Location = new Point(0, 62);
         toolStrip3.Name = "toolStrip3";
         toolStrip3.RightToLeft = RightToLeft.No;
-        toolStrip3.Size = new Size(48, 464);
+        toolStrip3.Size = new Size(36, 554);
         toolStrip3.TabIndex = 12;
         toolStrip3.Text = "toolStrip3";
         // 
@@ -456,7 +456,7 @@ partial class Form1
         toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
         toolStripButton3.ImageTransparentColor = Color.Magenta;
         toolStripButton3.Name = "toolStripButton3";
-        toolStripButton3.Size = new Size(43, 28);
+        toolStripButton3.Size = new Size(31, 28);
         toolStripButton3.Text = "&Zoom Out";
         // 
         // pasteToolStripButton1
@@ -466,7 +466,7 @@ partial class Form1
         pasteToolStripButton1.Image = (Image)resources.GetObject("pasteToolStripButton1.Image");
         pasteToolStripButton1.ImageTransparentColor = Color.Magenta;
         pasteToolStripButton1.Name = "pasteToolStripButton1";
-        pasteToolStripButton1.Size = new Size(43, 28);
+        pasteToolStripButton1.Size = new Size(31, 28);
         pasteToolStripButton1.Text = "&Zoom In";
         pasteToolStripButton1.Click += pasteToolStripButton1_Click;
         // 
@@ -476,14 +476,14 @@ partial class Form1
         toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
         toolStripButton1.ImageTransparentColor = Color.Magenta;
         toolStripButton1.Name = "toolStripButton1";
-        toolStripButton1.Size = new Size(43, 28);
+        toolStripButton1.Size = new Size(31, 28);
         toolStripButton1.Text = "toolStripButton1";
         toolStripButton1.Click += toolStripButton1_Click;
         // 
         // toolStripSeparator7
         // 
         toolStripSeparator7.Name = "toolStripSeparator7";
-        toolStripSeparator7.Size = new Size(43, 6);
+        toolStripSeparator7.Size = new Size(31, 6);
         // 
         // toolStripButton4
         // 
@@ -491,7 +491,7 @@ partial class Form1
         toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
         toolStripButton4.ImageTransparentColor = Color.Magenta;
         toolStripButton4.Name = "toolStripButton4";
-        toolStripButton4.Size = new Size(43, 28);
+        toolStripButton4.Size = new Size(31, 28);
         toolStripButton4.Text = "Add Geometry";
         toolStripButton4.Click += toolStripButton4_Click;
         // 
@@ -501,7 +501,7 @@ partial class Form1
         toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
         toolStripButton2.ImageTransparentColor = Color.Magenta;
         toolStripButton2.Name = "toolStripButton2";
-        toolStripButton2.Size = new Size(43, 28);
+        toolStripButton2.Size = new Size(31, 28);
         toolStripButton2.Text = "Load";
         // 
         // toolStripButton6
@@ -510,7 +510,7 @@ partial class Form1
         toolStripButton6.Image = (Image)resources.GetObject("toolStripButton6.Image");
         toolStripButton6.ImageTransparentColor = Color.Magenta;
         toolStripButton6.Name = "toolStripButton6";
-        toolStripButton6.Size = new Size(43, 28);
+        toolStripButton6.Size = new Size(31, 28);
         toolStripButton6.Text = "toolStripButton6";
         toolStripButton6.ToolTipText = "Materials";
         toolStripButton6.Click += toolStripButton6_Click;
@@ -521,7 +521,7 @@ partial class Form1
         toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
         toolStripButton5.ImageTransparentColor = Color.Magenta;
         toolStripButton5.Name = "toolStripButton5";
-        toolStripButton5.Size = new Size(43, 28);
+        toolStripButton5.Size = new Size(31, 28);
         toolStripButton5.Text = "toolStripButton5";
         toolStripButton5.ToolTipText = "Solve";
         toolStripButton5.Click += toolStripButton5_Click;
@@ -530,9 +530,9 @@ partial class Form1
         // 
         statusStrip2.Dock = DockStyle.Top;
         statusStrip2.ImageScalingSize = new Size(24, 24);
-        statusStrip2.Location = new Point(48, 62);
+        statusStrip2.Location = new Point(36, 62);
         statusStrip2.Name = "statusStrip2";
-        statusStrip2.Size = new Size(781, 22);
+        statusStrip2.Size = new Size(1076, 22);
         statusStrip2.TabIndex = 17;
         statusStrip2.Text = "statusStrip2";
         // 
@@ -543,9 +543,9 @@ partial class Form1
         toolStrip2.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip2.ImageScalingSize = new Size(24, 24);
         toolStrip2.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripTextBox1, toolStripSeparator8, toolStripLabel2, toolStripTextBox2 });
-        toolStrip2.Location = new Point(48, 495);
+        toolStrip2.Location = new Point(36, 585);
         toolStrip2.Name = "toolStrip2";
-        toolStrip2.Size = new Size(781, 31);
+        toolStrip2.Size = new Size(1076, 31);
         toolStrip2.TabIndex = 18;
         toolStrip2.Text = "toolStrip2";
         // 
@@ -579,19 +579,19 @@ partial class Form1
         // panel1
         // 
         panel1.Dock = DockStyle.Fill;
-        panel1.Location = new Point(48, 84);
+        panel1.Location = new Point(36, 84);
         panel1.Name = "panel1";
-        panel1.Size = new Size(781, 411);
+        panel1.Size = new Size(1076, 501);
         panel1.TabIndex = 20;
         panel1.Paint += panel1_Paint_1;
         // 
-        // Form1
+        // WaterTank
         // 
         AutoScaleDimensions = new SizeF(10F, 25F);
         AutoScaleMode = AutoScaleMode.Font;
         AutoSize = true;
         BackColor = SystemColors.Control;
-        ClientSize = new Size(829, 526);
+        ClientSize = new Size(1112, 616);
         Controls.Add(panel1);
         Controls.Add(toolStrip2);
         Controls.Add(statusStrip2);
@@ -604,9 +604,10 @@ partial class Form1
         IsMdiContainer = true;
         MainMenuStrip = menuStrip1;
         Margin = new Padding(3, 4, 3, 4);
-        Name = "Form1";
+        Name = "WaterTank";
         RightToLeft = RightToLeft.No;
         Text = "Water Tank Design Tool";
+        WindowState = FormWindowState.Maximized;
         Load += Form1_Load;
         Click += Form1_Click;
         menuStrip1.ResumeLayout(false);

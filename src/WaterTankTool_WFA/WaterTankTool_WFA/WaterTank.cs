@@ -6,14 +6,14 @@ using WaterTankTool_WFA.Solver;
 
 namespace WaterTankTool_WFA;
 
-public partial class Form1 : Form
+public partial class WaterTank : Form
 {
 
     StructuralDrawingForm tankDesign = new StructuralDrawingForm();
     private Image drawingImage;
     private Point lastMousePosition;
     private bool isDragging = false;
-    public Form1()
+    public WaterTank()
     {
         InitializeComponent();
 
@@ -35,31 +35,24 @@ public partial class Form1 : Form
         if (e.Button == MouseButtons.Left)
         {
             isDragging = true;
-            lastMousePosition = e.Location; // Store the initial mouse position
+            lastMousePosition = e.Location;
         }
     }
 
-    // Mouse Move - Handle the dragging and update the rotation angle
     private void panel1_MouseMove(object sender, MouseEventArgs e)
     {
         if (isDragging)
         {
-            // Calculate the difference in mouse movement
             int deltaX = e.X - lastMousePosition.X;
             int deltaY = e.Y - lastMousePosition.Y;
 
-            // Adjust the rotation angle based on horizontal movement
-            rotationAngle += deltaX * 0.5f; // Scale the angle change for smoother rotation
+            rotationAngle += deltaX * 0.5f;
 
-            // Store the current mouse position for the next movement calculation
             lastMousePosition = e.Location;
-
-            // Force the panel to redraw with the new rotation angle
             panel1.Invalidate();
         }
     }
 
-    // Mouse Up - Stop the drag operation
     private void panel1_MouseUp(object sender, MouseEventArgs e)
     {
         if (e.Button == MouseButtons.Left)
@@ -288,7 +281,7 @@ public partial class Form1 : Form
     {
 
     }
-    private float zoomFactor = 1.0f; // Initial zoom factor
+    private float zoomFactor = 1.0f;
     private float rotationAngle = 0.0f; // Rotation angle in degrees
 
     private void panel1_Paint_1(object sender, PaintEventArgs e)
@@ -303,7 +296,7 @@ public partial class Form1 : Form
         // Clear the panel to avoid residual drawings
         g.Clear(Color.White);
 
-        // Calculate the scaled dimensions of the image
+ 
         int scaledWidth = (int)(drawingImage.Width * zoomFactor);
         int scaledHeight = (int)(drawingImage.Height * zoomFactor);
 
@@ -312,15 +305,14 @@ public partial class Form1 : Form
         int y = (panel1.Height - scaledHeight) / 2;
 
         // Apply rotation transformation around the image center
-        g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f); // Move to center
-        g.RotateTransform(rotationAngle); // Rotate by the specified angle
-        g.TranslateTransform(-panel1.Width / 2f, -panel1.Height / 2f); // Move back
+        g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f); 
+        g.RotateTransform(rotationAngle); 
+        g.TranslateTransform(-panel1.Width / 2f, -panel1.Height / 2f);
 
         // Draw the scaled and rotated image
         Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
         g.DrawImage(drawingImage, destRect);
 
-        // Reset transformations to avoid affecting future drawings
         g.ResetTransform();
     }
 
@@ -328,22 +320,20 @@ public partial class Form1 : Form
 
     private void panel1_MouseWheel(object sender, MouseEventArgs e)
     {
-        // Adjust the zoom factor based on the mouse wheel scroll direction
         if (e.Delta > 0)
-            zoomFactor += 0.1f; // Zoom in
+            zoomFactor += 0.1f;
         else if (zoomFactor > 0.1f)
-            zoomFactor -= 0.1f; // Zoom out
+            zoomFactor -= 0.1f;
 
-        panel1.Invalidate(); // Force redraw to apply zoom
+        panel1.Invalidate();
     }
 
 
     private void rotateButton_Click(object sender, EventArgs e)
     {
-        // Increase the rotation angle by 15 degrees (or any desired value)
         rotationAngle = (rotationAngle + 15) % 360;
 
-        panel1.Invalidate(); // Force redraw to apply rotation
+        panel1.Invalidate();
     }
 
 
