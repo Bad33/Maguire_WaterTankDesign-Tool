@@ -10,4 +10,11 @@ namespace WaterTankTool_WFA.Constants
     {
 
     }
+
+    public enum textboxStatusEnum
+    {
+        OK,
+        Invalid,
+        Empty
+    }
 }

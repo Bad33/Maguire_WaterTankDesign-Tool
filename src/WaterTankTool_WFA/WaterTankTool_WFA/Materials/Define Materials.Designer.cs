@@ -57,7 +57,7 @@
             groupBox1.Controls.Add(groupBox2);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(575, 410);
+            groupBox1.Size = new Size(575, 391);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -128,7 +128,7 @@
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox2.Location = new Point(16, 30);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(283, 360);
+            groupBox2.Size = new Size(283, 343);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Materials";
@@ -165,7 +165,7 @@
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 62;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(277, 330);
+            dataGridView1.Size = new Size(277, 313);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
@@ -180,7 +180,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
             CancelButton = button5;
-            ClientSize = new Size(599, 437);
+            ClientSize = new Size(599, 420);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;

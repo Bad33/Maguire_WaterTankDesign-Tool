@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +9,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WaterTankTool_WFA.Constants;
 using WaterTankTool_WFA.Entity;
+using WaterTankTool_WFA.Solver_Equation;
 
 namespace WaterTankTool_WFA
 {
@@ -42,8 +45,6 @@ namespace WaterTankTool_WFA
             maskedTextBox3.TextChanged += InputFields_TextChanged;
             maskedTextBox4.TextChanged += InputFields_TextChanged;
 
-            UpdateWeightLabel();
-
         }
 
         public SegmentDialogBox(string segmentType)
@@ -64,8 +65,8 @@ namespace WaterTankTool_WFA
         private void InputFields_TextChanged(object sender, EventArgs e)
         {
             // Call the method to update the weight
-            UpdateWeightLabel();
-            UpdateProjectedArea();
+            //UpdateWeightLabel();
+            ValidateLabels();
         }
 
         private void ModifyDialogBox()
@@ -224,12 +225,15 @@ namespace WaterTankTool_WFA
 
         private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
-            UpdateWeightLabel();
+            ValidateLabels();
         }
 
-        private void UpdateWeightLabel()
+
+        private void ValidateLabels()
         {
-            // Validate inputs and ensure all required fields are populated
+            Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
+            Segment_Conical_Equations conical_Equations = new Segment_Conical_Equations();
+
             if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) &&
                 !string.IsNullOrWhiteSpace(maskedTextBox2.Text) &&
                 !string.IsNullOrWhiteSpace(maskedTextBox3.Text) &&
@@ -240,48 +244,70 @@ namespace WaterTankTool_WFA
                     double.TryParse(maskedTextBox1.Text, out double heightInitial) &&
                     double.TryParse(maskedTextBox4.Text, out double heightFinal))
                 {
-                    // Perform calculations if all inputs are valid
-                    double Ag = CalculateCrossSectionArea(diameter, thickness);
-                    double height = CalculateHeight(heightFinal, heightInitial);
-                    double weight = Ag * height * 7850; // Using steel density (7850 kg/m^3)
 
-                    // Update the weight textbox with the calculated weight
-                    textBox1.Text = weight.ToString("F2"); // Format the result to two decimal places
+                    if (_segmentType == "Cylinder")
+                    {
+                        textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial,heightFinal,diameter,thickness).ToString();
+                        textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial,heightFinal,diameter).ToString();
+                        textBox3.Text = cylinder_Equations.Centroid(heightInitial,heightFinal).ToString();
+                        textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
+                        textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
+                        textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
+                        textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
+                        textBox8.Text = cylinder_Equations.F(heightInitial,heightFinal,diameter).ToString();
+                        textBox9.Text = cylinder_Equations.L(heightInitial,heightFinal).ToString();
+                        textBox10.Text = cylinder_Equations.Mbase(heightInitial,heightFinal,diameter).ToString();
+
+                    }
+
+                    else if (_segmentType == "Base")
+                    {
+                        //change the diameter to diameter initial and final 
+                        textBox1.Text = conical_Equations.weight(heightInitial, heightFinal,diameter ,diameter, thickness).ToString();
+                        textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString();
+                        textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
+                        textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
+                        textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
+                        textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
+                        textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
+                        textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString();
+                        textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
+                        textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString();
+
+                    }
+
                 }
                 else
                 {
-                    // Clear the weight label if any input is invalid
-                    textBox1.Text = "Invalid input";
+                    setTextboxvalues("Invalid Input");
                 }
             }
             else
             {
-                // Clear the weight label if any input field is empty
-                textBox1.Text = "N/A";
+                setTextboxvalues("-");
             }
         }
 
-
-
-
-        private static double CalculateCrossSectionArea(double diameter, double thickness)
+        public void setTextboxvalues(string value)
         {
-            var crossSectionArea = (Math.PI / 4) * (Math.Pow(diameter, 2) - Math.Pow((diameter - 2 * thickness), 2));
-
-            return crossSectionArea;
-        }
-
-        private static double CalculateHeight(double heightFinal, double heightInitial)
-        {
-            var height = heightFinal - heightInitial;
-
-            return height;
+            textBox1.Text = value;
+            textBox2.Text = value;
+            textBox3.Text = value;
+            textBox4.Text = value;
+            textBox5.Text = value;
+            textBox6.Text = value;
+            textBox7.Text = value;
+            textBox8.Text = value;
+            textBox9.Text = value;
+            textBox10.Text = value; 
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
-            UpdateProjectedArea();
+            //UpdateProjectedArea();
         }
+
+
 
         private void UpdateProjectedArea()
         {
@@ -296,12 +322,12 @@ namespace WaterTankTool_WFA
                     double.TryParse(maskedTextBox4.Text, out double heightFinal))
                 {
                     // Perform calculations if all inputs are valid
-                    double height = CalculateHeight(heightFinal, heightInitial);
+                    //double height = CalculateHeight(heightFinal, heightInitial);
 
-                    var p_area = diameter * height;
+                    //var p_area = diameter * height;
 
                     // Update the weight textbox with the calculated weight
-                    textBox2.Text = p_area.ToString("F2"); // Format the result to two decimal places
+                    textBox2.Text = "sfsdf"; 
                 }
                 else
                 {
@@ -312,7 +338,7 @@ namespace WaterTankTool_WFA
             else
             {
                 // Clear the weight label if any input field is empty
-                textBox2.Text = "N/A";
+                textBox2.Text = "-";
             }
         }
     }

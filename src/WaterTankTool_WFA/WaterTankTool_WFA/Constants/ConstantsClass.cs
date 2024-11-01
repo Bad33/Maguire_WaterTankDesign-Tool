@@ -8,6 +8,16 @@ namespace WaterTankTool_WFA.Constants
         // This class can be used to store additional global constants in the future.
     }
 
+    public static class WindLoadConstants
+    {
+        public const double Kzt = 1.0;
+        public const double Ke = 1.0;
+        public const double Kd = 0.85;
+        public const double G = 1.0;
+        public const double I = 1.15;
+        public const int V = 90;
+    }
+
     public static class WindLoadExposure_C
     {
         public const double Alpha = 9.5;
