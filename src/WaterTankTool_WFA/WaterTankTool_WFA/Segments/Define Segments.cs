@@ -37,7 +37,11 @@ namespace WaterTankTool_WFA
         private void button1_Click(object sender, EventArgs e)
         {
             AddSegmentSection addSegmentSection = new AddSegmentSection();
-            addSegmentSection.ShowDialog();
+            DialogResult result = addSegmentSection.ShowDialog();
+            if (result == DialogResult.Cancel || result == DialogResult.OK)
+            {
+                this.Close();
+            }
             LoadData();
 
 
@@ -75,14 +79,18 @@ namespace WaterTankTool_WFA
                     using (var context = new WaterTankDbContext())
                     {
                         var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == segmentNumber);
+                        var tankProperties = context.TankProperties.ToList();
 
                         if (segmentProperties != null)
                         {
+                            context.TankProperties.RemoveRange(tankProperties);
+
                             context.SegmentProperties.Remove(segmentProperties);
                             context.SaveChanges();
                             MessageBox.Show($"Segment {segmentName} deleted successfully.");
                             LoadData();
-                            form1.OnSegmentDeleted();
+                            WaterTank waterTank = new WaterTank();
+                            waterTank.OnSegmentAdded();
                         }
                         else
                         {

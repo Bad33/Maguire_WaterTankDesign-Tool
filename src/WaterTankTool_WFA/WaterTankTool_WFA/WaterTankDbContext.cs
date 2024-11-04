@@ -15,6 +15,8 @@ namespace WaterTankTool_WFA
 
         public DbSet<MaterialProperties> MaterialProperties { get; set; }
 
+        public DbSet<TankProperties> TankProperties { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=C:\\Users\\Union Loaner\\WaterTank.db");

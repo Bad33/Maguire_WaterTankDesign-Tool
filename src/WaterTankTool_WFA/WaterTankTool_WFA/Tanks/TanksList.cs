@@ -42,7 +42,13 @@ namespace WaterTankTool_WFA
             if (dimensions != null)
             {
                 TankProperty tankProperty = new TankProperty(dimensions);
-                tankProperty.ShowDialog();
+                
+                DialogResult result = tankProperty.ShowDialog();
+
+                if (result == DialogResult.OK || result == DialogResult.Cancel)
+                {
+                    this.Close();
+                }
             }
 
         }

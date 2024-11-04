@@ -25,7 +25,11 @@ namespace WaterTankTool_WFA
         {
             SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType);
             this.Close();
-            segmentDialogBox.ShowDialog();
+            DialogResult result  = segmentDialogBox.ShowDialog();
+            if (result == DialogResult.OK || result == DialogResult.Cancel)
+            {
+                this.Close();
+            }
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -70,7 +74,13 @@ namespace WaterTankTool_WFA
             _selectedPictureBox.BorderStyle = BorderStyle.Fixed3D;
 
             TanksList tanksList = new TanksList();
-            tanksList.ShowDialog();
+            DialogResult result = tanksList.ShowDialog();
+            if (result == DialogResult.OK || result == DialogResult.Cancel)
+            {
+                this.Close();
+            }
+
+
         }
     }
 }

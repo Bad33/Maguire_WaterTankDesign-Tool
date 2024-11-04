@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WaterTankTool_WFA;
 
@@ -10,9 +11,11 @@ using WaterTankTool_WFA;
 namespace WaterTankTool_WFA.Migrations
 {
     [DbContext(typeof(WaterTankDbContext))]
-    partial class WaterTankDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241104201053_tankPropertiesTableAdded")]
+    partial class tankPropertiesTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -85,37 +88,6 @@ namespace WaterTankTool_WFA.Migrations
                     b.HasKey("SegmentNumber");
 
                     b.ToTable("SegmentProperties");
-                });
-
-            modelBuilder.Entity("WaterTankTool_WFA.Entity.TankProperties", b =>
-                {
-                    b.Property<int>("TankNumber")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Capacity")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ProjectedArea")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("TotalWeight")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("WeightOfSteel")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("WeightOfWater")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("TankNumber");
-
-                    b.ToTable("TankProperties");
                 });
 #pragma warning restore 612, 618
         }

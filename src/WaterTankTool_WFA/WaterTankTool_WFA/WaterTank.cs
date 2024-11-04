@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Custom_Design_Control;
 using WaterTankTool_WFA.Entity;
@@ -8,7 +9,7 @@ namespace WaterTankTool_WFA;
 
 public partial class WaterTank : Form
 {
-
+    private BackgroundWorker worker = new BackgroundWorker();
     StructuralDrawingForm tankDesign = new StructuralDrawingForm();
     private Image drawingImage;
     private Point lastMousePosition;
@@ -17,7 +18,8 @@ public partial class WaterTank : Form
     {
         InitializeComponent();
 
-        drawingImage = Image.FromFile("../../../../icons/150K.png");
+        panelDrawTankCapacity();
+
 
         this.Paint += panel1_Paint_1;
         panel1.MouseWheel += panel1_MouseWheel;
@@ -27,6 +29,35 @@ public partial class WaterTank : Form
 
 
         this.Resize += (s, e) => this.Invalidate();
+
+    }
+
+    private void panelDrawTankCapacity()
+    {
+        WaterTankDbContext context = new WaterTankDbContext();
+
+        var tankCap = context.TankProperties.FirstOrDefault();
+
+        switch (tankCap?.Capacity)
+        {
+            case "150,000 gallon":
+                drawingImage = Image.FromFile("../../../../icons/150K.png");
+                break;
+            case "250,000 gallon":
+                drawingImage = Image.FromFile("../../../../icons/250K.png");
+                break;
+
+            case "500,000 gallon":
+                drawingImage = Image.FromFile("../../../../icons/500K.png");
+                break;
+
+            default:
+                drawingImage = Image.FromFile("../../../../icons/150K.png");
+                break;
+
+        }
+
+
 
     }
 
@@ -61,30 +92,34 @@ public partial class WaterTank : Form
         }
     }
 
-    public void OnSegmentAdded(SegmentProperties newSegment)
+    public void OnSegmentAdded()
     {
-        //if (InvokeRequired)
-        //{
-        //    this.Invoke(new Action(() => OnSegmentAdded(newSegment)));
-        //    return;
-        //}
-        //tankDesign.Segments = GetSegmentsFromDatabase();
-
-        //tableLayoutPanel1.PerformLayout();
-        //tankDesign.PerformLayout();
-
-        //tankDesign.Redraw();
+        worker.DoWork += Worker_DoWork;
+        worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+        worker.RunWorkerAsync();
     }
 
     public void OnSegmentDeleted()
     {
-        //tankDesign.Segments = GetSegmentsFromDatabase();
+        worker.DoWork += Worker_DoWork;
+        worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
+        worker.RunWorkerAsync();
 
-        //tableLayoutPanel1.PerformLayout();
-        //tankDesign.PerformLayout();
+    }
 
-        //tankDesign.Redraw();
+    private void Worker_DoWork(object sender, DoWorkEventArgs
+ e)
+    {
+        panelDrawTankCapacity();
 
+        // Perform long-running operations here (e.g., database updates, complex calculations)
+        // ...
+    }
+
+    private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+    {
+        // Update the UI on the main thread
+        panel1.Invalidate();
     }
 
 
@@ -334,6 +369,7 @@ public partial class WaterTank : Form
         rotationAngle = (rotationAngle + 15) % 360;
 
         panel1.Invalidate();
+        
     }
 
 

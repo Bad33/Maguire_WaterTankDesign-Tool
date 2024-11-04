@@ -578,6 +578,7 @@ partial class WaterTank
         // 
         // panel1
         // 
+        panel1.BorderStyle = BorderStyle.Fixed3D;
         panel1.Dock = DockStyle.Fill;
         panel1.Location = new Point(36, 84);
         panel1.Name = "panel1";

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.ValueGeneration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -44,14 +45,19 @@ namespace WaterTankTool_WFA
             maskedTextBox2.TextChanged += InputFields_TextChanged;
             maskedTextBox3.TextChanged += InputFields_TextChanged;
             maskedTextBox4.TextChanged += InputFields_TextChanged;
+            maskedTextBox5.TextChanged += InputFields_TextChanged;
 
         }
 
         public SegmentDialogBox(string segmentType)
         {
             _segmentType = segmentType;
+
+
             InitializeComponent();
+            showInputFieldsOnType();
         }
+
 
         public SegmentDialogBox(int segmentNumber, string dialogType)
         {
@@ -62,11 +68,29 @@ namespace WaterTankTool_WFA
 
         }
 
+        public void showInputFieldsOnType()
+        {
+            if (_segmentType == "Base")
+            {
+                label3.Text = "DiameterInitial";
+                label4.Text = "DiameterFinal";
+                label25.Visible = true;
+                maskedTextBox5.Visible = true;
+                label26.Visible = true;
+            }
+            else if (_segmentType == "Cylinder")
+            {
+                label3.Text = "Diameter";
+                label25.Visible = false;
+                maskedTextBox5.Visible = false;
+                label26.Visible = false;
+            }
+        }
+
         private void InputFields_TextChanged(object sender, EventArgs e)
         {
-            // Call the method to update the weight
-            //UpdateWeightLabel();
-            ValidateLabels();
+
+            DoCalculations();
         }
 
         private void ModifyDialogBox()
@@ -78,14 +102,36 @@ namespace WaterTankTool_WFA
                 using (var context = new WaterTankDbContext())
                 {
                     var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
-                    if (segmentProperties != null)
+                    if (segmentProperties != null && segmentProperties.SegmentType == "Base")
                     {
-                        richTextBox1.Text = segmentProperties.SegmentName;
                         _segmentType = segmentProperties.SegmentType;
+
+                        showInputFieldsOnType();
+
+                        richTextBox1.Text = segmentProperties.SegmentName;
+                        maskedTextBox2.Text = segmentProperties.DiameterInitial.ToString();
+                        maskedTextBox3.Text = segmentProperties.DiameterFinal.ToString();
+                        maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
+                        maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
+                        maskedTextBox5.Text = segmentProperties.Thickness.ToString();
+
+                        DoCalculations();
+
+                    }
+                    else if(segmentProperties != null && segmentProperties.SegmentType == "Cylinder")
+                    {
+                        _segmentType = segmentProperties.SegmentType;
+
+                        showInputFieldsOnType();
+
+
+                        richTextBox1.Text = segmentProperties.SegmentName;
                         maskedTextBox2.Text = segmentProperties.Diameter.ToString();
                         maskedTextBox3.Text = segmentProperties.Thickness.ToString();
                         maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
                         maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
+
+                        DoCalculations();
 
                     }
                 }
@@ -107,14 +153,99 @@ namespace WaterTankTool_WFA
 
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void Save_ClickBase(object sender, EventArgs e)
         {
-            // Validate the input fields before proceeding
             if (string.IsNullOrWhiteSpace(richTextBox1.Text) ||
-                string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
-                string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
-                string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
-                string.IsNullOrWhiteSpace(maskedTextBox4.Text))
+             string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
+             string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
+             string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
+             string.IsNullOrWhiteSpace(maskedTextBox4.Text) || string.IsNullOrWhiteSpace(maskedTextBox5.Text))
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!double.TryParse(maskedTextBox2.Text, out double diameterInitial) ||
+                !double.TryParse(maskedTextBox3.Text, out double diameterFinal) ||
+                !double.TryParse(maskedTextBox1.Text, out double heightInitial) ||
+                !double.TryParse(maskedTextBox4.Text, out double heightFinal) || !double.TryParse(maskedTextBox5.Text, out double thickness))
+            {
+                MessageBox.Show("Please enter valid numbers for Diameter, Thickness, and Heights.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            var diameter = (double)(diameterFinal - diameterInitial);
+
+            using (var context = new WaterTankDbContext())
+            {
+                SegmentProperties segmentProperties;
+
+
+
+
+                if (_dialogType == "Modify")
+                {
+                    segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+
+                    ValidateSegment(segmentProperties);
+
+                    if (segmentProperties == null)
+                    {
+                        MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    segmentProperties.SegmentName = richTextBox1.Text;
+                    segmentProperties.SegmentType = _segmentType;
+                    segmentProperties.Diameter = diameter;
+                    segmentProperties.Thickness = thickness;
+                    segmentProperties.HeightInitial = heightInitial;
+                    segmentProperties.HeightFinal = heightFinal;
+                    segmentProperties.DiameterInitial = diameterInitial;
+                    segmentProperties.DiameterFinal = diameterFinal;
+                }
+                else
+                {
+                    segmentProperties = new SegmentProperties()
+                    {
+                        SegmentName = richTextBox1.Text,
+                        SegmentType = _segmentType,
+                        Diameter = diameter,
+                        Thickness = thickness,
+                        HeightInitial = heightInitial,
+                        HeightFinal = heightFinal,
+                        DiameterInitial = diameterInitial,
+                        DiameterFinal = diameterFinal
+
+                    };
+
+                    ValidateSegment(segmentProperties);
+
+
+                    context.SegmentProperties.Add(segmentProperties);
+                }
+
+                try
+                {
+                    int rowsAffected = context.SaveChanges();
+                    successDialog(rowsAffected);
+                    //WaterTank form1 = new WaterTank();
+                    //form1.OnSegmentAdded();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void Save_ClickCylinder(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(richTextBox1.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox4.Text))
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -134,10 +265,13 @@ namespace WaterTankTool_WFA
             {
                 SegmentProperties segmentProperties;
 
+
                 if (_dialogType == "Modify")
                 {
                     // Modify existing segment
                     segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+
+                    ValidateSegment(segmentProperties);
 
                     if (segmentProperties == null)
                     {
@@ -165,6 +299,9 @@ namespace WaterTankTool_WFA
                         HeightFinal = heightFinal
                     };
 
+                    ValidateSegment(segmentProperties);
+
+
                     context.SegmentProperties.Add(segmentProperties);
                 }
 
@@ -172,13 +309,42 @@ namespace WaterTankTool_WFA
                 {
                     int rowsAffected = context.SaveChanges();
                     successDialog(rowsAffected);
-                    WaterTank form1 = new WaterTank();
-                    form1.OnSegmentAdded(segmentProperties);
+                    //WaterTank form1 = new WaterTank();
+                    //form1.OnSegmentAdded();
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+            }
+        }
+
+        private void Save_Click(object sender, EventArgs e)
+        {
+            if (_segmentType == "Base")
+            {
+                Save_ClickBase(sender, e);
+            }
+            else if (_segmentType == "Cylinder")
+            {
+                Save_ClickCylinder(sender, e);
+            }
+
+        }
+
+        private void ValidateSegment(SegmentProperties segment)
+        {
+            if (segment.SegmentType == "Base" && (segment.DiameterInitial == null || segment.DiameterFinal == null))
+            {
+                throw new ValidationException("DiameterInitial and DiameterFinal must be specified for 'base' segment type.");
+            }
+            else if (segment.SegmentType != "Base" && (segment.DiameterInitial != null || segment.DiameterFinal != null))
+            {
+                throw new ValidationException("DiameterInitial and DiameterFinal should be null for non-base segment types.");
+            }
+            else if (segment.SegmentType == "Base" && (segment.DiameterInitial != null && segment.DiameterFinal != null && segment.Diameter == null))
+            {
+                segment.Diameter = (double)(segment.DiameterFinal - segment.DiameterInitial);
             }
         }
 
@@ -197,7 +363,7 @@ namespace WaterTankTool_WFA
                 DialogResult result = MessageBox.Show("Data might not have been saved!", "Confirmation", MessageBoxButtons.OK);
                 if (result == DialogResult.OK)
                 {
-                    this.Close(); // Close the dialog even if no rows were affected
+                    this.Close(); 
                 }
             }
         }
@@ -225,45 +391,29 @@ namespace WaterTankTool_WFA
 
         private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
-            ValidateLabels();
+            DoCalculations();
         }
 
 
-        private void ValidateLabels()
+        private void DoCalculations()
         {
             Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations conical_Equations = new Segment_Conical_Equations();
 
-            if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) &&
-                !string.IsNullOrWhiteSpace(maskedTextBox2.Text) &&
-                !string.IsNullOrWhiteSpace(maskedTextBox3.Text) &&
-                !string.IsNullOrWhiteSpace(maskedTextBox4.Text))
+            if (_segmentType == "Cylinder")
             {
-                if (double.TryParse(maskedTextBox2.Text, out double diameter) &&
-                    double.TryParse(maskedTextBox3.Text, out double thickness) &&
-                    double.TryParse(maskedTextBox1.Text, out double heightInitial) &&
-                    double.TryParse(maskedTextBox4.Text, out double heightFinal))
+                if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) &&
+                    !string.IsNullOrWhiteSpace(maskedTextBox2.Text) &&
+                    !string.IsNullOrWhiteSpace(maskedTextBox3.Text) &&
+                    !string.IsNullOrWhiteSpace(maskedTextBox4.Text))
                 {
 
-                    if (_segmentType == "Cylinder")
+                    if (double.TryParse(maskedTextBox2.Text, out double diameter) &&
+                        double.TryParse(maskedTextBox3.Text, out double thickness) &&
+                        double.TryParse(maskedTextBox1.Text, out double heightInitial) &&
+                        double.TryParse(maskedTextBox4.Text, out double heightFinal))
                     {
-                        textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial,heightFinal,diameter,thickness).ToString();
-                        textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial,heightFinal,diameter).ToString();
-                        textBox3.Text = cylinder_Equations.Centroid(heightInitial,heightFinal).ToString();
-                        textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
-                        textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
-                        textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
-                        textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
-                        textBox8.Text = cylinder_Equations.F(heightInitial,heightFinal,diameter).ToString();
-                        textBox9.Text = cylinder_Equations.L(heightInitial,heightFinal).ToString();
-                        textBox10.Text = cylinder_Equations.Mbase(heightInitial,heightFinal,diameter).ToString();
-
-                    }
-
-                    else if (_segmentType == "Base")
-                    {
-                        //change the diameter to diameter initial and final 
-                        textBox1.Text = conical_Equations.weight(heightInitial, heightFinal,diameter ,diameter, thickness).ToString();
+                        textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial, heightFinal, diameter, thickness).ToString();
                         textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString();
                         textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
                         textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
@@ -273,19 +423,57 @@ namespace WaterTankTool_WFA
                         textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString();
                         textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
                         textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString();
-
                     }
-
+                    else
+                    {
+                        setTextboxvalues("Invalid Input");
+                    }
                 }
                 else
                 {
-                    setTextboxvalues("Invalid Input");
+                    setTextboxvalues("-");
+                }
+            }
+            else if (_segmentType == "Base")
+            {
+                if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) &&
+                    !string.IsNullOrWhiteSpace(maskedTextBox2.Text) &&
+                    !string.IsNullOrWhiteSpace(maskedTextBox3.Text) &&
+                    !string.IsNullOrWhiteSpace(maskedTextBox4.Text) && !string.IsNullOrWhiteSpace(maskedTextBox5.Text))
+                {
+                    if (double.TryParse(maskedTextBox2.Text, out double diameterInitial) &&
+                        double.TryParse(maskedTextBox3.Text, out double diameterFinal) &&
+                        double.TryParse(maskedTextBox1.Text, out double heightInitial) &&
+                        double.TryParse(maskedTextBox4.Text, out double heightFinal) &&
+                        double.TryParse(maskedTextBox5.Text, out double thickness)) 
+                    {
+
+                        textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString();
+                        textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString();
+                        textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
+                        textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
+                        textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
+                        textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
+                        textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
+                        textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameterInitial).ToString();
+                        textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
+                        textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString();
+                    }
+                    else
+                    {
+                        setTextboxvalues("Invalid Input");
+                    }
+                }
+                else
+                {
+                    setTextboxvalues("-");
                 }
             }
             else
             {
-                setTextboxvalues("-");
+                setTextboxvalues("Unknown Segment Type");
             }
+
         }
 
         public void setTextboxvalues(string value)
@@ -299,7 +487,7 @@ namespace WaterTankTool_WFA
             textBox7.Text = value;
             textBox8.Text = value;
             textBox9.Text = value;
-            textBox10.Text = value; 
+            textBox10.Text = value;
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -309,37 +497,36 @@ namespace WaterTankTool_WFA
 
 
 
-        private void UpdateProjectedArea()
+
+
+        private void label3_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox2.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox3.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox4.Text))
-            {
-                if (double.TryParse(maskedTextBox2.Text, out double diameter) &&
-                    double.TryParse(maskedTextBox3.Text, out double thickness) &&
-                    double.TryParse(maskedTextBox1.Text, out double heightInitial) &&
-                    double.TryParse(maskedTextBox4.Text, out double heightFinal))
-                {
-                    // Perform calculations if all inputs are valid
-                    //double height = CalculateHeight(heightFinal, heightInitial);
 
-                    //var p_area = diameter * height;
+        }
 
-                    // Update the weight textbox with the calculated weight
-                    textBox2.Text = "sfsdf"; 
-                }
-                else
-                {
-                    // Clear the weight label if any input is invalid
-                    textBox2.Text = "Invalid input";
-                }
-            }
-            else
-            {
-                // Clear the weight label if any input field is empty
-                textBox2.Text = "-";
-            }
+        private void label25_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void maskedTextBox2_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void maskedTextBox3_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void maskedTextBox5_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
         }
     }
 }

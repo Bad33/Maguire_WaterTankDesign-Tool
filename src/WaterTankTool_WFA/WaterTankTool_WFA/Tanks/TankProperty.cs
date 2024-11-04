@@ -66,6 +66,38 @@ namespace WaterTankTool_WFA
             }
         }
 
+        public bool SaveTankProperties()
+        {
+            using (var context = new WaterTankDbContext())
+            {
+                TankProperties properties = new TankProperties()
+                {
+                    Capacity = textBox4.Text,
+                    WeightOfWater = textBox5.Text,
+                    WeightOfSteel = textBox6.Text,
+                    TotalWeight = textBox7.Text,
+                    ProjectedArea = textBox8.Text,
+                };
+
+                context.TankProperties.Add(properties);
+
+
+                try
+                {
+                    int rowsAffected = context.SaveChanges();
+                    WaterTank form1 = new WaterTank();
+
+                    return true;
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred while saving Tank Properties data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+            }
+        }
+
         private void button1_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(textBox1.Text) ||
@@ -73,6 +105,11 @@ namespace WaterTankTool_WFA
                  string.IsNullOrWhiteSpace(textBox3.Text))
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!SaveTankProperties())
+            {
                 return;
             }
 
@@ -120,7 +157,7 @@ namespace WaterTankTool_WFA
                         int rowsAffected = context.SaveChanges();
                         successDialog(rowsAffected);
                         WaterTank form1 = new WaterTank();
-                        form1.OnSegmentAdded(segmentProperties);
+                        form1.OnSegmentAdded();
                     }
                     catch (Exception ex)
                     {

@@ -38,6 +38,9 @@
             label1 = new Label();
             richTextBox1 = new RichTextBox();
             groupBox2 = new GroupBox();
+            maskedTextBox5 = new MaskedTextBox();
+            label26 = new Label();
+            label25 = new Label();
             label19 = new Label();
             label18 = new Label();
             label17 = new Label();
@@ -47,6 +50,9 @@
             label4 = new Label();
             label3 = new Label();
             groupBox3 = new GroupBox();
+            label24 = new Label();
+            label23 = new Label();
+            label22 = new Label();
             label21 = new Label();
             label20 = new Label();
             label15 = new Label();
@@ -69,9 +75,6 @@
             label8 = new Label();
             label2 = new Label();
             label7 = new Label();
-            label22 = new Label();
-            label23 = new Label();
-            label24 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -83,6 +86,7 @@
             maskedTextBox2.Name = "maskedTextBox2";
             maskedTextBox2.Size = new Size(124, 31);
             maskedTextBox2.TabIndex = 6;
+            maskedTextBox2.MaskInputRejected += maskedTextBox2_MaskInputRejected;
             maskedTextBox2.TextChanged += InputFields_TextChanged;
             // 
             // maskedTextBox3
@@ -91,6 +95,7 @@
             maskedTextBox3.Name = "maskedTextBox3";
             maskedTextBox3.Size = new Size(124, 31);
             maskedTextBox3.TabIndex = 7;
+            maskedTextBox3.MaskInputRejected += maskedTextBox3_MaskInputRejected;
             maskedTextBox3.TextChanged += InputFields_TextChanged;
             // 
             // maskedTextBox4
@@ -112,7 +117,7 @@
             // Save
             // 
             Save.BackColor = SystemColors.Window;
-            Save.Location = new Point(452, 552);
+            Save.Location = new Point(452, 602);
             Save.Name = "Save";
             Save.Size = new Size(91, 34);
             Save.TabIndex = 11;
@@ -123,7 +128,7 @@
             // button2
             // 
             button2.BackColor = SystemColors.Window;
-            button2.Location = new Point(573, 552);
+            button2.Location = new Point(580, 602);
             button2.Name = "button2";
             button2.Size = new Size(97, 34);
             button2.TabIndex = 12;
@@ -162,6 +167,10 @@
             // 
             // groupBox2
             // 
+            groupBox2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            groupBox2.Controls.Add(maskedTextBox5);
+            groupBox2.Controls.Add(label26);
+            groupBox2.Controls.Add(label25);
             groupBox2.Controls.Add(label19);
             groupBox2.Controls.Add(label18);
             groupBox2.Controls.Add(label17);
@@ -176,11 +185,39 @@
             groupBox2.Controls.Add(maskedTextBox3);
             groupBox2.Location = new Point(12, 122);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(665, 136);
+            groupBox2.Size = new Size(665, 174);
             groupBox2.TabIndex = 14;
             groupBox2.TabStop = false;
             groupBox2.Text = "Input";
             groupBox2.Enter += groupBox2_Enter;
+            // 
+            // maskedTextBox5
+            // 
+            maskedTextBox5.Location = new Point(157, 131);
+            maskedTextBox5.Name = "maskedTextBox5";
+            maskedTextBox5.Size = new Size(122, 31);
+            maskedTextBox5.TabIndex = 21;
+            maskedTextBox5.MaskInputRejected += maskedTextBox5_MaskInputRejected;
+            // 
+            // label26
+            // 
+            label26.AutoSize = true;
+            label26.Font = new Font("Arial Narrow", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            label26.Location = new Point(290, 133);
+            label26.Name = "label26";
+            label26.Size = new Size(21, 22);
+            label26.TabIndex = 20;
+            label26.Text = "in";
+            // 
+            // label25
+            // 
+            label25.AutoSize = true;
+            label25.Location = new Point(16, 126);
+            label25.Name = "label25";
+            label25.Size = new Size(87, 25);
+            label25.TabIndex = 18;
+            label25.Text = "Thickness";
+            label25.Click += label25_Click;
             // 
             // label19
             // 
@@ -243,11 +280,12 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(16, 91);
+            label4.Location = new Point(16, 86);
             label4.Name = "label4";
             label4.Size = new Size(87, 25);
             label4.TabIndex = 11;
             label4.Text = "Thickness";
+            label4.Click += label4_Click;
             // 
             // label3
             // 
@@ -257,6 +295,7 @@
             label3.Size = new Size(84, 25);
             label3.TabIndex = 10;
             label3.Text = "Diameter";
+            label3.Click += label3_Click;
             // 
             // groupBox3
             // 
@@ -285,13 +324,43 @@
             groupBox3.Controls.Add(label8);
             groupBox3.Controls.Add(label2);
             groupBox3.Controls.Add(label7);
-            groupBox3.Location = new Point(12, 264);
+            groupBox3.Location = new Point(12, 312);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(665, 273);
             groupBox3.TabIndex = 15;
             groupBox3.TabStop = false;
             groupBox3.Text = "Properties";
             groupBox3.Enter += groupBox3_Enter;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label24.Location = new Point(612, 233);
+            label24.Name = "label24";
+            label24.Size = new Size(51, 22);
+            label24.TabIndex = 25;
+            label24.Text = "Kips-ft";
+            // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label23.Location = new Point(616, 187);
+            label23.Name = "label23";
+            label23.Size = new Size(18, 22);
+            label23.TabIndex = 24;
+            label23.Text = "ft";
+            // 
+            // label22
+            // 
+            label22.AutoSize = true;
+            label22.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
+            label22.Location = new Point(612, 144);
+            label22.Name = "label22";
+            label22.Size = new Size(38, 22);
+            label22.TabIndex = 23;
+            label22.Text = "Kips";
             // 
             // label21
             // 
@@ -485,36 +554,6 @@
             label7.TabIndex = 0;
             label7.Text = "Weight";
             // 
-            // label22
-            // 
-            label22.AutoSize = true;
-            label22.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label22.Location = new Point(612, 144);
-            label22.Name = "label22";
-            label22.Size = new Size(38, 22);
-            label22.TabIndex = 23;
-            label22.Text = "Kips";
-            // 
-            // label23
-            // 
-            label23.AutoSize = true;
-            label23.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label23.Location = new Point(616, 187);
-            label23.Name = "label23";
-            label23.Size = new Size(18, 22);
-            label23.TabIndex = 24;
-            label23.Text = "ft";
-            // 
-            // label24
-            // 
-            label24.AutoSize = true;
-            label24.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label24.Location = new Point(612, 233);
-            label24.Name = "label24";
-            label24.Size = new Size(51, 22);
-            label24.TabIndex = 25;
-            label24.Text = "Kips-ft";
-            // 
             // SegmentDialogBox
             // 
             AcceptButton = Save;
@@ -522,7 +561,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             CancelButton = button2;
-            ClientSize = new Size(689, 608);
+            ClientSize = new Size(689, 648);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -588,5 +627,8 @@
         private Label label24;
         private Label label23;
         private Label label22;
+        private Label label26;
+        private Label label25;
+        private MaskedTextBox maskedTextBox5;
     }
 }
