@@ -74,6 +74,7 @@ namespace WaterTankTool_WFA
             {
                 label3.Text = "DiameterInitial";
                 label4.Text = "DiameterFinal";
+                label17.Text = "ft";
                 label25.Visible = true;
                 maskedTextBox5.Visible = true;
                 label26.Visible = true;
@@ -81,6 +82,7 @@ namespace WaterTankTool_WFA
             else if (_segmentType == "Cylinder")
             {
                 label3.Text = "Diameter";
+                label17.Text = "in";
                 label25.Visible = false;
                 maskedTextBox5.Visible = false;
                 label26.Visible = false;
@@ -397,84 +399,86 @@ namespace WaterTankTool_WFA
 
         private void DoCalculations()
         {
-            Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
-            Segment_Conical_Equations conical_Equations = new Segment_Conical_Equations();
+            if (string.IsNullOrWhiteSpace(_segmentType))
+            {
+                setTextboxvalues("Unknown Segment Type");
+                return;
+            }
+
+            bool validInput = ValidateAndParseInput(out double diameter, out double diameterFinal, out double thickness, out double heightInitial, out double heightFinal);
+
+            if (!validInput)
+            {
+                setTextboxvalues("");
+                return;
+            }
 
             if (_segmentType == "Cylinder")
             {
-                if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox2.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox3.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox4.Text))
-                {
-
-                    if (double.TryParse(maskedTextBox2.Text, out double diameter) &&
-                        double.TryParse(maskedTextBox3.Text, out double thickness) &&
-                        double.TryParse(maskedTextBox1.Text, out double heightInitial) &&
-                        double.TryParse(maskedTextBox4.Text, out double heightFinal))
-                    {
-                        textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial, heightFinal, diameter, thickness).ToString();
-                        textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString();
-                        textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
-                        textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
-                        textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
-                        textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
-                        textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
-                        textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString();
-                        textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
-                        textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString();
-                    }
-                    else
-                    {
-                        setTextboxvalues("Invalid Input");
-                    }
-                }
-                else
-                {
-                    setTextboxvalues("-");
-                }
+                CalculateCylinderValues(heightInitial, heightFinal, diameter, thickness);
             }
             else if (_segmentType == "Base")
             {
-                if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox2.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox3.Text) &&
-                    !string.IsNullOrWhiteSpace(maskedTextBox4.Text) && !string.IsNullOrWhiteSpace(maskedTextBox5.Text))
-                {
-                    if (double.TryParse(maskedTextBox2.Text, out double diameterInitial) &&
-                        double.TryParse(maskedTextBox3.Text, out double diameterFinal) &&
-                        double.TryParse(maskedTextBox1.Text, out double heightInitial) &&
-                        double.TryParse(maskedTextBox4.Text, out double heightFinal) &&
-                        double.TryParse(maskedTextBox5.Text, out double thickness)) 
-                    {
-
-                        textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString();
-                        textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString();
-                        textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
-                        textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
-                        textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
-                        textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
-                        textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
-                        textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameterInitial).ToString();
-                        textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
-                        textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString();
-                    }
-                    else
-                    {
-                        setTextboxvalues("Invalid Input");
-                    }
-                }
-                else
-                {
-                    setTextboxvalues("-");
-                }
+                CalculateBaseValues(heightInitial, heightFinal, diameter, diameterFinal, thickness);
             }
             else
             {
                 setTextboxvalues("Unknown Segment Type");
             }
-
         }
+
+        private bool ValidateAndParseInput(out double diameter, out double diameterFinal, out double thickness, out double heightInitial, out double heightFinal)
+        {
+            diameter = diameterFinal = thickness = heightInitial = heightFinal = 0.0;
+
+            bool isCylinderValid = _segmentType == "Cylinder" &&
+                                   double.TryParse(maskedTextBox2.Text, out diameter) &&
+                                   double.TryParse(maskedTextBox3.Text, out thickness) &&
+                                   double.TryParse(maskedTextBox1.Text, out heightInitial) &&
+                                   double.TryParse(maskedTextBox4.Text, out heightFinal);
+
+            bool isBaseValid = _segmentType == "Base" &&
+                               double.TryParse(maskedTextBox2.Text, out diameter) &&
+                               double.TryParse(maskedTextBox3.Text, out diameterFinal) &&
+                               double.TryParse(maskedTextBox1.Text, out heightInitial) &&
+                               double.TryParse(maskedTextBox4.Text, out heightFinal) &&
+                               double.TryParse(maskedTextBox5.Text, out thickness);
+
+            return isCylinderValid || isBaseValid;
+        }
+
+        private void CalculateCylinderValues(double heightInitial, double heightFinal, double diameter, double thickness)
+        {
+            Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
+
+            textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial, heightFinal, diameter, thickness).ToString();
+            textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString();
+            textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
+            textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
+            textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
+            textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
+            textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
+            textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString();
+            textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
+            textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString();
+        }
+
+        private void CalculateBaseValues(double heightInitial, double heightFinal, double diameterInitial, double diameterFinal, double thickness)
+        {
+            Segment_Conical_Equations conical_Equations = new Segment_Conical_Equations();
+
+            textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString();
+            textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString();
+            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal).ToString();
+            textBox4.Text = conical_Equations.kzi(heightInitial).ToString();
+            textBox5.Text = conical_Equations.kzf(heightFinal).ToString();
+            textBox6.Text = conical_Equations.qzi(heightInitial).ToString();
+            textBox7.Text = conical_Equations.qzf(heightFinal).ToString();
+            textBox8.Text = conical_Equations.F(heightInitial, heightFinal, diameterInitial).ToString();
+            textBox9.Text = conical_Equations.L(heightInitial, heightFinal).ToString();
+            textBox10.Text = conical_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString();
+        }
+
 
         public void setTextboxvalues(string value)
         {

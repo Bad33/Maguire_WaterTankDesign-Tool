@@ -9,7 +9,7 @@ namespace WaterTankTool_WFA;
 
 public partial class WaterTank : Form
 {
-    private BackgroundWorker worker = new BackgroundWorker();
+
     StructuralDrawingForm tankDesign = new StructuralDrawingForm();
     private Image drawingImage;
     private Point lastMousePosition;
@@ -32,8 +32,11 @@ public partial class WaterTank : Form
 
     }
 
+
+
     private void panelDrawTankCapacity()
     {
+
         WaterTankDbContext context = new WaterTankDbContext();
 
         var tankCap = context.TankProperties.FirstOrDefault();
@@ -57,7 +60,7 @@ public partial class WaterTank : Form
 
         }
 
-
+        panel1.Invalidate();
 
     }
 
@@ -94,34 +97,18 @@ public partial class WaterTank : Form
 
     public void OnSegmentAdded()
     {
-        worker.DoWork += Worker_DoWork;
-        worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-        worker.RunWorkerAsync();
+        panelDrawTankCapacity();
+        panel1.Invalidate();
+
     }
 
     public void OnSegmentDeleted()
     {
-        worker.DoWork += Worker_DoWork;
-        worker.RunWorkerCompleted += Worker_RunWorkerCompleted;
-        worker.RunWorkerAsync();
-
-    }
-
-    private void Worker_DoWork(object sender, DoWorkEventArgs
- e)
-    {
         panelDrawTankCapacity();
-
-        // Perform long-running operations here (e.g., database updates, complex calculations)
-        // ...
-    }
-
-    private void Worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-    {
-        // Update the UI on the main thread
         panel1.Invalidate();
-    }
 
+
+    }
 
     public List<SegmentProperties> GetSegmentsFromDatabase()
     {
@@ -226,14 +213,14 @@ public partial class WaterTank : Form
 
     private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Define_Segments define_Segments = new Define_Segments();
+        Define_Segments define_Segments = new Define_Segments(this);
         define_Segments.ShowDialog();
     }
 
     private void toolStripButton4_Click(object sender, EventArgs e)
     {
 
-        Define_Segments define_Segments = new Define_Segments();
+        Define_Segments define_Segments = new Define_Segments(this);
         define_Segments.ShowDialog();
     }
 
@@ -269,8 +256,12 @@ public partial class WaterTank : Form
 
     private void pasteToolStripButton1_Click(object sender, EventArgs e)
     {
-        //tableLayoutPanel1.ZoomFactor += 0.1f;
-        //tableLayoutPanel1.Refresh();
+         zoomFactor += 0.1f;
+
+        panel1.Invalidate();
+
+
+
     }
 
     private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
@@ -331,7 +322,7 @@ public partial class WaterTank : Form
         // Clear the panel to avoid residual drawings
         g.Clear(Color.White);
 
- 
+
         int scaledWidth = (int)(drawingImage.Width * zoomFactor);
         int scaledHeight = (int)(drawingImage.Height * zoomFactor);
 
@@ -340,8 +331,8 @@ public partial class WaterTank : Form
         int y = (panel1.Height - scaledHeight) / 2;
 
         // Apply rotation transformation around the image center
-        g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f); 
-        g.RotateTransform(rotationAngle); 
+        g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f);
+        g.RotateTransform(rotationAngle);
         g.TranslateTransform(-panel1.Width / 2f, -panel1.Height / 2f);
 
         // Draw the scaled and rotated image
@@ -369,12 +360,13 @@ public partial class WaterTank : Form
         rotationAngle = (rotationAngle + 15) % 360;
 
         panel1.Invalidate();
-        
+
     }
 
+    private void toolStripButton3_Click(object sender, EventArgs e)
+    {
+        zoomFactor -= 0.1f;
 
-
-
-
-
+        panel1.Invalidate();
+    }
 }

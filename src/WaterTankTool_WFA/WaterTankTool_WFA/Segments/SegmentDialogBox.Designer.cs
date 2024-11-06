@@ -255,9 +255,9 @@
             label16.Font = new Font("Arial Narrow", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
             label16.Location = new Point(293, 42);
             label16.Name = "label16";
-            label16.Size = new Size(21, 22);
+            label16.Size = new Size(18, 22);
             label16.TabIndex = 14;
-            label16.Text = "in";
+            label16.Text = "ft";
             // 
             // label6
             // 

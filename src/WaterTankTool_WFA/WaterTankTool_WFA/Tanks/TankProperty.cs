@@ -16,10 +16,13 @@ namespace WaterTankTool_WFA
     public partial class TankProperty : Form
     {
         TankDataDimensions _properties = new TankDataDimensions();
+        private WaterTank _waterTankForm;
 
-        public TankProperty(TankDataDimensions properties)
+
+        public TankProperty(TankDataDimensions properties, WaterTank waterTank)
         {
             _properties = properties;
+            _waterTankForm = waterTank;
             InitializeComponent();
             FillTextBoxValues();
         }
@@ -156,8 +159,7 @@ namespace WaterTankTool_WFA
                     {
                         int rowsAffected = context.SaveChanges();
                         successDialog(rowsAffected);
-                        WaterTank form1 = new WaterTank();
-                        form1.OnSegmentAdded();
+                        _waterTankForm.OnSegmentAdded();
                     }
                     catch (Exception ex)
                     {

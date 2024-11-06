@@ -29,6 +29,14 @@
         private void InitializeComponent()
         {
             groupBox1 = new GroupBox();
+            numericUpDown2 = new NumericUpDown();
+            numericUpDown1 = new NumericUpDown();
+            label16 = new Label();
+            label15 = new Label();
+            label14 = new Label();
+            label13 = new Label();
+            label12 = new Label();
+            label11 = new Label();
             comboBox1 = new ComboBox();
             textBox10 = new TextBox();
             textBox9 = new TextBox();
@@ -37,8 +45,6 @@
             textBox6 = new TextBox();
             textBox5 = new TextBox();
             textBox4 = new TextBox();
-            textBox2 = new TextBox();
-            textBox1 = new TextBox();
             label10 = new Label();
             label9 = new Label();
             label8 = new Label();
@@ -51,17 +57,15 @@
             label1 = new Label();
             button1 = new Button();
             button2 = new Button();
-            label11 = new Label();
-            label12 = new Label();
-            label13 = new Label();
-            label14 = new Label();
-            label15 = new Label();
-            label16 = new Label();
             groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(numericUpDown2);
+            groupBox1.Controls.Add(numericUpDown1);
             groupBox1.Controls.Add(label16);
             groupBox1.Controls.Add(label15);
             groupBox1.Controls.Add(label14);
@@ -76,8 +80,6 @@
             groupBox1.Controls.Add(textBox6);
             groupBox1.Controls.Add(textBox5);
             groupBox1.Controls.Add(textBox4);
-            groupBox1.Controls.Add(textBox2);
-            groupBox1.Controls.Add(textBox1);
             groupBox1.Controls.Add(label10);
             groupBox1.Controls.Add(label9);
             groupBox1.Controls.Add(label8);
@@ -95,6 +97,82 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Properties";
             // 
+            // numericUpDown2
+            // 
+            numericUpDown2.DecimalPlaces = 2;
+            numericUpDown2.Increment = new decimal(new int[] { 25, 0, 0, 131072 });
+            numericUpDown2.Location = new Point(127, 107);
+            numericUpDown2.Maximum = new decimal(new int[] { 125, 0, 0, 131072 });
+            numericUpDown2.Name = "numericUpDown2";
+            numericUpDown2.Size = new Size(149, 31);
+            numericUpDown2.TabIndex = 28;
+            numericUpDown2.ValueChanged += numericUpDown2_ValueChanged;
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.DecimalPlaces = 2;
+            numericUpDown1.Increment = new decimal(new int[] { 25, 0, 0, 131072 });
+            numericUpDown1.Location = new Point(126, 54);
+            numericUpDown1.Maximum = new decimal(new int[] { 5, 0, 0, 65536 });
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(150, 31);
+            numericUpDown1.TabIndex = 27;
+            numericUpDown1.ValueChanged += numericUpDown1_ValueChanged;
+            // 
+            // label16
+            // 
+            label16.AutoSize = true;
+            label16.Location = new Point(286, 443);
+            label16.Name = "label16";
+            label16.Size = new Size(38, 25);
+            label16.TabIndex = 26;
+            label16.Text = "%g";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(287, 388);
+            label15.Name = "label15";
+            label15.Size = new Size(37, 25);
+            label15.TabIndex = 25;
+            label15.Text = "sec";
+            // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(283, 342);
+            label14.Name = "label14";
+            label14.Size = new Size(38, 25);
+            label14.TabIndex = 24;
+            label14.Text = "%g";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(283, 298);
+            label13.Name = "label13";
+            label13.Size = new Size(38, 25);
+            label13.TabIndex = 23;
+            label13.Text = "%g";
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(294, 110);
+            label12.Name = "label12";
+            label12.Size = new Size(38, 25);
+            label12.TabIndex = 22;
+            label12.Text = "%g";
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(293, 63);
+            label11.Name = "label11";
+            label11.Size = new Size(38, 25);
+            label11.TabIndex = 21;
+            label11.Text = "%g";
+            // 
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
@@ -103,7 +181,8 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(150, 33);
             comboBox1.TabIndex = 20;
-            comboBox1.Text = "A";
+            comboBox1.Text = "Select Site Class";
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // textBox10
             // 
@@ -132,6 +211,7 @@
             textBox7.Name = "textBox7";
             textBox7.Size = new Size(150, 31);
             textBox7.TabIndex = 16;
+            textBox7.TextChanged += textBox7_TextChanged;
             // 
             // textBox6
             // 
@@ -139,6 +219,7 @@
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(150, 31);
             textBox6.TabIndex = 15;
+            textBox6.TextChanged += textBox6_TextChanged;
             // 
             // textBox5
             // 
@@ -146,6 +227,7 @@
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(150, 31);
             textBox5.TabIndex = 14;
+            textBox5.TextChanged += textBox5_TextChanged;
             // 
             // textBox4
             // 
@@ -153,20 +235,7 @@
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(150, 31);
             textBox4.TabIndex = 13;
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(126, 107);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(150, 31);
-            textBox2.TabIndex = 11;
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(126, 57);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
-            textBox1.TabIndex = 10;
+            textBox4.TextChanged += textBox4_TextChanged;
             // 
             // label10
             // 
@@ -268,6 +337,7 @@
             button1.TabIndex = 1;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
@@ -277,60 +347,6 @@
             button2.TabIndex = 2;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(293, 63);
-            label11.Name = "label11";
-            label11.Size = new Size(38, 25);
-            label11.TabIndex = 21;
-            label11.Text = "%g";
-            // 
-            // label12
-            // 
-            label12.AutoSize = true;
-            label12.Location = new Point(294, 110);
-            label12.Name = "label12";
-            label12.Size = new Size(38, 25);
-            label12.TabIndex = 22;
-            label12.Text = "%g";
-            // 
-            // label13
-            // 
-            label13.AutoSize = true;
-            label13.Location = new Point(283, 298);
-            label13.Name = "label13";
-            label13.Size = new Size(38, 25);
-            label13.TabIndex = 23;
-            label13.Text = "%g";
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(283, 342);
-            label14.Name = "label14";
-            label14.Size = new Size(38, 25);
-            label14.TabIndex = 24;
-            label14.Text = "%g";
-            // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(287, 388);
-            label15.Name = "label15";
-            label15.Size = new Size(37, 25);
-            label15.TabIndex = 25;
-            label15.Text = "sec";
-            // 
-            // label16
-            // 
-            label16.AutoSize = true;
-            label16.Location = new Point(286, 443);
-            label16.Name = "label16";
-            label16.Size = new Size(38, 25);
-            label16.TabIndex = 26;
-            label16.Text = "%g";
             // 
             // Seismic
             // 
@@ -347,6 +363,8 @@
             Text = "Seismic Load";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
         }
 
@@ -363,8 +381,6 @@
         private TextBox textBox6;
         private TextBox textBox5;
         private TextBox textBox4;
-        private TextBox textBox2;
-        private TextBox textBox1;
         private Label label10;
         private Label label9;
         private Label label8;
@@ -381,5 +397,7 @@
         private Label label14;
         private Label label13;
         private Label label12;
+        private NumericUpDown numericUpDown2;
+        private NumericUpDown numericUpDown1;
     }
 }
