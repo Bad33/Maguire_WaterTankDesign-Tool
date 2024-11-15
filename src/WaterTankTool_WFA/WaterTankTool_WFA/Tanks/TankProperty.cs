@@ -17,13 +17,19 @@ namespace WaterTankTool_WFA
     {
         TankDataDimensions _properties = new TankDataDimensions();
         private WaterTank _waterTankForm;
+        private WaterTankDbContext _context;
 
 
         public TankProperty(TankDataDimensions properties, WaterTank waterTank)
         {
             _properties = properties;
             _waterTankForm = waterTank;
+
             InitializeComponent();
+
+            var context = WaterTankDbContext.GetInstance();
+
+            _context = context;
             FillTextBoxValues();
         }
 
@@ -71,8 +77,8 @@ namespace WaterTankTool_WFA
 
         public bool SaveTankProperties()
         {
-            using (var context = new WaterTankDbContext())
-            {
+            //using (var context = WaterTankDbContext.GetInstance())
+            //{
                 TankProperties properties = new TankProperties()
                 {
                     Capacity = textBox4.Text,
@@ -82,13 +88,12 @@ namespace WaterTankTool_WFA
                     ProjectedArea = textBox8.Text,
                 };
 
-                context.TankProperties.Add(properties);
+                _context.TankProperties.Add(properties);
 
 
                 try
                 {
-                    int rowsAffected = context.SaveChanges();
-                    WaterTank form1 = new WaterTank();
+                    int rowsAffected = _context.SaveChanges();
 
                     return true;
 
@@ -98,7 +103,7 @@ namespace WaterTankTool_WFA
                     MessageBox.Show($"An error occurred while saving Tank Properties data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
-            }
+            //}
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -131,11 +136,11 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            using (var context = new WaterTankDbContext())
-            {
+            //using (var context = WaterTankDbContext.GetInstance())
+            //{
                 SegmentProperties segmentProperties;
 
-                if (context.SegmentProperties.ToList().Any(x => x.SegmentType == "Tanks"))
+                if (_context.SegmentProperties.ToList().Any(x => x.SegmentType == "Tanks"))
                 {
                     MessageBox.Show("You Have to delete the existing tank to add new one.Alternatively you can modify the existing tank", "Error");
                     return;
@@ -152,12 +157,12 @@ namespace WaterTankTool_WFA
                         HeightFinal = heightFinal
                     };
 
-                    context.SegmentProperties.Add(segmentProperties);
+                    _context.SegmentProperties.Add(segmentProperties);
 
 
                     try
                     {
-                        int rowsAffected = context.SaveChanges();
+                        int rowsAffected = _context.SaveChanges();
                         successDialog(rowsAffected);
                         _waterTankForm.OnSegmentAdded();
                     }
@@ -168,7 +173,7 @@ namespace WaterTankTool_WFA
                 }
 
 
-            }
+            //}
         }
 
         private void textBox8_TextChanged(object sender, EventArgs e)

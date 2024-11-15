@@ -18,6 +18,8 @@ namespace WaterTankTool_WFA
 {
     public partial class SegmentDialogBox : Form
     {
+        private WaterTankDbContext _context;
+
         public String SegmentName { get; set; }
         public String SegmentType { get; set; }
         public double Diameter { get; set; }
@@ -55,6 +57,11 @@ namespace WaterTankTool_WFA
 
 
             InitializeComponent();
+
+            var context = WaterTankDbContext.GetInstance();
+
+            _context = context;
+
             showInputFieldsOnType();
         }
 
@@ -64,6 +71,9 @@ namespace WaterTankTool_WFA
             _dialogType = dialogType;
             _segmentNumber = segmentNumber;
             InitializeComponent();
+            var context = WaterTankDbContext.GetInstance();
+
+            _context = context;
             ModifyDialogBox();
 
         }
@@ -101,7 +111,7 @@ namespace WaterTankTool_WFA
 
             if (_dialogType == "Modify")
             {
-                using (var context = new WaterTankDbContext())
+                using (var context = WaterTankDbContext.GetInstance())
                 {
                     var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
                     if (segmentProperties != null && segmentProperties.SegmentType == "Base")
@@ -178,8 +188,8 @@ namespace WaterTankTool_WFA
 
             var diameter = (double)(diameterFinal - diameterInitial);
 
-            using (var context = new WaterTankDbContext())
-            {
+            //using (var context = WaterTankDbContext.GetInstance())
+            //{
                 SegmentProperties segmentProperties;
 
 
@@ -187,7 +197,7 @@ namespace WaterTankTool_WFA
 
                 if (_dialogType == "Modify")
                 {
-                    segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+                    segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
 
                     ValidateSegment(segmentProperties);
 
@@ -224,12 +234,12 @@ namespace WaterTankTool_WFA
                     ValidateSegment(segmentProperties);
 
 
-                    context.SegmentProperties.Add(segmentProperties);
+                    _context.SegmentProperties.Add(segmentProperties);
                 }
 
                 try
                 {
-                    int rowsAffected = context.SaveChanges();
+                    int rowsAffected = _context.SaveChanges();
                     successDialog(rowsAffected);
                     //WaterTank form1 = new WaterTank();
                     //form1.OnSegmentAdded();
@@ -238,7 +248,7 @@ namespace WaterTankTool_WFA
                 {
                     MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
+            //}
         }
 
         private void Save_ClickCylinder(object sender, EventArgs e)
@@ -263,15 +273,15 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            using (var context = new WaterTankDbContext())
-            {
+            //using (var context = WaterTankDbContext.GetInstance())
+            //{
                 SegmentProperties segmentProperties;
 
 
                 if (_dialogType == "Modify")
                 {
                     // Modify existing segment
-                    segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+                    segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
 
                     ValidateSegment(segmentProperties);
 
@@ -304,12 +314,12 @@ namespace WaterTankTool_WFA
                     ValidateSegment(segmentProperties);
 
 
-                    context.SegmentProperties.Add(segmentProperties);
+                    _context.SegmentProperties.Add(segmentProperties);
                 }
 
                 try
                 {
-                    int rowsAffected = context.SaveChanges();
+                    int rowsAffected = _context.SaveChanges();
                     successDialog(rowsAffected);
                     //WaterTank form1 = new WaterTank();
                     //form1.OnSegmentAdded();
@@ -318,7 +328,7 @@ namespace WaterTankTool_WFA
                 {
                     MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-            }
+            //}
         }
 
         private void Save_Click(object sender, EventArgs e)

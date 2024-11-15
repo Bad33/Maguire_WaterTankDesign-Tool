@@ -50,7 +50,7 @@ namespace WaterTankTool_WFA
         {
             if (_dialogType == "Modify")
             {
-                using(var context = new WaterTankDbContext())
+                using(var context = WaterTankDbContext.GetInstance())
                 {
                     // Modify existing segment
                     var materialProperties = context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == _materialNumber);
@@ -95,7 +95,7 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            using (var context = new WaterTankDbContext())
+            using (var context = WaterTankDbContext.GetInstance())
             {
                 MaterialProperties materialProperties;
 

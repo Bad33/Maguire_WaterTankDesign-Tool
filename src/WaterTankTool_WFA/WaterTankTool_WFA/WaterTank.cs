@@ -11,12 +11,16 @@ public partial class WaterTank : Form
 {
 
     StructuralDrawingForm tankDesign = new StructuralDrawingForm();
+    WaterTankDbContext context;
     private Image drawingImage;
     private Point lastMousePosition;
     private bool isDragging = false;
+
     public WaterTank()
     {
         InitializeComponent();
+        var _context = WaterTankDbContext.GetInstance();
+        context = _context;
 
         panelDrawTankCapacity();
 
@@ -29,40 +33,41 @@ public partial class WaterTank : Form
 
 
         this.Resize += (s, e) => this.Invalidate();
-
     }
 
 
 
     private void panelDrawTankCapacity()
     {
+        var tankCap = context.TankProperties?.FirstOrDefault();
 
-        WaterTankDbContext context = new WaterTankDbContext();
-
-        var tankCap = context.TankProperties.FirstOrDefault();
-
-        switch (tankCap?.Capacity)
+        if (tankCap?.Capacity != null)
         {
-            case "150,000 gallon":
-                drawingImage = Image.FromFile("../../../../icons/150K.png");
-                break;
-            case "250,000 gallon":
-                drawingImage = Image.FromFile("../../../../icons/250K.png");
-                break;
-
-            case "500,000 gallon":
-                drawingImage = Image.FromFile("../../../../icons/500K.png");
-                break;
-
-            default:
-                drawingImage = Image.FromFile("../../../../icons/150K.png");
-                break;
-
+            switch (tankCap.Capacity)
+            {
+                case "150,000 gallon":
+                    drawingImage = Image.FromFile("../../../../icons/150K.png");
+                    break;
+                case "250,000 gallon":
+                    drawingImage = Image.FromFile("../../../../icons/250K.png");
+                    break;
+                case "500,000 gallon":
+                    drawingImage = Image.FromFile("../../../../icons/500K.png");
+                    break;
+                default:
+                    drawingImage = Image.FromFile("../../../../icons/150K.png");
+                    break;
+            }
+        }
+        else
+        {
+            // Set drawingImage to null to indicate a blank panel
+            drawingImage = null;
         }
 
         panel1.Invalidate();
-
     }
+
 
     private void panel1_MouseDown(object sender, MouseEventArgs e)
     {
@@ -114,7 +119,7 @@ public partial class WaterTank : Form
     {
         List<SegmentProperties> segments = new List<SegmentProperties>();
 
-        using (var context = new WaterTankDbContext())
+        using (var context = WaterTankDbContext.GetInstance())
         {
             segments = context.SegmentProperties.ToList();
         }
@@ -283,8 +288,58 @@ public partial class WaterTank : Form
 
     private void newToolStripMenuItem_Click(object sender, EventArgs e)
     {
-
+        CreateNewProject();
     }
+
+    private void CreateNewProject()
+    {
+        // Open a SaveFileDialog to get the project file location and name
+        using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+        {
+            saveFileDialog.Filter = "Project Files (*.proj)|*.proj";
+            saveFileDialog.Title = "Create New Project";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string projectPath = saveFileDialog.FileName;
+
+                try
+                {
+                    // Create a new project file with default content
+                    File.WriteAllText(projectPath, "Default project content or structure.");
+
+                    // Optionally, create a project folder and initialize project data
+                    string projectFolder = Path.GetDirectoryName(projectPath);
+                    Directory.CreateDirectory(Path.Combine(projectFolder, "Assets"));
+                    Directory.CreateDirectory(Path.Combine(projectFolder, "Data"));
+
+                    // Set up the UI for a new project
+                    InitializeNewProjectUI();
+
+                    // Display a message to confirm the project creation
+                    MessageBox.Show("New project created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error creating new project: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+    }
+
+    private void InitializeNewProjectUI()
+    {
+        // Clear existing data or UI elements
+        // For example, clear textboxes, grids, or project-specific fields
+        // textBox1.Clear();
+        // dataGridView1.Rows.Clear();
+        // Reset any project-specific settings or UI components
+
+        // Optionally, reset global variables or states for a new project
+        //currentProjectPath = null; // Replace with your variable that tracks the current project path
+        //isProjectSaved = false;    // Replace with your variable that tracks save state
+    }
+
 
     private void toolStripButton5_Click(object sender, EventArgs e)
     {
@@ -322,25 +377,29 @@ public partial class WaterTank : Form
         // Clear the panel to avoid residual drawings
         g.Clear(Color.White);
 
+        // Only draw the image if it exists
+        if (drawingImage != null)
+        {
+            int scaledWidth = (int)(drawingImage.Width * zoomFactor);
+            int scaledHeight = (int)(drawingImage.Height * zoomFactor);
 
-        int scaledWidth = (int)(drawingImage.Width * zoomFactor);
-        int scaledHeight = (int)(drawingImage.Height * zoomFactor);
+            // Calculate the top-left corner to center the image
+            int x = (panel1.Width - scaledWidth) / 2;
+            int y = (panel1.Height - scaledHeight) / 2;
 
-        // Calculate the top-left corner to center the image
-        int x = (panel1.Width - scaledWidth) / 2;
-        int y = (panel1.Height - scaledHeight) / 2;
+            // Apply rotation transformation around the image center
+            g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f);
+            g.RotateTransform(rotationAngle);
+            g.TranslateTransform(-panel1.Width / 2f, -panel1.Height / 2f);
 
-        // Apply rotation transformation around the image center
-        g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f);
-        g.RotateTransform(rotationAngle);
-        g.TranslateTransform(-panel1.Width / 2f, -panel1.Height / 2f);
+            // Draw the scaled and rotated image
+            Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
+            g.DrawImage(drawingImage, destRect);
 
-        // Draw the scaled and rotated image
-        Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
-        g.DrawImage(drawingImage, destRect);
-
-        g.ResetTransform();
+            g.ResetTransform();
+        }
     }
+
 
 
 

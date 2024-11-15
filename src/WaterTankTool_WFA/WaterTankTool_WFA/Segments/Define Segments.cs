@@ -21,8 +21,9 @@ namespace WaterTankTool_WFA
         {
             _waterTankForm = waterTank;
             InitializeComponent();
+            var context = WaterTankDbContext.GetInstance();
 
-            _context = new WaterTankDbContext();
+            _context = context;
             LoadData();
         }
 
@@ -77,17 +78,17 @@ namespace WaterTankTool_WFA
 
                 if (result == DialogResult.Yes)
                 {
-                    using (var context = new WaterTankDbContext())
-                    {
-                        var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == segmentNumber);
-                        var tankProperties = context.TankProperties.ToList();
+                    //using (var context = WaterTankDbContext.GetInstance())
+                    //{
+                        var segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == segmentNumber);
+                        var tankProperties = _context.TankProperties.ToList();
 
                         if (segmentProperties != null)
                         {
-                            context.TankProperties.RemoveRange(tankProperties);
+                            _context.TankProperties.RemoveRange(tankProperties);
 
-                            context.SegmentProperties.Remove(segmentProperties);
-                            context.SaveChanges();
+                            _context.SegmentProperties.Remove(segmentProperties);
+                            _context.SaveChanges();
                             MessageBox.Show($"Segment {segmentName} deleted successfully.");
                             LoadData();
                             
@@ -97,7 +98,7 @@ namespace WaterTankTool_WFA
                         {
                             MessageBox.Show("Selected Segment not found");
                         }
-                    }
+                    //}
                 }
             }
             else

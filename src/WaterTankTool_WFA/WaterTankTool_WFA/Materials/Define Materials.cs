@@ -22,7 +22,7 @@ namespace WaterTankTool_WFA
         public Define_Materials()
         {
             InitializeComponent();
-            _context = new WaterTankDbContext();
+            _context = WaterTankDbContext.GetInstance();
             MaterialListView();
         }
 
@@ -84,7 +84,7 @@ namespace WaterTankTool_WFA
 
                 if (result == DialogResult.Yes)
                 {
-                    using (var context = new WaterTankDbContext())
+                    using (var context = WaterTankDbContext.GetInstance())
                     {
                         var materialProperties = context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == materialNumber);
 
