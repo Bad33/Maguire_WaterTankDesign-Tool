@@ -30,6 +30,7 @@ namespace WaterTankTool_WFA
         {
             if (_context.MaterialProperties != null)
             {
+                
                 dataGridView1.DataSource = _context.MaterialProperties
                     .Select(x => new
                     {
@@ -37,6 +38,10 @@ namespace WaterTankTool_WFA
                         MaterialName = x.MaterialName
                     })
                     .ToList();
+                int columnIndexToDisable = 0;
+
+
+                dataGridView1.Columns[columnIndexToDisable].ReadOnly = true;
                 foreach (DataGridViewColumn column in dataGridView1.Columns)
                 {
                     column.SortMode = DataGridViewColumnSortMode.Programmatic;
@@ -84,22 +89,21 @@ namespace WaterTankTool_WFA
 
                 if (result == DialogResult.Yes)
                 {
-                    using (var context = WaterTankDbContext.GetInstance())
-                    {
-                        var materialProperties = context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == materialNumber);
 
-                        if (materialProperties != null)
-                        {
-                            context.MaterialProperties.Remove(materialProperties);
-                            context.SaveChanges();
-                            MessageBox.Show($"Material {materialName} deleted successfully.");
-                            MaterialListView();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Selected Material not found");
-                        }
+                    var materialProperties = _context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == materialNumber);
+
+                    if (materialProperties != null)
+                    {
+                        _context.MaterialProperties.Remove(materialProperties);
+                        _context.SaveChanges();
+                        MessageBox.Show($"Material {materialName} deleted successfully.");
+                        MaterialListView();
                     }
+                    else
+                    {
+                        MessageBox.Show("Selected Material not found");
+                    }
+                    
                 }
             }
         }
@@ -115,6 +119,10 @@ namespace WaterTankTool_WFA
                         MaterialName = x.MaterialName
                     })
                     .ToList();
+                int columnIndexToDisable = 0;
+
+
+                dataGridView1.Columns[columnIndexToDisable].ReadOnly = true;
                 foreach (DataGridViewColumn column in dataGridView1.Columns)
                 {
                     column.SortMode = DataGridViewColumnSortMode.Programmatic;

@@ -40,10 +40,10 @@ namespace WaterTankTool_WFA
         {
             AddSegmentSection addSegmentSection = new AddSegmentSection(_waterTankForm);
             DialogResult result = addSegmentSection.ShowDialog();
-            if (result == DialogResult.Cancel || result == DialogResult.OK)
-            {
-                this.Close();
-            }
+            //if (result == DialogResult.Cancel || result == DialogResult.OK)
+            //{
+            //    this.Close();
+            //}
             LoadData();
 
 

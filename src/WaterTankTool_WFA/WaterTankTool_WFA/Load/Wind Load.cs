@@ -13,6 +13,8 @@ namespace WaterTankTool_WFA.Load
 {
     public partial class Wind_Load : Form
     {
+
+        
         public Wind_Load()
         {
             InitializeComponent();
@@ -45,6 +47,20 @@ namespace WaterTankTool_WFA.Load
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if(textBox1.Text !=null && textBox2.Text != null && textBox3.Text != null && textBox4.Text != null && textBox5.Text != null && textBox6.Text != null && textBox7.Text != null && textBox8.Text != null)
+            {
+                var Kzt = Double.Parse(textBox1.Text);
+                var Kd = Double.Parse(textBox3.Text);
+                var I = Double.Parse(textBox5.Text);
+                var V = Double.Parse(textBox6.Text);
+
+                var Q = Lambda.Y * 0.000256 * Kzt * Kd * I * V;
+                richTextBox2.Text = "q = " + Q.ToString();
+            } 
         }
     }
 }

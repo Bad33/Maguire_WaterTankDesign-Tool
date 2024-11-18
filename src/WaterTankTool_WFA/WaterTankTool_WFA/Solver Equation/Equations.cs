@@ -47,7 +47,7 @@ namespace WaterTankTool_WFA.Solver_Equation
 
             var outerVolume = (Math.PI / 4) * (Math.Pow(Diameter, 2) * height);
 
-            var innerVolume = (Math.PI / 4) * Math.Pow((Diameter - (thickness/12)),2) * height;
+            var innerVolume = (Math.PI / 4) * Math.Pow((Diameter - (2*thickness)),2) * height;
 
             var segmentVolume = outerVolume - innerVolume;
 

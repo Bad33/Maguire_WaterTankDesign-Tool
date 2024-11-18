@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; 
 using System.Collections.Generic;
 
 namespace WaterTankTool_WFA.Constants
@@ -9,6 +9,11 @@ namespace WaterTankTool_WFA.Constants
         public const double rs = 490; //pcf
         public const double rc = 144; // pcf
 
+    }
+
+    public static class Lambda
+    {
+        public const double Y = 0.6;
     }
 
 

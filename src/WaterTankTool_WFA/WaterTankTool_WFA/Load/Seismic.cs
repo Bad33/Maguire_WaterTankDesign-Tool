@@ -98,7 +98,7 @@ namespace WaterTankTool_WFA.Load
 
                 textBox6.Text = Sd1.ToString();
             }
-            else if(textBox4?.Text == "NaN")
+            else if (textBox4?.Text == "NaN")
             {
                 textBox6.Text = "";
             }
@@ -111,11 +111,18 @@ namespace WaterTankTool_WFA.Load
                 var Sms = double.Parse(textBox5.Text) * (double)numericUpDown2.Value;
                 double Sds = Math.Round(((double)2 / 3) * Sms, 4);
                 textBox7.Text = Sds.ToString();
+                textBox9.Text = Sds.ToString();
             }
-            else if(textBox5?.Text == "NaN")
+            else if (textBox5?.Text == "NaN")
             {
                 textBox7.Text = "";
+                textBox9.Text = "";
             }
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

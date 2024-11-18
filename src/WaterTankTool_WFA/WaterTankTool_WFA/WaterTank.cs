@@ -261,7 +261,7 @@ public partial class WaterTank : Form
 
     private void pasteToolStripButton1_Click(object sender, EventArgs e)
     {
-         zoomFactor += 0.1f;
+        zoomFactor += 0.1f;
 
         panel1.Invalidate();
 
@@ -427,5 +427,21 @@ public partial class WaterTank : Form
         zoomFactor -= 0.1f;
 
         panel1.Invalidate();
+    }
+
+    private void snowLoadToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+        Snow_Load snow_Load = new Snow_Load();
+        snow_Load.ShowDialog();
+    }
+
+    private void openToolStripMenuItem_Click(object sender, EventArgs e)
+    {
+
+    }
+
+    private void splitContainer1_Panel1_Paint_1(object sender, PaintEventArgs e)
+    {
+
     }
 }
