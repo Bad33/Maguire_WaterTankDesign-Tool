@@ -33,5 +33,11 @@ namespace WaterTankTool_WFA.Entity
 
         [Range(0, double.MaxValue)]
         public double HeightFinal { get; set; }
+
+        [Range(0, double.MaxValue)]
+        public double? DiameterInitial { get; set; }
+
+        [Range(0, double.MaxValue)]
+        public double? DiameterFinal { get; set; }
     }
 }

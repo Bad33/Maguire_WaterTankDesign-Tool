@@ -17,10 +17,14 @@ namespace WaterTankTool_WFA
     {
         string _dialogType;
         int _materialNumber;
+        private WaterTankDbContext _context;
+
         public Material_Property_Data()
         {
            
             InitializeComponent();
+            _context = WaterTankDbContext.GetInstance();
+
         }
 
         public Material_Property_Data(string controlType, int materialNumber)
@@ -28,6 +32,8 @@ namespace WaterTankTool_WFA
             _materialNumber = materialNumber;
             _dialogType = controlType;
             InitializeComponent();
+            _context = WaterTankDbContext.GetInstance();
+
             ModifyDialogBox();
         }
 
@@ -50,24 +56,22 @@ namespace WaterTankTool_WFA
         {
             if (_dialogType == "Modify")
             {
-                using(var context = new WaterTankDbContext())
+                // Modify existing segment
+                var materialProperties = _context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == _materialNumber);
+
+                if (materialProperties == null)
                 {
-                    // Modify existing segment
-                    var materialProperties = context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == _materialNumber);
-
-                    if (materialProperties == null)
-                    {
-                        MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    textBox1.Text = materialProperties.MaterialName;
-                    comboBox2.Text = materialProperties.MaterialType;
-                    numericUpDown1.Text = materialProperties.Density.ToString();
-                    numericUpDown2.Text = materialProperties.ModulusOfElasticity.ToString();
-                    numericUpDown3.Text = materialProperties.TensileYieldStress.ToString();
-                    numericUpDown4.Text = materialProperties.TensileUltimateStress.ToString();
+                    MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
+
+                textBox1.Text = materialProperties.MaterialName;
+                comboBox2.Text = materialProperties.MaterialType;
+                numericUpDown1.Text = materialProperties.Density.ToString();
+                numericUpDown2.Text = materialProperties.ModulusOfElasticity.ToString();
+                numericUpDown3.Text = materialProperties.TensileYieldStress.ToString();
+                numericUpDown4.Text = materialProperties.TensileUltimateStress.ToString();
+                
 
             }
         }
@@ -95,14 +99,13 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            using (var context = new WaterTankDbContext())
-            {
+
                 MaterialProperties materialProperties;
 
                 if (_dialogType == "Modify")
                 {
                     // Modify existing segment
-                    materialProperties = context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == _materialNumber);
+                    materialProperties = _context.MaterialProperties.FirstOrDefault(item => item.MaterialNumber == _materialNumber);
 
                     if (materialProperties == null)
                     {
@@ -130,14 +133,14 @@ namespace WaterTankTool_WFA
                         TensileUltimateStress = _tensileUltimateStress,
                     };
 
-                    context.MaterialProperties.Add(materialProperties);
+                    _context.MaterialProperties.Add(materialProperties);
                 }
 
 
 
                 try
                 {
-                    int rowsAffected = context.SaveChanges();
+                    int rowsAffected = _context.SaveChanges();
                     successDialog(rowsAffected);
 
                 }
@@ -148,7 +151,7 @@ namespace WaterTankTool_WFA
 
 
 
-            }
+            
         }
 
         private void successDialog(int rowsAffected)

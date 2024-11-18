@@ -59,5 +59,15 @@ namespace WaterTankTool_WFA.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] water_tank_3487274 {
+            get {
+                object obj = ResourceManager.GetObject("water-tank_3487274", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

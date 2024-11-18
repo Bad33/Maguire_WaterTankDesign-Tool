@@ -16,12 +16,14 @@ namespace WaterTankTool_WFA
         private WaterTankDbContext _context;
         MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
         DialogResult result;
-        WaterTank form1 = new WaterTank();
-        public Define_Segments()
+        private WaterTank _waterTankForm;
+        public Define_Segments(WaterTank waterTank)
         {
+            _waterTankForm = waterTank;
             InitializeComponent();
+            var context = WaterTankDbContext.GetInstance();
 
-            _context = new WaterTankDbContext();
+            _context = context;
             LoadData();
         }
 
@@ -36,8 +38,12 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AddSegmentSection addSegmentSection = new AddSegmentSection();
-            addSegmentSection.ShowDialog();
+            AddSegmentSection addSegmentSection = new AddSegmentSection(_waterTankForm);
+            DialogResult result = addSegmentSection.ShowDialog();
+            //if (result == DialogResult.Cancel || result == DialogResult.OK)
+            //{
+            //    this.Close();
+            //}
             LoadData();
 
 
@@ -72,23 +78,27 @@ namespace WaterTankTool_WFA
 
                 if (result == DialogResult.Yes)
                 {
-                    using (var context = new WaterTankDbContext())
-                    {
-                        var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == segmentNumber);
+                    //using (var context = WaterTankDbContext.GetInstance())
+                    //{
+                        var segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == segmentNumber);
+                        var tankProperties = _context.TankProperties.ToList();
 
                         if (segmentProperties != null)
                         {
-                            context.SegmentProperties.Remove(segmentProperties);
-                            context.SaveChanges();
+                            _context.TankProperties.RemoveRange(tankProperties);
+
+                            _context.SegmentProperties.Remove(segmentProperties);
+                            _context.SaveChanges();
                             MessageBox.Show($"Segment {segmentName} deleted successfully.");
                             LoadData();
-                            form1.OnSegmentDeleted();
+                            
+                            _waterTankForm.OnSegmentDeleted();
                         }
                         else
                         {
                             MessageBox.Show("Selected Segment not found");
                         }
-                    }
+                    //}
                 }
             }
             else

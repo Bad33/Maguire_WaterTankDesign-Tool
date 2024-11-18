@@ -17,10 +17,11 @@ namespace WaterTankTool_WFA
         String _selectedTankCapacity;
         TankData tankData = new TankData();
         TankDataDimensions dimensions = new TankDataDimensions();
-
-        public TanksList()
+        WaterTank _waterTankForm;
+        public TanksList(WaterTank waterTankForm)
         {
             GetTanksJsonData();
+            _waterTankForm = waterTankForm;
             InitializeComponent();
         }
 
@@ -41,8 +42,15 @@ namespace WaterTankTool_WFA
         {
             if (dimensions != null)
             {
-                TankProperty tankProperty = new TankProperty(dimensions);
-                tankProperty.ShowDialog();
+
+                TankProperty tankProperty = new TankProperty(dimensions,_waterTankForm);
+                
+                DialogResult result = tankProperty.ShowDialog();
+
+                if (result == DialogResult.OK || result == DialogResult.Cancel)
+                {
+                    this.Close();
+                }
             }
 
         }

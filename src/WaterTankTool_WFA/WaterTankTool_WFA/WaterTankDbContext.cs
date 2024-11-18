@@ -1,23 +1,63 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using WaterTankTool_WFA.Entity;
 
-
-namespace WaterTankTool_WFA
+public class WaterTankDbContext : DbContext
 {
-    public class WaterTankDbContext : DbContext
+    private static WaterTankDbContext _instance;
+    private static readonly object _lock = new object();
+    private static string _defaultConnectionString = "Data Source=default_project_path\\project_data.db"; // Set this to a default path
+
+    public DbSet<SegmentProperties> SegmentProperties { get; set; }
+    public DbSet<MaterialProperties> MaterialProperties { get; set; }
+    public DbSet<TankProperties> TankProperties { get; set; }
+
+    // Private constructor to prevent direct instantiation
+    public WaterTankDbContext(string connectionString)
     {
-        public DbSet<SegmentProperties> SegmentProperties { get; set; }
+        _defaultConnectionString = connectionString;
+    }
 
-        public DbSet<MaterialProperties> MaterialProperties { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public static WaterTankDbContext GetInstance()
+    {
+        if (_instance == null)
         {
-            optionsBuilder.UseSqlite("Data Source=C:\\Users\\Union Loaner\\WaterTank.db");
+            lock (_lock)
+            {
+                if (_instance == null)
+                {
+                    _instance = new WaterTankDbContext(_defaultConnectionString);
+                }
+            }
+        }
+        return _instance;
+    }
+
+    public static void SetConnectionString(string connectionString)
+    {
+        lock (_lock)
+        {
+            _defaultConnectionString = connectionString;
+            _instance = null; // Reset the instance so it uses the new connection string on the next call
+        }
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlite(_defaultConnectionString);
+        }
+    }
+
+    public void EnsureDatabaseCreated()
+    {
+        try
+        {
+            Database.EnsureCreated();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error ensuring database is created: {ex.Message}");
         }
     }
 }

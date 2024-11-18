@@ -7,6 +7,7 @@ using WaterTankTool_WFA.Constants;
 
 namespace WaterTankTool_WFA.Solver_Equation
 {
+
     public class Equations
     {
         //Constants
@@ -19,6 +20,8 @@ namespace WaterTankTool_WFA.Solver_Equation
 
     public class Segment_Cylinder_Equations
     {
+        UnitsConverter unitsConverter = new UnitsConverter();
+
         Material_Property_Data Material_Property_Data;
         public Segment_Cylinder_Equations() { }
 
@@ -36,17 +39,19 @@ namespace WaterTankTool_WFA.Solver_Equation
             return result;
         }
 
-        public double weightOfPedestal(double heightInitial,double heightFinal,double Diameter,double thickness)
+        public double weightOfPedestal(double heightInitial,double heightFinal,double Diameter,double t)
         {
+            var thickness = unitsConverter.inch_TO_Ft(t);
+
             var height = heightFinal - heightInitial;
 
             var outerVolume = (Math.PI / 4) * (Math.Pow(Diameter, 2) * height);
 
-            var innerVolume = (Math.PI / 4) * Math.Pow((Diameter - (thickness/12)),2) * height;
+            var innerVolume = (Math.PI / 4) * Math.Pow((Diameter - (2*thickness)),2) * height;
 
             var segmentVolume = outerVolume - innerVolume;
 
-            var weight = (segmentVolume * 490 ) / 1000;
+            var weight = (segmentVolume * ConstantsClass.rs ) / 1000;
 
             return weight;
         }
@@ -109,9 +114,12 @@ namespace WaterTankTool_WFA.Solver_Equation
         }
     }
 
+
     //Equations for Conical Segments
     public class Segment_Conical_Equations
     {
+        UnitsConverter unitsConverter = new UnitsConverter();
+
         public double ProjectedArea(double heightInitial, double heightfinal, double diameter)
         {
             var height = heightfinal - heightInitial;
@@ -126,17 +134,19 @@ namespace WaterTankTool_WFA.Solver_Equation
             return result;
         }
 
-        public double weight(double hi, double hf, double di,double df, double thickness)
+        public double weight(double hi, double hf, double di,double df, double t)
         {
+            var thickness = unitsConverter.inch_TO_Ft(t);
+
             var d = df - di;
-            var h = hf - di;
+            var h = hf - hi;
 
             var S1 = (Math.PI / 4) * Math.Pow(di,2);
             var S2 = (Math.PI / 4) * Math.Pow(df,2);
             var S3 = (Math.PI / 4) * Math.Pow((di - (thickness/12)),2);
             var S4 = (Math.PI / 4) * Math.Pow((df - (thickness / 12)), 2);
 
-            var weight = ((h / 3) * (S1 + S2 - S3 - S4 + Math.Sqrt(S1 * S2) - Math.Sqrt(S3*S4))) * (490/1000);
+            var weight = ((h / 3) * (S1 + S2 - S3 - S4 + Math.Sqrt(S1 * S2) - Math.Sqrt(S3*S4))) * (ConstantsClass.rs/1000);
 
 
             return weight;
