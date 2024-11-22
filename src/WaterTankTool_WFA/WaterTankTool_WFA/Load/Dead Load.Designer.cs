@@ -42,52 +42,59 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(35, 44);
+            label1.Location = new Point(24, 26);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(64, 28);
+            label1.Size = new Size(45, 19);
             label1.TabIndex = 0;
             label1.Text = "ρsteel";
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(151, 44);
+            textBox1.Location = new Point(106, 26);
+            textBox1.Margin = new Padding(2, 2, 2, 2);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
+            textBox1.Size = new Size(106, 23);
             textBox1.TabIndex = 1;
             textBox1.Text = "490";
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(richTextBox1);
-            groupBox1.Location = new Point(35, 105);
+            groupBox1.Location = new Point(24, 63);
+            groupBox1.Margin = new Padding(2, 2, 2, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(324, 88);
+            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Size = new Size(227, 53);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Notes";
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(13, 31);
+            richTextBox1.Location = new Point(9, 19);
+            richTextBox1.Margin = new Padding(2, 2, 2, 2);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(305, 41);
+            richTextBox1.Size = new Size(215, 26);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
             // 
             // button1
             // 
-            button1.Location = new Point(119, 220);
+            button1.Location = new Point(83, 132);
+            button1.Margin = new Padding(2, 2, 2, 2);
             button1.Name = "button1";
-            button1.Size = new Size(112, 34);
+            button1.Size = new Size(78, 26);
             button1.TabIndex = 3;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            button2.Location = new Point(247, 220);
+            button2.Location = new Point(173, 132);
+            button2.Margin = new Padding(2, 2, 2, 2);
             button2.Name = "button2";
-            button2.Size = new Size(112, 34);
+            button2.Size = new Size(78, 26);
             button2.TabIndex = 4;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
@@ -96,25 +103,27 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label2.Location = new Point(310, 50);
+            label2.Location = new Point(217, 30);
+            label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(31, 22);
+            label2.Size = new Size(22, 16);
             label2.TabIndex = 5;
             label2.Text = "Pcf";
             // 
             // Dead_Load
             // 
             AcceptButton = button1;
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(385, 275);
+            ClientSize = new Size(270, 169);
             Controls.Add(label2);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
+            Margin = new Padding(2, 2, 2, 2);
             MaximizeBox = false;
             Name = "Dead_Load";
             StartPosition = FormStartPosition.CenterParent;

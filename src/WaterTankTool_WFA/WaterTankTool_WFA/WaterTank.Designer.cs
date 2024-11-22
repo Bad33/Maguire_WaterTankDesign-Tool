@@ -131,7 +131,7 @@ partial class WaterTank
         newToolStripMenuItem.ImageTransparentColor = Color.Magenta;
         newToolStripMenuItem.Name = "newToolStripMenuItem";
         newToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
-        newToolStripMenuItem.Size = new Size(153, 30);
+        newToolStripMenuItem.Size = new Size(188, 30);
         newToolStripMenuItem.Text = "&New";
         newToolStripMenuItem.Click += newToolStripMenuItem_Click;
         // 
@@ -141,14 +141,14 @@ partial class WaterTank
         openToolStripMenuItem.ImageTransparentColor = Color.Magenta;
         openToolStripMenuItem.Name = "openToolStripMenuItem";
         openToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-        openToolStripMenuItem.Size = new Size(153, 30);
+        openToolStripMenuItem.Size = new Size(188, 30);
         openToolStripMenuItem.Text = "&Open";
         openToolStripMenuItem.Click += openToolStripMenuItem_Click;
         // 
         // toolStripSeparator2
         // 
         toolStripSeparator2.Name = "toolStripSeparator2";
-        toolStripSeparator2.Size = new Size(150, 6);
+        toolStripSeparator2.Size = new Size(185, 6);
         // 
         // saveToolStripMenuItem
         // 
@@ -156,19 +156,19 @@ partial class WaterTank
         saveToolStripMenuItem.ImageTransparentColor = Color.Magenta;
         saveToolStripMenuItem.Name = "saveToolStripMenuItem";
         saveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-        saveToolStripMenuItem.Size = new Size(153, 30);
+        saveToolStripMenuItem.Size = new Size(188, 30);
         saveToolStripMenuItem.Text = "&Save";
         // 
         // saveAsToolStripMenuItem
         // 
         saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-        saveAsToolStripMenuItem.Size = new Size(153, 30);
+        saveAsToolStripMenuItem.Size = new Size(188, 30);
         saveAsToolStripMenuItem.Text = "Save &As";
         // 
         // toolStripSeparator3
         // 
         toolStripSeparator3.Name = "toolStripSeparator3";
-        toolStripSeparator3.Size = new Size(150, 6);
+        toolStripSeparator3.Size = new Size(185, 6);
         // 
         // printToolStripMenuItem
         // 
@@ -176,7 +176,7 @@ partial class WaterTank
         printToolStripMenuItem.ImageTransparentColor = Color.Magenta;
         printToolStripMenuItem.Name = "printToolStripMenuItem";
         printToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-        printToolStripMenuItem.Size = new Size(153, 30);
+        printToolStripMenuItem.Size = new Size(188, 30);
         printToolStripMenuItem.Text = "&Print";
         // 
         // printPreviewToolStripMenuItem
@@ -184,18 +184,18 @@ partial class WaterTank
         printPreviewToolStripMenuItem.Image = (Image)resources.GetObject("printPreviewToolStripMenuItem.Image");
         printPreviewToolStripMenuItem.ImageTransparentColor = Color.Magenta;
         printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-        printPreviewToolStripMenuItem.Size = new Size(153, 30);
+        printPreviewToolStripMenuItem.Size = new Size(188, 30);
         printPreviewToolStripMenuItem.Text = "Print Pre&view";
         // 
         // toolStripSeparator4
         // 
         toolStripSeparator4.Name = "toolStripSeparator4";
-        toolStripSeparator4.Size = new Size(150, 6);
+        toolStripSeparator4.Size = new Size(185, 6);
         // 
         // exitToolStripMenuItem
         // 
         exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-        exitToolStripMenuItem.Size = new Size(153, 30);
+        exitToolStripMenuItem.Size = new Size(188, 30);
         exitToolStripMenuItem.Text = "E&xit";
         // 
         // editToolStripMenuItem
@@ -367,6 +367,7 @@ partial class WaterTank
         newToolStripButton.Name = "newToolStripButton";
         newToolStripButton.Size = new Size(28, 28);
         newToolStripButton.Text = "&New";
+        newToolStripButton.Click += newToolStripButton_Click;
         // 
         // openToolStripButton
         // 

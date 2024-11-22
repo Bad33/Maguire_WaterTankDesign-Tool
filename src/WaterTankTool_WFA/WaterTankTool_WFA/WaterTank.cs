@@ -119,10 +119,10 @@ public partial class WaterTank : Form
     {
         List<SegmentProperties> segments = new List<SegmentProperties>();
 
-        using (var context = WaterTankDbContext.GetInstance())
-        {
-            segments = context.SegmentProperties.ToList();
-        }
+        //using (var context = WaterTankDbContext.GetInstance())
+        //{
+        segments = context.SegmentProperties.ToList();
+        //}
 
         return segments;
     }
@@ -388,9 +388,9 @@ public partial class WaterTank : Form
             int y = (panel1.Height - scaledHeight) / 2;
 
             // Apply rotation transformation around the image center
-            g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f);
-            g.RotateTransform(rotationAngle);
-            g.TranslateTransform(-panel1.Width / 2f, -panel1.Height / 2f);
+            //g.TranslateTransform(panel1.Width / 2f, panel1.Height / 2f);
+            //g.RotateTransform(rotationAngle);
+            //g.TranslateTransform(-panel1.Width / 2f, -panel1.Height / 2f);
 
             // Draw the scaled and rotated image
             Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
@@ -442,6 +442,12 @@ public partial class WaterTank : Form
 
     private void splitContainer1_Panel1_Paint_1(object sender, PaintEventArgs e)
     {
+
+    }
+
+    private void newToolStripButton_Click(object sender, EventArgs e)
+    {
+        CreateNewProject();
 
     }
 }

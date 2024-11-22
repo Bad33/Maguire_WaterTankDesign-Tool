@@ -64,9 +64,9 @@
             // button1
             // 
             button1.Location = new Point(194, 329);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(78, 20);
+            button1.Size = new Size(82, 26);
             button1.TabIndex = 0;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
@@ -74,10 +74,10 @@
             // 
             // button2
             // 
-            button2.Location = new Point(290, 329);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Location = new Point(289, 329);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
-            button2.Size = new Size(78, 20);
+            button2.Size = new Size(92, 26);
             button2.TabIndex = 1;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
@@ -105,9 +105,9 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(8, 18);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(213, 298);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
@@ -127,7 +127,7 @@
             // textBox8
             // 
             textBox8.Location = new Point(97, 266);
-            textBox8.Margin = new Padding(2, 2, 2, 2);
+            textBox8.Margin = new Padding(2);
             textBox8.Name = "textBox8";
             textBox8.Size = new Size(74, 23);
             textBox8.TabIndex = 18;
@@ -135,7 +135,7 @@
             // textBox7
             // 
             textBox7.Location = new Point(97, 239);
-            textBox7.Margin = new Padding(2, 2, 2, 2);
+            textBox7.Margin = new Padding(2);
             textBox7.Name = "textBox7";
             textBox7.Size = new Size(74, 23);
             textBox7.TabIndex = 17;
@@ -177,7 +177,7 @@
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "C", "D" });
             comboBox1.Location = new Point(97, 27);
-            comboBox1.Margin = new Padding(2, 2, 2, 2);
+            comboBox1.Margin = new Padding(2);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(74, 23);
             comboBox1.TabIndex = 13;
@@ -187,7 +187,7 @@
             // textBox6
             // 
             textBox6.Location = new Point(97, 209);
-            textBox6.Margin = new Padding(2, 2, 2, 2);
+            textBox6.Margin = new Padding(2);
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(74, 23);
             textBox6.TabIndex = 12;
@@ -196,7 +196,7 @@
             // textBox5
             // 
             textBox5.Location = new Point(97, 178);
-            textBox5.Margin = new Padding(2, 2, 2, 2);
+            textBox5.Margin = new Padding(2);
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(74, 23);
             textBox5.TabIndex = 11;
@@ -205,7 +205,7 @@
             // textBox4
             // 
             textBox4.Location = new Point(97, 148);
-            textBox4.Margin = new Padding(2, 2, 2, 2);
+            textBox4.Margin = new Padding(2);
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(74, 23);
             textBox4.TabIndex = 10;
@@ -214,7 +214,7 @@
             // textBox3
             // 
             textBox3.Location = new Point(97, 116);
-            textBox3.Margin = new Padding(2, 2, 2, 2);
+            textBox3.Margin = new Padding(2);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(74, 23);
             textBox3.TabIndex = 9;
@@ -223,7 +223,7 @@
             // textBox2
             // 
             textBox2.Location = new Point(97, 86);
-            textBox2.Margin = new Padding(2, 2, 2, 2);
+            textBox2.Margin = new Padding(2);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(74, 23);
             textBox2.TabIndex = 8;
@@ -232,7 +232,7 @@
             // textBox1
             // 
             textBox1.Location = new Point(97, 56);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(74, 23);
             textBox1.TabIndex = 7;
@@ -314,9 +314,9 @@
             groupBox2.Controls.Add(richTextBox2);
             groupBox2.Controls.Add(button3);
             groupBox2.Location = new Point(225, 18);
-            groupBox2.Margin = new Padding(2, 2, 2, 2);
+            groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(2, 2, 2, 2);
+            groupBox2.Padding = new Padding(2);
             groupBox2.Size = new Size(156, 153);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
@@ -325,7 +325,7 @@
             // richTextBox2
             // 
             richTextBox2.Location = new Point(11, 75);
-            richTextBox2.Margin = new Padding(2, 2, 2, 2);
+            richTextBox2.Margin = new Padding(2);
             richTextBox2.Name = "richTextBox2";
             richTextBox2.Size = new Size(133, 50);
             richTextBox2.TabIndex = 1;
@@ -335,9 +335,9 @@
             // button3
             // 
             button3.Location = new Point(11, 35);
-            button3.Margin = new Padding(2, 2, 2, 2);
+            button3.Margin = new Padding(2);
             button3.Name = "button3";
-            button3.Size = new Size(132, 20);
+            button3.Size = new Size(132, 27);
             button3.TabIndex = 0;
             button3.Text = "Calculate";
             button3.UseVisualStyleBackColor = true;
@@ -347,9 +347,9 @@
             // 
             groupBox3.Controls.Add(richTextBox1);
             groupBox3.Location = new Point(225, 175);
-            groupBox3.Margin = new Padding(2, 2, 2, 2);
+            groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(2, 2, 2, 2);
+            groupBox3.Padding = new Padding(2);
             groupBox3.Size = new Size(156, 141);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
@@ -358,7 +358,7 @@
             // richTextBox1
             // 
             richTextBox1.Location = new Point(11, 24);
-            richTextBox1.Margin = new Padding(2, 2, 2, 2);
+            richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(133, 88);
             richTextBox1.TabIndex = 7;
@@ -371,13 +371,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             CancelButton = button2;
-            ClientSize = new Size(390, 366);
+            ClientSize = new Size(393, 367);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(button2);
             Controls.Add(button1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Wind_Load";
             StartPosition = FormStartPosition.CenterParent;

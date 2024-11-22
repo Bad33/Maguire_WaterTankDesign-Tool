@@ -91,9 +91,9 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(18, 16);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(239, 326);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
@@ -105,7 +105,7 @@
             numericUpDown2.DecimalPlaces = 2;
             numericUpDown2.Increment = new decimal(new int[] { 25, 0, 0, 131072 });
             numericUpDown2.Location = new Point(89, 64);
-            numericUpDown2.Margin = new Padding(2, 2, 2, 2);
+            numericUpDown2.Margin = new Padding(2);
             numericUpDown2.Maximum = new decimal(new int[] { 125, 0, 0, 131072 });
             numericUpDown2.Name = "numericUpDown2";
             numericUpDown2.Size = new Size(104, 23);
@@ -117,7 +117,7 @@
             numericUpDown1.DecimalPlaces = 2;
             numericUpDown1.Increment = new decimal(new int[] { 25, 0, 0, 131072 });
             numericUpDown1.Location = new Point(88, 32);
-            numericUpDown1.Margin = new Padding(2, 2, 2, 2);
+            numericUpDown1.Margin = new Padding(2);
             numericUpDown1.Maximum = new decimal(new int[] { 5, 0, 0, 65536 });
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(105, 23);
@@ -189,7 +189,7 @@
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "A", "B", "C", "D", "E", "F" });
             comboBox1.Location = new Point(88, 93);
-            comboBox1.Margin = new Padding(2, 2, 2, 2);
+            comboBox1.Margin = new Padding(2);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(106, 23);
             comboBox1.TabIndex = 20;
@@ -199,7 +199,7 @@
             // textBox10
             // 
             textBox10.Location = new Point(88, 290);
-            textBox10.Margin = new Padding(2, 2, 2, 2);
+            textBox10.Margin = new Padding(2);
             textBox10.Name = "textBox10";
             textBox10.Size = new Size(106, 23);
             textBox10.TabIndex = 19;
@@ -207,7 +207,7 @@
             // textBox9
             // 
             textBox9.Location = new Point(88, 264);
-            textBox9.Margin = new Padding(2, 2, 2, 2);
+            textBox9.Margin = new Padding(2);
             textBox9.Name = "textBox9";
             textBox9.Size = new Size(106, 23);
             textBox9.TabIndex = 18;
@@ -215,7 +215,7 @@
             // textBox8
             // 
             textBox8.Location = new Point(88, 233);
-            textBox8.Margin = new Padding(2, 2, 2, 2);
+            textBox8.Margin = new Padding(2);
             textBox8.Name = "textBox8";
             textBox8.Size = new Size(106, 23);
             textBox8.TabIndex = 17;
@@ -223,7 +223,7 @@
             // textBox7
             // 
             textBox7.Location = new Point(88, 203);
-            textBox7.Margin = new Padding(2, 2, 2, 2);
+            textBox7.Margin = new Padding(2);
             textBox7.Name = "textBox7";
             textBox7.Size = new Size(106, 23);
             textBox7.TabIndex = 16;
@@ -232,7 +232,7 @@
             // textBox6
             // 
             textBox6.Location = new Point(88, 177);
-            textBox6.Margin = new Padding(2, 2, 2, 2);
+            textBox6.Margin = new Padding(2);
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(106, 23);
             textBox6.TabIndex = 15;
@@ -241,7 +241,7 @@
             // textBox5
             // 
             textBox5.Location = new Point(88, 151);
-            textBox5.Margin = new Padding(2, 2, 2, 2);
+            textBox5.Margin = new Padding(2);
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(106, 23);
             textBox5.TabIndex = 14;
@@ -250,7 +250,7 @@
             // textBox4
             // 
             textBox4.Location = new Point(88, 124);
-            textBox4.Margin = new Padding(2, 2, 2, 2);
+            textBox4.Margin = new Padding(2);
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(106, 23);
             textBox4.TabIndex = 13;
@@ -361,9 +361,9 @@
             // button1
             // 
             button1.Location = new Point(83, 358);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(78, 20);
+            button1.Size = new Size(78, 24);
             button1.TabIndex = 1;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
@@ -372,9 +372,9 @@
             // button2
             // 
             button2.Location = new Point(178, 358);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
-            button2.Size = new Size(78, 20);
+            button2.Size = new Size(78, 24);
             button2.TabIndex = 2;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
@@ -389,7 +389,7 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "Seismic";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Seismic Load";

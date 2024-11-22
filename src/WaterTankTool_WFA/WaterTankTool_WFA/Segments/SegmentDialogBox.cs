@@ -461,32 +461,32 @@ namespace WaterTankTool_WFA
         {
             Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
 
-            textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial, heightFinal, diameter, thickness).ToString();
-            textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString();
-            textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
-            textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
-            textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
-            textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
-            textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
-            textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString();
-            textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
-            textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString();
+            textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial, heightFinal, diameter, thickness).ToString("F4");
+            textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString("F4");
+            textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString("F4");
+            textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
+            textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
+            textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
+            textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
+            textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString("F4");
+            textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
+            textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString("F4");
         }
 
         private void CalculateBaseValues(double heightInitial, double heightFinal, double diameterInitial, double diameterFinal, double thickness)
         {
             Segment_Conical_Equations conical_Equations = new Segment_Conical_Equations();
 
-            textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString();
-            textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString();
-            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal).ToString();
-            textBox4.Text = conical_Equations.kzi(heightInitial).ToString();
-            textBox5.Text = conical_Equations.kzf(heightFinal).ToString();
-            textBox6.Text = conical_Equations.qzi(heightInitial).ToString();
-            textBox7.Text = conical_Equations.qzf(heightFinal).ToString();
-            textBox8.Text = conical_Equations.F(heightInitial, heightFinal, diameterInitial).ToString();
-            textBox9.Text = conical_Equations.L(heightInitial, heightFinal).ToString();
-            textBox10.Text = conical_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString();
+            textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString("F4");
+            textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString("F4");
+            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal).ToString("F4");
+            textBox4.Text = conical_Equations.kzi(heightInitial).ToString("F4");
+            textBox5.Text = conical_Equations.kzf(heightFinal).ToString("F4");
+            textBox6.Text = conical_Equations.qzi(heightInitial).ToString("F4");
+            textBox7.Text = conical_Equations.qzf(heightFinal).ToString("F4");
+            textBox8.Text = conical_Equations.F(heightInitial, heightFinal, diameterInitial).ToString("F4");
+            textBox9.Text = conical_Equations.L(heightInitial, heightFinal).ToString("F4");
+            textBox10.Text = conical_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString("F4");
         }
 
 

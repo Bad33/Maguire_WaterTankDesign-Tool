@@ -59,7 +59,7 @@ namespace WaterTankTool_WFA.Load
                 var V = Double.Parse(textBox6.Text);
 
                 var Q = Lambda.Y * 0.000256 * Kzt * Kd * I * V;
-                richTextBox2.Text = "q = " + Q.ToString();
+                richTextBox2.Text = "q = " + Q.ToString("F5");
             } 
         }
     }
