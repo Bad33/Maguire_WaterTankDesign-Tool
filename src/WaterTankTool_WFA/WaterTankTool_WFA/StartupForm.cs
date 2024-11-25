@@ -47,7 +47,7 @@ namespace WaterTankTool_WFA
                 Padding = new Padding(20),
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
-                BackColor = Color.FromArgb(45, 45, 48),
+                BackColor = Color.FromArgb(40, 40, 42),
                 WrapContents = false
             };
             mainLayout.Controls.Add(recentProjectsPanel, 0, 0);
@@ -62,27 +62,39 @@ namespace WaterTankTool_WFA
             };
             recentProjectsPanel.Controls.Add(recentProjectsLabel);
 
-            //Label copyrightText = new Label
-            //{
-            //    Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n" +
-            //           "This software and its associated materials are proprietary to Iron Maguire and are protected by applicable copyright and intellectual property laws.\n" +
-            //           "Unauthorized use, reproduction, or distribution of this software or any of its components is strictly prohibited.\n\n" +
-            //           "For licensing information, please contact: im@gmail.com\n\n" +
-            //           "Version: 1.1.0\n" +
-            //           "Developed by Nikhil Chaudhary, under the guidance of Dr. Akram Jwadhari at SDSU.",
-            //    Font = new Font("Segoe UI", 8, FontStyle.Regular),
-            //    ForeColor = Color.White,
-            //    AutoSize = true,
-            //    Margin = new Padding(0, 0, 0, 10),
-                
-            //};
-            //mainLayout.Controls.Add(copyrightText,1,0);
 
-           
+
 
 
             LoadRecentProjects();
             DisplayRecentProjects(recentProjectsPanel);
+
+
+            Panel copyrightPanel = new Panel
+            {
+                Dock = DockStyle.Bottom,
+                Height = 50,
+                BackColor = Color.FromArgb(40, 40, 42) // Match the panel color
+            };
+
+            Label copyrightText = new Label
+            {
+                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n",
+                //"This software and its associated materials are proprietary to Iron Maguire and are protected by applicable copyright and intellectual property laws.\n" +
+                //"Unauthorized use, reproduction, or distribution of this software or any of its components is strictly prohibited.\n\n" +
+                //"For licensing information, please contact: im@gmail.com\n\n" +
+                //"Version: 1.1.0\n" +
+                //"Developed by Nikhil Chaudhary, under the guidance of Dr. Akram Jwadhari at SDSU.",
+                Font = new Font("Segoe UI", 8, FontStyle.Regular),
+                ForeColor = Color.White,
+                AutoSize = true,
+    TextAlign = ContentAlignment.MiddleCenter,
+    Dock = DockStyle.Fill
+
+
+            };
+            copyrightPanel.Controls.Add(copyrightText);
+            recentProjectsPanel.Controls.Add(copyrightPanel);
 
             FlowLayoutPanel buttonPanel = new FlowLayoutPanel
             {

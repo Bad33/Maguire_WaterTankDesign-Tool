@@ -114,7 +114,7 @@ namespace WaterTankTool_WFA
                 DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
                 int segmentNumber = (int)selectedRow.Cells[0].Value;
 
-                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(segmentNumber, "Modify");
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(segmentNumber, "Modify",_waterTankForm);
                 var result = segmentDialogBox.ShowDialog();
 
                 if (result == DialogResult.OK)

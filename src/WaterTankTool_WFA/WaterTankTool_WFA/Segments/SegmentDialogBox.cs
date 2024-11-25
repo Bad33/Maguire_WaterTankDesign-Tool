@@ -19,7 +19,7 @@ namespace WaterTankTool_WFA
     public partial class SegmentDialogBox : Form
     {
         private WaterTankDbContext _context;
-
+        private WaterTank _waterTankForm;
         public String SegmentName { get; set; }
         public String SegmentType { get; set; }
         public double Diameter { get; set; }
@@ -51,10 +51,10 @@ namespace WaterTankTool_WFA
 
         }
 
-        public SegmentDialogBox(string segmentType)
+        public SegmentDialogBox(string segmentType,WaterTank waterTankForm)
         {
             _segmentType = segmentType;
-
+            _waterTankForm = waterTankForm;
 
             InitializeComponent();
 
@@ -66,7 +66,7 @@ namespace WaterTankTool_WFA
         }
 
 
-        public SegmentDialogBox(int segmentNumber, string dialogType)
+        public SegmentDialogBox(int segmentNumber, string dialogType, WaterTank waterTankForm)
         {
             _dialogType = dialogType;
             _segmentNumber = segmentNumber;
@@ -74,6 +74,7 @@ namespace WaterTankTool_WFA
             var context = WaterTankDbContext.GetInstance();
 
             _context = context;
+            _waterTankForm = waterTankForm;
             ModifyDialogBox();
 
         }
@@ -111,9 +112,9 @@ namespace WaterTankTool_WFA
 
             if (_dialogType == "Modify")
             {
-                using (var context = WaterTankDbContext.GetInstance())
-                {
-                    var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+                //using (var context = WaterTankDbContext.GetInstance())
+                //{
+                    var segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
                     if (segmentProperties != null && segmentProperties.SegmentType == "Base")
                     {
                         _segmentType = segmentProperties.SegmentType;
@@ -146,7 +147,7 @@ namespace WaterTankTool_WFA
                         DoCalculations();
 
                     }
-                }
+                //}
             }
         }
 
@@ -243,6 +244,7 @@ namespace WaterTankTool_WFA
                     successDialog(rowsAffected);
                     //WaterTank form1 = new WaterTank();
                     //form1.OnSegmentAdded();
+                    _waterTankForm.OnSegmentAdded();
                 }
                 catch (Exception ex)
                 {
@@ -323,6 +325,7 @@ namespace WaterTankTool_WFA
                     successDialog(rowsAffected);
                     //WaterTank form1 = new WaterTank();
                     //form1.OnSegmentAdded();
+                    _waterTankForm.OnSegmentAdded();
                 }
                 catch (Exception ex)
                 {

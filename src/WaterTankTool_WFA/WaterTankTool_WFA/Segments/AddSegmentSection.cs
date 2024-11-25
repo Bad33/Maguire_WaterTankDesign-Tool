@@ -35,7 +35,7 @@ namespace WaterTankTool_WFA
         {
             var gg = _context.MaterialProperties.Select(x=> x.MaterialName).ToList();
 
-            if(gg == null)
+            if(gg == null || gg.Count<=0)
             {
                 comboBox1.Text = "Select the material type.";
             }
@@ -52,7 +52,7 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType);
+            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType,_waterTankForm);
             this.Close();
             DialogResult result = segmentDialogBox.ShowDialog();
             if (result == DialogResult.OK || result == DialogResult.Cancel)
