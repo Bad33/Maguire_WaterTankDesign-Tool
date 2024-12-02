@@ -678,14 +678,13 @@ public partial class WaterTank : Form
 
 
 
-
     private Point AdjustLabelPosition(RectangleF labelBounds, List<RectangleF> existingLabelBounds, ref RectangleF adjustedBounds)
     {
         int verticalSpacing = 5; // Space between labels in pixels
         bool overlap;
 
         // Initialize the adjusted position with the original label bounds
-        Point adjustedPosition = new Point((int)labelBounds.X , (int)labelBounds.Y);
+        Point adjustedPosition = new Point((int)labelBounds.X, (int)labelBounds.Y);
 
         do
         {
@@ -750,15 +749,14 @@ public partial class WaterTank : Form
             return; // Prevent division by zero or negative scaling
 
         // Calculate scaling factor: pixels per foot
-        double scaleFactor = imageBounds.Height / totalTankHeight;
+        double scaleFactor = imageBounds.Height / totalTankHeight ;
 
         // Define offsets for lines and labels
         int lineXOffset = imageBounds.Right + 40; // 40 pixels to the right of the image
         int labelXOffset = lineXOffset + 20;     // 20 pixels further for the label
 
-        // Length of the vertical dimension line in pixels (representing segment height)
-        // You can adjust this multiplier for better visualization
-        double verticalLineLengthMultiplier = 1.0;
+        // Length multiplier for the vertical line based on segment height
+        double verticalLineLengthMultiplier = 1.0; // Adjust as needed for visibility
 
         // List to keep track of existing label bounds to prevent overlaps
         List<RectangleF> existingLabelBounds = new List<RectangleF>();
@@ -766,16 +764,17 @@ public partial class WaterTank : Form
         foreach (var dimension in dimensions)
         {
             // Calculate the average height of the segment
-            double averageHeight = (dimension.HeightFinal + dimension.HeightInitial) / 2;
-
-            // Calculate the Y position on the image (tank at top, base at bottom)
-            int segmentY = imageBounds.Top + 100 + imageBounds.Height - (int)(averageHeight * scaleFactor);
-
-            // Calculate the length of the vertical line based on segment height
-            int verticalLineHeight = (int)((dimension.HeightFinal - dimension.HeightInitial) * scaleFactor * verticalLineLengthMultiplier);
+            double averageHeight = (dimension.HeightFinal + dimension.HeightInitial) / 2.0;
 
             
-            // Define start and end points for the vertical line
+
+            // Calculate the Y position on the image (tank at top, base at bottom)
+            int segmentY = imageBounds.Top + 80 + imageBounds.Height - (int)(averageHeight * scaleFactor);
+
+            // Calculate the height of the vertical line based on segment height
+            int verticalLineHeight = (int)((dimension.HeightFinal - dimension.HeightInitial) * scaleFactor * verticalLineLengthMultiplier);
+
+            // Define start and end points for the vertical line (upward)
             Point lineStart = new Point(lineXOffset, segmentY);
             Point lineEnd = new Point(lineXOffset, segmentY - verticalLineHeight); // Line goes upward
 
@@ -819,6 +818,7 @@ public partial class WaterTank : Form
             }
         }
     }
+
 
 
 
