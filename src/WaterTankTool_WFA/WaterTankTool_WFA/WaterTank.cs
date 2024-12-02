@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Custom_Design_Control;
@@ -32,6 +33,7 @@ public partial class WaterTank : Form
         InitializeComponent();
         var _context = WaterTankDbContext.GetInstance();
         context = _context;
+        InitializeUIComponents();
         InitializeStatusStrip2();
         InitializeLayout();
         panelDrawTankCapacity();
@@ -80,7 +82,6 @@ public partial class WaterTank : Form
         };
 
 
-
         // Add labels to statusStrip2
         statusStrip2.Items.Add(appStatusLabel);
         statusStrip2.Items.Add(new ToolStripSeparator());
@@ -93,13 +94,6 @@ public partial class WaterTank : Form
 
     private void InitializeLayout()
     {
-        // Configure SplitContainer2 and Panel1 (already created in your code)
-        //splitContainer2.Panel1.BackColor = Color.White; // Drawing area background
-        //splitContainer2.Panel1.Controls.Add(panel1);
-
-        // Add the toggle button to show/hide dimensions
-
-
 
         toggleButton = new Button
         {
@@ -129,6 +123,17 @@ public partial class WaterTank : Form
         toggleSolveButton.Click += ToggleSolverVisibility;
         splitContainer2.Panel2.Controls.Add(toggleSolveButton);
 
+        Button exportButton = new Button
+        {
+            Text = "Export Diagram",
+            Dock = DockStyle.Top,
+            Height = 40,
+            BackColor = Color.Gray,
+            ForeColor = Color.White,
+            FlatStyle = FlatStyle.Popup
+        };
+        exportButton.Click += ExportDiagram;
+        splitContainer2.Panel2.Controls.Add(exportButton);
 
 
         // Initialize the DataGridView for dimensions
@@ -161,6 +166,8 @@ public partial class WaterTank : Form
         dimensionGridView.Visible = false;
 
     }
+
+
 
     private void ToggleDimensionTableVisibility(object sender, EventArgs e)
     {
@@ -214,6 +221,56 @@ public partial class WaterTank : Form
         dimensionGridView.AllowUserToAddRows = false; // Disable the new row placeholder
     }
 
+    private void InitializeUIComponents()
+    {
+        // Export Button
+
+    }
+    private void ExportDiagram(object sender, EventArgs e)
+    {
+        using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+        {
+            saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg";
+            saveFileDialog.Title = "Export Diagram";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // Create a bitmap with the panel's dimensions
+                using (Bitmap bitmap = new Bitmap(panel1.Width, panel1.Height))
+                {
+                    using (Graphics g = Graphics.FromImage(bitmap))
+                    {
+                        g.Clear(Color.White);
+                        g.SmoothingMode = SmoothingMode.AntiAlias;
+
+                        // Draw the tank image and dimensions as in the Panel_Paint event
+                        if (drawingImage != null)
+                        {
+                            int scaledWidth = (int)(drawingImage.Width * zoomFactor);
+                            int scaledHeight = (int)(drawingImage.Height * zoomFactor);
+                            int x = (panel1.Width - scaledWidth) / 2;
+                            int y = (panel1.Height - scaledHeight) / 2;
+                            Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
+
+                            g.TranslateTransform(destRect.X + scaledWidth / 2, destRect.Y + scaledHeight / 2);
+                            g.RotateTransform(rotationAngle);
+                            g.TranslateTransform(-(destRect.X + scaledWidth / 2), -(destRect.Y + scaledHeight / 2));
+
+                            g.DrawImage(drawingImage, destRect);
+
+                            // Draw the dimensions
+                            DrawDimensions(g, destRect);
+                        }
+                    }
+
+                    // Save the bitmap to the selected file
+                    bitmap.Save(saveFileDialog.FileName, saveFileDialog.FilterIndex == 1 ? ImageFormat.Png : ImageFormat.Jpeg);
+                }
+
+                MessageBox.Show("Diagram exported successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+    }
 
 
 
@@ -363,60 +420,7 @@ public partial class WaterTank : Form
         return segments;
     }
 
-    private void Form1_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void toolStripMenuItem1_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void toolStripMenuItem2_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void Form1_Load(object sender, EventArgs e)
-    {
-        panel1.Invalidate();
-    }
-
-    private void toolStripContainer1_ContentPanel_Load(object sender, EventArgs e)
-    {
-
-    }
-
-    private void splitContainer2_Panel2_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
-
-    private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e)
-    {
-
-    }
-
-    private void splitContainer3_Panel2_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
-
-    private void splitContainer3_Panel1_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
-
-    private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
-
-    private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
+   
 
     private void addSegmentToolStripMenuItem_Click(object sender, EventArgs e)
     {
@@ -430,26 +434,6 @@ public partial class WaterTank : Form
         Define_Materials dialog = new Define_Materials();
 
         dialog.ShowDialog();
-    }
-
-    private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
-    {
-
-    }
-
-    private void toolStrip3_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-    {
-
-    }
-
-    private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-    {
-
-    }
-
-    private void toolStripButton1_Click(object sender, EventArgs e)
-    {
-
     }
 
     private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -500,13 +484,6 @@ public partial class WaterTank : Form
         zoomFactor += 0.1f;
 
         panel1.Invalidate();
-
-
-
-    }
-
-    private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
-    {
 
     }
 
@@ -589,15 +566,7 @@ public partial class WaterTank : Form
         define_Materials.ShowDialog();
     }
 
-    private void toolStripStatusLabel1_Click(object sender, EventArgs e)
-    {
 
-    }
-
-    private void panel1_Paint(object sender, PaintEventArgs e)
-    {
-
-    }
     private float zoomFactor = 1.0f;
     private float rotationAngle = 0.0f; // Rotation angle in degrees
 
@@ -613,6 +582,12 @@ public partial class WaterTank : Form
         // Clear the background
         g.Clear(Color.White);
 
+        // Apply transformations for scaling and rotation
+        g.TranslateTransform(panel1.Width / 2, panel1.Height / 2); // Move origin to center
+        g.RotateTransform(rotationAngle);                         // Apply rotation
+        g.ScaleTransform(zoomFactor, zoomFactor);                  // Apply scaling
+        g.TranslateTransform(-panel1.Width / 2, -panel1.Height / 2); // Move origin back
+
         // Draw the tank image if it exists
         if (drawingImage != null)
         {
@@ -627,68 +602,119 @@ public partial class WaterTank : Form
             Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
             g.DrawImage(drawingImage, destRect);
 
-            // Draw dimensions with arrow lines and labels
-            DrawTankWithArrowDimensions(g);
+            // Draw the dimensions
+            DrawDimensions(g, destRect);
         }
+
+        // Reset transformations
+        g.ResetTransform();
     }
+
+
+
+
 
 
     private void DrawTankWithArrowDimensions(Graphics g)
     {
-        // Enable high-quality rendering
-        g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        // Ensure drawingImage is valid
         if (drawingImage == null) return;
 
-        // Dynamically calculate tankImageHeight and bounds
         int scaledWidth = (int)(drawingImage.Width * zoomFactor);
         int scaledHeight = (int)(drawingImage.Height * zoomFactor);
-        int tankImageHeight = scaledHeight;
 
-        // Top-left corner of the image to center it
-        int xOffset = (panel1.Width - scaledWidth) / 2;
-        int yOffset = (panel1.Height - scaledHeight) / 2;
+        int xOffset = (panel1.Width - scaledWidth) / 2; // Center the tank horizontally
+        int yOffset = (panel1.Height - scaledHeight) / 2; // Center the tank vertically
 
-        // Vertical offset for labels
-        int labelOffsetX = xOffset + scaledWidth + 20; // Position labels to the right of the image
+        int arrowOffsetX = xOffset + scaledWidth + 40; // Space for arrows to the right
+        int labelOffsetX = arrowOffsetX + 30; // Space for labels to the right of arrows
 
-        // Get the dimensions from the database
+        List<Rectangle> existingLabels = new List<Rectangle>(); // To prevent overlap
+
         var dimensions = GetDimensionsFromDatabase();
 
         foreach (var dimension in dimensions)
         {
-            if (dimension.ComponentName == "Cylinder")
+            int segmentTop = yOffset + (int)(scaledHeight * (dimension.HeightInitial / 100.0));
+            int segmentBottom = yOffset + (int)(scaledHeight * (dimension.HeightFinal / 100.0));
+
+            Point arrowStart, arrowEnd, labelPosition;
+
+            if (dimension.ComponentName == "Tank") // Tank section at the very top
             {
-                // Map cylinder segments proportionally to tank image
-                int segmentTop = yOffset + (int)(tankImageHeight * (dimension.HeightInitial / 100.0));
-                int segmentBottom = yOffset + (int)(tankImageHeight * (dimension.HeightFinal / 100.0));
-
-                // Draw the arrow
-                Point start = new Point(labelOffsetX - 30, segmentTop);
-                Point end = new Point(labelOffsetX - 30, segmentBottom);
-                DrawVerticalArrowLine(g, start, end, Color.Black);
-
-                // Draw the label centered vertically relative to the arrow
-                string label = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2}, D={dimension.Diameter:F2}";
-                g.DrawString(label, new Font("Segoe UI", 10, FontStyle.Bold), Brushes.Black, labelOffsetX, (segmentTop + segmentBottom) / 2 - 10);
+                arrowStart = new Point(arrowOffsetX, segmentTop);
+                arrowEnd = new Point(arrowOffsetX, segmentTop + 40); // Short arrow for tank
+                labelPosition = new Point(labelOffsetX, segmentTop + 5); // Close to the top
             }
-            else if (dimension.ComponentName == "Tanks" || dimension.ComponentName == "Base")
+            else if (dimension.ComponentName == "Base") // Base section at the bottom
             {
-                // Calculate arrow positions for Tanks and Base
-                int segmentTop = yOffset + (dimension.ComponentName == "Tanks" ? 0 : tankImageHeight - 100);
-                int segmentBottom = yOffset + (dimension.ComponentName == "Tanks" ? 150 : tankImageHeight);
-
-                Point start = new Point(labelOffsetX - 30, segmentTop);
-                Point end = new Point(labelOffsetX - 30, segmentBottom);
-                DrawVerticalArrowLine(g, start, end, Color.Black);
-
-                // Add label
-                string label = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2}, D={dimension.Diameter:F2}";
-                g.DrawString(label, new Font("Segoe UI", 10, FontStyle.Bold), Brushes.Black, labelOffsetX, (segmentTop + segmentBottom) / 2 - 10);
+                arrowStart = new Point(arrowOffsetX, segmentBottom - 40); // Short arrow for base
+                arrowEnd = new Point(arrowOffsetX, segmentBottom);
+                labelPosition = new Point(labelOffsetX, segmentBottom - 20); // Close to the bottom
             }
+            else // Cylinder sections dynamically positioned
+            {
+                arrowStart = new Point(arrowOffsetX, segmentTop);
+                arrowEnd = new Point(arrowOffsetX, segmentBottom);
+                int labelY = (segmentTop + segmentBottom) / 2; // Center label vertically
+                //labelPosition = AdjustLabelPosition(new Point(labelOffsetX, labelY), existingLabels);
+            }
+
+            // Draw arrows
+            DrawVerticalArrowLine(g, arrowStart, arrowEnd, Color.Black);
+
+            // Draw labels
+            string label = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2}, D={dimension.Diameter:F2}";
+            SizeF textSize = g.MeasureString(label, new Font("Segoe UI", 10, FontStyle.Bold));
+            //Rectangle labelRect = new Rectangle(labelPosition, textSize.ToSize());
+            //existingLabels.Add(labelRect); // Track label positions to avoid overlap
+            //g.DrawString(label, new Font("Segoe UI", 10, FontStyle.Bold), Brushes.Black, labelPosition);
         }
     }
+
+
+
+
+
+
+
+
+
+    private Point AdjustLabelPosition(RectangleF labelBounds, List<RectangleF> existingLabelBounds, ref RectangleF adjustedBounds)
+    {
+        int verticalSpacing = 5; // Space between labels in pixels
+        bool overlap;
+
+        // Initialize the adjusted position with the original label bounds
+        Point adjustedPosition = new Point((int)labelBounds.X , (int)labelBounds.Y);
+
+        do
+        {
+            overlap = false;
+
+            foreach (var existingBound in existingLabelBounds)
+            {
+                if (adjustedBounds.IntersectsWith(existingBound))
+                {
+                    // If overlapping, move the label downward by verticalSpacing
+                    adjustedPosition.Y += verticalSpacing;
+                    adjustedBounds.Y += verticalSpacing;
+                    overlap = true;
+                    break; // Exit the loop to re-check with updated position
+                }
+            }
+
+        } while (overlap); // Repeat until no overlap is detected
+
+        return adjustedPosition;
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -697,62 +723,133 @@ public partial class WaterTank : Form
         using (Pen pen = new Pen(color, 2))
         {
             AdjustableArrowCap arrowCap = new AdjustableArrowCap(5, 5);
-            pen.CustomEndCap = arrowCap;
             pen.CustomStartCap = arrowCap;
+            pen.CustomEndCap = arrowCap;
 
-            // Draw the vertical line with arrows
             g.DrawLine(pen, start, end);
         }
     }
 
 
 
+
+
+
     private void DrawDimensions(Graphics g, Rectangle imageBounds)
     {
+        // Retrieve dimension data from the database
         var dimensions = GetDimensionsFromDatabase();
-        var labelStartX = imageBounds.Right + 20; // Start X position for labels
-        var labelYStep = 30; // Vertical space between labels
-        var labelY = imageBounds.Top + 20; // Start Y position for labels
+
+        if (dimensions == null || dimensions.Count == 0)
+            return;
+
+        // Calculate the total tank height in feet
+        double totalTankHeight = dimensions.Max(d => d.HeightFinal) - dimensions.Min(d => d.HeightInitial);
+
+        if (totalTankHeight <= 0)
+            return; // Prevent division by zero or negative scaling
+
+        // Calculate scaling factor: pixels per foot
+        double scaleFactor = imageBounds.Height / totalTankHeight;
+
+        // Define offsets for lines and labels
+        int lineXOffset = imageBounds.Right + 40; // 40 pixels to the right of the image
+        int labelXOffset = lineXOffset + 20;     // 20 pixels further for the label
+
+        // Length of the vertical dimension line in pixels (representing segment height)
+        // You can adjust this multiplier for better visualization
+        double verticalLineLengthMultiplier = 1.0;
+
+        // List to keep track of existing label bounds to prevent overlaps
+        List<RectangleF> existingLabelBounds = new List<RectangleF>();
 
         foreach (var dimension in dimensions)
         {
-            // Calculate the mid-point of the component (on the tank image)
-            Point componentMidPoint = GetComponentMidPoint(dimension.ComponentName, imageBounds);
+            // Calculate the average height of the segment
+            double averageHeight = (dimension.HeightFinal + dimension.HeightInitial) / 2;
 
-            // Set the label's position
-            Point labelPosition = new Point(labelStartX, labelY);
+            // Calculate the Y position on the image (tank at top, base at bottom)
+            int segmentY = imageBounds.Top + 100 + imageBounds.Height - (int)(averageHeight * scaleFactor);
 
-            // Draw a connecting line (dashed)
-            using (Pen dashedPen = new Pen(Color.Gray, 1)
-            {
-                DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-            })
-            {
-                // Draw a straight horizontal line from component to label area
-                g.DrawLine(dashedPen, componentMidPoint.X, componentMidPoint.Y, labelStartX - 10, componentMidPoint.Y);
+            // Calculate the length of the vertical line based on segment height
+            int verticalLineHeight = (int)((dimension.HeightFinal - dimension.HeightInitial) * scaleFactor * verticalLineLengthMultiplier);
 
-                // Draw a vertical connecting line from label area to the text
-                g.DrawLine(dashedPen, labelStartX - 10, componentMidPoint.Y, labelPosition.X, labelPosition.Y + 10);
-            }
+            
+            // Define start and end points for the vertical line
+            Point lineStart = new Point(lineXOffset, segmentY);
+            Point lineEnd = new Point(lineXOffset, segmentY - verticalLineHeight); // Line goes upward
 
-            // Draw the label background
-            Rectangle labelRect = new Rectangle(labelPosition.X, labelPosition.Y, 200, labelYStep - 5);
-            using (Brush labelBackgroundBrush = new SolidBrush(Color.LightGray))
-            {
-                g.FillRectangle(labelBackgroundBrush, labelRect);
-            }
+            // Draw the vertical line with arrows at both ends
+            DrawDoubleArrowVerticalLine(g, lineStart, lineEnd, Color.Black);
 
-            // Draw the label text
-            string labelText = $"{dimension.ComponentName}: H={(dimension.HeightFinal - dimension.HeightInitial):F2}, D={dimension.Diameter:F2}";
+            // Prepare label text
+            string labelText = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2} ft, D={dimension.Diameter:F2} ft";
+
             using (Font labelFont = new Font("Segoe UI", 9, FontStyle.Bold))
             {
+                // Measure the size of the label text
+                SizeF textSize = g.MeasureString(labelText, labelFont);
+
+                // Define the initial label position (to the right of the vertical line)
+                Point labelPosition = new Point(labelXOffset, lineEnd.Y - (int)(textSize.Height / 2));
+
+                // Define the background rectangle for the label
+                RectangleF labelBackground = new RectangleF(labelPosition, textSize);
+
+                // Adjust label position to prevent overlap
+                labelPosition = AdjustLabelPosition(labelBackground, existingLabelBounds, ref labelBackground);
+
+                // Add the adjusted label bounds to the list
+                existingLabelBounds.Add(labelBackground);
+
+                // Draw the label background
+                using (Brush backgroundBrush = new SolidBrush(Color.LightYellow))
+                {
+                    g.FillRectangle(backgroundBrush, labelBackground);
+                }
+
+                // Optionally, draw a border around the label
+                using (Pen borderPen = new Pen(Color.Gray, 1))
+                {
+                    g.DrawRectangle(borderPen, labelBackground.X, labelBackground.Y, labelBackground.Width, labelBackground.Height);
+                }
+
+                // Draw the label text
                 g.DrawString(labelText, labelFont, Brushes.Black, labelPosition);
             }
-
-            // Increment the Y position for the next label
-            labelY += labelYStep;
         }
     }
+
+
+
+
+    private void DrawDoubleArrowVerticalLine(Graphics g, Point start, Point end, Color color)
+    {
+        using (Pen pen = new Pen(color, 2))
+        {
+            // Define arrow caps for both ends
+            AdjustableArrowCap arrowCap = new AdjustableArrowCap(5, 5);
+            pen.CustomStartCap = arrowCap;
+            pen.CustomEndCap = arrowCap;
+
+            // Draw the vertical line with arrows at both ends
+            g.DrawLine(pen, start, end);
+        }
+    }
+
+
+
+    private void DrawHorizontalArrowLine(Graphics g, Point start, Point end, Color color)
+    {
+        using (Pen pen = new Pen(color, 2))
+        {
+            AdjustableArrowCap arrowCap = new AdjustableArrowCap(5, 5);
+            pen.CustomEndCap = arrowCap;
+            g.DrawLine(pen, start, end);
+        }
+    }
+
+
 
     private Point GetComponentMidPoint(string componentName, Rectangle imageBounds)
     {
@@ -799,20 +896,6 @@ public partial class WaterTank : Form
         g.DrawString(text, font, Brushes.Black, position);
     }
 
-
-
-    //private Point GetLabelPosition(string componentName, Rectangle imageBounds)
-    //{
-    //    // Customize positions based on the component name and layout requirements
-    //    return componentName switch
-    //    {
-    //        "Base" => new Point(imageBounds.Left + 20, imageBounds.Bottom - 50), // Bottom-left
-    //        "Cylinder" => new Point(imageBounds.Left + imageBounds.Width / 2, imageBounds.Top + imageBounds.Height / 2), // Center
-    //        "Tanks" => new Point(imageBounds.Right - 200, imageBounds.Top + 20), // Top-right
-    //        _ => new Point(imageBounds.Left + 20, imageBounds.Top + 20) // Default position
-    //    };
-    //}
-
     private List<Dimension> GetDimensionsFromDatabase()
     {
         return context.SegmentProperties
@@ -851,17 +934,17 @@ public partial class WaterTank : Form
         return labelPosition;
     }
 
-    private Point GetSegmentPosition(string componentName, Rectangle imageBounds)
+    private Point GetSegmentPosition(string componentName, Rectangle bounds)
     {
-        // Dynamically determine segment positions
         return componentName switch
         {
-            "Base" => new Point(imageBounds.X + imageBounds.Width / 2, imageBounds.Bottom - 50),
-            "Cylinder" => new Point(imageBounds.X + imageBounds.Width / 2, imageBounds.Y + imageBounds.Height / 2),
-            "Tank" => new Point(imageBounds.X + imageBounds.Width / 2, imageBounds.Y + 30),
-            _ => new Point(imageBounds.X + imageBounds.Width / 2, imageBounds.Y + 10)
+            "Base" => new Point(bounds.X + bounds.Width / 2, bounds.Bottom - (bounds.Height / 10)), // Near bottom
+            "Cylinder" => new Point(bounds.X + bounds.Width / 2, bounds.Top + (bounds.Height / 2)), // Center
+            "Tank" => new Point(bounds.X + bounds.Width / 2, bounds.Top + 50), // Near top
+            _ => new Point(bounds.X + bounds.Width / 2, bounds.Top) // Default top position
         };
     }
+
 
     private Point GetLabelPosition(string componentName, Rectangle imageBounds, int labelIndex)
     {
@@ -919,15 +1002,9 @@ public partial class WaterTank : Form
         snow_Load.ShowDialog();
     }
 
-    private void openToolStripMenuItem_Click(object sender, EventArgs e)
-    {
+    private void openToolStripMenuItem_Click(object sender, EventArgs e) { }
 
-    }
-
-    private void splitContainer1_Panel1_Paint_1(object sender, PaintEventArgs e)
-    {
-
-    }
+    private void splitContainer1_Panel1_Paint_1(object sender, PaintEventArgs e) { }
 
     private void newToolStripButton_Click(object sender, EventArgs e)
     {
@@ -935,28 +1012,51 @@ public partial class WaterTank : Form
 
     }
 
-    private void splitContainer2_Panel2_Paint_1(object sender, PaintEventArgs e)
-    {
+    private void splitContainer2_Panel2_Paint_1(object sender, PaintEventArgs e) { }
 
+    private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e) { }
+
+    private void toolStripTextBox1_Click(object sender, EventArgs e) { }
+
+    private void toolStripTextBox2_Click(object sender, EventArgs e) { }
+
+    private void statusStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e) { }
+
+    private void Form1_Click(object sender, EventArgs e) { }
+
+    private void toolStripMenuItem1_Click(object sender, EventArgs e) { }
+
+    private void toolStripMenuItem2_Click(object sender, EventArgs e) { }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+        panel1.Invalidate();
     }
 
-    private void splitContainer2_Panel1_Paint(object sender, PaintEventArgs e)
-    {
+    private void toolStripContainer1_ContentPanel_Load(object sender, EventArgs e) { }
+    private void splitContainer2_Panel2_Paint(object sender, PaintEventArgs e) { }
 
-    }
+    private void splitContainer2_SplitterMoved(object sender, SplitterEventArgs e) { }
 
-    private void toolStripTextBox1_Click(object sender, EventArgs e)
-    {
+    private void splitContainer3_Panel2_Paint(object sender, PaintEventArgs e) { }
 
-    }
+    private void splitContainer3_Panel1_Paint(object sender, PaintEventArgs e) { }
 
-    private void toolStripTextBox2_Click(object sender, EventArgs e)
-    {
+    private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e){ }
 
-    }
+    private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e){ }
 
-    private void statusStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-    {
+    private void toolStripStatusLabel1_Click(object sender, EventArgs e) { }
 
-    }
+    private void panel1_Paint(object sender, PaintEventArgs e) { }
+    private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e) { }
+
+    private void toolsToolStripMenuItem_Click(object sender, EventArgs e) { }
+
+    private void toolStrip3_ItemClicked(object sender, ToolStripItemClickedEventArgs e) { }
+
+    private void toolStrip2_ItemClicked(object sender, ToolStripItemClickedEventArgs e) { }
+
+    private void toolStripButton1_Click(object sender, EventArgs e) { }
+
 }
