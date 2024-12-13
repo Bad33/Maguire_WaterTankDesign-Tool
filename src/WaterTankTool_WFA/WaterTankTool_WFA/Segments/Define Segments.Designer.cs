@@ -49,14 +49,14 @@
             groupBox1.Controls.Add(button1);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(845, 103);
+            groupBox1.Size = new Size(845, 92);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Segments Action";
             // 
             // button3
             // 
-            button3.Location = new Point(581, 47);
+            button3.Location = new Point(580, 36);
             button3.Name = "button3";
             button3.Size = new Size(166, 34);
             button3.TabIndex = 2;
@@ -66,7 +66,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(315, 47);
+            button2.Location = new Point(310, 36);
             button2.Name = "button2";
             button2.Size = new Size(167, 34);
             button2.TabIndex = 1;
@@ -76,7 +76,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(60, 47);
+            button1.Location = new Point(55, 36);
             button1.Name = "button1";
             button1.Size = new Size(160, 34);
             button1.TabIndex = 0;
@@ -89,9 +89,9 @@
             groupBox2.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             groupBox2.AutoSize = true;
             groupBox2.Controls.Add(dataGridView1);
-            groupBox2.Location = new Point(12, 158);
+            groupBox2.Location = new Point(12, 125);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(845, 210);
+            groupBox2.Size = new Size(845, 154);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Segment List";
@@ -115,7 +115,7 @@
             dataGridView1.RowTemplate.ReadOnly = true;
             dataGridView1.RowTemplate.Resizable = DataGridViewTriState.False;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(839, 188);
+            dataGridView1.Size = new Size(839, 132);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             // 
@@ -124,7 +124,7 @@
             AutoScaleMode = AutoScaleMode.Inherit;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(878, 395);
+            ClientSize = new Size(878, 303);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             MinimumSize = new Size(850, 250);

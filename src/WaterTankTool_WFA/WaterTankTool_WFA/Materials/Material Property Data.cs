@@ -18,14 +18,25 @@ namespace WaterTankTool_WFA
         string _dialogType;
         int _materialNumber;
         private WaterTankDbContext _context;
+        private WaterTank _waterTankForm;
 
-        public Material_Property_Data()
+        public Material_Property_Data(WaterTank waterTankForm)
         {
            
             InitializeComponent();
             _context = WaterTankDbContext.GetInstance();
+            _waterTankForm = waterTankForm;
 
         }
+
+        //public Material_Property_Data()
+        //{
+
+        //    InitializeComponent();
+        //    _context = WaterTankDbContext.GetInstance();
+
+
+        //}
 
         public Material_Property_Data(string controlType, int materialNumber)
         {
@@ -134,7 +145,7 @@ namespace WaterTankTool_WFA
                     };
 
                     _context.MaterialProperties.Add(materialProperties);
-                }
+            }
 
 
 
@@ -142,9 +153,11 @@ namespace WaterTankTool_WFA
                 {
                     int rowsAffected = _context.SaveChanges();
                     successDialog(rowsAffected);
+                    _waterTankForm.OnmaterialAdded();
 
-                }
-                catch (Exception ex)
+
+            }
+            catch (Exception ex)
                 {
                     MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

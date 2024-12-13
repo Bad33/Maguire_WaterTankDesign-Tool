@@ -17,18 +17,44 @@ namespace WaterTankTool_WFA
         private PictureBox _selectedPictureBox;
         private String SegmentType;
         private WaterTank _waterTankForm;
+        private WaterTankDbContext _context;
+
+        List<string> ggwp = new List<string>();
         public AddSegmentSection(WaterTank waterTankForm)
         {
 
             _waterTankForm = waterTankForm;
             InitializeComponent();
+            _context = WaterTankDbContext.GetInstance();
+
+            setComboboxItems();
+
+        }
+
+        private void setComboboxItems()
+        {
+            var gg = _context.MaterialProperties.Select(x=> x.MaterialName).ToList();
+
+            if(gg == null || gg.Count<=0)
+            {
+                comboBox1.Text = "Select the material type.";
+            }
+            else
+            {
+                comboBox1.Text = gg[0].ToString();
+                foreach (var g in gg)
+                {
+                    comboBox1.Items.Add(g);
+                }
+            }
+
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType);
+            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType,_waterTankForm);
             this.Close();
-            DialogResult result  = segmentDialogBox.ShowDialog();
+            DialogResult result = segmentDialogBox.ShowDialog();
             if (result == DialogResult.OK || result == DialogResult.Cancel)
             {
                 this.Close();
@@ -84,6 +110,12 @@ namespace WaterTankTool_WFA
             }
 
 
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+            //comboBox1.Items = ggwp.ToList();
         }
     }
 }

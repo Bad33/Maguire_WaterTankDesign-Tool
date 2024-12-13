@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WaterTankTool_WFA.Constants;
+using WaterTankTool_WFA.Entity;
 
 namespace WaterTankTool_WFA.Solver_Equation
 {
@@ -23,12 +24,23 @@ namespace WaterTankTool_WFA.Solver_Equation
         UnitsConverter unitsConverter = new UnitsConverter();
 
         Material_Property_Data Material_Property_Data;
-        public Segment_Cylinder_Equations() { }
+
+        private WaterTankDbContext _context;
+
+        private WindLoadEntity Qwind;
+
+        public Segment_Cylinder_Equations() {
+            _context = WaterTankDbContext.GetInstance();
+            Qwind = _context.WindLoadEntity.FirstOrDefault();
+
+
+
+        }
 
         public double ProjectedArea(double heightInitial,double heightfinal, double diameter)
         {
             var height = heightfinal - heightInitial;
-            var result = 12 * (height * diameter);
+            var result = (height * diameter);
             return result;
         }
 
@@ -76,20 +88,36 @@ namespace WaterTankTool_WFA.Solver_Equation
 
         public double qzi(double heightInitial)
         {
-            var result = 0.00256 * kzi(heightInitial) * WindLoadConstants.Kzt * WindLoadConstants.Kd * WindLoadConstants.I * Math.Pow(WindLoadConstants.V,2);
+            double result = 0;
+            if (Qwind != null)
+            {
+
+                var value1 = Qwind.Q * kzi(heightInitial) * Qwind.G;
+                var value2 = 30 * Qwind.Cf;
+                result = Math.Max(value1,value2);
+            }
+
             return result;
         }
 
         public double qzf(double heightFinal)
         {
-            var result = 0.00256 * kzf(heightFinal) * WindLoadConstants.Kzt * WindLoadConstants.Kd * WindLoadConstants.I * Math.Pow(WindLoadConstants.V, 2);
+            double result = 0;
+            if (Qwind != null)
+            {
+
+                var value1 = Qwind.Q * kzf(heightFinal) * Qwind.G;
+                var value2 = 30 * Qwind.Cf;
+                result = Math.Max(value1, value2);
+            }
+
             return result;
         }
 
         public double F(double heightInitial,double heightFinal,double diameter)
         {
             var height = heightFinal - heightInitial;
-            var result = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial,heightFinal, diameter);
+            var result = (((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial,heightFinal, diameter)) / 1000;
 
             return result;
         }
@@ -119,6 +147,17 @@ namespace WaterTankTool_WFA.Solver_Equation
     public class Segment_Conical_Equations
     {
         UnitsConverter unitsConverter = new UnitsConverter();
+
+        private WaterTankDbContext _context;
+
+        private WindLoadEntity Qwind;
+
+        public Segment_Conical_Equations()
+        {
+            _context = WaterTankDbContext.GetInstance();
+            Qwind = _context.WindLoadEntity.FirstOrDefault();
+
+        }
 
         public double ProjectedArea(double heightInitial, double heightfinal, double diameter)
         {
@@ -172,13 +211,29 @@ namespace WaterTankTool_WFA.Solver_Equation
 
         public double qzi(double heightInitial)
         {
-            var result = 0.00256 * kzi(heightInitial) * WindLoadConstants.Kzt * WindLoadConstants.Kd * WindLoadConstants.I * Math.Pow(WindLoadConstants.V, 2);
+            double result = 0;
+            if (Qwind != null)
+            {
+
+                var value1 = Qwind.Q * kzi(heightInitial) * Qwind.G;
+                var value2 = 30 * Qwind.Cf;
+                result = Math.Max(value1, value2);
+            }
+
             return result;
         }
 
         public double qzf(double heightFinal)
         {
-            var result = 0.00256 * kzf(heightFinal) * WindLoadConstants.Kzt * WindLoadConstants.Kd * WindLoadConstants.I * Math.Pow(WindLoadConstants.V, 2);
+            double result = 0;
+            if (Qwind != null)
+            {
+
+                var value1 = Qwind.Q * kzf(heightFinal) * Qwind.G;
+                var value2 = 30 * Qwind.Cf;
+                result = Math.Max(value1, value2);
+            }
+
             return result;
         }
 

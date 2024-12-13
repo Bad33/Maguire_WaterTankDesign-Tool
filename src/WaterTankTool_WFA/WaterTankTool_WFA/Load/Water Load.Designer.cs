@@ -42,52 +42,59 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label1.Location = new Point(44, 45);
+            label1.Location = new Point(31, 27);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(72, 56);
+            label1.Size = new Size(51, 38);
             label1.TabIndex = 0;
             label1.Text = "ρwater\r\n\r\n";
             // 
             // textBox1
             // 
-            textBox1.Location = new Point(155, 45);
+            textBox1.Location = new Point(108, 27);
+            textBox1.Margin = new Padding(2, 2, 2, 2);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(150, 31);
+            textBox1.Size = new Size(106, 23);
             textBox1.TabIndex = 1;
             textBox1.Text = "62.4";
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(richTextBox1);
-            groupBox1.Location = new Point(48, 115);
+            groupBox1.Location = new Point(34, 69);
+            groupBox1.Margin = new Padding(2, 2, 2, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(345, 104);
+            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Size = new Size(242, 62);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Notes";
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(16, 39);
+            richTextBox1.Location = new Point(11, 23);
+            richTextBox1.Margin = new Padding(2, 2, 2, 2);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(312, 49);
+            richTextBox1.Size = new Size(220, 31);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
             // 
             // button1
             // 
-            button1.Location = new Point(155, 261);
+            button1.Location = new Point(108, 150);
+            button1.Margin = new Padding(2, 2, 2, 2);
             button1.Name = "button1";
-            button1.Size = new Size(112, 34);
+            button1.Size = new Size(78, 27);
             button1.TabIndex = 3;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
             // 
             // button2
             // 
-            button2.Location = new Point(281, 261);
+            button2.Location = new Point(197, 150);
+            button2.Margin = new Padding(2, 2, 2, 2);
             button2.Name = "button2";
-            button2.Size = new Size(112, 34);
+            button2.Size = new Size(78, 27);
             button2.TabIndex = 4;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
@@ -96,23 +103,25 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Arial Narrow", 9F, FontStyle.Italic);
-            label2.Location = new Point(317, 50);
+            label2.Location = new Point(222, 30);
+            label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(31, 22);
+            label2.Size = new Size(22, 16);
             label2.TabIndex = 5;
             label2.Text = "Pcf";
             // 
             // Water_Load
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(440, 313);
+            ClientSize = new Size(308, 188);
             Controls.Add(label2);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Water_Load";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Water Load";

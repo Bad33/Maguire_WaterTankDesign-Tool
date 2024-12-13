@@ -17,13 +17,24 @@ namespace WaterTankTool_WFA
         private WaterTankDbContext _context;
         DialogResult result;
         MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
+        private WaterTank _waterTankForm;
 
 
-        public Define_Materials()
+        //public Define_Materials()
+        //{
+        //    InitializeComponent();
+        //    _context = WaterTankDbContext.GetInstance();
+        //    MaterialListView();
+        //}
+
+        public Define_Materials(WaterTank waterTankForm)
         {
             InitializeComponent();
             _context = WaterTankDbContext.GetInstance();
+
+            _waterTankForm = waterTankForm;
             MaterialListView();
+
         }
 
         public void MaterialListView()
@@ -65,7 +76,7 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Material_Property_Data dialog = new Material_Property_Data();
+            Material_Property_Data dialog = new Material_Property_Data(_waterTankForm);
 
             dialog.ShowDialog();
             MaterialListView();
@@ -98,6 +109,7 @@ namespace WaterTankTool_WFA
                         _context.SaveChanges();
                         MessageBox.Show($"Material {materialName} deleted successfully.");
                         MaterialListView();
+                        _waterTankForm.OnMaterialDeleted();
                     }
                     else
                     {

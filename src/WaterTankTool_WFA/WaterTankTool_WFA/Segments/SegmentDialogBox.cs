@@ -19,7 +19,7 @@ namespace WaterTankTool_WFA
     public partial class SegmentDialogBox : Form
     {
         private WaterTankDbContext _context;
-
+        private WaterTank _waterTankForm;
         public String SegmentName { get; set; }
         public String SegmentType { get; set; }
         public double Diameter { get; set; }
@@ -51,10 +51,10 @@ namespace WaterTankTool_WFA
 
         }
 
-        public SegmentDialogBox(string segmentType)
+        public SegmentDialogBox(string segmentType, WaterTank waterTankForm)
         {
             _segmentType = segmentType;
-
+            _waterTankForm = waterTankForm;
 
             InitializeComponent();
 
@@ -66,7 +66,7 @@ namespace WaterTankTool_WFA
         }
 
 
-        public SegmentDialogBox(int segmentNumber, string dialogType)
+        public SegmentDialogBox(int segmentNumber, string dialogType, WaterTank waterTankForm)
         {
             _dialogType = dialogType;
             _segmentNumber = segmentNumber;
@@ -74,6 +74,7 @@ namespace WaterTankTool_WFA
             var context = WaterTankDbContext.GetInstance();
 
             _context = context;
+            _waterTankForm = waterTankForm;
             ModifyDialogBox();
 
         }
@@ -89,7 +90,7 @@ namespace WaterTankTool_WFA
                 maskedTextBox5.Visible = true;
                 label26.Visible = true;
             }
-            else if (_segmentType == "Cylinder")
+            else if (_segmentType == "Cylinder" || _segmentType == "Tanks")
             {
                 label3.Text = "Diameter";
                 label17.Text = "in";
@@ -111,42 +112,56 @@ namespace WaterTankTool_WFA
 
             if (_dialogType == "Modify")
             {
-                using (var context = WaterTankDbContext.GetInstance())
+                //using (var context = WaterTankDbContext.GetInstance())
+                //{
+                var segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+                if (segmentProperties != null && segmentProperties.SegmentType == "Base")
                 {
-                    var segmentProperties = context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
-                    if (segmentProperties != null && segmentProperties.SegmentType == "Base")
-                    {
-                        _segmentType = segmentProperties.SegmentType;
+                    _segmentType = segmentProperties.SegmentType;
 
-                        showInputFieldsOnType();
+                    showInputFieldsOnType();
 
-                        richTextBox1.Text = segmentProperties.SegmentName;
-                        maskedTextBox2.Text = segmentProperties.DiameterInitial.ToString();
-                        maskedTextBox3.Text = segmentProperties.DiameterFinal.ToString();
-                        maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
-                        maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
-                        maskedTextBox5.Text = segmentProperties.Thickness.ToString();
+                    richTextBox1.Text = segmentProperties.SegmentName;
+                    maskedTextBox2.Text = segmentProperties.DiameterInitial.ToString();
+                    maskedTextBox3.Text = segmentProperties.DiameterFinal.ToString();
+                    maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
+                    maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
+                    maskedTextBox5.Text = segmentProperties.Thickness.ToString();
 
-                        DoCalculations();
+                    DoCalculations();
 
-                    }
-                    else if(segmentProperties != null && segmentProperties.SegmentType == "Cylinder")
-                    {
-                        _segmentType = segmentProperties.SegmentType;
-
-                        showInputFieldsOnType();
-
-
-                        richTextBox1.Text = segmentProperties.SegmentName;
-                        maskedTextBox2.Text = segmentProperties.Diameter.ToString();
-                        maskedTextBox3.Text = segmentProperties.Thickness.ToString();
-                        maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
-                        maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
-
-                        DoCalculations();
-
-                    }
                 }
+                else if (segmentProperties != null && segmentProperties.SegmentType == "Cylinder")
+                {
+                    _segmentType = segmentProperties.SegmentType;
+
+                    showInputFieldsOnType();
+
+
+                    richTextBox1.Text = segmentProperties.SegmentName;
+                    maskedTextBox2.Text = segmentProperties.Diameter.ToString();
+                    maskedTextBox3.Text = segmentProperties.Thickness.ToString();
+                    maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
+                    maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
+
+                    DoCalculations();
+
+                }
+                else if (segmentProperties != null && segmentProperties.SegmentType == "Tanks")
+                {
+                    _segmentType = segmentProperties.SegmentType;
+
+                    showInputFieldsOnType();
+                    richTextBox1.Text = segmentProperties.SegmentName;
+                    maskedTextBox2.Text = segmentProperties.Diameter.ToString();
+                    maskedTextBox3.Text = segmentProperties.Thickness.ToString();
+                    maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
+                    maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
+
+                    DoCalculations();
+
+                }
+                //}
             }
         }
 
@@ -182,7 +197,7 @@ namespace WaterTankTool_WFA
                 !double.TryParse(maskedTextBox1.Text, out double heightInitial) ||
                 !double.TryParse(maskedTextBox4.Text, out double heightFinal) || !double.TryParse(maskedTextBox5.Text, out double thickness))
             {
-                MessageBox.Show("Please enter valid numbers for Diameter, Thickness, and Heights.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -190,64 +205,65 @@ namespace WaterTankTool_WFA
 
             //using (var context = WaterTankDbContext.GetInstance())
             //{
-                SegmentProperties segmentProperties;
+            SegmentProperties segmentProperties;
 
 
 
 
-                if (_dialogType == "Modify")
+            if (_dialogType == "Modify")
+            {
+                segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+
+                ValidateSegment(segmentProperties);
+
+                if (segmentProperties == null)
                 {
-                    segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
-
-                    ValidateSegment(segmentProperties);
-
-                    if (segmentProperties == null)
-                    {
-                        MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    segmentProperties.SegmentName = richTextBox1.Text;
-                    segmentProperties.SegmentType = _segmentType;
-                    segmentProperties.Diameter = diameter;
-                    segmentProperties.Thickness = thickness;
-                    segmentProperties.HeightInitial = heightInitial;
-                    segmentProperties.HeightFinal = heightFinal;
-                    segmentProperties.DiameterInitial = diameterInitial;
-                    segmentProperties.DiameterFinal = diameterFinal;
-                }
-                else
-                {
-                    segmentProperties = new SegmentProperties()
-                    {
-                        SegmentName = richTextBox1.Text,
-                        SegmentType = _segmentType,
-                        Diameter = diameter,
-                        Thickness = thickness,
-                        HeightInitial = heightInitial,
-                        HeightFinal = heightFinal,
-                        DiameterInitial = diameterInitial,
-                        DiameterFinal = diameterFinal
-
-                    };
-
-                    ValidateSegment(segmentProperties);
-
-
-                    _context.SegmentProperties.Add(segmentProperties);
+                    MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
-                try
+                segmentProperties.SegmentName = richTextBox1.Text;
+                segmentProperties.SegmentType = _segmentType;
+                segmentProperties.Diameter = diameter;
+                segmentProperties.Thickness = thickness;
+                segmentProperties.HeightInitial = heightInitial;
+                segmentProperties.HeightFinal = heightFinal;
+                segmentProperties.DiameterInitial = diameterInitial;
+                segmentProperties.DiameterFinal = diameterFinal;
+            }
+            else
+            {
+                segmentProperties = new SegmentProperties()
                 {
-                    int rowsAffected = _context.SaveChanges();
-                    successDialog(rowsAffected);
-                    //WaterTank form1 = new WaterTank();
-                    //form1.OnSegmentAdded();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                    SegmentName = richTextBox1.Text,
+                    SegmentType = _segmentType,
+                    Diameter = diameter,
+                    Thickness = thickness,
+                    HeightInitial = heightInitial,
+                    HeightFinal = heightFinal,
+                    DiameterInitial = diameterInitial,
+                    DiameterFinal = diameterFinal
+
+                };
+
+                ValidateSegment(segmentProperties);
+
+
+                _context.SegmentProperties.Add(segmentProperties);
+            }
+
+            try
+            {
+                int rowsAffected = _context.SaveChanges();
+                successDialog(rowsAffected);
+                //WaterTank form1 = new WaterTank();
+                //form1.OnSegmentAdded();
+                _waterTankForm.OnSegmentAdded();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             //}
         }
 
@@ -269,65 +285,66 @@ namespace WaterTankTool_WFA
                 !double.TryParse(maskedTextBox1.Text, out double heightInitial) ||
                 !double.TryParse(maskedTextBox4.Text, out double heightFinal))
             {
-                MessageBox.Show("Please enter valid numbers for Diameter, Thickness, and Heights.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
             //using (var context = WaterTankDbContext.GetInstance())
             //{
-                SegmentProperties segmentProperties;
+            SegmentProperties segmentProperties;
 
 
-                if (_dialogType == "Modify")
+            if (_dialogType == "Modify")
+            {
+                // Modify existing segment
+                segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+
+                ValidateSegment(segmentProperties);
+
+                if (segmentProperties == null)
                 {
-                    // Modify existing segment
-                    segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
-
-                    ValidateSegment(segmentProperties);
-
-                    if (segmentProperties == null)
-                    {
-                        MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    segmentProperties.SegmentName = richTextBox1.Text;
-                    segmentProperties.SegmentType = _segmentType;
-                    segmentProperties.Diameter = diameter;
-                    segmentProperties.Thickness = thickness;
-                    segmentProperties.HeightInitial = heightInitial;
-                    segmentProperties.HeightFinal = heightFinal;
-                }
-                else
-                {
-                    // Add new segment
-                    segmentProperties = new SegmentProperties()
-                    {
-                        SegmentName = richTextBox1.Text,
-                        SegmentType = _segmentType,
-                        Diameter = diameter,
-                        Thickness = thickness,
-                        HeightInitial = heightInitial,
-                        HeightFinal = heightFinal
-                    };
-
-                    ValidateSegment(segmentProperties);
-
-
-                    _context.SegmentProperties.Add(segmentProperties);
+                    MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
                 }
 
-                try
+                segmentProperties.SegmentName = richTextBox1.Text;
+                segmentProperties.SegmentType = _segmentType;
+                segmentProperties.Diameter = diameter;
+                segmentProperties.Thickness = thickness;
+                segmentProperties.HeightInitial = heightInitial;
+                segmentProperties.HeightFinal = heightFinal;
+            }
+            else
+            {
+                // Add new segment
+                segmentProperties = new SegmentProperties()
                 {
-                    int rowsAffected = _context.SaveChanges();
-                    successDialog(rowsAffected);
-                    //WaterTank form1 = new WaterTank();
-                    //form1.OnSegmentAdded();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                    SegmentName = richTextBox1.Text,
+                    SegmentType = _segmentType,
+                    Diameter = diameter,
+                    Thickness = thickness,
+                    HeightInitial = heightInitial,
+                    HeightFinal = heightFinal
+                };
+
+                ValidateSegment(segmentProperties);
+
+
+                _context.SegmentProperties.Add(segmentProperties);
+            }
+
+            try
+            {
+                int rowsAffected = _context.SaveChanges();
+                successDialog(rowsAffected);
+                //WaterTank form1 = new WaterTank();
+                //form1.OnSegmentAdded();
+                _waterTankForm.OnSegmentAdded();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
             //}
         }
 
@@ -337,7 +354,7 @@ namespace WaterTankTool_WFA
             {
                 Save_ClickBase(sender, e);
             }
-            else if (_segmentType == "Cylinder")
+            else if (_segmentType == "Cylinder" || _segmentType == "Tanks")
             {
                 Save_ClickCylinder(sender, e);
             }
@@ -375,7 +392,7 @@ namespace WaterTankTool_WFA
                 DialogResult result = MessageBox.Show("Data might not have been saved!", "Confirmation", MessageBoxButtons.OK);
                 if (result == DialogResult.OK)
                 {
-                    this.Close(); 
+                    this.Close();
                 }
             }
         }
@@ -431,6 +448,10 @@ namespace WaterTankTool_WFA
             {
                 CalculateBaseValues(heightInitial, heightFinal, diameter, diameterFinal, thickness);
             }
+            else if (_segmentType == "Tanks")
+            {
+                CalculateCylinderValues(heightInitial, heightFinal, diameter, thickness);
+            }
             else
             {
                 setTextboxvalues("Unknown Segment Type");
@@ -454,39 +475,45 @@ namespace WaterTankTool_WFA
                                double.TryParse(maskedTextBox4.Text, out heightFinal) &&
                                double.TryParse(maskedTextBox5.Text, out thickness);
 
-            return isCylinderValid || isBaseValid;
+            bool isTankValid = _segmentType == "Tanks" &&
+                                double.TryParse(maskedTextBox2.Text, out diameter) &&
+                                double.TryParse(maskedTextBox3.Text, out thickness) &&
+                                double.TryParse(maskedTextBox1.Text, out heightInitial) &&
+                                double.TryParse(maskedTextBox4.Text, out heightFinal);
+
+            return isCylinderValid || isBaseValid || isTankValid;
         }
 
         private void CalculateCylinderValues(double heightInitial, double heightFinal, double diameter, double thickness)
         {
             Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
 
-            textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial, heightFinal, diameter, thickness).ToString();
-            textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString();
-            textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString();
-            textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString();
-            textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString();
-            textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString();
-            textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString();
-            textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString();
-            textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString();
-            textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString();
+            textBox1.Text = cylinder_Equations.weightOfPedestal(heightInitial, heightFinal, diameter, thickness).ToString("F4");
+            textBox2.Text = cylinder_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString("F4");
+            textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString("F4");
+            textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
+            textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
+            textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
+            textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
+            textBox8.Text = cylinder_Equations.F(heightInitial, heightFinal, diameter).ToString("F4");
+            textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
+            textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString("F4");
         }
 
         private void CalculateBaseValues(double heightInitial, double heightFinal, double diameterInitial, double diameterFinal, double thickness)
         {
             Segment_Conical_Equations conical_Equations = new Segment_Conical_Equations();
 
-            textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString();
-            textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString();
-            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal).ToString();
-            textBox4.Text = conical_Equations.kzi(heightInitial).ToString();
-            textBox5.Text = conical_Equations.kzf(heightFinal).ToString();
-            textBox6.Text = conical_Equations.qzi(heightInitial).ToString();
-            textBox7.Text = conical_Equations.qzf(heightFinal).ToString();
-            textBox8.Text = conical_Equations.F(heightInitial, heightFinal, diameterInitial).ToString();
-            textBox9.Text = conical_Equations.L(heightInitial, heightFinal).ToString();
-            textBox10.Text = conical_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString();
+            textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString("F4");
+            textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString("F4");
+            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal).ToString("F4");
+            textBox4.Text = conical_Equations.kzi(heightInitial).ToString("F4");
+            textBox5.Text = conical_Equations.kzf(heightFinal).ToString("F4");
+            textBox6.Text = conical_Equations.qzi(heightInitial).ToString("F4");
+            textBox7.Text = conical_Equations.qzf(heightFinal).ToString("F4");
+            textBox8.Text = conical_Equations.F(heightInitial, heightFinal, diameterInitial).ToString("F4");
+            textBox9.Text = conical_Equations.L(heightInitial, heightFinal).ToString("F4");
+            textBox10.Text = conical_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString("F4");
         }
 
 
@@ -539,6 +566,11 @@ namespace WaterTankTool_WFA
         }
 
         private void maskedTextBox5_MaskInputRejected(object sender, MaskInputRejectedEventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
         {
 
         }

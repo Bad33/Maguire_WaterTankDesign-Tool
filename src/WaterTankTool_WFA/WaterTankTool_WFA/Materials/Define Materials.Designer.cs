@@ -29,11 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
-            button5 = new Button();
-            button4 = new Button();
             groupBox3 = new GroupBox();
             button3 = new Button();
             button2 = new Button();
@@ -51,37 +49,15 @@
             // groupBox1
             // 
             groupBox1.BackColor = SystemColors.Control;
-            groupBox1.Controls.Add(button5);
-            groupBox1.Controls.Add(button4);
             groupBox1.Controls.Add(groupBox3);
             groupBox1.Controls.Add(groupBox2);
             groupBox1.Location = new Point(8, 7);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(402, 235);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
-            // 
-            // button5
-            // 
-            button5.Location = new Point(309, 203);
-            button5.Margin = new Padding(2, 2, 2, 2);
-            button5.Name = "button5";
-            button5.Size = new Size(78, 20);
-            button5.TabIndex = 3;
-            button5.Text = "Cancel";
-            button5.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            button4.Location = new Point(220, 203);
-            button4.Margin = new Padding(2, 2, 2, 2);
-            button4.Name = "button4";
-            button4.Size = new Size(78, 20);
-            button4.TabIndex = 2;
-            button4.Text = "Ok";
-            button4.UseVisualStyleBackColor = true;
             // 
             // groupBox3
             // 
@@ -90,20 +66,20 @@
             groupBox3.Controls.Add(button1);
             groupBox3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox3.Location = new Point(214, 18);
-            groupBox3.Margin = new Padding(2, 2, 2, 2);
+            groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(2, 2, 2, 2);
-            groupBox3.Size = new Size(174, 160);
+            groupBox3.Padding = new Padding(2);
+            groupBox3.Size = new Size(174, 204);
             groupBox3.TabIndex = 1;
             groupBox3.TabStop = false;
             groupBox3.Text = "Click to:";
             // 
             // button3
             // 
-            button3.Location = new Point(15, 120);
-            button3.Margin = new Padding(2, 2, 2, 2);
+            button3.Location = new Point(15, 155);
+            button3.Margin = new Padding(2);
             button3.Name = "button3";
-            button3.Size = new Size(152, 20);
+            button3.Size = new Size(152, 24);
             button3.TabIndex = 2;
             button3.Text = "Delete Material";
             button3.UseVisualStyleBackColor = true;
@@ -111,10 +87,10 @@
             // 
             // button2
             // 
-            button2.Location = new Point(15, 80);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Location = new Point(15, 96);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
-            button2.Size = new Size(152, 20);
+            button2.Size = new Size(152, 24);
             button2.TabIndex = 1;
             button2.Text = "Modify/Show Materials";
             button2.UseVisualStyleBackColor = true;
@@ -123,9 +99,9 @@
             // button1
             // 
             button1.Location = new Point(15, 37);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(152, 20);
+            button1.Size = new Size(152, 25);
             button1.TabIndex = 0;
             button1.Text = "Add New Material...";
             button1.UseVisualStyleBackColor = true;
@@ -136,9 +112,9 @@
             groupBox2.Controls.Add(dataGridView1);
             groupBox2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox2.Location = new Point(11, 18);
-            groupBox2.Margin = new Padding(2, 2, 2, 2);
+            groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(2, 2, 2, 2);
+            groupBox2.Padding = new Padding(2);
             groupBox2.Size = new Size(198, 206);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
@@ -152,29 +128,30 @@
             dataGridView1.BackgroundColor = SystemColors.ControlLight;
             dataGridView1.BorderStyle = BorderStyle.Fixed3D;
             dataGridView1.CellBorderStyle = DataGridViewCellBorderStyle.Raised;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = SystemColors.Control;
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle1.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle1.NullValue = "NA";
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
-            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = SystemColors.Control;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle3.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle3.NullValue = "NA";
+            dataGridViewCellStyle3.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = SystemColors.Window;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            dataGridViewCellStyle2.ForeColor = SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            dataGridView1.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = SystemColors.Window;
+            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle4.ForeColor = SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle4;
             dataGridView1.Dock = DockStyle.Fill;
             dataGridView1.Location = new Point(2, 18);
-            dataGridView1.Margin = new Padding(2, 2, 2, 2);
+            dataGridView1.Margin = new Padding(2);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.RowHeadersWidth = 62;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(194, 186);
@@ -188,15 +165,13 @@
             // 
             // Define_Materials
             // 
-            AcceptButton = button4;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = SystemColors.Control;
-            CancelButton = button5;
             ClientSize = new Size(419, 252);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Define_Materials";
             StartPosition = FormStartPosition.CenterParent;
@@ -214,8 +189,6 @@
         private GroupBox groupBox1;
         private GroupBox groupBox2;
         private GroupBox groupBox3;
-        private Button button5;
-        private Button button4;
         private Button button3;
         private Button button2;
         private Button button1;

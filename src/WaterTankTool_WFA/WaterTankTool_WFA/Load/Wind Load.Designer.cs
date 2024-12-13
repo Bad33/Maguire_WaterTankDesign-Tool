@@ -31,6 +31,8 @@
             button1 = new Button();
             button2 = new Button();
             groupBox1 = new GroupBox();
+            textBox9 = new TextBox();
+            label13 = new Label();
             label11 = new Label();
             textBox8 = new TextBox();
             textBox7 = new TextBox();
@@ -53,9 +55,10 @@
             label1 = new Label();
             groupBox2 = new GroupBox();
             richTextBox2 = new RichTextBox();
-            button3 = new Button();
             groupBox3 = new GroupBox();
-            richTextBox1 = new RichTextBox();
+            label12 = new Label();
+            label15 = new Label();
+            textBox11 = new TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -63,10 +66,10 @@
             // 
             // button1
             // 
-            button1.Location = new Point(194, 329);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Location = new Point(225, 375);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(78, 20);
+            button1.Size = new Size(73, 26);
             button1.TabIndex = 0;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
@@ -74,16 +77,20 @@
             // 
             // button2
             // 
-            button2.Location = new Point(290, 329);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Location = new Point(307, 375);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
-            button2.Size = new Size(78, 20);
+            button2.Size = new Size(74, 26);
             button2.TabIndex = 1;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(textBox11);
+            groupBox1.Controls.Add(label15);
+            groupBox1.Controls.Add(textBox9);
+            groupBox1.Controls.Add(label13);
             groupBox1.Controls.Add(label11);
             groupBox1.Controls.Add(textBox8);
             groupBox1.Controls.Add(textBox7);
@@ -105,13 +112,30 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(8, 18);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
-            groupBox1.Size = new Size(213, 298);
+            groupBox1.Padding = new Padding(2);
+            groupBox1.Size = new Size(213, 383);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Properties";
+            // 
+            // textBox9
+            // 
+            textBox9.Location = new Point(97, 299);
+            textBox9.Name = "textBox9";
+            textBox9.Size = new Size(74, 23);
+            textBox9.TabIndex = 21;
+            textBox9.Text = "0.6";
+            // 
+            // label13
+            // 
+            label13.AutoSize = true;
+            label13.Location = new Point(18, 299);
+            label13.Name = "label13";
+            label13.Size = new Size(13, 15);
+            label13.TabIndex = 20;
+            label13.Text = "λ";
             // 
             // label11
             // 
@@ -127,7 +151,7 @@
             // textBox8
             // 
             textBox8.Location = new Point(97, 266);
-            textBox8.Margin = new Padding(2, 2, 2, 2);
+            textBox8.Margin = new Padding(2);
             textBox8.Name = "textBox8";
             textBox8.Size = new Size(74, 23);
             textBox8.TabIndex = 18;
@@ -135,7 +159,7 @@
             // textBox7
             // 
             textBox7.Location = new Point(97, 239);
-            textBox7.Margin = new Padding(2, 2, 2, 2);
+            textBox7.Margin = new Padding(2);
             textBox7.Name = "textBox7";
             textBox7.Size = new Size(74, 23);
             textBox7.TabIndex = 17;
@@ -177,17 +201,17 @@
             comboBox1.FormattingEnabled = true;
             comboBox1.Items.AddRange(new object[] { "C", "D" });
             comboBox1.Location = new Point(97, 27);
-            comboBox1.Margin = new Padding(2, 2, 2, 2);
+            comboBox1.Margin = new Padding(2);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(74, 23);
             comboBox1.TabIndex = 13;
-            comboBox1.Text = "Select Exposure";
+            comboBox1.Text = "C";
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // textBox6
             // 
             textBox6.Location = new Point(97, 209);
-            textBox6.Margin = new Padding(2, 2, 2, 2);
+            textBox6.Margin = new Padding(2);
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(74, 23);
             textBox6.TabIndex = 12;
@@ -196,7 +220,7 @@
             // textBox5
             // 
             textBox5.Location = new Point(97, 178);
-            textBox5.Margin = new Padding(2, 2, 2, 2);
+            textBox5.Margin = new Padding(2);
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(74, 23);
             textBox5.TabIndex = 11;
@@ -205,7 +229,7 @@
             // textBox4
             // 
             textBox4.Location = new Point(97, 148);
-            textBox4.Margin = new Padding(2, 2, 2, 2);
+            textBox4.Margin = new Padding(2);
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(74, 23);
             textBox4.TabIndex = 10;
@@ -214,16 +238,17 @@
             // textBox3
             // 
             textBox3.Location = new Point(97, 116);
-            textBox3.Margin = new Padding(2, 2, 2, 2);
+            textBox3.Margin = new Padding(2);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(74, 23);
             textBox3.TabIndex = 9;
-            textBox3.Text = "0.85";
+            textBox3.Text = "1.00";
+            textBox3.TextChanged += textBox3_TextChanged;
             // 
             // textBox2
             // 
             textBox2.Location = new Point(97, 86);
-            textBox2.Margin = new Padding(2, 2, 2, 2);
+            textBox2.Margin = new Padding(2);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(74, 23);
             textBox2.TabIndex = 8;
@@ -232,11 +257,12 @@
             // textBox1
             // 
             textBox1.Location = new Point(97, 56);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(74, 23);
             textBox1.TabIndex = 7;
             textBox1.Text = "1.0";
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // label7
             // 
@@ -312,11 +338,10 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(richTextBox2);
-            groupBox2.Controls.Add(button3);
             groupBox2.Location = new Point(225, 18);
-            groupBox2.Margin = new Padding(2, 2, 2, 2);
+            groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(2, 2, 2, 2);
+            groupBox2.Padding = new Padding(2);
             groupBox2.Size = new Size(156, 153);
             groupBox2.TabIndex = 3;
             groupBox2.TabStop = false;
@@ -324,45 +349,54 @@
             // 
             // richTextBox2
             // 
-            richTextBox2.Location = new Point(11, 75);
-            richTextBox2.Margin = new Padding(2, 2, 2, 2);
+            richTextBox2.Location = new Point(10, 56);
+            richTextBox2.Margin = new Padding(2);
             richTextBox2.Name = "richTextBox2";
             richTextBox2.Size = new Size(133, 50);
             richTextBox2.TabIndex = 1;
             richTextBox2.Text = "";
             richTextBox2.TextChanged += richTextBox2_TextChanged;
             // 
-            // button3
-            // 
-            button3.Location = new Point(11, 35);
-            button3.Margin = new Padding(2, 2, 2, 2);
-            button3.Name = "button3";
-            button3.Size = new Size(132, 20);
-            button3.TabIndex = 0;
-            button3.Text = "Calculate";
-            button3.UseVisualStyleBackColor = true;
-            button3.Click += button3_Click;
-            // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(richTextBox1);
+            groupBox3.Controls.Add(label12);
             groupBox3.Location = new Point(225, 175);
-            groupBox3.Margin = new Padding(2, 2, 2, 2);
+            groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(2, 2, 2, 2);
-            groupBox3.Size = new Size(156, 141);
+            groupBox3.Padding = new Padding(2);
+            groupBox3.Size = new Size(156, 171);
             groupBox3.TabIndex = 4;
             groupBox3.TabStop = false;
             groupBox3.Text = "Notes";
             // 
-            // richTextBox1
+            // label12
             // 
-            richTextBox1.Location = new Point(11, 24);
-            richTextBox1.Margin = new Padding(2, 2, 2, 2);
-            richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(133, 88);
-            richTextBox1.TabIndex = 7;
-            richTextBox1.Text = "";
+            label12.BorderStyle = BorderStyle.Fixed3D;
+            label12.FlatStyle = FlatStyle.Flat;
+            label12.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            label12.Location = new Point(14, 32);
+            label12.Name = "label12";
+            label12.Size = new Size(129, 125);
+            label12.TabIndex = 0;
+            label12.Text = "q doesnot include velocity pressure exosure coefficient(Kz). The effect will be added for each segment individually.";
+            label12.UseCompatibleTextRendering = true;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(17, 338);
+            label15.Name = "label15";
+            label15.Size = new Size(19, 15);
+            label15.TabIndex = 22;
+            label15.Text = "Cf";
+            // 
+            // textBox11
+            // 
+            textBox11.Location = new Point(97, 338);
+            textBox11.Name = "textBox11";
+            textBox11.Size = new Size(75, 23);
+            textBox11.TabIndex = 24;
+            textBox11.Text = "0.5";
             // 
             // Wind_Load
             // 
@@ -371,13 +405,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             CancelButton = button2;
-            ClientSize = new Size(390, 366);
+            ClientSize = new Size(393, 420);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(button2);
             Controls.Add(button1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Wind_Load";
             StartPosition = FormStartPosition.CenterParent;
@@ -407,7 +441,6 @@
         private TextBox textBox1;
         private RichTextBox richTextBox2;
         private Button button3;
-        private RichTextBox richTextBox1;
         private ComboBox comboBox1;
         private TextBox textBox6;
         private TextBox textBox5;
@@ -419,5 +452,10 @@
         private Label label8;
         private TextBox textBox8;
         private Label label11;
+        private TextBox textBox9;
+        private Label label13;
+        private Label label12;
+        private TextBox textBox11;
+        private Label label15;
     }
 }

@@ -38,10 +38,12 @@
             // 
             // Solver_Output
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(637, 367);
+            ClientSize = new Size(446, 220);
+            Margin = new Padding(2, 2, 2, 2);
             Name = "Solver_Output";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "Solver Output";
             ResumeLayout(false);
         }
