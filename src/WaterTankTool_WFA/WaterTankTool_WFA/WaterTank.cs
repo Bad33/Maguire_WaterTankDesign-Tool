@@ -28,11 +28,14 @@ public partial class WaterTank : Form
     private ToolStripStatusLabel selectedMaterialLabel;
     private ToolStripStatusLabel designDetailsLabel;
     private ToolStripStatusLabel noMaterialStatus;
-    public WaterTank()
+    private StartupForm _startupForm;
+    public WaterTank(StartupForm startupForm)
     {
         InitializeComponent();
         var _context = WaterTankDbContext.GetInstance();
         context = _context;
+        _startupForm = startupForm;
+
         InitializeUIComponents();
         InitializeStatusStrip2();
         InitializeLayout();
@@ -44,7 +47,6 @@ public partial class WaterTank : Form
         panel1.MouseDown += panel1_MouseDown;
         panel1.MouseMove += panel1_MouseMove;
         panel1.MouseUp += panel1_MouseUp;
-
 
         this.Resize += (s, e) => this.Invalidate();
     }
@@ -280,13 +282,12 @@ public partial class WaterTank : Form
     {
         var tankCap = context.TankProperties?.FirstOrDefault();
 
-        var gg = context.MaterialProperties.Select(x => x.MaterialName).ToList();
-        if (gg.Count > 0)
-        {
+        //var gg = context.MaterialProperties.Select(x => x.MaterialName).ToList();
+        //if (gg.Count > 0)
+        //{
 
-            UpdateMaterial(gg[0]);
-            statusStrip2.Items.Remove(noMaterialStatus);
-        }
+            UpdateMaterial();
+        //}
 
 
         if (tankCap?.Capacity != null)
@@ -338,9 +339,22 @@ public partial class WaterTank : Form
         appStatusLabel.Text = $"Status: {status}";
     }
 
-    private void UpdateMaterial(string materialName)
+    private void UpdateMaterial()
     {
-        selectedMaterialLabel.Text = $"Material: {materialName}";
+        var material = context.MaterialProperties.FirstOrDefault();
+        if(material != null )
+        {
+
+            selectedMaterialLabel.Text = $"Material: {material.MaterialName}";
+            statusStrip2.Items.Remove(noMaterialStatus);
+
+        }
+        else
+        {
+            selectedMaterialLabel.Text = $"Material: None";
+
+        }
+
     }
 
 
@@ -388,6 +402,20 @@ public partial class WaterTank : Form
 
     }
 
+    public void OnmaterialAdded()
+    {
+        UpdateMaterial();
+
+    }
+
+    public void OnMaterialDeleted()
+    {
+        UpdateMaterial();
+        //statusStrip2.Items.Add(noMaterialStatus);
+
+
+    }
+
     public void OnSegmentDeleted()
     {
         panelDrawTankCapacity();
@@ -431,7 +459,7 @@ public partial class WaterTank : Form
 
     private void materialToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Define_Materials dialog = new Define_Materials();
+        Define_Materials dialog = new Define_Materials(this);
 
         dialog.ShowDialog();
     }
@@ -529,6 +557,7 @@ public partial class WaterTank : Form
                     // Set up the UI for a new project
                     InitializeNewProjectUI();
 
+                    _startupForm.OpenProject(projectPath);
                     // Display a message to confirm the project creation
                     MessageBox.Show("New project created successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
@@ -538,6 +567,25 @@ public partial class WaterTank : Form
                 }
             }
         }
+    }
+
+    private void OpenProject(string projectPath)
+    {
+        //try
+        //{
+        //    // Load project content
+        //    string projectContent = File.ReadAllText(projectPath);
+
+        //    // Initialize the UI or application state with the loaded project
+        //    InitializeProjectUI(projectContent);
+
+        //    // Optionally, set the current project path for future use
+        //    CurrentProjectPath = projectPath; // Make sure you have this variable declared
+        //}
+        //catch (Exception ex)
+        //{
+        //    MessageBox.Show($"Error opening project: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        //}
     }
 
     private void InitializeNewProjectUI()
@@ -562,7 +610,7 @@ public partial class WaterTank : Form
 
     private void toolStripButton6_Click(object sender, EventArgs e)
     {
-        Define_Materials define_Materials = new Define_Materials();
+        Define_Materials define_Materials = new Define_Materials(this);
         define_Materials.ShowDialog();
     }
 

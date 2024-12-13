@@ -121,8 +121,8 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            string diameterS = Regex.Match(_properties.Diameter, @"\d+").Value;
-            string thichnessS = Regex.Match(_properties.Thickness, @"\d+").Value;
+            string diameterS = Regex.Match(_properties.Diameter, @"\d+(\.\d+)?").Value;
+            string thichnessS = Regex.Match(_properties.Thickness, @"\d+(\.\d+)?").Value;
 
             double diameter = double.Parse(diameterS);
             double thickness = double.Parse(thichnessS);

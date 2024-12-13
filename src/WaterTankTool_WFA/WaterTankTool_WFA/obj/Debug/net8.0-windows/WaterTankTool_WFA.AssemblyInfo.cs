@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WaterTankTool_WFA")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f01c0ec10d73b3931e5b2288e7a46bfae85043c8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5accb47906fd1d936100fd60ccdd73ce7e35cf23")]
 [assembly: System.Reflection.AssemblyProductAttribute("WaterTankTool_WFA")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WaterTankTool_WFA")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

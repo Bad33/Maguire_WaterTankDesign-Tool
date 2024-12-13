@@ -246,7 +246,7 @@ namespace WaterTankTool_WFA
                     dbContext.EnsureDatabaseCreated();
                     _diContainer.Register<WaterTankDbContext>(dbContext);
 
-                    var mainForm = new WaterTank();
+                    var mainForm = new WaterTank(this);
                     this.Hide();
                     mainForm.Show();
 
@@ -264,7 +264,7 @@ namespace WaterTankTool_WFA
             }
         }
 
-        private void OpenProject(string projectPath)
+        public void OpenProject(string projectPath)
         {
             string dbFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "project_data.db");
             string connectionString = $"Data Source={dbFilePath};";
@@ -273,7 +273,7 @@ namespace WaterTankTool_WFA
             dbContext.EnsureDatabaseCreated();
             _diContainer.Register<WaterTankDbContext>(dbContext);
 
-            var mainForm = new WaterTank();
+            var mainForm = new WaterTank(this);
             this.Hide();
             mainForm.Show();
         }
@@ -281,6 +281,8 @@ namespace WaterTankTool_WFA
         private void InitializeProjectDatabase(string projectFolderPath)
         {
             string dbFilePath = Path.Combine(projectFolderPath, "project_data.db");
+
+
 
             if (File.Exists(dbFilePath))
             {
@@ -322,6 +324,54 @@ namespace WaterTankTool_WFA
                         TotalWeight TEXT,
                         ProjectedArea TEXT
                     );
+                    CREATE TABLE IF NOT EXISTS WindLoadEntity (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Exposure TEXT NOT NULL,
+                        Kzt REAL NOT NULL CHECK(Kzt >= 0),
+                        Ke REAL NOT NULL CHECK(Ke >= 0),
+                        Kd REAL NOT NULL CHECK(Kd >= 0),
+                        G REAL NOT NULL CHECK(G >= 0),
+                        I REAL NOT NULL CHECK(I >= 0),
+                        V REAL NOT NULL CHECK(V >= 0),
+                        Zg REAL NOT NULL CHECK(Zg >= 0),
+                        alpha REAL NOT NULL CHECK(alpha >= 0),
+                        lambda REAL NOT NULL CHECK(lambda >= 0),
+                        Cf REAL NOT NULL CHECK(Cf >= 0),
+                        Q REAL NOT NULL CHECK(Q >= 0)
+                    );
+
+                    CREATE TABLE IF NOT EXISTS SeismicLoadEntity (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Ss REAL NOT NULL CHECK(Ss >= 0),
+                        S1 REAL NOT NULL CHECK(S1 >= 0),
+                        SiteClass TEXT NOT NULL,
+                        Fa REAL NOT NULL CHECK(Fa >= 0),
+                        Fv REAL NOT NULL CHECK(Fv >= 0),
+                        Sds REAL NOT NULL CHECK(Sds >= 0),
+                        Sd1 REAL NOT NULL CHECK(Sd1 >= 0),
+                        Ri REAL NOT NULL CHECK(Ri >= 0),
+                        Ie REAL NOT NULL CHECK(Ie >= 0),
+                        Tl REAL NOT NULL CHECK(Tl >= 0),
+                        Ti REAL NOT NULL CHECK(Ti >= 0),
+                        Ts REAL NOT NULL CHECK(Ts >= 0),
+                        Sa REAL NOT NULL CHECK(Sa >= 0),
+                        Lambda REAL NOT NULL CHECK(Lambda >= 0),
+                        Ai REAL NOT NULL CHECK(Ai >= 0)
+                    );
+                    CREATE TABLE IF NOT EXISTS LiveLoadEntity (
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Live_Load REAL NOT NULL CHECK(Live_Load >= 0),
+                        Area_Exposed REAL NOT NULL CHECK(Area_Exposed >= 0),
+                        Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
+                    );
+
+                    CREATE TABLE IF NOT EXISTS SnowLoadEntity (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Snow_Pressure REAL NOT NULL CHECK(Snow_Pressure >= 0),
+                    Area_Subjected REAL NOT NULL CHECK(Area_Subjected >= 0),
+                    Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
+                );
+
                 ";
 
                 using (var command = new System.Data.SQLite.SQLiteCommand(createTableSQL, connection))
@@ -397,5 +447,6 @@ namespace WaterTankTool_WFA
         {
             // Any additional logic for when the StartupForm loads
         }
+
     }
 }

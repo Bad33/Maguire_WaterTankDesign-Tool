@@ -5,17 +5,28 @@ public class WaterTankDbContext : DbContext
 {
     private static WaterTankDbContext _instance;
     private static readonly object _lock = new object();
-    private static string _defaultConnectionString = "Data Source=default_project_path\\project_data.db"; // Set this to a default path
+    //private static string _defaultConnectionString = "Data Source=default_project_path\\project_data.db"; // Set this to a default path
+
+    private static string _defaultConnectionString;
 
     public DbSet<SegmentProperties> SegmentProperties { get; set; }
     public DbSet<MaterialProperties> MaterialProperties { get; set; }
     public DbSet<TankProperties> TankProperties { get; set; }
 
+    public DbSet<WindLoadEntity> WindLoadEntity {  get; set; }
+
+    public DbSet<LiveLoadEntity> LiveLoadEntity { get; set; }
+    public DbSet<SnowLoadEntity> SnowLoadEntity { get; set; }
+    public DbSet<SeismicLoadEntity> SeismicLoadEntity { get; set; }   
+
     // Private constructor to prevent direct instantiation
+
+    public WaterTankDbContext() : base() { }
     public WaterTankDbContext(string connectionString)
     {
         _defaultConnectionString = connectionString;
     }
+
 
     public static WaterTankDbContext GetInstance()
     {

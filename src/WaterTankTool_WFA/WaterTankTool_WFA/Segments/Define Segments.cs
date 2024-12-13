@@ -89,7 +89,7 @@ namespace WaterTankTool_WFA
 
                             _context.SegmentProperties.Remove(segmentProperties);
                             _context.SaveChanges();
-                            MessageBox.Show($"Segment {segmentName} deleted successfully.");
+                            //MessageBox.Show($"Segment {segmentName} deleted successfully.");
                             LoadData();
                             
                             _waterTankForm.OnSegmentDeleted();
