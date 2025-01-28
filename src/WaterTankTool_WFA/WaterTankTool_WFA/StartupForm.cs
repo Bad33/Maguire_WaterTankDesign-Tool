@@ -35,19 +35,23 @@ namespace WaterTankTool_WFA
                 Dock = DockStyle.Fill,
                 ColumnCount = 2,
                 RowCount = 1,
-                BackColor = Color.FromArgb(30, 30, 30)
+                BackColor = Color.Transparent
+
             };
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             this.Controls.Add(mainLayout);
-
+            //this.BackgroundImageLayout = ImageLayout.Stretch;
             FlowLayoutPanel recentProjectsPanel = new FlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(20),
+                Padding = new Padding(10),
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
-                BackColor = Color.FromArgb(40, 40, 42),
+                //BackColor = Color.Transparent,
+                BackgroundImage = Properties.Resources.Tea__SD_9,
+                BackgroundImageLayout = ImageLayout.Stretch,
+
                 WrapContents = false
             };
             mainLayout.Controls.Add(recentProjectsPanel, 0, 0);
@@ -73,13 +77,13 @@ namespace WaterTankTool_WFA
             Panel copyrightPanel = new Panel
             {
                 Dock = DockStyle.Bottom,
-                Height = 50,
-                BackColor = Color.FromArgb(40, 40, 42) // Match the panel color
+                Height = 70,
+                BackColor = Color.Transparent // Match the panel color
             };
 
             Label copyrightText = new Label
             {
-                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n",
+                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n" ,
                 //"This software and its associated materials are proprietary to Iron Maguire and are protected by applicable copyright and intellectual property laws.\n" +
                 //"Unauthorized use, reproduction, or distribution of this software or any of its components is strictly prohibited.\n\n" +
                 //"For licensing information, please contact: im@gmail.com\n\n" +
@@ -88,8 +92,9 @@ namespace WaterTankTool_WFA
                 Font = new Font("Segoe UI", 8, FontStyle.Regular),
                 ForeColor = Color.White,
                 AutoSize = true,
-    TextAlign = ContentAlignment.MiddleCenter,
-    Dock = DockStyle.Fill
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+
 
 
             };
@@ -101,7 +106,9 @@ namespace WaterTankTool_WFA
                 Dock = DockStyle.Fill,
                 Padding = new Padding(20),
                 FlowDirection = FlowDirection.TopDown,
-                BackColor = Color.FromArgb(30, 30, 30),
+                //BackColor = Color.Transparent,
+                BackgroundImage = Properties.Resources.Sheldon_IA_New_Tank_Paint_2,
+                BackgroundImageLayout = ImageLayout.Stretch,
                 AutoSize = true,
                 WrapContents = false
             };
@@ -133,15 +140,15 @@ namespace WaterTankTool_WFA
                 Text = text,
                 Font = new Font("Segoe UI", 12),
                 Size = new Size(570, 50),
-                BackColor = ColorTranslator.FromHtml("#2A2D34"),
+                BackColor = Color.Transparent,
                 FlatStyle = FlatStyle.Popup,
-                ForeColor = Color.White,
+                ForeColor = Color.Black,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Margin = new Padding(0, 5, 0, 5)
             };
             button.FlatAppearance.BorderSize = 0;
             button.MouseEnter += (s, e) => { button.BackColor = Color.FromArgb(65, 65, 70); };
-            button.MouseLeave += (s, e) => { button.BackColor = Color.FromArgb(45, 45, 48); };
+            button.MouseLeave += (s, e) => { button.BackColor = Color.Transparent; };
             return button;
         }
 
@@ -166,13 +173,16 @@ namespace WaterTankTool_WFA
                         Font = new Font("Segoe UI", 10),
                         Width = 850,
                         Height = 50,
-                        BackColor = ColorTranslator.FromHtml("#383D46"),
+                        BackColor = Color.Transparent,
                         FlatStyle = FlatStyle.Popup,
-                        ForeColor = Color.White,
+                        ForeColor = Color.Black,
                         TextAlign = ContentAlignment.MiddleLeft,
                         Padding = new Padding(5),
-                        Margin = new Padding(0, 5, 0, 5)
+                        Margin = new Padding(0, 5, 0, 5),
+                        
                     };
+                    projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(65, 65, 70); };
+                    projectButton.MouseLeave += (s, e) => { projectButton.BackColor = Color.Transparent; };
                     projectButton.FlatAppearance.BorderSize = 0;
                     projectButton.Click += (s, e) => { OpenProject(projectPath); };
                     recentProjectsPanel.Controls.Add(projectButton);

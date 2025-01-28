@@ -286,7 +286,7 @@ public partial class WaterTank : Form
         //if (gg.Count > 0)
         //{
 
-            UpdateMaterial();
+        UpdateMaterial();
         //}
 
 
@@ -342,7 +342,7 @@ public partial class WaterTank : Form
     private void UpdateMaterial()
     {
         var material = context.MaterialProperties.FirstOrDefault();
-        if(material != null )
+        if (material != null)
         {
 
             selectedMaterialLabel.Text = $"Material: {material.MaterialName}";
@@ -448,7 +448,7 @@ public partial class WaterTank : Form
         return segments;
     }
 
-   
+
 
     private void addSegmentToolStripMenuItem_Click(object sender, EventArgs e)
     {
@@ -797,7 +797,7 @@ public partial class WaterTank : Form
             return; // Prevent division by zero or negative scaling
 
         // Calculate scaling factor: pixels per foot
-        double scaleFactor = imageBounds.Height / totalTankHeight ;
+        double scaleFactor = imageBounds.Height / totalTankHeight;
 
         // Define offsets for lines and labels
         int lineXOffset = imageBounds.Right + 40; // 40 pixels to the right of the image
@@ -814,7 +814,7 @@ public partial class WaterTank : Form
             // Calculate the average height of the segment
             double averageHeight = (dimension.HeightFinal + dimension.HeightInitial) / 2.0;
 
-            
+
 
             // Calculate the Y position on the image (tank at top, base at bottom)
             int segmentY = imageBounds.Top + 80 + imageBounds.Height - (int)(averageHeight * scaleFactor);
@@ -1090,9 +1090,9 @@ public partial class WaterTank : Form
 
     private void splitContainer3_Panel1_Paint(object sender, PaintEventArgs e) { }
 
-    private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e){ }
+    private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e) { }
 
-    private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e){ }
+    private void splitContainer1_Panel2_Paint(object sender, PaintEventArgs e) { }
 
     private void toolStripStatusLabel1_Click(object sender, EventArgs e) { }
 
@@ -1107,4 +1107,9 @@ public partial class WaterTank : Form
 
     private void toolStripButton1_Click(object sender, EventArgs e) { }
 
+    private void helpToolStripButton_Click(object sender, EventArgs e)
+    {
+        Help help = new Help();
+        help.ShowDialog();
+    }
 }
