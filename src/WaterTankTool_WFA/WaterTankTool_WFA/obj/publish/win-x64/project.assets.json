@@ -661,6 +661,12 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
+      "Microsoft.NET.ILLink.Tasks/8.0.12": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Tasks.props": {}
+        }
+      },
       "Microsoft.NETCore.Platforms/3.1.0": {
         "type": "package",
         "compile": {
@@ -2077,6 +2083,12 @@
         },
         "build": {
           "buildTransitive/net6.0/_._": {}
+        }
+      },
+      "Microsoft.NET.ILLink.Tasks/8.0.12": {
+        "type": "package",
+        "build": {
+          "build/Microsoft.NET.ILLink.Tasks.props": {}
         }
       },
       "Microsoft.NETCore.Platforms/3.1.0": {
@@ -3783,6 +3795,57 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Microsoft.NET.ILLink.Tasks/8.0.12": {
+      "sha512": "FV4HnQ3JI15PHnJ5PGTbz+rYvrih42oLi/7UMIshNwCwUZhTq13UzrggtXk4ygrcMcN+4jsS6hhshx2p/Zd0ig==",
+      "type": "package",
+      "path": "microsoft.net.illink.tasks/8.0.12",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "Sdk/Sdk.props",
+        "THIRD-PARTY-NOTICES.TXT",
+        "analyzers/dotnet/cs/ILLink.CodeFixProvider.dll",
+        "analyzers/dotnet/cs/ILLink.RoslynAnalyzer.dll",
+        "build/Microsoft.NET.ILLink.Analyzers.props",
+        "build/Microsoft.NET.ILLink.Tasks.props",
+        "build/Microsoft.NET.ILLink.targets",
+        "microsoft.net.illink.tasks.8.0.12.nupkg.sha512",
+        "microsoft.net.illink.tasks.nuspec",
+        "tools/net472/ILLink.Tasks.dll",
+        "tools/net472/ILLink.Tasks.dll.config",
+        "tools/net472/Mono.Cecil.Mdb.dll",
+        "tools/net472/Mono.Cecil.Pdb.dll",
+        "tools/net472/Mono.Cecil.Rocks.dll",
+        "tools/net472/Mono.Cecil.dll",
+        "tools/net472/Sdk/Sdk.props",
+        "tools/net472/System.Buffers.dll",
+        "tools/net472/System.Collections.Immutable.dll",
+        "tools/net472/System.Memory.dll",
+        "tools/net472/System.Numerics.Vectors.dll",
+        "tools/net472/System.Reflection.Metadata.dll",
+        "tools/net472/System.Runtime.CompilerServices.Unsafe.dll",
+        "tools/net472/build/Microsoft.NET.ILLink.Analyzers.props",
+        "tools/net472/build/Microsoft.NET.ILLink.Tasks.props",
+        "tools/net472/build/Microsoft.NET.ILLink.targets",
+        "tools/net8.0/ILLink.Tasks.deps.json",
+        "tools/net8.0/ILLink.Tasks.dll",
+        "tools/net8.0/Mono.Cecil.Mdb.dll",
+        "tools/net8.0/Mono.Cecil.Pdb.dll",
+        "tools/net8.0/Mono.Cecil.Rocks.dll",
+        "tools/net8.0/Mono.Cecil.dll",
+        "tools/net8.0/Sdk/Sdk.props",
+        "tools/net8.0/build/Microsoft.NET.ILLink.Analyzers.props",
+        "tools/net8.0/build/Microsoft.NET.ILLink.Tasks.props",
+        "tools/net8.0/build/Microsoft.NET.ILLink.targets",
+        "tools/net8.0/illink.deps.json",
+        "tools/net8.0/illink.dll",
+        "tools/net8.0/illink.runtimeconfig.json",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "Microsoft.NETCore.Platforms/3.1.0": {
       "sha512": "z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
       "type": "package",
@@ -5004,27 +5067,28 @@
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.8",
+      "Microsoft.NET.ILLink.Tasks >= 8.0.12",
       "System.Data.SQLite >= 1.0.119"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Union Loaner\\.nuget\\packages\\": {},
+    "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
+      "projectUniqueName": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
       "projectName": "WaterTankTool_WFA",
-      "projectPath": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
-      "packagesPath": "C:\\Users\\Union Loaner\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Union Loaner\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\obj\\publish\\win-x64\\",
+      "projectPath": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
+      "packagesPath": "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\obj\\publish\\win-x64\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Union Loaner\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\DTS Loaner 25\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5051,7 +5115,8 @@
         "enableAudit": "true",
         "auditLevel": "low",
         "auditMode": "direct"
-      }
+      },
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net8.0-windows7.0": {
@@ -5075,6 +5140,12 @@
             "target": "Package",
             "version": "[8.0.8, )"
           },
+          "Microsoft.NET.ILLink.Tasks": {
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[8.0.12, )",
+            "autoReferenced": true
+          },
           "System.Data.SQLite": {
             "target": "Package",
             "version": "[1.0.119, )"
@@ -5094,15 +5165,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.12, 8.0.12]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.12, 8.0.12]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.12, 8.0.12]"
           }
         ],
         "frameworkReferences": {
@@ -5113,7 +5184,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {

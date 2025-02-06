@@ -63,9 +63,29 @@ namespace WaterTankTool_WFA.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Katy__TX {
+        internal static System.Drawing.Bitmap _150k {
             get {
-                object obj = ResourceManager.GetObject("Katy, TX", resourceCulture);
+                object obj = ResourceManager.GetObject("150k", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _250k {
+            get {
+                object obj = ResourceManager.GetObject("250k", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _500k {
+            get {
+                object obj = ResourceManager.GetObject("500k", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

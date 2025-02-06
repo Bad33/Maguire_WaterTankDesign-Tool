@@ -21,7 +21,7 @@ namespace WaterTankTool_WFA.Custom_Design_Control
             this.Paint += StructuralDrawingForm_Paint;
 
             // Load the PNG structural drawing
-            drawingImage = Image.FromFile("../../../../icons/150K.png");
+            drawingImage = Properties.Resources._150k;
         }
 
         private void StructuralDrawingForm_Paint(object sender, PaintEventArgs e)

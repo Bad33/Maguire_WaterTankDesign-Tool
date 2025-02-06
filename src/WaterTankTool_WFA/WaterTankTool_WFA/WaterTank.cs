@@ -28,6 +28,7 @@ public partial class WaterTank : Form
     private ToolStripStatusLabel selectedMaterialLabel;
     private ToolStripStatusLabel designDetailsLabel;
     private ToolStripStatusLabel noMaterialStatus;
+    private ToolStripStatusLabel noLoadStatus;
     private StartupForm _startupForm;
     public WaterTank(StartupForm startupForm)
     {
@@ -76,6 +77,13 @@ public partial class WaterTank : Form
             TextAlign = ContentAlignment.MiddleLeft
         };
 
+        noLoadStatus = new ToolStripStatusLabel
+        {
+            Text = "Please add the Load!",
+            ForeColor = Color.Red,
+            Spring = true, // Allow this label to stretch
+            TextAlign = ContentAlignment.MiddleLeft
+        };
         designDetailsLabel = new ToolStripStatusLabel
         {
             Text = "Tank: - | Total Weight: 0Kips | Area: 0ft²",
@@ -90,7 +98,12 @@ public partial class WaterTank : Form
         statusStrip2.Items.Add(selectedMaterialLabel);
         statusStrip2.Items.Add(new ToolStripSeparator());
         statusStrip2.Items.Add(noMaterialStatus);
+        if (statusStrip2.Items.Contains(noMaterialStatus))
+        {
+            Console.WriteLine("muji");
+        }
 
+        statusStrip2.Items.Add(noLoadStatus);
         statusStrip2.Items.Add(designDetailsLabel);
     }
 
@@ -287,6 +300,7 @@ public partial class WaterTank : Form
         //{
 
         UpdateMaterial();
+        UpdateLoadStatus();
         //}
 
 
@@ -295,24 +309,24 @@ public partial class WaterTank : Form
             switch (tankCap.Capacity)
             {
                 case "150,000 gallon":
-                    drawingImage = Image.FromFile("../../../../icons/150K.png");
+                    drawingImage = Properties.Resources._150k;
                     UpdateAppStatus("Loading Tank...");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
                     break;
                 case "250,000 gallon":
-                    drawingImage = Image.FromFile("../../../../icons/250K.png");
+                    drawingImage = Properties.Resources._250k;
                     UpdateAppStatus("Loading Tank...");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
 
                     break;
                 case "500,000 gallon":
-                    drawingImage = Image.FromFile("../../../../icons/500K.png");
+                    drawingImage = Properties.Resources._500k;
                     UpdateAppStatus("Loading Tank...");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
 
                     break;
                 default:
-                    drawingImage = Image.FromFile("../../../../icons/150K.png");
+                    drawingImage = Properties.Resources._150k;
                     UpdateAppStatus("Loading Tank...");
                     UpdateDesignDetails("-", "0", "0");
                     break;
@@ -341,12 +355,14 @@ public partial class WaterTank : Form
 
     private void UpdateMaterial()
     {
+
         var material = context.MaterialProperties.FirstOrDefault();
         if (material != null)
         {
 
             selectedMaterialLabel.Text = $"Material: {material.MaterialName}";
             statusStrip2.Items.Remove(noMaterialStatus);
+            
 
         }
         else
@@ -355,6 +371,28 @@ public partial class WaterTank : Form
 
         }
 
+
+    }
+
+    private void UpdateLoadStatus()
+    {
+        var liveLoad = context.LiveLoadEntity.FirstOrDefault();
+        var seismicLoad = context.SeismicLoadEntity.FirstOrDefault();
+        var snowLoad = context.SnowLoadEntity.FirstOrDefault();
+        var windLoad = context.WindLoadEntity.FirstOrDefault();
+
+        if (liveLoad != null && seismicLoad != null && snowLoad !=null && windLoad !=null)
+        {
+
+            statusStrip2.Items.Remove(noLoadStatus);
+
+
+        }
+        //else
+        //{
+        //    selectedMaterialLabel.Text = $"Material: None";
+
+        //}
     }
 
 
@@ -797,7 +835,7 @@ public partial class WaterTank : Form
             return; // Prevent division by zero or negative scaling
 
         // Calculate scaling factor: pixels per foot
-        double scaleFactor = imageBounds.Height / totalTankHeight;
+        double scaleFactor = imageBounds.Height / 746;
 
         // Define offsets for lines and labels
         int lineXOffset = imageBounds.Right + 40; // 40 pixels to the right of the image
@@ -809,22 +847,59 @@ public partial class WaterTank : Form
         // List to keep track of existing label bounds to prevent overlaps
         List<RectangleF> existingLabelBounds = new List<RectangleF>();
 
+        int designTankHeight = 243;
+        int designCylinderHeight = 350;
+        int designBaseHeight = 153;
+        int totalDesignHeight = designTankHeight + designCylinderHeight + designBaseHeight; //746
+
+        int tankHeight = (int)(designTankHeight * scaleFactor);
+        int cylinderHeight = (int)(designCylinderHeight * scaleFactor);
+        int baseHeight = (int)(designBaseHeight * scaleFactor);
+
+        int tankTop = imageBounds.Top;
+        int tankBottom = tankTop + tankHeight;
+        int cylinderTop = tankBottom;
+        int cylinderBottom = cylinderTop + cylinderHeight;
+        int baseTop = cylinderBottom;
+        // Ideally, baseBottom should be imageBounds.Bottom
+        int baseBottom = imageBounds.Bottom;
+
         foreach (var dimension in dimensions)
         {
             // Calculate the average height of the segment
             double averageHeight = (dimension.HeightFinal + dimension.HeightInitial) / 2.0;
+            int segmentY = 0;
+            int flag = 0;
+            if (dimension.ComponentName == "Base")
+            {
+                double ratio = dimension.HeightInitial / (double)designBaseHeight;
+                segmentY = baseBottom;
+                flag = designBaseHeight;
 
+            }
+            else if(dimension.ComponentName == "Cylinder")
+            {
+                double ratio = dimension.HeightInitial / (double)designCylinderHeight;
+                segmentY = cylinderBottom;
+                flag = designBaseHeight;
 
+            }
+            else if( dimension.ComponentName == "Tanks")
+            {
+                double ratio = dimension.HeightInitial / (double)designTankHeight;
+                segmentY = tankBottom;
+                flag = designTankHeight;
+            }
 
             // Calculate the Y position on the image (tank at top, base at bottom)
-            int segmentY = imageBounds.Top + 80 + imageBounds.Height - (int)(averageHeight * scaleFactor);
+            //segmentY = imageBounds.Top + imageBounds.Height - (int)(averageHeight * scaleFactor);
 
             // Calculate the height of the vertical line based on segment height
-            int verticalLineHeight = (int)((dimension.HeightFinal - dimension.HeightInitial) * scaleFactor * verticalLineLengthMultiplier);
+            //int verticalLineHeight = (int)((dimension.HeightFinal - dimension.HeightInitial) * scaleFactor * verticalLineLengthMultiplier);
 
             // Define start and end points for the vertical line (upward)
             Point lineStart = new Point(lineXOffset, segmentY);
-            Point lineEnd = new Point(lineXOffset, segmentY - verticalLineHeight); // Line goes upward
+            Point lineEnd = new Point(lineXOffset, segmentY-flag); // Line goes upward
 
             // Draw the vertical line with arrows at both ends
             DrawDoubleArrowVerticalLine(g, lineStart, lineEnd, Color.Black);
