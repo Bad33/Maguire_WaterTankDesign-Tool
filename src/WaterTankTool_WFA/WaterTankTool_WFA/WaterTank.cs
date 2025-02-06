@@ -858,12 +858,13 @@ public partial class WaterTank : Form
 
         int tankTop = imageBounds.Top;
         int tankBottom = tankTop + tankHeight;
-        int cylinderTop = tankBottom;
-        int cylinderBottom = cylinderTop + cylinderHeight;
-        int baseTop = cylinderBottom;
         // Ideally, baseBottom should be imageBounds.Bottom
         int baseBottom = imageBounds.Bottom;
+        int baseTop = baseBottom + baseHeight;
 
+        int cylinderTop = imageBounds.Top ;
+
+            int cylinderBottom = imageBounds.Bottom - baseHeight;
         foreach (var dimension in dimensions)
         {
             // Calculate the average height of the segment
@@ -880,14 +881,15 @@ public partial class WaterTank : Form
             else if(dimension.ComponentName == "Cylinder")
             {
                 double ratio = dimension.HeightInitial / (double)designCylinderHeight;
-                segmentY = cylinderBottom;
-                flag = designBaseHeight;
+                segmentY = cylinderBottom + (int)ratio * cylinderHeight;
+                cylinderBottom = cylinderBottom + (int)dimension.HeightInitial;
+                flag = designCylinderHeight;
 
             }
             else if( dimension.ComponentName == "Tanks")
             {
                 double ratio = dimension.HeightInitial / (double)designTankHeight;
-                segmentY = tankBottom;
+                segmentY = tankBottom ;
                 flag = designTankHeight;
             }
 
@@ -904,6 +906,7 @@ public partial class WaterTank : Form
             // Draw the vertical line with arrows at both ends
             DrawDoubleArrowVerticalLine(g, lineStart, lineEnd, Color.Black);
 
+           
             // Prepare label text
             string labelText = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2} ft, D={dimension.Diameter:F2} ft";
 
