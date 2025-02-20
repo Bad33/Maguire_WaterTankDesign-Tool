@@ -19,6 +19,9 @@
     <Compile Update="Help.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="LoadingWindow.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Update="Load\Snow Load.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -35,7 +38,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="StartupForm.cs">
-      <SubType>Form</SubType>
+      <SubType>Component</SubType>
     </Compile>
     <Compile Update="WaterTank.cs">
       <SubType>Form</SubType>

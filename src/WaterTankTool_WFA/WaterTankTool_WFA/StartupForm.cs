@@ -8,10 +8,21 @@ using WaterTankTool_WFA.Entity;
 
 namespace WaterTankTool_WFA
 {
+
+    public class DoubleBufferedFlowLayoutPanel : FlowLayoutPanel
+    {
+        public DoubleBufferedFlowLayoutPanel()
+        {
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            this.UpdateStyles();
+        }
+    }
     public partial class StartupForm : Form
     {
         private readonly DIContainer _diContainer;
         private List<string> recentProjects = new List<string>();
+
 
         public StartupForm(DIContainer diContainer)
         {
@@ -42,16 +53,15 @@ namespace WaterTankTool_WFA
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             this.Controls.Add(mainLayout);
             //this.BackgroundImageLayout = ImageLayout.Stretch;
-            FlowLayoutPanel recentProjectsPanel = new FlowLayoutPanel
+            // Use the custom double-buffered panel for the recent projects list
+            DoubleBufferedFlowLayoutPanel recentProjectsPanel = new DoubleBufferedFlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(10),
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
-                //BackColor = Color.Transparent,
                 BackgroundImage = Properties.Resources.Tea__SD_9,
                 BackgroundImageLayout = ImageLayout.Stretch,
-
                 WrapContents = false
             };
             mainLayout.Controls.Add(recentProjectsPanel, 0, 0);
@@ -101,12 +111,12 @@ namespace WaterTankTool_WFA
             copyrightPanel.Controls.Add(copyrightText);
             recentProjectsPanel.Controls.Add(copyrightPanel);
 
-            FlowLayoutPanel buttonPanel = new FlowLayoutPanel
+            // Use the custom double-buffered panel for the button section
+            DoubleBufferedFlowLayoutPanel buttonPanel = new DoubleBufferedFlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(20),
                 FlowDirection = FlowDirection.TopDown,
-                //BackColor = Color.Transparent,
                 BackgroundImage = Properties.Resources.Sheldon_IA_New_Tank_Paint_2,
                 BackgroundImageLayout = ImageLayout.Stretch,
                 AutoSize = true,
@@ -274,14 +284,29 @@ namespace WaterTankTool_WFA
             }
         }
 
-        public void OpenProject(string projectPath)
+        public async void OpenProject(string projectPath)
         {
-            string dbFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "project_data.db");
-            string connectionString = $"Data Source={dbFilePath};";
+            using (LoadingWindow loading = new LoadingWindow())
+            {
+                // Show the loading window
+                loading.Show();
+                // Force the UI to update immediately so that the loading form is visible
+                Application.DoEvents();
 
-            var dbContext = new WaterTankDbContext(connectionString);
-            dbContext.EnsureDatabaseCreated();
-            _diContainer.Register<WaterTankDbContext>(dbContext);
+                // Run the heavy project-loading work asynchronously
+                await Task.Run(() =>
+                {
+                    string dbFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(projectPath), "project_data.db");
+                    string connectionString = $"Data Source={dbFilePath};";
+                    var dbContext = new WaterTankDbContext(connectionString);
+                    dbContext.EnsureDatabaseCreated();
+                    _diContainer.Register<WaterTankDbContext>(dbContext);
+                    // If you have additional heavy work, include it here.
+                });
+
+                // Close the loading window once the work is complete
+                loading.Close();
+            }
 
             var mainForm = new WaterTank(this);
             this.Hide();

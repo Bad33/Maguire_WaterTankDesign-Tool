@@ -39,9 +39,9 @@ public partial class WaterTank : Form
 
         InitializeUIComponents();
         InitializeStatusStrip2();
-        InitializeLayout();
+        //InitializeLayout();
         panelDrawTankCapacity();
-        LoadDimensionsToGrid();
+        //LoadDimensionsToGrid();
 
         this.Paint += panel1_Paint_1;
         panel1.MouseWheel += panel1_MouseWheel;
@@ -110,75 +110,75 @@ public partial class WaterTank : Form
     private void InitializeLayout()
     {
 
-        toggleButton = new Button
-        {
-            Text = "Show Dimensions",
-            Dock = DockStyle.Top,
-            Height = 40,
-            BackColor = Color.Gray,
-            ForeColor = Color.White,
-            FlatStyle = FlatStyle.Popup
+        //toggleButton = new Button
+        //{
+        //    Text = "Show Dimensions",
+        //    Dock = DockStyle.Top,
+        //    Height = 40,
+        //    BackColor = Color.Gray,
+        //    ForeColor = Color.White,
+        //    FlatStyle = FlatStyle.Popup
 
-        };
-        toggleButton.FlatAppearance.BorderSize = 0;
-        toggleButton.Click += ToggleDimensionTableVisibility;
-        splitContainer2.Panel1.Controls.Add(toggleButton);
-
-
-        toggleSolveButton = new Button
-        {
-            Text = "Solve",
-            Dock = DockStyle.Top,
-            Height = 40,
-            BackColor = Color.Gray,
-            ForeColor = Color.White,
-            FlatStyle = FlatStyle.Popup
-        };
-        toggleSolveButton.FlatAppearance.BorderSize = 0;
-        toggleSolveButton.Click += ToggleSolverVisibility;
-        splitContainer2.Panel2.Controls.Add(toggleSolveButton);
-
-        Button exportButton = new Button
-        {
-            Text = "Export Diagram",
-            Dock = DockStyle.Top,
-            Height = 40,
-            BackColor = Color.Gray,
-            ForeColor = Color.White,
-            FlatStyle = FlatStyle.Popup
-        };
-        exportButton.Click += ExportDiagram;
-        splitContainer2.Panel2.Controls.Add(exportButton);
+        //};
+        //toggleButton.FlatAppearance.BorderSize = 0;
+        //toggleButton.Click += ToggleDimensionTableVisibility;
+        //splitContainer2.Panel1.Controls.Add(toggleButton);
 
 
-        // Initialize the DataGridView for dimensions
-        dimensionGridView = new DataGridView
-        {
-            Dock = DockStyle.Bottom,
-            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-            ReadOnly = true,
-            AllowUserToAddRows = false, // Disable the extra row
-            RowHeadersVisible = false, // Hide the arrow column
-            ColumnHeadersVisible = true, // Ensure column headers are visible
-            BackgroundColor = Color.White,
-            BorderStyle = BorderStyle.Fixed3D,
-            ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+        //toggleSolveButton = new Button
+        //{
+        //    Text = "Solve",
+        //    Dock = DockStyle.Top,
+        //    Height = 40,
+        //    BackColor = Color.Gray,
+        //    ForeColor = Color.White,
+        //    FlatStyle = FlatStyle.Popup
+        //};
+        //toggleSolveButton.FlatAppearance.BorderSize = 0;
+        //toggleSolveButton.Click += ToggleSolverVisibility;
+        //splitContainer2.Panel2.Controls.Add(toggleSolveButton);
 
-        };
+        //Button exportButton = new Button
+        //{
+        //    Text = "Export Diagram",
+        //    Dock = DockStyle.Top,
+        //    Height = 40,
+        //    BackColor = Color.Gray,
+        //    ForeColor = Color.White,
+        //    FlatStyle = FlatStyle.Popup
+        //};
+        //exportButton.Click += ExportDiagram;
+        //splitContainer2.Panel2.Controls.Add(exportButton);
 
-        dimensionGridView.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
-        {
-            Font = new Font("Segoe UI", 9, FontStyle.Bold), // Bold font for headers
-            Alignment = DataGridViewContentAlignment.MiddleCenter, // Center alignment
-            BackColor = Color.LightGray, // Optional: Background color for headers
-            ForeColor = Color.Black      // Optional: Text color for headers
-        };
 
-        dimensionGridView.Columns.Add("Component", "Component");
-        dimensionGridView.Columns.Add("Height", "Height");
-        dimensionGridView.Columns.Add("Diameter", "Diameter");
-        splitContainer2.Panel1.Controls.Add(dimensionGridView);
-        dimensionGridView.Visible = false;
+        //// Initialize the DataGridView for dimensions
+        //dimensionGridView = new DataGridView
+        //{
+        //    Dock = DockStyle.Bottom,
+        //    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+        //    ReadOnly = true,
+        //    AllowUserToAddRows = false, // Disable the extra row
+        //    RowHeadersVisible = false, // Hide the arrow column
+        //    ColumnHeadersVisible = true, // Ensure column headers are visible
+        //    BackgroundColor = Color.White,
+        //    BorderStyle = BorderStyle.Fixed3D,
+        //    ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
+
+        //};
+
+        //dimensionGridView.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+        //{
+        //    Font = new Font("Segoe UI", 9, FontStyle.Bold), // Bold font for headers
+        //    Alignment = DataGridViewContentAlignment.MiddleCenter, // Center alignment
+        //    BackColor = Color.LightGray, // Optional: Background color for headers
+        //    ForeColor = Color.Black      // Optional: Text color for headers
+        //};
+
+        //dimensionGridView.Columns.Add("Component", "Component");
+        //dimensionGridView.Columns.Add("Height", "Height");
+        //dimensionGridView.Columns.Add("Diameter", "Diameter");
+        //splitContainer2.Panel1.Controls.Add(dimensionGridView);
+        //dimensionGridView.Visible = false;
 
     }
 
@@ -268,7 +268,7 @@ public partial class WaterTank : Form
                             Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
 
                             g.TranslateTransform(destRect.X + scaledWidth / 2, destRect.Y + scaledHeight / 2);
-                            g.RotateTransform(rotationAngle);
+                            //g.RotateTransform(rotationAngle);
                             g.TranslateTransform(-(destRect.X + scaledWidth / 2), -(destRect.Y + scaledHeight / 2));
 
                             g.DrawImage(drawingImage, destRect);
@@ -362,7 +362,7 @@ public partial class WaterTank : Form
 
             selectedMaterialLabel.Text = $"Material: {material.MaterialName}";
             statusStrip2.Items.Remove(noMaterialStatus);
-            
+
 
         }
         else
@@ -381,7 +381,7 @@ public partial class WaterTank : Form
         var snowLoad = context.SnowLoadEntity.FirstOrDefault();
         var windLoad = context.WindLoadEntity.FirstOrDefault();
 
-        if (liveLoad != null && seismicLoad != null && snowLoad !=null && windLoad !=null)
+        if (liveLoad != null && seismicLoad != null && snowLoad != null && windLoad != null)
         {
 
             statusStrip2.Items.Remove(noLoadStatus);
@@ -670,7 +670,7 @@ public partial class WaterTank : Form
 
         // Apply transformations for scaling and rotation
         g.TranslateTransform(panel1.Width / 2, panel1.Height / 2); // Move origin to center
-        g.RotateTransform(rotationAngle);                         // Apply rotation
+        //g.RotateTransform(rotationAngle);                         // Apply rotation
         g.ScaleTransform(zoomFactor, zoomFactor);                  // Apply scaling
         g.TranslateTransform(-panel1.Width / 2, -panel1.Height / 2); // Move origin back
 
@@ -862,9 +862,9 @@ public partial class WaterTank : Form
         int baseBottom = imageBounds.Bottom;
         int baseTop = baseBottom + baseHeight;
 
-        int cylinderTop = imageBounds.Top ;
+        int cylinderTop = imageBounds.Top;
 
-            int cylinderBottom = imageBounds.Bottom - baseHeight;
+        int cylinderBottom = imageBounds.Bottom - baseHeight;
         foreach (var dimension in dimensions)
         {
             // Calculate the average height of the segment
@@ -878,7 +878,7 @@ public partial class WaterTank : Form
                 flag = designBaseHeight;
 
             }
-            else if(dimension.ComponentName == "Cylinder")
+            else if (dimension.ComponentName == "Cylinder")
             {
                 double ratio = dimension.HeightInitial / (double)designCylinderHeight;
                 segmentY = cylinderBottom + (int)ratio * cylinderHeight;
@@ -886,10 +886,10 @@ public partial class WaterTank : Form
                 flag = designCylinderHeight;
 
             }
-            else if( dimension.ComponentName == "Tanks")
+            else if (dimension.ComponentName == "Tanks")
             {
                 double ratio = dimension.HeightInitial / (double)designTankHeight;
-                segmentY = tankBottom ;
+                segmentY = tankBottom;
                 flag = designTankHeight;
             }
 
@@ -901,12 +901,12 @@ public partial class WaterTank : Form
 
             // Define start and end points for the vertical line (upward)
             Point lineStart = new Point(lineXOffset, segmentY);
-            Point lineEnd = new Point(lineXOffset, segmentY-flag); // Line goes upward
+            Point lineEnd = new Point(lineXOffset, segmentY - flag); // Line goes upward
 
             // Draw the vertical line with arrows at both ends
             DrawDoubleArrowVerticalLine(g, lineStart, lineEnd, Color.Black);
 
-           
+
             // Prepare label text
             string labelText = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2} ft, D={dimension.Diameter:F2} ft";
 
@@ -1189,5 +1189,29 @@ public partial class WaterTank : Form
     {
         Help help = new Help();
         help.ShowDialog();
+    }
+
+    private void liveLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+    {
+        Live_Load live_Load = new Live_Load();
+        live_Load.ShowDialog();
+    }
+
+    private void snowLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+    {
+        Snow_Load snow_Load = new Snow_Load();
+        snow_Load.ShowDialog();
+    }
+
+    private void windLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+    {
+        Wind_Load wind_Load = new Wind_Load();
+        wind_Load.ShowDialog();
+    }
+
+    private void seismicLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+    {
+        Seismic seismic = new Seismic();
+        seismic.ShowDialog();
     }
 }

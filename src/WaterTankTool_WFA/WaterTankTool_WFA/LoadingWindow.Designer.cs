@@ -1,6 +1,6 @@
 ﻿namespace WaterTankTool_WFA
 {
-    partial class StartupForm
+    partial class LoadingWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -28,19 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StartupForm));
             SuspendLayout();
             // 
-            // StartupForm
+            // LoadingWindow
             // 
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(563, 319);
-            //Icon = (Icon)resources.GetObject("$this.Icon");
-            Margin = new Padding(0, 1, 0, 1);
-            Name = "StartupForm";
-            Text = "Water Tank Design-Analysis Tool";
-            Load += StartupForm_Load;
+            ClientSize = new Size(251, 71);
+            Name = "LoadingWindow";
+            Text = "LoadingWindow";
             ResumeLayout(false);
         }
 
