@@ -465,13 +465,13 @@ public partial class WaterTank : Form
 
     private void LoadData()
     {
-        dimensionGridView.Columns.Clear();
+        //dimensionGridView.Columns.Clear();
 
-        dimensionGridView.DataSource = context.SegmentProperties.ToList();
-        foreach (DataGridViewColumn column in dimensionGridView.Columns)
-        {
-            column.SortMode = DataGridViewColumnSortMode.Programmatic;
-        }
+        //dimensionGridView.DataSource = context.SegmentProperties.ToList();
+        //foreach (DataGridViewColumn column in dimensionGridView.Columns)
+        //{
+        //    column.SortMode = DataGridViewColumnSortMode.Programmatic;
+        //}
     }
 
     public List<SegmentProperties> GetSegmentsFromDatabase()

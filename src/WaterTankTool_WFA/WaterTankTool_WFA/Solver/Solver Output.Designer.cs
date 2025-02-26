@@ -60,10 +60,7 @@
             Column19 = new DataGridViewTextBoxColumn();
             Column20 = new DataGridViewTextBoxColumn();
             groupBox2 = new GroupBox();
-            dataGridView2 = new DataGridView();
-            Column1 = new DataGridViewTextBoxColumn();
-            Column2 = new DataGridViewTextBoxColumn();
-            Column3 = new DataGridViewTextBoxColumn();
+            tableLayoutPanel1 = new TableLayoutPanel();
             groupBox3 = new GroupBox();
             dataGridView3 = new DataGridView();
             Segments = new DataGridViewTextBoxColumn();
@@ -82,10 +79,6 @@
             Column14 = new DataGridViewTextBoxColumn();
             groupBox4 = new GroupBox();
             dataGridView1 = new DataGridView();
-            Segment = new DataGridViewTextBoxColumn();
-            Fₐ = new DataGridViewTextBoxColumn();
-            Fb = new DataGridViewTextBoxColumn();
-            Check = new DataGridViewTextBoxColumn();
             toolStrip1 = new ToolStrip();
             saveToolStripButton = new ToolStripButton();
             printToolStripButton = new ToolStripButton();
@@ -94,13 +87,16 @@
             toolStripLabel1 = new ToolStripLabel();
             sqliteCommand1 = new Microsoft.Data.Sqlite.SqliteCommand();
             sqliteCommand2 = new Microsoft.Data.Sqlite.SqliteCommand();
+            Segment = new DataGridViewTextBoxColumn();
+            Fₐ = new DataGridViewTextBoxColumn();
+            Fb = new DataGridViewTextBoxColumn();
+            Check = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView6).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView4).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView5).BeginInit();
             groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView3).BeginInit();
             groupBox4.SuspendLayout();
@@ -270,6 +266,7 @@
             // Column15
             // 
             Column15.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            Column15.DataPropertyName = "Segment";
             Column15.FillWeight = 10F;
             resources.ApplyResources(Column15, "Column15");
             Column15.Name = "Column15";
@@ -278,74 +275,53 @@
             // 
             // Column16
             // 
+            Column16.DataPropertyName = "Diameter";
             resources.ApplyResources(Column16, "Column16");
             Column16.Name = "Column16";
             Column16.ReadOnly = true;
             // 
             // Column17
             // 
+            Column17.DataPropertyName = "Thickness";
             resources.ApplyResources(Column17, "Column17");
             Column17.Name = "Column17";
             Column17.ReadOnly = true;
             // 
             // Column18
             // 
+            Column18.DataPropertyName = "A";
             resources.ApplyResources(Column18, "Column18");
             Column18.Name = "Column18";
             Column18.ReadOnly = true;
             // 
             // Column19
             // 
+            Column19.DataPropertyName = "I";
             resources.ApplyResources(Column19, "Column19");
             Column19.Name = "Column19";
             Column19.ReadOnly = true;
             // 
             // Column20
             // 
+            Column20.DataPropertyName = "S";
             resources.ApplyResources(Column20, "Column20");
             Column20.Name = "Column20";
             Column20.ReadOnly = true;
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(dataGridView2);
+            groupBox2.Controls.Add(tableLayoutPanel1);
             resources.ApplyResources(groupBox2, "groupBox2");
-            groupBox2.ForeColor = Color.FromArgb(192, 0, 0);
+            groupBox2.ForeColor = Color.Red;
             groupBox2.Name = "groupBox2";
             groupBox2.TabStop = false;
             // 
-            // dataGridView2
+            // tableLayoutPanel1
             // 
-            dataGridView2.AllowUserToAddRows = false;
-            dataGridView2.AllowUserToDeleteRows = false;
-            dataGridView2.AllowUserToOrderColumns = true;
-            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView2.ColumnHeadersVisible = false;
-            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3 });
-            resources.ApplyResources(dataGridView2, "dataGridView2");
-            dataGridView2.Name = "dataGridView2";
-            dataGridView2.ReadOnly = true;
-            dataGridView2.RowHeadersVisible = false;
-            dataGridView2.RowTemplate.ReadOnly = true;
-            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            // 
-            // Column1
-            // 
-            resources.ApplyResources(Column1, "Column1");
-            Column1.Name = "Column1";
-            Column1.ReadOnly = true;
-            // 
-            // Column2
-            // 
-            resources.ApplyResources(Column2, "Column2");
-            Column2.Name = "Column2";
-            Column2.ReadOnly = true;
-            // 
-            // Column3
-            // 
-            resources.ApplyResources(Column3, "Column3");
-            Column3.Name = "Column3";
-            Column3.ReadOnly = true;
+            resources.ApplyResources(tableLayoutPanel1, "tableLayoutPanel1");
+            tableLayoutPanel1.ForeColor = Color.Black;
+            tableLayoutPanel1.GrowStyle = TableLayoutPanelGrowStyle.FixedSize;
+            tableLayoutPanel1.Name = "tableLayoutPanel1";
             // 
             // groupBox3
             // 
@@ -367,84 +343,98 @@
             // 
             // Segments
             // 
+            Segments.DataPropertyName = "Segment";
             resources.ApplyResources(Segments, "Segments");
             Segments.Name = "Segments";
             Segments.ReadOnly = true;
             // 
             // Radius
             // 
+            Radius.DataPropertyName = "Radius";
             resources.ApplyResources(Radius, "Radius");
             Radius.Name = "Radius";
             Radius.ReadOnly = true;
             // 
             // Thickness
             // 
+            Thickness.DataPropertyName = "Thickness";
             resources.ApplyResources(Thickness, "Thickness");
             Thickness.Name = "Thickness";
             Thickness.ReadOnly = true;
             // 
             // Column4
             // 
+            Column4.DataPropertyName = "Rt";
             resources.ApplyResources(Column4, "Column4");
             Column4.Name = "Column4";
             Column4.ReadOnly = true;
             // 
             // Column5
             // 
+            Column5.DataPropertyName = "A";
             resources.ApplyResources(Column5, "Column5");
             Column5.Name = "Column5";
             Column5.ReadOnly = true;
             // 
             // Column6
             // 
+            Column6.DataPropertyName = "I";
             resources.ApplyResources(Column6, "Column6");
             Column6.Name = "Column6";
             Column6.ReadOnly = true;
             // 
             // Column7
             // 
+            Column7.DataPropertyName = "r";
             resources.ApplyResources(Column7, "Column7");
             Column7.Name = "Column7";
             Column7.ReadOnly = true;
             // 
             // Column8
             // 
+            Column8.DataPropertyName = "Co";
             resources.ApplyResources(Column8, "Column8");
             Column8.Name = "Column8";
             Column8.ReadOnly = true;
             // 
             // Column9
             // 
+            Column9.DataPropertyName = "Fl";
             resources.ApplyResources(Column9, "Column9");
             Column9.Name = "Column9";
             Column9.ReadOnly = true;
             // 
             // Column10
             // 
+            Column10.DataPropertyName = "KLr";
             resources.ApplyResources(Column10, "Column10");
             Column10.Name = "Column10";
             Column10.ReadOnly = true;
             // 
             // Column11
             // 
+            Column11.DataPropertyName = "Cc";
             resources.ApplyResources(Column11, "Column11");
             Column11.Name = "Column11";
             Column11.ReadOnly = true;
             // 
             // Column12
             // 
+            Column12.DataPropertyName = "Kf";
             resources.ApplyResources(Column12, "Column12");
             Column12.Name = "Column12";
             Column12.ReadOnly = true;
             // 
             // Column13
             // 
+            Column13.DataPropertyName = "Fa";
             resources.ApplyResources(Column13, "Column13");
             Column13.Name = "Column13";
             Column13.ReadOnly = true;
             // 
             // Column14
             // 
+            Column14.DataPropertyName = "Fb";
             resources.ApplyResources(Column14, "Column14");
             Column14.Name = "Column14";
             Column14.ReadOnly = true;
@@ -467,30 +457,6 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
-            // 
-            // Segment
-            // 
-            resources.ApplyResources(Segment, "Segment");
-            Segment.Name = "Segment";
-            Segment.ReadOnly = true;
-            // 
-            // Fₐ
-            // 
-            resources.ApplyResources(Fₐ, "Fₐ");
-            Fₐ.Name = "Fₐ";
-            Fₐ.ReadOnly = true;
-            // 
-            // Fb
-            // 
-            resources.ApplyResources(Fb, "Fb");
-            Fb.Name = "Fb";
-            Fb.ReadOnly = true;
-            // 
-            // Check
-            // 
-            resources.ApplyResources(Check, "Check");
-            Check.Name = "Check";
-            Check.ReadOnly = true;
             // 
             // toolStrip1
             // 
@@ -543,6 +509,34 @@
             sqliteCommand2.Transaction = null;
             sqliteCommand2.UpdatedRowSource = System.Data.UpdateRowSource.None;
             // 
+            // Segment
+            // 
+            Segment.DataPropertyName = "Segment";
+            resources.ApplyResources(Segment, "Segment");
+            Segment.Name = "Segment";
+            Segment.ReadOnly = true;
+            // 
+            // Fₐ
+            // 
+            Fₐ.DataPropertyName = "fa";
+            resources.ApplyResources(Fₐ, "Fₐ");
+            Fₐ.Name = "Fₐ";
+            Fₐ.ReadOnly = true;
+            // 
+            // Fb
+            // 
+            Fb.DataPropertyName = "fb";
+            resources.ApplyResources(Fb, "Fb");
+            Fb.Name = "Fb";
+            Fb.ReadOnly = true;
+            // 
+            // Check
+            // 
+            Check.DataPropertyName = "check";
+            resources.ApplyResources(Check, "Check");
+            Check.Name = "Check";
+            Check.ReadOnly = true;
+            // 
             // Solver_Output
             // 
             AccessibleRole = AccessibleRole.None;
@@ -565,7 +559,6 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView4).EndInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView5).EndInit();
             groupBox2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             groupBox3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView3).EndInit();
             groupBox4.ResumeLayout(false);
@@ -593,15 +586,8 @@
         private ToolStripLabel toolStripLabel1;
         private DataGridView dataGridView1;
         private Microsoft.Data.Sqlite.SqliteCommand sqliteCommand1;
-        private DataGridView dataGridView2;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn Column2;
-        private DataGridViewTextBoxColumn Column3;
         private DataGridView dataGridView3;
         private DataGridView dataGridView5;
-        private Label label3;
-        private Label label2;
-        private Label label1;
         private DataGridView dataGridView7;
         private DataGridView dataGridView6;
         private DataGridView dataGridView4;
@@ -611,12 +597,24 @@
         private DataGridViewTextBoxColumn Column21;
         private DataGridViewTextBoxColumn Column22;
         private DataGridViewTextBoxColumn Column23;
+        private Microsoft.Data.Sqlite.SqliteCommand sqliteCommand2;
+        private DataGridViewTextBoxColumn Column27;
+        private DataGridViewTextBoxColumn Column28;
+        private DataGridViewTextBoxColumn Column29;
+        private DataGridViewTextBoxColumn Column30;
+        private DataGridViewTextBoxColumn Column31;
+        private DataGridViewTextBoxColumn Column33;
+        private DataGridViewTextBoxColumn Column32;
+        private Label label3;
+        private Label label2;
+        private Label label1;
         private DataGridViewTextBoxColumn Column15;
         private DataGridViewTextBoxColumn Column16;
         private DataGridViewTextBoxColumn Column17;
         private DataGridViewTextBoxColumn Column18;
         private DataGridViewTextBoxColumn Column19;
         private DataGridViewTextBoxColumn Column20;
+        private TableLayoutPanel tableLayoutPanel1;
         private DataGridViewTextBoxColumn Segments;
         private DataGridViewTextBoxColumn Radius;
         private DataGridViewTextBoxColumn Thickness;
@@ -631,17 +629,9 @@
         private DataGridViewTextBoxColumn Column12;
         private DataGridViewTextBoxColumn Column13;
         private DataGridViewTextBoxColumn Column14;
-        private Microsoft.Data.Sqlite.SqliteCommand sqliteCommand2;
         private DataGridViewTextBoxColumn Segment;
         private DataGridViewTextBoxColumn Fₐ;
         private DataGridViewTextBoxColumn Fb;
         private DataGridViewTextBoxColumn Check;
-        private DataGridViewTextBoxColumn Column27;
-        private DataGridViewTextBoxColumn Column28;
-        private DataGridViewTextBoxColumn Column29;
-        private DataGridViewTextBoxColumn Column30;
-        private DataGridViewTextBoxColumn Column31;
-        private DataGridViewTextBoxColumn Column33;
-        private DataGridViewTextBoxColumn Column32;
     }
 }

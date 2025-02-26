@@ -83,7 +83,7 @@
             // maskedTextBox2
             // 
             maskedTextBox2.Location = new Point(108, 22);
-            maskedTextBox2.Margin = new Padding(2, 2, 2, 2);
+            maskedTextBox2.Margin = new Padding(2);
             maskedTextBox2.Name = "maskedTextBox2";
             maskedTextBox2.Size = new Size(88, 23);
             maskedTextBox2.TabIndex = 6;
@@ -93,7 +93,7 @@
             // maskedTextBox3
             // 
             maskedTextBox3.Location = new Point(108, 51);
-            maskedTextBox3.Margin = new Padding(2, 2, 2, 2);
+            maskedTextBox3.Margin = new Padding(2);
             maskedTextBox3.Name = "maskedTextBox3";
             maskedTextBox3.Size = new Size(88, 23);
             maskedTextBox3.TabIndex = 7;
@@ -103,7 +103,7 @@
             // maskedTextBox4
             // 
             maskedTextBox4.Location = new Point(349, 53);
-            maskedTextBox4.Margin = new Padding(2, 2, 2, 2);
+            maskedTextBox4.Margin = new Padding(2);
             maskedTextBox4.Name = "maskedTextBox4";
             maskedTextBox4.Size = new Size(77, 23);
             maskedTextBox4.TabIndex = 9;
@@ -112,7 +112,7 @@
             // maskedTextBox1
             // 
             maskedTextBox1.Location = new Point(349, 24);
-            maskedTextBox1.Margin = new Padding(2, 2, 2, 2);
+            maskedTextBox1.Margin = new Padding(2);
             maskedTextBox1.Name = "maskedTextBox1";
             maskedTextBox1.Size = new Size(77, 23);
             maskedTextBox1.TabIndex = 8;
@@ -122,7 +122,7 @@
             // 
             Save.BackColor = SystemColors.Window;
             Save.Location = new Point(307, 361);
-            Save.Margin = new Padding(2, 2, 2, 2);
+            Save.Margin = new Padding(2);
             Save.Name = "Save";
             Save.Size = new Size(73, 30);
             Save.TabIndex = 11;
@@ -134,7 +134,7 @@
             // 
             button2.BackColor = SystemColors.Window;
             button2.Location = new Point(393, 361);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(81, 30);
             button2.TabIndex = 12;
@@ -146,9 +146,9 @@
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(richTextBox1);
             groupBox1.Location = new Point(8, 13);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(466, 52);
             groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
@@ -169,7 +169,7 @@
             // richTextBox1
             // 
             richTextBox1.Location = new Point(139, 25);
-            richTextBox1.Margin = new Padding(2, 2, 2, 2);
+            richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(178, 19);
             richTextBox1.TabIndex = 4;
@@ -195,9 +195,9 @@
             groupBox2.Controls.Add(maskedTextBox2);
             groupBox2.Controls.Add(maskedTextBox3);
             groupBox2.Location = new Point(8, 73);
-            groupBox2.Margin = new Padding(2, 2, 2, 2);
+            groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(2, 2, 2, 2);
+            groupBox2.Padding = new Padding(2);
             groupBox2.Size = new Size(466, 104);
             groupBox2.TabIndex = 14;
             groupBox2.TabStop = false;
@@ -207,7 +207,7 @@
             // maskedTextBox5
             // 
             maskedTextBox5.Location = new Point(110, 79);
-            maskedTextBox5.Margin = new Padding(2, 2, 2, 2);
+            maskedTextBox5.Margin = new Padding(2);
             maskedTextBox5.Name = "maskedTextBox5";
             maskedTextBox5.Size = new Size(87, 23);
             maskedTextBox5.TabIndex = 21;
@@ -349,9 +349,9 @@
             groupBox3.Controls.Add(label2);
             groupBox3.Controls.Add(label7);
             groupBox3.Location = new Point(8, 187);
-            groupBox3.Margin = new Padding(2, 2, 2, 2);
+            groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(2, 2, 2, 2);
+            groupBox3.Padding = new Padding(2);
             groupBox3.Size = new Size(466, 164);
             groupBox3.TabIndex = 15;
             groupBox3.TabStop = false;
@@ -427,7 +427,7 @@
             // textBox10
             // 
             textBox10.Location = new Point(340, 136);
-            textBox10.Margin = new Padding(2, 2, 2, 2);
+            textBox10.Margin = new Padding(2);
             textBox10.Name = "textBox10";
             textBox10.ReadOnly = true;
             textBox10.Size = new Size(86, 23);
@@ -436,16 +436,17 @@
             // textBox9
             // 
             textBox9.Location = new Point(340, 111);
-            textBox9.Margin = new Padding(2, 2, 2, 2);
+            textBox9.Margin = new Padding(2);
             textBox9.Name = "textBox9";
             textBox9.ReadOnly = true;
             textBox9.Size = new Size(86, 23);
             textBox9.TabIndex = 17;
+            textBox9.TextChanged += textBox9_TextChanged;
             // 
             // textBox8
             // 
             textBox8.Location = new Point(340, 83);
-            textBox8.Margin = new Padding(2, 2, 2, 2);
+            textBox8.Margin = new Padding(2);
             textBox8.Name = "textBox8";
             textBox8.ReadOnly = true;
             textBox8.Size = new Size(86, 23);
@@ -454,7 +455,7 @@
             // textBox7
             // 
             textBox7.Location = new Point(340, 57);
-            textBox7.Margin = new Padding(2, 2, 2, 2);
+            textBox7.Margin = new Padding(2);
             textBox7.Name = "textBox7";
             textBox7.ReadOnly = true;
             textBox7.Size = new Size(86, 23);
@@ -463,7 +464,7 @@
             // textBox6
             // 
             textBox6.Location = new Point(340, 29);
-            textBox6.Margin = new Padding(2, 2, 2, 2);
+            textBox6.Margin = new Padding(2);
             textBox6.Name = "textBox6";
             textBox6.ReadOnly = true;
             textBox6.Size = new Size(86, 23);
@@ -472,7 +473,7 @@
             // textBox5
             // 
             textBox5.Location = new Point(108, 136);
-            textBox5.Margin = new Padding(2, 2, 2, 2);
+            textBox5.Margin = new Padding(2);
             textBox5.Name = "textBox5";
             textBox5.ReadOnly = true;
             textBox5.Size = new Size(88, 23);
@@ -481,7 +482,7 @@
             // textBox4
             // 
             textBox4.Location = new Point(108, 109);
-            textBox4.Margin = new Padding(2, 2, 2, 2);
+            textBox4.Margin = new Padding(2);
             textBox4.Name = "textBox4";
             textBox4.ReadOnly = true;
             textBox4.Size = new Size(88, 23);
@@ -490,7 +491,7 @@
             // textBox3
             // 
             textBox3.Location = new Point(107, 80);
-            textBox3.Margin = new Padding(2, 2, 2, 2);
+            textBox3.Margin = new Padding(2);
             textBox3.Name = "textBox3";
             textBox3.ReadOnly = true;
             textBox3.Size = new Size(89, 23);
@@ -499,7 +500,7 @@
             // textBox2
             // 
             textBox2.Location = new Point(107, 53);
-            textBox2.Margin = new Padding(2, 2, 2, 2);
+            textBox2.Margin = new Padding(2);
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
             textBox2.Size = new Size(89, 23);
@@ -509,7 +510,7 @@
             // textBox1
             // 
             textBox1.Location = new Point(107, 27);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
             textBox1.Size = new Size(89, 23);
@@ -619,7 +620,7 @@
             Controls.Add(button2);
             Controls.Add(Save);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "SegmentDialogBox";
             StartPosition = FormStartPosition.CenterParent;

@@ -432,6 +432,7 @@ C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTa
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Custom_Design_Control.StructuralDrawingForm.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Custom_Design_Control.TankDesign.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Help.resources
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.ModernProgressBar.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Dead_Load.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Live_Load.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Load.Seismic.resources
@@ -447,6 +448,7 @@ C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTa
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.SegmentDialogBox.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.Solver.Solver_Output.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.SplashScreen.resources
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.DoubleBufferedFlowLayoutPanel.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.TankProperty.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.TanksList.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.WaterTank.resources
@@ -462,5 +464,3 @@ C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTa
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.pdb
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.genruntimeconfig.cache
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\ref\WaterTankTool_WFA.dll
-C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.DoubleBufferedFlowLayoutPanel.resources
-C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Debug\net8.0-windows\WaterTankTool_WFA.ModernProgressBar.resources
