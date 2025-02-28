@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Solver_Output));
             printDialog1 = new PrintDialog();
             printDocument1 = new System.Drawing.Printing.PrintDocument();
-            statusStrip1 = new StatusStrip();
             groupBox1 = new GroupBox();
             label3 = new Label();
             label2 = new Label();
@@ -79,6 +78,10 @@
             Column14 = new DataGridViewTextBoxColumn();
             groupBox4 = new GroupBox();
             dataGridView1 = new DataGridView();
+            Segment = new DataGridViewTextBoxColumn();
+            Fₐ = new DataGridViewTextBoxColumn();
+            Fb = new DataGridViewTextBoxColumn();
+            Check = new DataGridViewTextBoxColumn();
             toolStrip1 = new ToolStrip();
             saveToolStripButton = new ToolStripButton();
             printToolStripButton = new ToolStripButton();
@@ -87,10 +90,7 @@
             toolStripLabel1 = new ToolStripLabel();
             sqliteCommand1 = new Microsoft.Data.Sqlite.SqliteCommand();
             sqliteCommand2 = new Microsoft.Data.Sqlite.SqliteCommand();
-            Segment = new DataGridViewTextBoxColumn();
-            Fₐ = new DataGridViewTextBoxColumn();
-            Fb = new DataGridViewTextBoxColumn();
-            Check = new DataGridViewTextBoxColumn();
+            statusStrip2 = new StatusStrip();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView6).BeginInit();
@@ -107,12 +107,6 @@
             // printDialog1
             // 
             printDialog1.UseEXDialog = true;
-            // 
-            // statusStrip1
-            // 
-            statusStrip1.BackColor = SystemColors.ControlLight;
-            resources.ApplyResources(statusStrip1, "statusStrip1");
-            statusStrip1.Name = "statusStrip1";
             // 
             // groupBox1
             // 
@@ -155,42 +149,49 @@
             // 
             // Column27
             // 
+            Column27.DataPropertyName = "Fwind";
             resources.ApplyResources(Column27, "Column27");
             Column27.Name = "Column27";
             Column27.ReadOnly = true;
             // 
             // Column28
             // 
+            Column28.DataPropertyName = "Vwind";
             resources.ApplyResources(Column28, "Column28");
             Column28.Name = "Column28";
             Column28.ReadOnly = true;
             // 
             // Column29
             // 
+            Column29.DataPropertyName = "BaseElevation";
             resources.ApplyResources(Column29, "Column29");
             Column29.Name = "Column29";
             Column29.ReadOnly = true;
             // 
             // Column30
             // 
+            Column30.DataPropertyName = "LoadLocation";
             resources.ApplyResources(Column30, "Column30");
             Column30.Name = "Column30";
             Column30.ReadOnly = true;
             // 
             // Column31
             // 
+            Column31.DataPropertyName = "ArmLength";
             resources.ApplyResources(Column31, "Column31");
             Column31.Name = "Column31";
             Column31.ReadOnly = true;
             // 
             // Column33
             // 
+            Column33.DataPropertyName = "FArm";
             resources.ApplyResources(Column33, "Column33");
             Column33.Name = "Column33";
             Column33.ReadOnly = true;
             // 
             // Column32
             // 
+            Column32.DataPropertyName = "Mwind";
             resources.ApplyResources(Column32, "Column32");
             Column32.Name = "Column32";
             Column32.ReadOnly = true;
@@ -208,18 +209,21 @@
             // 
             // Column24
             // 
+            Column24.DataPropertyName = "waterWeight";
             resources.ApplyResources(Column24, "Column24");
             Column24.Name = "Column24";
             Column24.ReadOnly = true;
             // 
             // Column25
             // 
+            Column25.DataPropertyName = "snowWeight";
             resources.ApplyResources(Column25, "Column25");
             Column25.Name = "Column25";
             Column25.ReadOnly = true;
             // 
             // Column26
             // 
+            Column26.DataPropertyName = "selfWeight";
             resources.ApplyResources(Column26, "Column26");
             Column26.Name = "Column26";
             Column26.ReadOnly = true;
@@ -236,18 +240,21 @@
             // 
             // Column21
             // 
+            Column21.DataPropertyName = "waterWeight";
             resources.ApplyResources(Column21, "Column21");
             Column21.Name = "Column21";
             Column21.ReadOnly = true;
             // 
             // Column22
             // 
+            Column22.DataPropertyName = "snowWeight";
             resources.ApplyResources(Column22, "Column22");
             Column22.Name = "Column22";
             Column22.ReadOnly = true;
             // 
             // Column23
             // 
+            Column23.DataPropertyName = "selfWeight";
             resources.ApplyResources(Column23, "Column23");
             Column23.Name = "Column23";
             Column23.ReadOnly = true;
@@ -458,6 +465,34 @@
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             // 
+            // Segment
+            // 
+            Segment.DataPropertyName = "Segment";
+            resources.ApplyResources(Segment, "Segment");
+            Segment.Name = "Segment";
+            Segment.ReadOnly = true;
+            // 
+            // Fₐ
+            // 
+            Fₐ.DataPropertyName = "fa";
+            resources.ApplyResources(Fₐ, "Fₐ");
+            Fₐ.Name = "Fₐ";
+            Fₐ.ReadOnly = true;
+            // 
+            // Fb
+            // 
+            Fb.DataPropertyName = "fb";
+            resources.ApplyResources(Fb, "Fb");
+            Fb.Name = "Fb";
+            Fb.ReadOnly = true;
+            // 
+            // Check
+            // 
+            Check.DataPropertyName = "check";
+            resources.ApplyResources(Check, "Check");
+            Check.Name = "Check";
+            Check.ReadOnly = true;
+            // 
             // toolStrip1
             // 
             toolStrip1.BackColor = SystemColors.Control;
@@ -509,45 +544,24 @@
             sqliteCommand2.Transaction = null;
             sqliteCommand2.UpdatedRowSource = System.Data.UpdateRowSource.None;
             // 
-            // Segment
+            // statusStrip2
             // 
-            Segment.DataPropertyName = "Segment";
-            resources.ApplyResources(Segment, "Segment");
-            Segment.Name = "Segment";
-            Segment.ReadOnly = true;
-            // 
-            // Fₐ
-            // 
-            Fₐ.DataPropertyName = "fa";
-            resources.ApplyResources(Fₐ, "Fₐ");
-            Fₐ.Name = "Fₐ";
-            Fₐ.ReadOnly = true;
-            // 
-            // Fb
-            // 
-            Fb.DataPropertyName = "fb";
-            resources.ApplyResources(Fb, "Fb");
-            Fb.Name = "Fb";
-            Fb.ReadOnly = true;
-            // 
-            // Check
-            // 
-            Check.DataPropertyName = "check";
-            resources.ApplyResources(Check, "Check");
-            Check.Name = "Check";
-            Check.ReadOnly = true;
+            statusStrip2.GripStyle = ToolStripGripStyle.Visible;
+            resources.ApplyResources(statusStrip2, "statusStrip2");
+            statusStrip2.Name = "statusStrip2";
+            statusStrip2.RenderMode = ToolStripRenderMode.ManagerRenderMode;
             // 
             // Solver_Output
             // 
             AccessibleRole = AccessibleRole.None;
             AutoScaleMode = AutoScaleMode.Inherit;
             resources.ApplyResources(this, "$this");
+            Controls.Add(statusStrip2);
             Controls.Add(toolStrip1);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Controls.Add(statusStrip1);
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             Name = "Solver_Output";
@@ -591,20 +605,7 @@
         private DataGridView dataGridView7;
         private DataGridView dataGridView6;
         private DataGridView dataGridView4;
-        private DataGridViewTextBoxColumn Column24;
-        private DataGridViewTextBoxColumn Column25;
-        private DataGridViewTextBoxColumn Column26;
-        private DataGridViewTextBoxColumn Column21;
-        private DataGridViewTextBoxColumn Column22;
-        private DataGridViewTextBoxColumn Column23;
         private Microsoft.Data.Sqlite.SqliteCommand sqliteCommand2;
-        private DataGridViewTextBoxColumn Column27;
-        private DataGridViewTextBoxColumn Column28;
-        private DataGridViewTextBoxColumn Column29;
-        private DataGridViewTextBoxColumn Column30;
-        private DataGridViewTextBoxColumn Column31;
-        private DataGridViewTextBoxColumn Column33;
-        private DataGridViewTextBoxColumn Column32;
         private Label label3;
         private Label label2;
         private Label label1;
@@ -633,5 +634,20 @@
         private DataGridViewTextBoxColumn Fₐ;
         private DataGridViewTextBoxColumn Fb;
         private DataGridViewTextBoxColumn Check;
+        private DataGridViewTextBoxColumn Column21;
+        private DataGridViewTextBoxColumn Column22;
+        private DataGridViewTextBoxColumn Column23;
+        private DataGridViewTextBoxColumn Column24;
+        private DataGridViewTextBoxColumn Column25;
+        private DataGridViewTextBoxColumn Column26;
+        private DataGridViewTextBoxColumn Column27;
+        private DataGridViewTextBoxColumn Column28;
+        private DataGridViewTextBoxColumn Column29;
+        private DataGridViewTextBoxColumn Column30;
+        private DataGridViewTextBoxColumn Column31;
+        private DataGridViewTextBoxColumn Column33;
+        private DataGridViewTextBoxColumn Column32;
+        private ToolStripStatusLabel toolStripStatusLabel1;
+        private StatusStrip statusStrip2;
     }
 }

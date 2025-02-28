@@ -424,7 +424,7 @@ namespace WaterTankTool_WFA
         }
 
 
-        private void DoCalculations()
+        public void DoCalculations()
         {
             if (string.IsNullOrWhiteSpace(_segmentType))
             {
