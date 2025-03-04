@@ -40,6 +40,14 @@ namespace WaterTankTool_WFA.Solver
 
         public List<string> selfWeightData = new List<string>();
 
+        public List<segmentGravityLoad> cummulativeLoadData = new List<segmentGravityLoad>();
+
+        public List<WindTable> windLoadData = new List<WindTable>();
+
+        public List<designTableData> segmentPropertiesTableData = new List<designTableData>();
+
+        public List<tabelData2> tabelData2s = new List<tabelData2>();
+
         public Solver_Output()
         {
             InitializeComponent();
@@ -51,15 +59,16 @@ namespace WaterTankTool_WFA.Solver
 
             LoadAllowableCompressiveStress();
 
-            LoadTable2();
-
-            LoadCheckTableData();
 
             LoadSegmentWeightData();
 
             LoadCummulativeWeightData();
 
             WindLoadPerSegment();
+
+            LoadTable2();
+
+            LoadCheckTableData();
         }
 
         private void WindLoadPerSegment()
@@ -70,7 +79,7 @@ namespace WaterTankTool_WFA.Solver
             Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
 
-            List<WindTable> windTableData = new List<WindTable>();
+            
             double cumulativeFwind = 0;
 
             foreach (var segment in segmentData)
@@ -83,7 +92,7 @@ namespace WaterTankTool_WFA.Solver
 
                 cumulativeFwind += fwind;  // cumulative addition
 
-                windTableData.Add(new WindTable
+                windLoadData.Add(new WindTable
                 {
                     Fwind = fwind.ToString(),
                     Vwind = cumulativeFwind.ToString(), // cumulative sum updated per iteration
@@ -96,7 +105,7 @@ namespace WaterTankTool_WFA.Solver
             }
 
 
-            dataGridView7.DataSource = windTableData;
+            dataGridView7.DataSource = windLoadData;
 
 
         }
@@ -210,7 +219,13 @@ namespace WaterTankTool_WFA.Solver
 
 
 
-                waterWeight = foundTank.Weight_of_Water;
+                
+
+                string numericPart = new string(foundTank.Weight_of_Water
+                         .Where(c => char.IsDigit(c) || c == '.' || c == '-')
+                         .ToArray());
+                waterWeight = numericPart;
+
                 snowWeight = _context.SnowLoadEntity.FirstOrDefault().Total_Load.ToString();
                 selfWeight = foundTank.Weight_of_Steel;
                 int cumulativeIndex = 0;
@@ -234,7 +249,7 @@ namespace WaterTankTool_WFA.Solver
                     }
                 }
 
-                var viewModelData = segmentData.Select((segment, index) =>
+                cummulativeLoadData = segmentData.Select((segment, index) =>
                 {
                     // Accumulate selfWeight in each iteration
                     return new segmentGravityLoad
@@ -246,7 +261,7 @@ namespace WaterTankTool_WFA.Solver
                     };
                 }).ToList();
 
-                dataGridView6.DataSource = viewModelData;
+                dataGridView6.DataSource = cummulativeLoadData;
 
             }
 
@@ -260,15 +275,47 @@ namespace WaterTankTool_WFA.Solver
 
             if (segmentData.Count > 0)
             {
-                var viewModelData = segmentData.Select(segment => new CheckTableData
+                var viewModelData = segmentData.Select((segment,index) => 
                 {
-                    Segment = segment.SegmentName,
-                    //fa = ,
-                    //fb = ,
-                    //check = ,
+
+                    double fa = 0;
+                    double fb = 0;
+                    string check = null;
+
+                    if (segmentData[index].SegmentType == "Tanks")
+                    {
+                        fa = 0;
+                        fb = 0;
+                        check = "NA";
+                    }
+                    else
+                    {
+                        fa = (Double.Parse(cummulativeLoadData[index].waterWeight) + Double.Parse(cummulativeLoadData[index].snowWeight) + Double.Parse(cummulativeLoadData[index].selfWeight)) / segmentPropertiesTableData[index].A;
+                        fb = (Double.Parse(windLoadData[index].Mwind) * 12) / segmentPropertiesTableData[index].S;
+
+                        if((fa + fb) == 0)
+                        {
+                            check = "NA";
+                        }
+                        else
+                        {
+                            check = ((fa / tabelData2s[index].Fa) + (fb / tabelData2s[index].Fb)).ToString();
+
+                        }
+                    }
 
 
-                    //A = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2))),
+                    return new CheckTableData
+                    {
+
+                        Segment = segment.SegmentName,
+                        fa = fa,
+                        fb = fb,
+                        check = check,
+
+
+                        //A = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2))),
+                    };
 
 
 
@@ -287,7 +334,7 @@ namespace WaterTankTool_WFA.Solver
             if (segmentData.Count > 0)
             {
 
-                var viewModelData = segmentData.Select(segment =>
+                tabelData2s = segmentData.Select(segment =>
                 {
                     var rt = (segment.Diameter / 2) / segment.Thickness;
                     var i = Math.Round((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4)), 4);
@@ -347,7 +394,7 @@ namespace WaterTankTool_WFA.Solver
 
                 }).ToList();
 
-                dataGridView3.DataSource = viewModelData;
+                dataGridView3.DataSource = tabelData2s;
             }
 
         }
@@ -457,7 +504,7 @@ namespace WaterTankTool_WFA.Solver
             if (segmentData.Count > 0)
             {
 
-                var viewModelData = segmentData.Select(segment => new designTableData
+                segmentPropertiesTableData = segmentData.Select(segment => new designTableData
                 {
                     Segment = segment.SegmentName,
                     Diameter = segment.Diameter,
@@ -472,7 +519,7 @@ namespace WaterTankTool_WFA.Solver
 
                 }).ToList();
 
-                dataGridView5.DataSource = viewModelData;
+                dataGridView5.DataSource = segmentPropertiesTableData;
             }
 
         }
@@ -674,7 +721,7 @@ namespace WaterTankTool_WFA.Solver
         public string Segment { get; set; }
         public double fa { get; set; }
         public double fb { get; set; }
-        public double check {  get; set; }
+        public string check {  get; set; }
     }
     public class TanksData
     {

@@ -192,8 +192,8 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            if (!double.TryParse(maskedTextBox2.Text, out double diameterInitial) ||
-                !double.TryParse(maskedTextBox3.Text, out double diameterFinal) ||
+            if (!double.TryParse(maskedTextBox2.Text, out double diameterFinal) ||
+                !double.TryParse(maskedTextBox3.Text, out double diameterInitial) ||
                 !double.TryParse(maskedTextBox1.Text, out double heightInitial) ||
                 !double.TryParse(maskedTextBox4.Text, out double heightFinal) || !double.TryParse(maskedTextBox5.Text, out double thickness))
             {
