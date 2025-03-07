@@ -36,7 +36,7 @@
             AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(563, 319);
-            Icon = (Icon)resources.GetObject("$this.Icon");
+            //Icon = (Icon)resources.GetObject("$this.Icon");
             Margin = new Padding(0, 1, 0, 1);
             Name = "StartupForm";
             Text = "Water Tank Design-Analysis Tool";

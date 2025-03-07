@@ -8,10 +8,21 @@ using WaterTankTool_WFA.Entity;
 
 namespace WaterTankTool_WFA
 {
+
+    public class DoubleBufferedFlowLayoutPanel : FlowLayoutPanel
+    {
+        public DoubleBufferedFlowLayoutPanel()
+        {
+            this.DoubleBuffered = true;
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer, true);
+            this.UpdateStyles();
+        }
+    }
     public partial class StartupForm : Form
     {
         private readonly DIContainer _diContainer;
         private List<string> recentProjects = new List<string>();
+
 
         public StartupForm(DIContainer diContainer)
         {
@@ -35,19 +46,22 @@ namespace WaterTankTool_WFA
                 Dock = DockStyle.Fill,
                 ColumnCount = 2,
                 RowCount = 1,
-                BackColor = Color.FromArgb(30, 30, 30)
+                BackColor = Color.Transparent
+
             };
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             this.Controls.Add(mainLayout);
-
-            FlowLayoutPanel recentProjectsPanel = new FlowLayoutPanel
+            //this.BackgroundImageLayout = ImageLayout.Stretch;
+            // Use the custom double-buffered panel for the recent projects list
+            DoubleBufferedFlowLayoutPanel recentProjectsPanel = new DoubleBufferedFlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
-                Padding = new Padding(20),
+                Padding = new Padding(10),
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
-                BackColor = Color.FromArgb(40, 40, 42),
+                BackgroundImage = Properties.Resources.Tea__SD_9,
+                BackgroundImageLayout = ImageLayout.Stretch,
                 WrapContents = false
             };
             mainLayout.Controls.Add(recentProjectsPanel, 0, 0);
@@ -73,13 +87,13 @@ namespace WaterTankTool_WFA
             Panel copyrightPanel = new Panel
             {
                 Dock = DockStyle.Bottom,
-                Height = 50,
-                BackColor = Color.FromArgb(40, 40, 42) // Match the panel color
+                Height = 70,
+                BackColor = Color.Transparent // Match the panel color
             };
 
             Label copyrightText = new Label
             {
-                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n",
+                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n" ,
                 //"This software and its associated materials are proprietary to Iron Maguire and are protected by applicable copyright and intellectual property laws.\n" +
                 //"Unauthorized use, reproduction, or distribution of this software or any of its components is strictly prohibited.\n\n" +
                 //"For licensing information, please contact: im@gmail.com\n\n" +
@@ -88,20 +102,23 @@ namespace WaterTankTool_WFA
                 Font = new Font("Segoe UI", 8, FontStyle.Regular),
                 ForeColor = Color.White,
                 AutoSize = true,
-    TextAlign = ContentAlignment.MiddleCenter,
-    Dock = DockStyle.Fill
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+
 
 
             };
             copyrightPanel.Controls.Add(copyrightText);
             recentProjectsPanel.Controls.Add(copyrightPanel);
 
-            FlowLayoutPanel buttonPanel = new FlowLayoutPanel
+            // Use the custom double-buffered panel for the button section
+            DoubleBufferedFlowLayoutPanel buttonPanel = new DoubleBufferedFlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(20),
                 FlowDirection = FlowDirection.TopDown,
-                BackColor = Color.FromArgb(30, 30, 30),
+                BackgroundImage = Properties.Resources.Sheldon_IA_New_Tank_Paint_2,
+                BackgroundImageLayout = ImageLayout.Stretch,
                 AutoSize = true,
                 WrapContents = false
             };
@@ -133,15 +150,15 @@ namespace WaterTankTool_WFA
                 Text = text,
                 Font = new Font("Segoe UI", 12),
                 Size = new Size(570, 50),
-                BackColor = ColorTranslator.FromHtml("#2A2D34"),
+                BackColor = Color.Transparent,
                 FlatStyle = FlatStyle.Popup,
-                ForeColor = Color.White,
+                ForeColor = Color.Black,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Margin = new Padding(0, 5, 0, 5)
             };
             button.FlatAppearance.BorderSize = 0;
             button.MouseEnter += (s, e) => { button.BackColor = Color.FromArgb(65, 65, 70); };
-            button.MouseLeave += (s, e) => { button.BackColor = Color.FromArgb(45, 45, 48); };
+            button.MouseLeave += (s, e) => { button.BackColor = Color.Transparent; };
             return button;
         }
 
@@ -166,13 +183,16 @@ namespace WaterTankTool_WFA
                         Font = new Font("Segoe UI", 10),
                         Width = 850,
                         Height = 50,
-                        BackColor = ColorTranslator.FromHtml("#383D46"),
+                        BackColor = Color.Transparent,
                         FlatStyle = FlatStyle.Popup,
-                        ForeColor = Color.White,
+                        ForeColor = Color.Black,
                         TextAlign = ContentAlignment.MiddleLeft,
                         Padding = new Padding(5),
-                        Margin = new Padding(0, 5, 0, 5)
+                        Margin = new Padding(0, 5, 0, 5),
+                        
                     };
+                    projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(65, 65, 70); };
+                    projectButton.MouseLeave += (s, e) => { projectButton.BackColor = Color.Transparent; };
                     projectButton.FlatAppearance.BorderSize = 0;
                     projectButton.Click += (s, e) => { OpenProject(projectPath); };
                     recentProjectsPanel.Controls.Add(projectButton);
@@ -264,14 +284,29 @@ namespace WaterTankTool_WFA
             }
         }
 
-        public void OpenProject(string projectPath)
+        public async void OpenProject(string projectPath)
         {
-            string dbFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "project_data.db");
-            string connectionString = $"Data Source={dbFilePath};";
+            using (LoadingWindow loading = new LoadingWindow())
+            {
+                // Show the loading window
+                loading.Show();
+                // Force the UI to update immediately so that the loading form is visible
+                Application.DoEvents();
 
-            var dbContext = new WaterTankDbContext(connectionString);
-            dbContext.EnsureDatabaseCreated();
-            _diContainer.Register<WaterTankDbContext>(dbContext);
+                // Run the heavy project-loading work asynchronously
+                await Task.Run(() =>
+                {
+                    string dbFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(projectPath), "project_data.db");
+                    string connectionString = $"Data Source={dbFilePath};";
+                    var dbContext = new WaterTankDbContext(connectionString);
+                    dbContext.EnsureDatabaseCreated();
+                    _diContainer.Register<WaterTankDbContext>(dbContext);
+                    // If you have additional heavy work, include it here.
+                });
+
+                // Close the loading window once the work is complete
+                loading.Close();
+            }
 
             var mainForm = new WaterTank(this);
             this.Hide();

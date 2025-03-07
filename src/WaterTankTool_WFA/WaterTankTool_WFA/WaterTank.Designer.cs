@@ -69,19 +69,18 @@ partial class WaterTank
         saveToolStripButton = new ToolStripButton();
         printToolStripButton = new ToolStripButton();
         toolStripSeparator = new ToolStripSeparator();
-        cutToolStripButton = new ToolStripButton();
-        copyToolStripButton = new ToolStripButton();
-        pasteToolStripButton = new ToolStripButton();
-        toolStripSeparator1 = new ToolStripSeparator();
         helpToolStripButton = new ToolStripButton();
         toolStrip3 = new ToolStrip();
         toolStripButton3 = new ToolStripButton();
         pasteToolStripButton1 = new ToolStripButton();
-        toolStripButton1 = new ToolStripButton();
-        toolStripSeparator7 = new ToolStripSeparator();
         toolStripButton4 = new ToolStripButton();
-        toolStripButton2 = new ToolStripButton();
+        toolStripSeparator7 = new ToolStripSeparator();
         toolStripButton6 = new ToolStripButton();
+        toolStripButton2 = new ToolStripDropDownButton();
+        liveLoadToolStripMenuItem1 = new ToolStripMenuItem();
+        snowLoadToolStripMenuItem1 = new ToolStripMenuItem();
+        windLoadToolStripMenuItem1 = new ToolStripMenuItem();
+        seismicLoadToolStripMenuItem1 = new ToolStripMenuItem();
         toolStripButton5 = new ToolStripButton();
         statusStrip2 = new StatusStrip();
         toolStrip2 = new ToolStrip();
@@ -91,260 +90,199 @@ partial class WaterTank
         toolStripLabel2 = new ToolStripLabel();
         toolStripTextBox2 = new ToolStripTextBox();
         panel1 = new Panel();
-        splitContainer2 = new SplitContainer();
         menuStrip1.SuspendLayout();
         toolStrip1.SuspendLayout();
         toolStrip3.SuspendLayout();
         toolStrip2.SuspendLayout();
-        panel1.SuspendLayout();
-        ((System.ComponentModel.ISupportInitialize)splitContainer2).BeginInit();
-        splitContainer2.SuspendLayout();
         SuspendLayout();
         // 
         // menuStrip1
         // 
-        menuStrip1.AllowMerge = false;
         menuStrip1.BackColor = SystemColors.ControlLight;
-        menuStrip1.Font = new Font("Segoe UI", 8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+        resources.ApplyResources(menuStrip1, "menuStrip1");
         menuStrip1.GripMargin = new Padding(3);
         menuStrip1.ImageScalingSize = new Size(24, 24);
-        menuStrip1.ImeMode = ImeMode.NoControl;
         menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, aboutToolStripMenuItem });
-        menuStrip1.Location = new Point(0, 0);
         menuStrip1.Name = "menuStrip1";
-        menuStrip1.Padding = new Padding(0, 2, 0, 2);
-        menuStrip1.Size = new Size(1112, 28);
+        menuStrip1.RenderMode = ToolStripRenderMode.System;
+        menuStrip1.ShowItemToolTips = true;
         menuStrip1.Stretch = false;
-        menuStrip1.TabIndex = 0;
-        menuStrip1.Text = "menuStrip1";
         // 
         // fileToolStripMenuItem
         // 
         fileToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { newToolStripMenuItem, openToolStripMenuItem, toolStripSeparator2, saveToolStripMenuItem, saveAsToolStripMenuItem, toolStripSeparator3, printToolStripMenuItem, printPreviewToolStripMenuItem, toolStripSeparator4, exitToolStripMenuItem });
         fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-        fileToolStripMenuItem.Size = new Size(43, 24);
-        fileToolStripMenuItem.Text = "&File";
+        resources.ApplyResources(fileToolStripMenuItem, "fileToolStripMenuItem");
         // 
         // newToolStripMenuItem
         // 
-        newToolStripMenuItem.Image = (Image)resources.GetObject("newToolStripMenuItem.Image");
-        newToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(newToolStripMenuItem, "newToolStripMenuItem");
         newToolStripMenuItem.Name = "newToolStripMenuItem";
-        newToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.N;
-        newToolStripMenuItem.Size = new Size(228, 30);
-        newToolStripMenuItem.Text = "&New";
         newToolStripMenuItem.Click += newToolStripMenuItem_Click;
         // 
         // openToolStripMenuItem
         // 
-        openToolStripMenuItem.Image = (Image)resources.GetObject("openToolStripMenuItem.Image");
-        openToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(openToolStripMenuItem, "openToolStripMenuItem");
         openToolStripMenuItem.Name = "openToolStripMenuItem";
-        openToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.O;
-        openToolStripMenuItem.Size = new Size(228, 30);
-        openToolStripMenuItem.Text = "&Open";
         openToolStripMenuItem.Click += openToolStripMenuItem_Click;
         // 
         // toolStripSeparator2
         // 
         toolStripSeparator2.Name = "toolStripSeparator2";
-        toolStripSeparator2.Size = new Size(225, 6);
+        resources.ApplyResources(toolStripSeparator2, "toolStripSeparator2");
         // 
         // saveToolStripMenuItem
         // 
-        saveToolStripMenuItem.Image = (Image)resources.GetObject("saveToolStripMenuItem.Image");
-        saveToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(saveToolStripMenuItem, "saveToolStripMenuItem");
         saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-        saveToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.S;
-        saveToolStripMenuItem.Size = new Size(228, 30);
-        saveToolStripMenuItem.Text = "&Save";
         // 
         // saveAsToolStripMenuItem
         // 
         saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-        saveAsToolStripMenuItem.Size = new Size(228, 30);
-        saveAsToolStripMenuItem.Text = "Save &As";
+        resources.ApplyResources(saveAsToolStripMenuItem, "saveAsToolStripMenuItem");
         // 
         // toolStripSeparator3
         // 
         toolStripSeparator3.Name = "toolStripSeparator3";
-        toolStripSeparator3.Size = new Size(225, 6);
+        resources.ApplyResources(toolStripSeparator3, "toolStripSeparator3");
         // 
         // printToolStripMenuItem
         // 
-        printToolStripMenuItem.Image = (Image)resources.GetObject("printToolStripMenuItem.Image");
-        printToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(printToolStripMenuItem, "printToolStripMenuItem");
         printToolStripMenuItem.Name = "printToolStripMenuItem";
-        printToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.P;
-        printToolStripMenuItem.Size = new Size(228, 30);
-        printToolStripMenuItem.Text = "&Print";
         // 
         // printPreviewToolStripMenuItem
         // 
-        printPreviewToolStripMenuItem.Image = (Image)resources.GetObject("printPreviewToolStripMenuItem.Image");
-        printPreviewToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(printPreviewToolStripMenuItem, "printPreviewToolStripMenuItem");
         printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-        printPreviewToolStripMenuItem.Size = new Size(228, 30);
-        printPreviewToolStripMenuItem.Text = "Print Pre&view";
         // 
         // toolStripSeparator4
         // 
         toolStripSeparator4.Name = "toolStripSeparator4";
-        toolStripSeparator4.Size = new Size(225, 6);
+        resources.ApplyResources(toolStripSeparator4, "toolStripSeparator4");
         // 
         // exitToolStripMenuItem
         // 
         exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-        exitToolStripMenuItem.Size = new Size(228, 30);
-        exitToolStripMenuItem.Text = "E&xit";
+        resources.ApplyResources(exitToolStripMenuItem, "exitToolStripMenuItem");
         // 
         // editToolStripMenuItem
         // 
         editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator5, cutToolStripMenuItem, copyToolStripMenuItem, pasteToolStripMenuItem, toolStripSeparator6, selectAllToolStripMenuItem });
         editToolStripMenuItem.Name = "editToolStripMenuItem";
-        editToolStripMenuItem.Size = new Size(46, 24);
-        editToolStripMenuItem.Text = "&Edit";
+        resources.ApplyResources(editToolStripMenuItem, "editToolStripMenuItem");
         // 
         // undoToolStripMenuItem
         // 
         undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-        undoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Z;
-        undoToolStripMenuItem.Size = new Size(179, 30);
-        undoToolStripMenuItem.Text = "&Undo";
+        resources.ApplyResources(undoToolStripMenuItem, "undoToolStripMenuItem");
         // 
         // redoToolStripMenuItem
         // 
         redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-        redoToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.Y;
-        redoToolStripMenuItem.Size = new Size(179, 30);
-        redoToolStripMenuItem.Text = "&Redo";
+        resources.ApplyResources(redoToolStripMenuItem, "redoToolStripMenuItem");
         // 
         // toolStripSeparator5
         // 
         toolStripSeparator5.Name = "toolStripSeparator5";
-        toolStripSeparator5.Size = new Size(176, 6);
+        resources.ApplyResources(toolStripSeparator5, "toolStripSeparator5");
         // 
         // cutToolStripMenuItem
         // 
-        cutToolStripMenuItem.Image = (Image)resources.GetObject("cutToolStripMenuItem.Image");
-        cutToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(cutToolStripMenuItem, "cutToolStripMenuItem");
         cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-        cutToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.X;
-        cutToolStripMenuItem.Size = new Size(179, 30);
-        cutToolStripMenuItem.Text = "Cu&t";
         // 
         // copyToolStripMenuItem
         // 
-        copyToolStripMenuItem.Image = (Image)resources.GetObject("copyToolStripMenuItem.Image");
-        copyToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(copyToolStripMenuItem, "copyToolStripMenuItem");
         copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-        copyToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.C;
-        copyToolStripMenuItem.Size = new Size(179, 30);
-        copyToolStripMenuItem.Text = "&Copy";
         // 
         // pasteToolStripMenuItem
         // 
-        pasteToolStripMenuItem.Image = (Image)resources.GetObject("pasteToolStripMenuItem.Image");
-        pasteToolStripMenuItem.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(pasteToolStripMenuItem, "pasteToolStripMenuItem");
         pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-        pasteToolStripMenuItem.ShortcutKeys = Keys.Control | Keys.V;
-        pasteToolStripMenuItem.Size = new Size(179, 30);
-        pasteToolStripMenuItem.Text = "&Paste";
         // 
         // toolStripSeparator6
         // 
         toolStripSeparator6.Name = "toolStripSeparator6";
-        toolStripSeparator6.Size = new Size(176, 6);
+        resources.ApplyResources(toolStripSeparator6, "toolStripSeparator6");
         // 
         // selectAllToolStripMenuItem
         // 
         selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-        selectAllToolStripMenuItem.Size = new Size(179, 30);
-        selectAllToolStripMenuItem.Text = "Select &All";
+        resources.ApplyResources(selectAllToolStripMenuItem, "selectAllToolStripMenuItem");
         // 
         // toolsToolStripMenuItem
         // 
         toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { optionsToolStripMenuItem, loadToolStripMenuItem, materialToolStripMenuItem, solveToolStripMenuItem });
         toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-        toolsToolStripMenuItem.Size = new Size(62, 24);
-        toolsToolStripMenuItem.Text = "&Define";
+        resources.ApplyResources(toolsToolStripMenuItem, "toolsToolStripMenuItem");
         toolsToolStripMenuItem.Click += toolsToolStripMenuItem_Click;
         // 
         // optionsToolStripMenuItem
         // 
         optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-        optionsToolStripMenuItem.Size = new Size(153, 26);
-        optionsToolStripMenuItem.Text = "&Geometry";
+        resources.ApplyResources(optionsToolStripMenuItem, "optionsToolStripMenuItem");
         optionsToolStripMenuItem.Click += optionsToolStripMenuItem_Click;
         // 
         // loadToolStripMenuItem
         // 
         loadToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { liveLoadToolStripMenuItem, deadLoadToolStripMenuItem, waterLoadToolStripMenuItem, snowLoadToolStripMenuItem, windLoadToolStripMenuItem, seismicLoadToolStripMenuItem });
         loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-        loadToolStripMenuItem.Size = new Size(153, 26);
-        loadToolStripMenuItem.Text = "Load";
+        resources.ApplyResources(loadToolStripMenuItem, "loadToolStripMenuItem");
         // 
         // liveLoadToolStripMenuItem
         // 
         liveLoadToolStripMenuItem.Name = "liveLoadToolStripMenuItem";
-        liveLoadToolStripMenuItem.Size = new Size(170, 26);
-        liveLoadToolStripMenuItem.Text = "Live Load";
+        resources.ApplyResources(liveLoadToolStripMenuItem, "liveLoadToolStripMenuItem");
         liveLoadToolStripMenuItem.Click += liveLoadToolStripMenuItem_Click;
         // 
         // deadLoadToolStripMenuItem
         // 
         deadLoadToolStripMenuItem.Name = "deadLoadToolStripMenuItem";
-        deadLoadToolStripMenuItem.Size = new Size(170, 26);
-        deadLoadToolStripMenuItem.Text = "Dead Load";
+        resources.ApplyResources(deadLoadToolStripMenuItem, "deadLoadToolStripMenuItem");
         deadLoadToolStripMenuItem.Click += deadLoadToolStripMenuItem_Click;
         // 
         // waterLoadToolStripMenuItem
         // 
         waterLoadToolStripMenuItem.Name = "waterLoadToolStripMenuItem";
-        waterLoadToolStripMenuItem.Size = new Size(170, 26);
-        waterLoadToolStripMenuItem.Text = "Water Load";
+        resources.ApplyResources(waterLoadToolStripMenuItem, "waterLoadToolStripMenuItem");
         waterLoadToolStripMenuItem.Click += waterLoadToolStripMenuItem_Click;
         // 
         // snowLoadToolStripMenuItem
         // 
         snowLoadToolStripMenuItem.Name = "snowLoadToolStripMenuItem";
-        snowLoadToolStripMenuItem.Size = new Size(170, 26);
-        snowLoadToolStripMenuItem.Text = "Snow Load";
+        resources.ApplyResources(snowLoadToolStripMenuItem, "snowLoadToolStripMenuItem");
         snowLoadToolStripMenuItem.Click += snowLoadToolStripMenuItem_Click;
         // 
         // windLoadToolStripMenuItem
         // 
         windLoadToolStripMenuItem.Name = "windLoadToolStripMenuItem";
-        windLoadToolStripMenuItem.Size = new Size(170, 26);
-        windLoadToolStripMenuItem.Text = "Wind Load";
+        resources.ApplyResources(windLoadToolStripMenuItem, "windLoadToolStripMenuItem");
         windLoadToolStripMenuItem.Click += windLoadToolStripMenuItem_Click;
         // 
         // seismicLoadToolStripMenuItem
         // 
         seismicLoadToolStripMenuItem.Name = "seismicLoadToolStripMenuItem";
-        seismicLoadToolStripMenuItem.Size = new Size(170, 26);
-        seismicLoadToolStripMenuItem.Text = "Seismic Load";
+        resources.ApplyResources(seismicLoadToolStripMenuItem, "seismicLoadToolStripMenuItem");
         seismicLoadToolStripMenuItem.Click += seismicLoadToolStripMenuItem_Click;
         // 
         // materialToolStripMenuItem
         // 
         materialToolStripMenuItem.Name = "materialToolStripMenuItem";
-        materialToolStripMenuItem.Size = new Size(153, 26);
-        materialToolStripMenuItem.Text = "Material";
+        resources.ApplyResources(materialToolStripMenuItem, "materialToolStripMenuItem");
         materialToolStripMenuItem.Click += materialToolStripMenuItem_Click;
         // 
         // solveToolStripMenuItem
         // 
         solveToolStripMenuItem.Name = "solveToolStripMenuItem";
-        solveToolStripMenuItem.Size = new Size(153, 26);
-        solveToolStripMenuItem.Text = "Solve";
+        resources.ApplyResources(solveToolStripMenuItem, "solveToolStripMenuItem");
         solveToolStripMenuItem.Click += solveToolStripMenuItem_Click;
         // 
         // aboutToolStripMenuItem
         // 
         aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-        aboutToolStripMenuItem.Size = new Size(61, 24);
-        aboutToolStripMenuItem.Text = "About";
+        resources.ApplyResources(aboutToolStripMenuItem, "aboutToolStripMenuItem");
         aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
         // 
         // toolStrip1
@@ -352,299 +290,198 @@ partial class WaterTank
         toolStrip1.BackColor = SystemColors.ControlLight;
         toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip1.ImageScalingSize = new Size(24, 24);
-        toolStrip1.Items.AddRange(new ToolStripItem[] { newToolStripButton, openToolStripButton, saveToolStripButton, printToolStripButton, toolStripSeparator, cutToolStripButton, copyToolStripButton, pasteToolStripButton, toolStripSeparator1, helpToolStripButton });
-        toolStrip1.Location = new Point(0, 28);
+        toolStrip1.Items.AddRange(new ToolStripItem[] { newToolStripButton, openToolStripButton, saveToolStripButton, printToolStripButton, toolStripSeparator, helpToolStripButton });
+        resources.ApplyResources(toolStrip1, "toolStrip1");
         toolStrip1.Name = "toolStrip1";
-        toolStrip1.Size = new Size(1112, 31);
-        toolStrip1.TabIndex = 7;
-        toolStrip1.Text = "toolStrip1";
         // 
         // newToolStripButton
         // 
         newToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        newToolStripButton.Image = (Image)resources.GetObject("newToolStripButton.Image");
-        newToolStripButton.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(newToolStripButton, "newToolStripButton");
         newToolStripButton.Name = "newToolStripButton";
-        newToolStripButton.Size = new Size(29, 28);
-        newToolStripButton.Text = "&New";
         newToolStripButton.Click += newToolStripButton_Click;
         // 
         // openToolStripButton
         // 
         openToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        openToolStripButton.Image = (Image)resources.GetObject("openToolStripButton.Image");
-        openToolStripButton.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(openToolStripButton, "openToolStripButton");
         openToolStripButton.Name = "openToolStripButton";
-        openToolStripButton.Size = new Size(29, 28);
-        openToolStripButton.Text = "&Open";
         // 
         // saveToolStripButton
         // 
         saveToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        saveToolStripButton.Image = (Image)resources.GetObject("saveToolStripButton.Image");
-        saveToolStripButton.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(saveToolStripButton, "saveToolStripButton");
         saveToolStripButton.Name = "saveToolStripButton";
-        saveToolStripButton.Size = new Size(29, 28);
-        saveToolStripButton.Text = "&Save";
         // 
         // printToolStripButton
         // 
         printToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        printToolStripButton.Image = (Image)resources.GetObject("printToolStripButton.Image");
-        printToolStripButton.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(printToolStripButton, "printToolStripButton");
         printToolStripButton.Name = "printToolStripButton";
-        printToolStripButton.Size = new Size(29, 28);
-        printToolStripButton.Text = "&Print";
         // 
         // toolStripSeparator
         // 
         toolStripSeparator.Name = "toolStripSeparator";
-        toolStripSeparator.Size = new Size(6, 31);
-        // 
-        // cutToolStripButton
-        // 
-        cutToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        cutToolStripButton.Image = (Image)resources.GetObject("cutToolStripButton.Image");
-        cutToolStripButton.ImageTransparentColor = Color.Magenta;
-        cutToolStripButton.Name = "cutToolStripButton";
-        cutToolStripButton.Size = new Size(29, 28);
-        cutToolStripButton.Text = "C&ut";
-        // 
-        // copyToolStripButton
-        // 
-        copyToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        copyToolStripButton.Image = (Image)resources.GetObject("copyToolStripButton.Image");
-        copyToolStripButton.ImageTransparentColor = Color.Magenta;
-        copyToolStripButton.Name = "copyToolStripButton";
-        copyToolStripButton.Size = new Size(29, 28);
-        copyToolStripButton.Text = "&Copy";
-        // 
-        // pasteToolStripButton
-        // 
-        pasteToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        pasteToolStripButton.Image = (Image)resources.GetObject("pasteToolStripButton.Image");
-        pasteToolStripButton.ImageTransparentColor = Color.Magenta;
-        pasteToolStripButton.Name = "pasteToolStripButton";
-        pasteToolStripButton.Size = new Size(29, 28);
-        pasteToolStripButton.Text = "&Paste";
-        // 
-        // toolStripSeparator1
-        // 
-        toolStripSeparator1.Name = "toolStripSeparator1";
-        toolStripSeparator1.Size = new Size(6, 31);
+        resources.ApplyResources(toolStripSeparator, "toolStripSeparator");
         // 
         // helpToolStripButton
         // 
         helpToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        helpToolStripButton.Image = (Image)resources.GetObject("helpToolStripButton.Image");
-        helpToolStripButton.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(helpToolStripButton, "helpToolStripButton");
         helpToolStripButton.Name = "helpToolStripButton";
-        helpToolStripButton.Size = new Size(29, 28);
-        helpToolStripButton.Text = "He&lp";
+        helpToolStripButton.Click += helpToolStripButton_Click;
         // 
         // toolStrip3
         // 
+        resources.ApplyResources(toolStrip3, "toolStrip3");
         toolStrip3.BackColor = SystemColors.ControlLight;
-        toolStrip3.Dock = DockStyle.Left;
         toolStrip3.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip3.ImageScalingSize = new Size(24, 24);
-        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton1, toolStripSeparator7, toolStripButton4, toolStripButton2, toolStripButton6, toolStripButton5 });
-        toolStrip3.Location = new Point(0, 59);
+        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton4, toolStripSeparator7, toolStripButton6, toolStripButton2, toolStripButton5 });
         toolStrip3.Name = "toolStrip3";
-        toolStrip3.RightToLeft = RightToLeft.No;
-        toolStrip3.Size = new Size(30, 557);
-        toolStrip3.TabIndex = 12;
-        toolStrip3.Text = "toolStrip3";
         // 
         // toolStripButton3
         // 
         toolStripButton3.Alignment = ToolStripItemAlignment.Right;
         toolStripButton3.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton3.Image = (Image)resources.GetObject("toolStripButton3.Image");
-        toolStripButton3.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(toolStripButton3, "toolStripButton3");
         toolStripButton3.Name = "toolStripButton3";
-        toolStripButton3.Size = new Size(27, 28);
-        toolStripButton3.Text = "&Zoom Out";
         toolStripButton3.Click += toolStripButton3_Click;
         // 
         // pasteToolStripButton1
         // 
         pasteToolStripButton1.Alignment = ToolStripItemAlignment.Right;
         pasteToolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        pasteToolStripButton1.Image = (Image)resources.GetObject("pasteToolStripButton1.Image");
-        pasteToolStripButton1.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(pasteToolStripButton1, "pasteToolStripButton1");
         pasteToolStripButton1.Name = "pasteToolStripButton1";
-        pasteToolStripButton1.Size = new Size(27, 28);
-        pasteToolStripButton1.Text = "&Zoom In";
         pasteToolStripButton1.Click += pasteToolStripButton1_Click;
-        // 
-        // toolStripButton1
-        // 
-        toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
-        toolStripButton1.ImageTransparentColor = Color.Magenta;
-        toolStripButton1.Name = "toolStripButton1";
-        toolStripButton1.Size = new Size(27, 28);
-        toolStripButton1.Text = "toolStripButton1";
-        toolStripButton1.Click += toolStripButton1_Click;
-        // 
-        // toolStripSeparator7
-        // 
-        toolStripSeparator7.Name = "toolStripSeparator7";
-        toolStripSeparator7.Size = new Size(27, 6);
         // 
         // toolStripButton4
         // 
         toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton4.Image = (Image)resources.GetObject("toolStripButton4.Image");
-        toolStripButton4.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(toolStripButton4, "toolStripButton4");
         toolStripButton4.Name = "toolStripButton4";
-        toolStripButton4.Size = new Size(27, 28);
-        toolStripButton4.Text = "Add Geometry";
         toolStripButton4.Click += toolStripButton4_Click;
         // 
-        // toolStripButton2
+        // toolStripSeparator7
         // 
-        toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton2.Image = (Image)resources.GetObject("toolStripButton2.Image");
-        toolStripButton2.ImageTransparentColor = Color.Magenta;
-        toolStripButton2.Name = "toolStripButton2";
-        toolStripButton2.Size = new Size(27, 28);
-        toolStripButton2.Text = "Load";
+        toolStripSeparator7.Name = "toolStripSeparator7";
+        resources.ApplyResources(toolStripSeparator7, "toolStripSeparator7");
         // 
         // toolStripButton6
         // 
         toolStripButton6.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton6.Image = (Image)resources.GetObject("toolStripButton6.Image");
-        toolStripButton6.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(toolStripButton6, "toolStripButton6");
         toolStripButton6.Name = "toolStripButton6";
-        toolStripButton6.Size = new Size(27, 28);
-        toolStripButton6.Text = "toolStripButton6";
-        toolStripButton6.ToolTipText = "Materials";
         toolStripButton6.Click += toolStripButton6_Click;
+        // 
+        // toolStripButton2
+        // 
+        toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton2.DropDownItems.AddRange(new ToolStripItem[] { liveLoadToolStripMenuItem1, snowLoadToolStripMenuItem1, windLoadToolStripMenuItem1, seismicLoadToolStripMenuItem1 });
+        resources.ApplyResources(toolStripButton2, "toolStripButton2");
+        toolStripButton2.Name = "toolStripButton2";
+        // 
+        // liveLoadToolStripMenuItem1
+        // 
+        liveLoadToolStripMenuItem1.Name = "liveLoadToolStripMenuItem1";
+        resources.ApplyResources(liveLoadToolStripMenuItem1, "liveLoadToolStripMenuItem1");
+        liveLoadToolStripMenuItem1.Click += liveLoadToolStripMenuItem1_Click;
+        // 
+        // snowLoadToolStripMenuItem1
+        // 
+        snowLoadToolStripMenuItem1.Name = "snowLoadToolStripMenuItem1";
+        resources.ApplyResources(snowLoadToolStripMenuItem1, "snowLoadToolStripMenuItem1");
+        snowLoadToolStripMenuItem1.Click += snowLoadToolStripMenuItem1_Click;
+        // 
+        // windLoadToolStripMenuItem1
+        // 
+        windLoadToolStripMenuItem1.Name = "windLoadToolStripMenuItem1";
+        resources.ApplyResources(windLoadToolStripMenuItem1, "windLoadToolStripMenuItem1");
+        windLoadToolStripMenuItem1.Click += windLoadToolStripMenuItem1_Click;
+        // 
+        // seismicLoadToolStripMenuItem1
+        // 
+        seismicLoadToolStripMenuItem1.Name = "seismicLoadToolStripMenuItem1";
+        resources.ApplyResources(seismicLoadToolStripMenuItem1, "seismicLoadToolStripMenuItem1");
+        seismicLoadToolStripMenuItem1.Click += seismicLoadToolStripMenuItem1_Click;
         // 
         // toolStripButton5
         // 
         toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton5.Image = (Image)resources.GetObject("toolStripButton5.Image");
-        toolStripButton5.ImageTransparentColor = Color.Magenta;
+        resources.ApplyResources(toolStripButton5, "toolStripButton5");
         toolStripButton5.Name = "toolStripButton5";
-        toolStripButton5.Size = new Size(27, 28);
-        toolStripButton5.Text = "toolStripButton5";
-        toolStripButton5.ToolTipText = "Solve";
         toolStripButton5.Click += toolStripButton5_Click;
         // 
         // statusStrip2
         // 
-        statusStrip2.Dock = DockStyle.Top;
+        statusStrip2.BackColor = SystemColors.ControlLight;
+        resources.ApplyResources(statusStrip2, "statusStrip2");
         statusStrip2.ImageScalingSize = new Size(24, 24);
-        statusStrip2.Location = new Point(30, 59);
         statusStrip2.Name = "statusStrip2";
-        statusStrip2.Size = new Size(1082, 22);
-        statusStrip2.TabIndex = 17;
-        statusStrip2.Text = "statusStrip2";
         statusStrip2.ItemClicked += statusStrip2_ItemClicked;
         // 
         // toolStrip2
         // 
         toolStrip2.BackColor = SystemColors.ControlLight;
-        toolStrip2.Dock = DockStyle.Bottom;
+        resources.ApplyResources(toolStrip2, "toolStrip2");
         toolStrip2.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip2.ImageScalingSize = new Size(24, 24);
         toolStrip2.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripTextBox1, toolStripSeparator8, toolStripLabel2, toolStripTextBox2 });
-        toolStrip2.Location = new Point(30, 589);
         toolStrip2.Name = "toolStrip2";
-        toolStrip2.Size = new Size(1082, 27);
-        toolStrip2.TabIndex = 18;
-        toolStrip2.Text = "toolStrip2";
         // 
         // toolStripLabel1
         // 
         toolStripLabel1.Name = "toolStripLabel1";
-        toolStripLabel1.Size = new Size(25, 24);
-        toolStripLabel1.Text = "X :";
+        resources.ApplyResources(toolStripLabel1, "toolStripLabel1");
         // 
         // toolStripTextBox1
         // 
         toolStripTextBox1.Name = "toolStripTextBox1";
         toolStripTextBox1.ReadOnly = true;
-        toolStripTextBox1.Size = new Size(100, 27);
-        toolStripTextBox1.Text = "0";
+        resources.ApplyResources(toolStripTextBox1, "toolStripTextBox1");
         toolStripTextBox1.Click += toolStripTextBox1_Click;
         // 
         // toolStripSeparator8
         // 
         toolStripSeparator8.Name = "toolStripSeparator8";
-        toolStripSeparator8.Size = new Size(6, 27);
+        resources.ApplyResources(toolStripSeparator8, "toolStripSeparator8");
         // 
         // toolStripLabel2
         // 
         toolStripLabel2.Name = "toolStripLabel2";
-        toolStripLabel2.Size = new Size(24, 24);
-        toolStripLabel2.Text = "Y :";
+        resources.ApplyResources(toolStripLabel2, "toolStripLabel2");
         // 
         // toolStripTextBox2
         // 
         toolStripTextBox2.Name = "toolStripTextBox2";
         toolStripTextBox2.ReadOnly = true;
-        toolStripTextBox2.Size = new Size(100, 27);
-        toolStripTextBox2.Text = "0";
+        resources.ApplyResources(toolStripTextBox2, "toolStripTextBox2");
         toolStripTextBox2.Click += toolStripTextBox2_Click;
         // 
         // panel1
         // 
+        resources.ApplyResources(panel1, "panel1");
         panel1.BorderStyle = BorderStyle.Fixed3D;
-        panel1.Controls.Add(splitContainer2);
-        panel1.Dock = DockStyle.Fill;
-        panel1.Location = new Point(30, 81);
         panel1.Name = "panel1";
-        panel1.Size = new Size(1082, 508);
-        panel1.TabIndex = 20;
         panel1.Paint += panel1_Paint_1;
-        // 
-        // splitContainer2
-        // 
-        splitContainer2.Dock = DockStyle.Right;
-        splitContainer2.IsSplitterFixed = true;
-        splitContainer2.Location = new Point(708, 0);
-        splitContainer2.Name = "splitContainer2";
-        splitContainer2.Orientation = Orientation.Horizontal;
-        // 
-        // splitContainer2.Panel1
-        // 
-        splitContainer2.Panel1.BackColor = SystemColors.ControlLight;
-        splitContainer2.Panel1.Paint += splitContainer2_Panel1_Paint;
-        // 
-        // splitContainer2.Panel2
-        // 
-        splitContainer2.Panel2.BackColor = SystemColors.ControlLight;
-        splitContainer2.Panel2.Paint += splitContainer2_Panel2_Paint_1;
-        splitContainer2.Size = new Size(370, 504);
-        splitContainer2.SplitterDistance = 105;
-        splitContainer2.TabIndex = 0;
         // 
         // WaterTank
         // 
-        AutoScaleDimensions = new SizeF(8F, 20F);
-        AutoScaleMode = AutoScaleMode.Font;
-        AutoSize = true;
+        resources.ApplyResources(this, "$this");
+        AutoScaleMode = AutoScaleMode.Dpi;
         BackColor = SystemColors.Control;
-        ClientSize = new Size(1112, 616);
         Controls.Add(panel1);
         Controls.Add(toolStrip2);
         Controls.Add(statusStrip2);
         Controls.Add(toolStrip3);
         Controls.Add(toolStrip1);
         Controls.Add(menuStrip1);
-        Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
+        DoubleBuffered = true;
+        ForeColor = SystemColors.WindowText;
         FormBorderStyle = FormBorderStyle.Fixed3D;
-        Icon = (Icon)resources.GetObject("$this.Icon");
-        IsMdiContainer = true;
         MainMenuStrip = menuStrip1;
-        Margin = new Padding(3, 4, 3, 4);
         Name = "WaterTank";
-        RightToLeft = RightToLeft.No;
-        Text = "Water Tank Design Tool";
         WindowState = FormWindowState.Maximized;
         Load += Form1_Load;
         Click += Form1_Click;
@@ -656,9 +493,6 @@ partial class WaterTank
         toolStrip3.PerformLayout();
         toolStrip2.ResumeLayout(false);
         toolStrip2.PerformLayout();
-        panel1.ResumeLayout(false);
-        ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
-        splitContainer2.ResumeLayout(false);
         ResumeLayout(false);
         PerformLayout();
     }
@@ -695,10 +529,6 @@ partial class WaterTank
     private ToolStripButton saveToolStripButton;
     private ToolStripButton printToolStripButton;
     private ToolStripSeparator toolStripSeparator;
-    private ToolStripButton cutToolStripButton;
-    private ToolStripButton copyToolStripButton;
-    private ToolStripButton pasteToolStripButton;
-    private ToolStripSeparator toolStripSeparator1;
     private ToolStripButton helpToolStripButton;
     private ToolStripMenuItem loadToolStripMenuItem;
     private ToolStripMenuItem materialToolStripMenuItem;
@@ -708,8 +538,6 @@ partial class WaterTank
     private ToolStripMenuItem solveToolStripMenuItem;
     private ToolStrip toolStrip3;
     private ToolStripButton pasteToolStripButton1;
-    private ToolStripButton toolStripButton1;
-    private ToolStripButton toolStripButton2;
     private ToolStripSeparator toolStripSeparator7;
     private ToolStripButton toolStripButton3;
     private StatusStrip statusStrip2;
@@ -728,5 +556,9 @@ partial class WaterTank
     private ToolStripButton toolStripButton6;
     private Panel panel1;
     private SplitContainer splitContainer1;
-    private SplitContainer splitContainer2;
+    private ToolStripDropDownButton toolStripButton2;
+    private ToolStripMenuItem liveLoadToolStripMenuItem1;
+    private ToolStripMenuItem snowLoadToolStripMenuItem1;
+    private ToolStripMenuItem windLoadToolStripMenuItem1;
+    private ToolStripMenuItem seismicLoadToolStripMenuItem1;
 }

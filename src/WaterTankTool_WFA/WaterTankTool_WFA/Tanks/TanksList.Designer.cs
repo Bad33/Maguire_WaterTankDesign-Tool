@@ -37,10 +37,11 @@
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
-            comboBox1.Items.AddRange(new object[] { "150,000 gallon", "250,000 gallon", "500,000 gallon", "700,000 gallon", "1,000,000 gallon" });
-            comboBox1.Location = new Point(209, 46);
+            comboBox1.Items.AddRange(new object[] { "50,000 gallon", "75,000 gallon", "100,000 gallon", "125,000 gallon", "150,000 gallon", "200,000 gallon", "250,000 gallon", "300,000 gallon", "400,000 gallon", "500,000 gallon", "600,000 gallon", "750,000 gallon" });
+            comboBox1.Location = new Point(146, 28);
+            comboBox1.Margin = new Padding(2, 2, 2, 2);
             comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(216, 33);
+            comboBox1.Size = new Size(152, 23);
             comboBox1.TabIndex = 0;
             comboBox1.Text = "Select Tank Capacity";
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
@@ -48,17 +49,19 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(39, 46);
+            label1.Location = new Point(27, 28);
+            label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(149, 25);
+            label1.Size = new Size(98, 15);
             label1.TabIndex = 1;
             label1.Text = "Select Tank Type :";
             // 
             // button1
             // 
-            button1.Location = new Point(209, 133);
+            button1.Location = new Point(146, 80);
+            button1.Margin = new Padding(2, 2, 2, 2);
             button1.Name = "button1";
-            button1.Size = new Size(99, 34);
+            button1.Size = new Size(69, 20);
             button1.TabIndex = 2;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
@@ -66,9 +69,10 @@
             // 
             // button2
             // 
-            button2.Location = new Point(327, 133);
+            button2.Location = new Point(229, 80);
+            button2.Margin = new Padding(2, 2, 2, 2);
             button2.Name = "button2";
-            button2.Size = new Size(98, 34);
+            button2.Size = new Size(69, 20);
             button2.TabIndex = 3;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
@@ -76,14 +80,15 @@
             // TanksList
             // 
             AcceptButton = button1;
-            AutoScaleDimensions = new SizeF(10F, 25F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(451, 200);
+            ClientSize = new Size(316, 120);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(label1);
             Controls.Add(comboBox1);
+            Margin = new Padding(2, 2, 2, 2);
             MaximizeBox = false;
             Name = "TanksList";
             StartPosition = FormStartPosition.CenterParent;
