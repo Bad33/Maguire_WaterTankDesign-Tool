@@ -1,8 +1,5 @@
-using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Drawing.Printing;
-using System.Windows.Forms;
 using WaterTankTool_WFA.Custom_Design_Control;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Load;
@@ -19,8 +16,6 @@ public partial class WaterTank : Form
     private Point lastMousePosition;
     private bool isDragging = false;
     private DataGridView dimensionGridView;
-    private Button toggleButton;
-    private Button toggleSolveButton;
     private bool isDimensionTableVisible = false;
     private bool isSolverVisible = false;
 
@@ -30,6 +25,9 @@ public partial class WaterTank : Form
     private ToolStripStatusLabel noMaterialStatus;
     private ToolStripStatusLabel noLoadStatus;
     private StartupForm _startupForm;
+
+    private List<(RectangleF Bounds, SegmentProperties Segment)> segmentLabels = new List<(RectangleF, SegmentProperties)>();
+    private Point imageOffset = new Point(0, 0);
     public WaterTank(StartupForm startupForm)
     {
         InitializeComponent();
@@ -37,17 +35,18 @@ public partial class WaterTank : Form
         context = _context;
         _startupForm = startupForm;
 
-        InitializeUIComponents();
         InitializeStatusStrip2();
         //InitializeLayout();
         panelDrawTankCapacity();
         //LoadDimensionsToGrid();
 
-        this.Paint += panel1_Paint_1;
+        //this.Paint += panel1_Paint_1;
+        panel1.Paint += panel1_Paint;
         panel1.MouseWheel += panel1_MouseWheel;
         panel1.MouseDown += panel1_MouseDown;
         panel1.MouseMove += panel1_MouseMove;
         panel1.MouseUp += panel1_MouseUp;
+        panel1.MouseClick += panel1_MouseClick;
 
         this.Resize += (s, e) => this.Invalidate();
     }
@@ -107,140 +106,7 @@ public partial class WaterTank : Form
         statusStrip2.Items.Add(designDetailsLabel);
     }
 
-    private void InitializeLayout()
-    {
 
-        //toggleButton = new Button
-        //{
-        //    Text = "Show Dimensions",
-        //    Dock = DockStyle.Top,
-        //    Height = 40,
-        //    BackColor = Color.Gray,
-        //    ForeColor = Color.White,
-        //    FlatStyle = FlatStyle.Popup
-
-        //};
-        //toggleButton.FlatAppearance.BorderSize = 0;
-        //toggleButton.Click += ToggleDimensionTableVisibility;
-        //splitContainer2.Panel1.Controls.Add(toggleButton);
-
-
-        //toggleSolveButton = new Button
-        //{
-        //    Text = "Solve",
-        //    Dock = DockStyle.Top,
-        //    Height = 40,
-        //    BackColor = Color.Gray,
-        //    ForeColor = Color.White,
-        //    FlatStyle = FlatStyle.Popup
-        //};
-        //toggleSolveButton.FlatAppearance.BorderSize = 0;
-        //toggleSolveButton.Click += ToggleSolverVisibility;
-        //splitContainer2.Panel2.Controls.Add(toggleSolveButton);
-
-        //Button exportButton = new Button
-        //{
-        //    Text = "Export Diagram",
-        //    Dock = DockStyle.Top,
-        //    Height = 40,
-        //    BackColor = Color.Gray,
-        //    ForeColor = Color.White,
-        //    FlatStyle = FlatStyle.Popup
-        //};
-        //exportButton.Click += ExportDiagram;
-        //splitContainer2.Panel2.Controls.Add(exportButton);
-
-
-        //// Initialize the DataGridView for dimensions
-        //dimensionGridView = new DataGridView
-        //{
-        //    Dock = DockStyle.Bottom,
-        //    AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
-        //    ReadOnly = true,
-        //    AllowUserToAddRows = false, // Disable the extra row
-        //    RowHeadersVisible = false, // Hide the arrow column
-        //    ColumnHeadersVisible = true, // Ensure column headers are visible
-        //    BackgroundColor = Color.White,
-        //    BorderStyle = BorderStyle.Fixed3D,
-        //    ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize,
-
-        //};
-
-        //dimensionGridView.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
-        //{
-        //    Font = new Font("Segoe UI", 9, FontStyle.Bold), // Bold font for headers
-        //    Alignment = DataGridViewContentAlignment.MiddleCenter, // Center alignment
-        //    BackColor = Color.LightGray, // Optional: Background color for headers
-        //    ForeColor = Color.Black      // Optional: Text color for headers
-        //};
-
-        //dimensionGridView.Columns.Add("Component", "Component");
-        //dimensionGridView.Columns.Add("Height", "Height");
-        //dimensionGridView.Columns.Add("Diameter", "Diameter");
-        //splitContainer2.Panel1.Controls.Add(dimensionGridView);
-        //dimensionGridView.Visible = false;
-
-    }
-
-
-
-    private void ToggleDimensionTableVisibility(object sender, EventArgs e)
-    {
-
-        isDimensionTableVisible = !isDimensionTableVisible;
-        ((Button)sender).Text = isDimensionTableVisible ? "Hide Dimensions" : "Show Dimensions";
-        dimensionGridView.Visible = isDimensionTableVisible;
-    }
-
-    private void ToggleSolverVisibility(object sender, EventArgs e)
-    {
-        isSolverVisible = !isSolverVisible;
-        ((Button)sender).Text = isSolverVisible ? "Hide Solver" : "Show Solver";
-    }
-
-    private void LoadDimensionsToGrid()
-    {
-        // Clear existing columns and rows
-        dimensionGridView.Columns.Clear();
-        dimensionGridView.Rows.Clear();
-
-        // Dynamically add columns based on the SegmentProperties class
-        foreach (var property in typeof(SegmentProperties).GetProperties())
-        {
-            dimensionGridView.Columns.Add(property.Name, property.Name);
-        }
-
-        // Retrieve data from the database
-        var segmentData = context.SegmentProperties.ToList();
-
-        // Populate rows dynamically
-        foreach (var segment in segmentData)
-        {
-            var values = typeof(SegmentProperties).GetProperties()
-                .Select(property => property.GetValue(segment)?.ToString() ?? string.Empty)
-                .ToArray();
-
-            dimensionGridView.Rows.Add(values);
-        }
-
-        // Set column header style
-        dimensionGridView.ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
-        {
-            Font = new Font("Segoe UI", 10, FontStyle.Bold),
-            Alignment = DataGridViewContentAlignment.MiddleCenter,
-        };
-
-        // Additional grid configuration
-        dimensionGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-        dimensionGridView.RowHeadersVisible = false; // Remove extra row header
-        dimensionGridView.AllowUserToAddRows = false; // Disable the new row placeholder
-    }
-
-    private void InitializeUIComponents()
-    {
-        // Export Button
-
-    }
     private void ExportDiagram(object sender, EventArgs e)
     {
         using (SaveFileDialog saveFileDialog = new SaveFileDialog())
@@ -267,14 +133,10 @@ public partial class WaterTank : Form
                             int y = (panel1.Height - scaledHeight) / 2;
                             Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
 
-                            g.TranslateTransform(destRect.X + scaledWidth / 2, destRect.Y + scaledHeight / 2);
-                            //g.RotateTransform(rotationAngle);
-                            g.TranslateTransform(-(destRect.X + scaledWidth / 2), -(destRect.Y + scaledHeight / 2));
-
                             g.DrawImage(drawingImage, destRect);
 
                             // Draw the dimensions
-                            DrawDimensions(g, destRect);
+                            DrawSegmentLabels(g, destRect);
                         }
                     }
 
@@ -288,21 +150,12 @@ public partial class WaterTank : Form
     }
 
 
-
-
-
     private void panelDrawTankCapacity()
     {
         var tankCap = context.TankProperties?.FirstOrDefault();
 
-        //var gg = context.MaterialProperties.Select(x => x.MaterialName).ToList();
-        //if (gg.Count > 0)
-        //{
-
         UpdateMaterial();
         UpdateLoadStatus();
-        //}
-
 
         if (tankCap?.Capacity != null)
         {
@@ -386,50 +239,10 @@ public partial class WaterTank : Form
 
             statusStrip2.Items.Remove(noLoadStatus);
 
-
         }
-        //else
-        //{
-        //    selectedMaterialLabel.Text = $"Material: None";
 
-        //}
     }
 
-
-
-    private void panel1_MouseDown(object sender, MouseEventArgs e)
-    {
-        if (e.Button == MouseButtons.Left)
-        {
-            isDragging = true;
-            lastMousePosition = e.Location;
-        }
-    }
-
-    private void panel1_MouseMove(object sender, MouseEventArgs e)
-    {
-        toolStripTextBox1.Text = $"{e.X}";
-        toolStripTextBox2.Text = $"{e.Y}";
-
-        if (isDragging)
-        {
-            int deltaX = e.X - lastMousePosition.X;
-            int deltaY = e.Y - lastMousePosition.Y;
-
-            rotationAngle += deltaX * 0.5f;
-
-            lastMousePosition = e.Location;
-            panel1.Invalidate();
-        }
-    }
-
-    private void panel1_MouseUp(object sender, MouseEventArgs e)
-    {
-        if (e.Button == MouseButtons.Left)
-        {
-            isDragging = false; // Stop dragging
-        }
-    }
 
     public void OnSegmentAdded()
     {
@@ -449,8 +262,6 @@ public partial class WaterTank : Form
     public void OnMaterialDeleted()
     {
         UpdateMaterial();
-        //statusStrip2.Items.Add(noMaterialStatus);
-
 
     }
 
@@ -477,11 +288,7 @@ public partial class WaterTank : Form
     public List<SegmentProperties> GetSegmentsFromDatabase()
     {
         List<SegmentProperties> segments = new List<SegmentProperties>();
-
-        //using (var context = WaterTankDbContext.GetInstance())
-        //{
         segments = context.SegmentProperties.ToList();
-        //}
 
         return segments;
     }
@@ -607,36 +414,10 @@ public partial class WaterTank : Form
         }
     }
 
-    private void OpenProject(string projectPath)
-    {
-        //try
-        //{
-        //    // Load project content
-        //    string projectContent = File.ReadAllText(projectPath);
-
-        //    // Initialize the UI or application state with the loaded project
-        //    InitializeProjectUI(projectContent);
-
-        //    // Optionally, set the current project path for future use
-        //    CurrentProjectPath = projectPath; // Make sure you have this variable declared
-        //}
-        //catch (Exception ex)
-        //{
-        //    MessageBox.Show($"Error opening project: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-        //}
-    }
 
     private void InitializeNewProjectUI()
     {
-        // Clear existing data or UI elements
-        // For example, clear textboxes, grids, or project-specific fields
-        // textBox1.Clear();
-        // dataGridView1.Rows.Clear();
-        // Reset any project-specific settings or UI components
 
-        // Optionally, reset global variables or states for a new project
-        //currentProjectPath = null; // Replace with your variable that tracks the current project path
-        //isProjectSaved = false;    // Replace with your variable that tracks save state
     }
 
 
@@ -659,293 +440,170 @@ public partial class WaterTank : Form
     private void panel1_Paint_1(object sender, PaintEventArgs e)
     {
         Graphics g = e.Graphics;
-
-        // Enable high-quality rendering
         g.SmoothingMode = SmoothingMode.AntiAlias;
-        g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-        g.PixelOffsetMode = PixelOffsetMode.HighQuality;
 
-        // Clear the background
-        g.Clear(Color.White);
-
-        // Apply transformations for scaling and rotation
-        g.TranslateTransform(panel1.Width / 2, panel1.Height / 2); // Move origin to center
-        //g.RotateTransform(rotationAngle);                         // Apply rotation
-        g.ScaleTransform(zoomFactor, zoomFactor);                  // Apply scaling
-        g.TranslateTransform(-panel1.Width / 2, -panel1.Height / 2); // Move origin back
-
-        // Draw the tank image if it exists
         if (drawingImage != null)
         {
             int scaledWidth = (int)(drawingImage.Width * zoomFactor);
             int scaledHeight = (int)(drawingImage.Height * zoomFactor);
-
-            // Calculate the top-left corner to center the image
-            int x = (panel1.Width - scaledWidth) / 2;
-            int y = (panel1.Height - scaledHeight) / 2;
-
-            // Draw the scaled tank image
+            int x = (panel1.Width - scaledWidth) / 2 + imageOffset.X;
+            int y = (panel1.Height - scaledHeight) / 2 + imageOffset.Y;
             Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
             g.DrawImage(drawingImage, destRect);
 
-            // Draw the dimensions
-            DrawDimensions(g, destRect);
-        }
-
-        // Reset transformations
-        g.ResetTransform();
-    }
-
-
-
-
-
-
-    private void DrawTankWithArrowDimensions(Graphics g)
-    {
-        if (drawingImage == null) return;
-
-        int scaledWidth = (int)(drawingImage.Width * zoomFactor);
-        int scaledHeight = (int)(drawingImage.Height * zoomFactor);
-
-        int xOffset = (panel1.Width - scaledWidth) / 2; // Center the tank horizontally
-        int yOffset = (panel1.Height - scaledHeight) / 2; // Center the tank vertically
-
-        int arrowOffsetX = xOffset + scaledWidth + 40; // Space for arrows to the right
-        int labelOffsetX = arrowOffsetX + 30; // Space for labels to the right of arrows
-
-        List<Rectangle> existingLabels = new List<Rectangle>(); // To prevent overlap
-
-        var dimensions = GetDimensionsFromDatabase();
-
-        foreach (var dimension in dimensions)
-        {
-            int segmentTop = yOffset + (int)(scaledHeight * (dimension.HeightInitial / 100.0));
-            int segmentBottom = yOffset + (int)(scaledHeight * (dimension.HeightFinal / 100.0));
-
-            Point arrowStart, arrowEnd, labelPosition;
-
-            if (dimension.ComponentName == "Tank") // Tank section at the very top
-            {
-                arrowStart = new Point(arrowOffsetX, segmentTop);
-                arrowEnd = new Point(arrowOffsetX, segmentTop + 40); // Short arrow for tank
-                labelPosition = new Point(labelOffsetX, segmentTop + 5); // Close to the top
-            }
-            else if (dimension.ComponentName == "Base") // Base section at the bottom
-            {
-                arrowStart = new Point(arrowOffsetX, segmentBottom - 40); // Short arrow for base
-                arrowEnd = new Point(arrowOffsetX, segmentBottom);
-                labelPosition = new Point(labelOffsetX, segmentBottom - 20); // Close to the bottom
-            }
-            else // Cylinder sections dynamically positioned
-            {
-                arrowStart = new Point(arrowOffsetX, segmentTop);
-                arrowEnd = new Point(arrowOffsetX, segmentBottom);
-                int labelY = (segmentTop + segmentBottom) / 2; // Center label vertically
-                //labelPosition = AdjustLabelPosition(new Point(labelOffsetX, labelY), existingLabels);
-            }
-
-            // Draw arrows
-            DrawVerticalArrowLine(g, arrowStart, arrowEnd, Color.Black);
-
-            // Draw labels
-            string label = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2}, D={dimension.Diameter:F2}";
-            SizeF textSize = g.MeasureString(label, new Font("Segoe UI", 10, FontStyle.Bold));
-            //Rectangle labelRect = new Rectangle(labelPosition, textSize.ToSize());
-            //existingLabels.Add(labelRect); // Track label positions to avoid overlap
-            //g.DrawString(label, new Font("Segoe UI", 10, FontStyle.Bold), Brushes.Black, labelPosition);
+            DrawSegmentLabels(g, destRect);
         }
     }
 
-
-
-
-
-
-
-
-    private Point AdjustLabelPosition(RectangleF labelBounds, List<RectangleF> existingLabelBounds, ref RectangleF adjustedBounds)
+    private void DrawSegmentLabels(Graphics g, Rectangle imageBounds)
     {
-        int verticalSpacing = 5; // Space between labels in pixels
-        bool overlap;
+        segmentLabels.Clear();
+        var segments = context.SegmentProperties.ToList();
 
-        // Initialize the adjusted position with the original label bounds
-        Point adjustedPosition = new Point((int)labelBounds.X, (int)labelBounds.Y);
-
-        do
-        {
-            overlap = false;
-
-            foreach (var existingBound in existingLabelBounds)
-            {
-                if (adjustedBounds.IntersectsWith(existingBound))
-                {
-                    // If overlapping, move the label downward by verticalSpacing
-                    adjustedPosition.Y += verticalSpacing;
-                    adjustedBounds.Y += verticalSpacing;
-                    overlap = true;
-                    break; // Exit the loop to re-check with updated position
-                }
-            }
-
-        } while (overlap); // Repeat until no overlap is detected
-
-        return adjustedPosition;
-    }
-
-
-
-
-
-
-
-
-
-
-
-    private void DrawVerticalArrowLine(Graphics g, Point start, Point end, Color color)
-    {
-        using (Pen pen = new Pen(color, 2))
-        {
-            AdjustableArrowCap arrowCap = new AdjustableArrowCap(5, 5);
-            pen.CustomStartCap = arrowCap;
-            pen.CustomEndCap = arrowCap;
-
-            g.DrawLine(pen, start, end);
-        }
-    }
-
-
-
-
-
-
-    private void DrawDimensions(Graphics g, Rectangle imageBounds)
-    {
-        // Retrieve dimension data from the database
-        var dimensions = GetDimensionsFromDatabase();
-
-        if (dimensions == null || dimensions.Count == 0)
+        if (segments.Count == 0)
             return;
 
-        // Calculate the total tank height in feet
-        double totalTankHeight = dimensions.Max(d => d.HeightFinal) - dimensions.Min(d => d.HeightInitial);
+        int tankHeight = imageBounds.Height;
+        int totalSegmentHeight = segments.Sum(s => (int)(s.HeightFinal - s.HeightInitial));
 
-        if (totalTankHeight <= 0)
-            return; // Prevent division by zero or negative scaling
+        double scaleFactor = (double)tankHeight / totalSegmentHeight;
+        int labelX = imageBounds.Right + 40;
+        List<RectangleF> labelBounds = new List<RectangleF>();
 
-        // Calculate scaling factor: pixels per foot
-        double scaleFactor = imageBounds.Height / 746;
-
-        // Define offsets for lines and labels
-        int lineXOffset = imageBounds.Right + 40; // 40 pixels to the right of the image
-        int labelXOffset = lineXOffset + 20;     // 20 pixels further for the label
-
-        // Length multiplier for the vertical line based on segment height
-        double verticalLineLengthMultiplier = 1.0; // Adjust as needed for visibility
-
-        // List to keep track of existing label bounds to prevent overlaps
-        List<RectangleF> existingLabelBounds = new List<RectangleF>();
-
-        int designTankHeight = 243;
-        int designCylinderHeight = 350;
-        int designBaseHeight = 153;
-        int totalDesignHeight = designTankHeight + designCylinderHeight + designBaseHeight; //746
-
-        int tankHeight = (int)(designTankHeight * scaleFactor);
-        int cylinderHeight = (int)(designCylinderHeight * scaleFactor);
-        int baseHeight = (int)(designBaseHeight * scaleFactor);
-
-        int tankTop = imageBounds.Top;
-        int tankBottom = tankTop + tankHeight;
-        // Ideally, baseBottom should be imageBounds.Bottom
+        //  Define Fixed Boundaries
         int baseBottom = imageBounds.Bottom;
-        int baseTop = baseBottom + baseHeight;
+        int baseTop = imageBounds.Top + (int)(imageBounds.Height * 0.80); // Base ends at 3rd line
+        int cylinderTop = baseTop;
+        int cylinderBottom = imageBounds.Top + (int)(imageBounds.Height * 0.35); // Cylinder ends at 7th line
+        int tankTop = imageBounds.Top;
+        int tankBottom = cylinderBottom;  //  Fix: Tank should stop **before** cylinder starts
 
-        int cylinderTop = imageBounds.Top;
-
-        int cylinderBottom = imageBounds.Bottom - baseHeight;
-        foreach (var dimension in dimensions)
+        foreach (var segment in segments.OrderBy(s => s.HeightInitial))
         {
-            // Calculate the average height of the segment
-            double averageHeight = (dimension.HeightFinal + dimension.HeightInitial) / 2.0;
-            int segmentY = 0;
-            int flag = 0;
-            if (dimension.ComponentName == "Base")
-            {
-                double ratio = dimension.HeightInitial / (double)designBaseHeight;
-                segmentY = baseBottom;
-                flag = designBaseHeight;
+            int segmentTop = imageBounds.Bottom - (int)(segment.HeightFinal * scaleFactor);
+            int segmentBottom = imageBounds.Bottom - (int)(segment.HeightInitial * scaleFactor);
+            int segmentHeight = segmentBottom - segmentTop;
 
-            }
-            else if (dimension.ComponentName == "Cylinder")
+            //  Fix Tank Label - Limit it to the spherical part
+            if (segment.SegmentType == "Tanks")
             {
-                double ratio = dimension.HeightInitial / (double)designCylinderHeight;
-                segmentY = cylinderBottom + (int)ratio * cylinderHeight;
-                cylinderBottom = cylinderBottom + (int)dimension.HeightInitial;
-                flag = designCylinderHeight;
-
-            }
-            else if (dimension.ComponentName == "Tanks")
-            {
-                double ratio = dimension.HeightInitial / (double)designTankHeight;
-                segmentY = tankBottom;
-                flag = designTankHeight;
+                segmentTop = tankTop;
+                segmentBottom = tankBottom;  //  Now tank ends **before the cylinder begins**
+                segmentHeight = segmentBottom - segmentTop;
             }
 
-            // Calculate the Y position on the image (tank at top, base at bottom)
-            //segmentY = imageBounds.Top + imageBounds.Height - (int)(averageHeight * scaleFactor);
+            int segmentCenterY = segmentTop + (segmentHeight / 2);
 
-            // Calculate the height of the vertical line based on segment height
-            //int verticalLineHeight = (int)((dimension.HeightFinal - dimension.HeightInitial) * scaleFactor * verticalLineLengthMultiplier);
+            //  Ensure Labels Stay Inside Image Bounds
+            if (segmentCenterY < imageBounds.Top + 20)
+                segmentCenterY = imageBounds.Top + 20;
+            if (segmentCenterY > imageBounds.Bottom - 20)
+                segmentCenterY = imageBounds.Bottom - 20;
 
-            // Define start and end points for the vertical line (upward)
-            Point lineStart = new Point(lineXOffset, segmentY);
-            Point lineEnd = new Point(lineXOffset, segmentY - flag); // Line goes upward
-
-            // Draw the vertical line with arrows at both ends
-            DrawDoubleArrowVerticalLine(g, lineStart, lineEnd, Color.Black);
-
-
-            // Prepare label text
-            string labelText = $"{dimension.ComponentName}: H={dimension.HeightFinal - dimension.HeightInitial:F2} ft, D={dimension.Diameter:F2} ft";
-
-            using (Font labelFont = new Font("Segoe UI", 9, FontStyle.Bold))
+            //  Prevent Overlapping Labels
+            while (labelBounds.Any(label => label.IntersectsWith(new RectangleF(labelX, segmentCenterY, 150, 20))))
             {
-                // Measure the size of the label text
-                SizeF textSize = g.MeasureString(labelText, labelFont);
-
-                // Define the initial label position (to the right of the vertical line)
-                Point labelPosition = new Point(labelXOffset, lineEnd.Y - (int)(textSize.Height / 2));
-
-                // Define the background rectangle for the label
-                RectangleF labelBackground = new RectangleF(labelPosition, textSize);
-
-                // Adjust label position to prevent overlap
-                labelPosition = AdjustLabelPosition(labelBackground, existingLabelBounds, ref labelBackground);
-
-                // Add the adjusted label bounds to the list
-                existingLabelBounds.Add(labelBackground);
-
-                // Draw the label background
-                using (Brush backgroundBrush = new SolidBrush(Color.LightYellow))
-                {
-                    g.FillRectangle(backgroundBrush, labelBackground);
-                }
-
-                // Optionally, draw a border around the label
-                using (Pen borderPen = new Pen(Color.Gray, 1))
-                {
-                    g.DrawRectangle(borderPen, labelBackground.X, labelBackground.Y, labelBackground.Width, labelBackground.Height);
-                }
-
-                // Draw the label text
-                g.DrawString(labelText, labelFont, Brushes.Black, labelPosition);
+                segmentCenterY += 30;
             }
+
+            Point arrowStart = new Point(imageBounds.Right + 20, segmentTop);
+            Point arrowEnd = new Point(imageBounds.Right + 20, segmentBottom);
+            DrawDoubleArrowVerticalLine(g, arrowStart, arrowEnd, Color.Black);
+
+            string labelText = $"{segment.SegmentName}:{segment.SegmentType}, H={segment.HeightFinal - segment.HeightInitial}ft, D={segment.Diameter}ft, T={segment.Thickness}in";
+            using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
+            {
+                SizeF textSize = g.MeasureString(labelText, font);
+                Point labelPosition = new Point(labelX, segmentCenterY - (int)(textSize.Height / 2));
+                g.DrawString(labelText, font, Brushes.Black, labelPosition);
+                labelBounds.Add(new RectangleF(labelPosition, textSize));
+
+                segmentLabels.Add((new RectangleF(labelPosition, textSize), segment));
+            }
+
+
+
+
+            //    segmentLabels.Clear();
+            //var segments = context.SegmentProperties.ToList();
+
+            //if (segments.Count == 0)
+            //    return;
+
+            //int tankHeight = imageBounds.Height;
+            //int totalSegmentHeight = segments.Sum(s => (int)(s.HeightFinal - s.HeightInitial));
+
+            //double scaleFactor = (double)tankHeight / totalSegmentHeight;
+            //int labelX = imageBounds.Right + 40;
+            //List<RectangleF> labelBounds = new List<RectangleF>();
+
+            ////  Define Fixed Boundaries for Tank, Base, and Cylinder
+            //int baseBottom = imageBounds.Bottom;
+            //int baseTop = imageBounds.Top + (int)(imageBounds.Height * 0.80); // Base ends at 3rd line
+            //int cylinderTop = baseTop;
+            //int cylinderBottom = imageBounds.Top + (int)(imageBounds.Height * 0.35); // Cylinder ends at 7th line
+            //int tankBottom = cylinderBottom;  //  FIX: Tank should stop where the cylinder begins
+
+            //foreach (var segment in segments.OrderBy(s => s.HeightInitial))
+            //{
+            //    int segmentTop = imageBounds.Bottom - (int)(segment.HeightFinal * scaleFactor);
+            //    int segmentBottom = imageBounds.Bottom - (int)(segment.HeightInitial * scaleFactor);
+            //    int segmentHeight = segmentBottom - segmentTop;
+
+            //    //  Fix Tank Segment - Keep it ONLY in the spherical area
+            //    if (segment.SegmentType == "Tanks")
+            //    {
+            //        segmentTop = imageBounds.Top;  // Start at the very top
+            //        segmentBottom = tankBottom;  //  FIX: Stop exactly where the cylinder starts
+            //        segmentHeight = segmentBottom - segmentTop;
+            //    }
+
+            //    //  Fix Cylinder Segment Position
+            //    if (segment.SegmentType == "Cylinder")
+            //    {
+            //        segmentTop = cylinderTop;
+            //        segmentBottom = cylinderBottom;
+            //        segmentHeight = segmentBottom - segmentTop;
+            //    }
+
+            //    //  Fix Base Segment Position
+            //    if (segment.SegmentType == "Base")
+            //    {
+            //        segmentTop = baseTop;
+            //        segmentBottom = baseBottom;
+            //        segmentHeight = segmentBottom - segmentTop;
+            //    }
+
+            //    int segmentCenterY = segmentTop + (segmentHeight / 2);
+
+            //    //  Ensure Labels Stay Inside Image Bounds
+            //    if (segmentCenterY < imageBounds.Top + 20)
+            //        segmentCenterY = imageBounds.Top + 20;
+            //    if (segmentCenterY > imageBounds.Bottom - 20)
+            //        segmentCenterY = imageBounds.Bottom - 20;
+
+            //    //  Auto-adjust to prevent label overlap
+            //    while (labelBounds.Any(label => label.IntersectsWith(new RectangleF(labelX, segmentCenterY, 150, 20))))
+            //    {
+            //        segmentCenterY += 30;
+            //    }
+
+            //    Point arrowStart = new Point(imageBounds.Right + 20, segmentTop);
+            //    Point arrowEnd = new Point(imageBounds.Right + 20, segmentBottom);
+            //    DrawDoubleArrowVerticalLine(g, arrowStart, arrowEnd, Color.Black);
+
+            //    string labelText = $"{segment.SegmentType}: H={segment.HeightFinal - segment.HeightInitial}m, D={segment.Diameter}m, T={segment.Thickness}cm";
+            //    using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
+            //    {
+            //        SizeF textSize = g.MeasureString(labelText, font);
+            //        Point labelPosition = new Point(labelX, segmentCenterY - (int)(textSize.Height / 2));
+            //        g.DrawString(labelText, font, Brushes.Black, labelPosition);
+            //        labelBounds.Add(new RectangleF(labelPosition, textSize));
+
+            //        segmentLabels.Add((new RectangleF(labelPosition, textSize), segment));
+            //    }
         }
     }
-
-
 
 
 
@@ -953,86 +611,11 @@ public partial class WaterTank : Form
     {
         using (Pen pen = new Pen(color, 2))
         {
-            // Define arrow caps for both ends
             AdjustableArrowCap arrowCap = new AdjustableArrowCap(5, 5);
             pen.CustomStartCap = arrowCap;
             pen.CustomEndCap = arrowCap;
-
-            // Draw the vertical line with arrows at both ends
             g.DrawLine(pen, start, end);
         }
-    }
-
-
-
-    private void DrawHorizontalArrowLine(Graphics g, Point start, Point end, Color color)
-    {
-        using (Pen pen = new Pen(color, 2))
-        {
-            AdjustableArrowCap arrowCap = new AdjustableArrowCap(5, 5);
-            pen.CustomEndCap = arrowCap;
-            g.DrawLine(pen, start, end);
-        }
-    }
-
-
-
-    private Point GetComponentMidPoint(string componentName, Rectangle imageBounds)
-    {
-        // Dynamically calculate positions for each component based on their location in the tank
-        return componentName switch
-        {
-            "Base" => new Point(imageBounds.Left + imageBounds.Width / 2, imageBounds.Bottom - 50),
-            "Cylinder" => new Point(imageBounds.Left + imageBounds.Width / 2, imageBounds.Top + imageBounds.Height / 2),
-            "Tanks" => new Point(imageBounds.Left + imageBounds.Width / 2, imageBounds.Top + 50),
-            _ => new Point(imageBounds.Left + imageBounds.Width / 2, imageBounds.Top) // Default to the top center
-        };
-    }
-
-    private void DrawStraightDottedLine(Graphics g, Point componentPosition, Point labelPosition)
-    {
-        using (Pen pen = new Pen(Color.Black, 1) { DashStyle = System.Drawing.Drawing2D.DashStyle.Dot })
-        {
-            // Horizontal line from component to the axis
-            int midX = labelPosition.X - 20; // Vertical axis for all labels
-            g.DrawLine(pen, componentPosition, new Point(midX, componentPosition.Y));
-
-            // Vertical line from the axis to the label
-            g.DrawLine(pen, new Point(midX, componentPosition.Y), new Point(midX, labelPosition.Y));
-
-            // Horizontal line to the label
-            g.DrawLine(pen, new Point(midX, labelPosition.Y), labelPosition);
-        }
-    }
-
-
-
-    private void DrawLabelWithBackground(Graphics g, string text, Point position)
-    {
-        var font = new Font("Segoe UI", 10, FontStyle.Bold);
-        var textSize = g.MeasureString(text, font);
-
-        // Draw semi-transparent background rectangle
-        using (var backgroundBrush = new SolidBrush(Color.FromArgb(200, Color.White)))
-        {
-            g.FillRectangle(backgroundBrush, new Rectangle(position, textSize.ToSize()));
-        }
-
-        // Draw the label text
-        g.DrawString(text, font, Brushes.Black, position);
-    }
-
-    private List<Dimension> GetDimensionsFromDatabase()
-    {
-        return context.SegmentProperties
-            .Select(d => new Dimension
-            {
-                ComponentName = d.SegmentType,
-                HeightFinal = d.HeightFinal,
-                HeightInitial = d.HeightInitial,
-                Diameter = d.Diameter
-            })
-            .ToList();
     }
 
     // Dimension class for holding dimension data
@@ -1045,65 +628,69 @@ public partial class WaterTank : Form
         public double HeightInitial { get; set; }
     }
 
-    private Point AdjustPositionForOverlap(Point labelPosition, List<Point> existingPositions)
-    {
-        // Adjust positions dynamically to avoid overlap
-        foreach (var existingPosition in existingPositions)
-        {
-            if (Math.Abs(existingPosition.X - labelPosition.X) < 100 &&
-                Math.Abs(existingPosition.Y - labelPosition.Y) < 40)
-            {
-                // Shift label downwards and slightly to the right if overlapping
-                labelPosition.Offset(0, 30);
-            }
-        }
-        return labelPosition;
-    }
-
-    private Point GetSegmentPosition(string componentName, Rectangle bounds)
-    {
-        return componentName switch
-        {
-            "Base" => new Point(bounds.X + bounds.Width / 2, bounds.Bottom - (bounds.Height / 10)), // Near bottom
-            "Cylinder" => new Point(bounds.X + bounds.Width / 2, bounds.Top + (bounds.Height / 2)), // Center
-            "Tank" => new Point(bounds.X + bounds.Width / 2, bounds.Top + 50), // Near top
-            _ => new Point(bounds.X + bounds.Width / 2, bounds.Top) // Default top position
-        };
-    }
-
-
-    private Point GetLabelPosition(string componentName, Rectangle imageBounds, int labelIndex)
-    {
-        int verticalSpacing = 25; // Space between labels
-        int labelX = imageBounds.Right + 50; // Fixed X position for labels
-        int labelY = imageBounds.Top + (labelIndex * verticalSpacing); // Vertical alignment
-
-        return new Point(labelX, labelY);
-    }
-
-
-    private void DrawConnectingLine(Graphics g, Point start, Point end)
-    {
-        using (var dashedPen = new Pen(Color.Black, 1)
-        {
-            DashStyle = System.Drawing.Drawing2D.DashStyle.Dash
-        })
-        {
-            g.DrawLine(dashedPen, start, end);
-        }
-    }
-
-
 
 
     private void panel1_MouseWheel(object sender, MouseEventArgs e)
     {
+        float oldZoom = zoomFactor;
         if (e.Delta > 0)
-            zoomFactor += 0.1f;
+            zoomFactor *= 1.1f;
         else if (zoomFactor > 0.1f)
-            zoomFactor -= 0.1f;
+            zoomFactor /= 1.1f;
+
+        // Adjust offset to zoom toward cursor position
+        imageOffset.X = (int)(imageOffset.X * (zoomFactor / oldZoom));
+        imageOffset.Y = (int)(imageOffset.Y * (zoomFactor / oldZoom));
 
         panel1.Invalidate();
+    }
+
+    private void panel1_MouseDown(object sender, MouseEventArgs e)
+    {
+        if (e.Button == MouseButtons.Left)
+        {
+            isDragging = false;
+            lastMousePosition = e.Location;
+        }
+    }
+
+
+    private void panel1_MouseMove(object sender, MouseEventArgs e)
+    {
+        toolStripTextBox1.Text = $"{e.X}";
+        toolStripTextBox2.Text = $"{e.Y}";
+
+        if (isDragging)
+        {
+            int deltaX = e.X - lastMousePosition.X;
+            int deltaY = e.Y - lastMousePosition.Y;
+
+            rotationAngle += deltaX * 0.5f;
+
+            lastMousePosition = e.Location;
+            panel1.Invalidate();
+        }
+    }
+
+    private void panel1_MouseUp(object sender, MouseEventArgs e)
+    {
+        isDragging = false;
+    }
+
+    private void panel1_MouseClick(object sender, MouseEventArgs e)
+    {
+        foreach (var (bounds, segment) in segmentLabels)
+        {
+            if (bounds.Contains(e.Location))
+            {
+                MessageBox.Show($"Segment: {segment.SegmentType}\n" +
+                                $"Height: {segment.HeightFinal - segment.HeightInitial}m\n" +
+                                $"Diameter: {segment.Diameter}m\n" +
+                                $"Thickness: {segment.Thickness}cm",
+                                "Segment Details", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                break;
+            }
+        }
     }
 
 
@@ -1191,27 +778,33 @@ public partial class WaterTank : Form
         help.ShowDialog();
     }
 
-    private void liveLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+
+    private void toolStripButton2_Click(object sender, EventArgs e)
     {
         Live_Load live_Load = new Live_Load();
         live_Load.ShowDialog();
     }
 
-    private void snowLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+    private void toolStripButton1_Click_1(object sender, EventArgs e)
     {
         Snow_Load snow_Load = new Snow_Load();
         snow_Load.ShowDialog();
     }
 
-    private void windLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+    private void toolStripButton7_Click(object sender, EventArgs e)
     {
         Wind_Load wind_Load = new Wind_Load();
         wind_Load.ShowDialog();
     }
 
-    private void seismicLoadToolStripMenuItem1_Click(object sender, EventArgs e)
+    private void toolStripButton8_Click(object sender, EventArgs e)
     {
         Seismic seismic = new Seismic();
         seismic.ShowDialog();
+    }
+
+    private void toolStripButton9_Click(object sender, EventArgs e)
+    {
+        ExportDiagram(sender, e);
     }
 }

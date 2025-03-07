@@ -206,10 +206,10 @@
             // 
             // maskedTextBox5
             // 
-            maskedTextBox5.Location = new Point(110, 79);
+            maskedTextBox5.Location = new Point(107, 78);
             maskedTextBox5.Margin = new Padding(2);
             maskedTextBox5.Name = "maskedTextBox5";
-            maskedTextBox5.Size = new Size(87, 23);
+            maskedTextBox5.Size = new Size(89, 23);
             maskedTextBox5.TabIndex = 21;
             maskedTextBox5.MaskInputRejected += maskedTextBox5_MaskInputRejected;
             // 
@@ -230,7 +230,7 @@
             label25.Location = new Point(11, 76);
             label25.Margin = new Padding(2, 0, 2, 0);
             label25.Name = "label25";
-            label25.Size = new Size(58, 15);
+            label25.Size = new Size(59, 15);
             label25.TabIndex = 18;
             label25.Text = "Thickness";
             label25.Click += label25_Click;
@@ -305,7 +305,7 @@
             label4.Location = new Point(11, 52);
             label4.Margin = new Padding(2, 0, 2, 0);
             label4.Name = "label4";
-            label4.Size = new Size(58, 15);
+            label4.Size = new Size(59, 15);
             label4.TabIndex = 11;
             label4.Text = "Thickness";
             label4.Click += label4_Click;

@@ -74,13 +74,15 @@ partial class WaterTank
         toolStripButton3 = new ToolStripButton();
         pasteToolStripButton1 = new ToolStripButton();
         toolStripButton4 = new ToolStripButton();
-        toolStripSeparator7 = new ToolStripSeparator();
+        toolStripSeparator9 = new ToolStripSeparator();
         toolStripButton6 = new ToolStripButton();
+        toolStripSeparator7 = new ToolStripSeparator();
+        toolStripLabel3 = new ToolStripLabel();
         toolStripButton2 = new ToolStripDropDownButton();
-        liveLoadToolStripMenuItem1 = new ToolStripMenuItem();
-        snowLoadToolStripMenuItem1 = new ToolStripMenuItem();
-        windLoadToolStripMenuItem1 = new ToolStripMenuItem();
-        seismicLoadToolStripMenuItem1 = new ToolStripMenuItem();
+        toolStripButton1 = new ToolStripButton();
+        toolStripButton7 = new ToolStripButton();
+        toolStripButton8 = new ToolStripButton();
+        toolStripSeparator1 = new ToolStripSeparator();
         toolStripButton5 = new ToolStripButton();
         statusStrip2 = new StatusStrip();
         toolStrip2 = new ToolStrip();
@@ -90,6 +92,7 @@ partial class WaterTank
         toolStripLabel2 = new ToolStripLabel();
         toolStripTextBox2 = new ToolStripTextBox();
         panel1 = new Panel();
+        toolStripButton9 = new ToolStripButton();
         menuStrip1.SuspendLayout();
         toolStrip1.SuspendLayout();
         toolStrip3.SuspendLayout();
@@ -337,7 +340,7 @@ partial class WaterTank
         toolStrip3.BackColor = SystemColors.ControlLight;
         toolStrip3.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip3.ImageScalingSize = new Size(24, 24);
-        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton4, toolStripSeparator7, toolStripButton6, toolStripButton2, toolStripButton5 });
+        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton4, toolStripSeparator9, toolStripButton6, toolStripSeparator7, toolStripLabel3, toolStripButton2, toolStripButton1, toolStripButton7, toolStripButton8, toolStripSeparator1, toolStripButton5 });
         toolStrip3.Name = "toolStrip3";
         // 
         // toolStripButton3
@@ -363,10 +366,10 @@ partial class WaterTank
         toolStripButton4.Name = "toolStripButton4";
         toolStripButton4.Click += toolStripButton4_Click;
         // 
-        // toolStripSeparator7
+        // toolStripSeparator9
         // 
-        toolStripSeparator7.Name = "toolStripSeparator7";
-        resources.ApplyResources(toolStripSeparator7, "toolStripSeparator7");
+        toolStripSeparator9.Name = "toolStripSeparator9";
+        resources.ApplyResources(toolStripSeparator9, "toolStripSeparator9");
         // 
         // toolStripButton6
         // 
@@ -375,36 +378,52 @@ partial class WaterTank
         toolStripButton6.Name = "toolStripButton6";
         toolStripButton6.Click += toolStripButton6_Click;
         // 
+        // toolStripSeparator7
+        // 
+        toolStripSeparator7.Name = "toolStripSeparator7";
+        resources.ApplyResources(toolStripSeparator7, "toolStripSeparator7");
+        // 
+        // toolStripLabel3
+        // 
+        resources.ApplyResources(toolStripLabel3, "toolStripLabel3");
+        toolStripLabel3.Name = "toolStripLabel3";
+        // 
         // toolStripButton2
         // 
         toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton2.DropDownItems.AddRange(new ToolStripItem[] { liveLoadToolStripMenuItem1, snowLoadToolStripMenuItem1, windLoadToolStripMenuItem1, seismicLoadToolStripMenuItem1 });
         resources.ApplyResources(toolStripButton2, "toolStripButton2");
         toolStripButton2.Name = "toolStripButton2";
+        toolStripButton2.ShowDropDownArrow = false;
+        toolStripButton2.Click += toolStripButton2_Click;
         // 
-        // liveLoadToolStripMenuItem1
+        // toolStripButton1
         // 
-        liveLoadToolStripMenuItem1.Name = "liveLoadToolStripMenuItem1";
-        resources.ApplyResources(liveLoadToolStripMenuItem1, "liveLoadToolStripMenuItem1");
-        liveLoadToolStripMenuItem1.Click += liveLoadToolStripMenuItem1_Click;
+        toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton1.Image = Properties.Resources.snowflake;
+        resources.ApplyResources(toolStripButton1, "toolStripButton1");
+        toolStripButton1.Name = "toolStripButton1";
+        toolStripButton1.Click += toolStripButton1_Click_1;
         // 
-        // snowLoadToolStripMenuItem1
+        // toolStripButton7
         // 
-        snowLoadToolStripMenuItem1.Name = "snowLoadToolStripMenuItem1";
-        resources.ApplyResources(snowLoadToolStripMenuItem1, "snowLoadToolStripMenuItem1");
-        snowLoadToolStripMenuItem1.Click += snowLoadToolStripMenuItem1_Click;
+        toolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton7.Image = Properties.Resources.wind;
+        resources.ApplyResources(toolStripButton7, "toolStripButton7");
+        toolStripButton7.Name = "toolStripButton7";
+        toolStripButton7.Click += toolStripButton7_Click;
         // 
-        // windLoadToolStripMenuItem1
+        // toolStripButton8
         // 
-        windLoadToolStripMenuItem1.Name = "windLoadToolStripMenuItem1";
-        resources.ApplyResources(windLoadToolStripMenuItem1, "windLoadToolStripMenuItem1");
-        windLoadToolStripMenuItem1.Click += windLoadToolStripMenuItem1_Click;
+        toolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton8.Image = Properties.Resources.seismic;
+        resources.ApplyResources(toolStripButton8, "toolStripButton8");
+        toolStripButton8.Name = "toolStripButton8";
+        toolStripButton8.Click += toolStripButton8_Click;
         // 
-        // seismicLoadToolStripMenuItem1
+        // toolStripSeparator1
         // 
-        seismicLoadToolStripMenuItem1.Name = "seismicLoadToolStripMenuItem1";
-        resources.ApplyResources(seismicLoadToolStripMenuItem1, "seismicLoadToolStripMenuItem1");
-        seismicLoadToolStripMenuItem1.Click += seismicLoadToolStripMenuItem1_Click;
+        toolStripSeparator1.Name = "toolStripSeparator1";
+        resources.ApplyResources(toolStripSeparator1, "toolStripSeparator1");
         // 
         // toolStripButton5
         // 
@@ -427,7 +446,7 @@ partial class WaterTank
         resources.ApplyResources(toolStrip2, "toolStrip2");
         toolStrip2.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip2.ImageScalingSize = new Size(24, 24);
-        toolStrip2.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripTextBox1, toolStripSeparator8, toolStripLabel2, toolStripTextBox2 });
+        toolStrip2.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripTextBox1, toolStripSeparator8, toolStripLabel2, toolStripTextBox2, toolStripButton9 });
         toolStrip2.Name = "toolStrip2";
         // 
         // toolStripLabel1
@@ -462,9 +481,20 @@ partial class WaterTank
         // panel1
         // 
         resources.ApplyResources(panel1, "panel1");
+        panel1.BackColor = SystemColors.ControlLightLight;
         panel1.BorderStyle = BorderStyle.Fixed3D;
         panel1.Name = "panel1";
         panel1.Paint += panel1_Paint_1;
+        // 
+        // toolStripButton9
+        // 
+        toolStripButton9.Alignment = ToolStripItemAlignment.Right;
+        toolStripButton9.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton9.Image = Properties.Resources.export;
+        resources.ApplyResources(toolStripButton9, "toolStripButton9");
+        toolStripButton9.Name = "toolStripButton9";
+        toolStripButton9.TextDirection = ToolStripTextDirection.Vertical270;
+        toolStripButton9.Click += toolStripButton9_Click;
         // 
         // WaterTank
         // 
@@ -557,8 +587,11 @@ partial class WaterTank
     private Panel panel1;
     private SplitContainer splitContainer1;
     private ToolStripDropDownButton toolStripButton2;
-    private ToolStripMenuItem liveLoadToolStripMenuItem1;
-    private ToolStripMenuItem snowLoadToolStripMenuItem1;
-    private ToolStripMenuItem windLoadToolStripMenuItem1;
-    private ToolStripMenuItem seismicLoadToolStripMenuItem1;
+    private ToolStripButton toolStripButton1;
+    private ToolStripSeparator toolStripSeparator1;
+    private ToolStripButton toolStripButton7;
+    private ToolStripButton toolStripButton8;
+    private ToolStripLabel toolStripLabel3;
+    private ToolStripSeparator toolStripSeparator9;
+    private ToolStripButton toolStripButton9;
 }

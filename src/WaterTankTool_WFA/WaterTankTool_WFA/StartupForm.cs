@@ -191,9 +191,10 @@ namespace WaterTankTool_WFA
                         Margin = new Padding(0, 5, 0, 5),
                         
                     };
-                    projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(65, 65, 70); };
+                    projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(97, 97, 102); };
                     projectButton.MouseLeave += (s, e) => { projectButton.BackColor = Color.Transparent; };
                     projectButton.FlatAppearance.BorderSize = 0;
+                    projectButton.FlatStyle = FlatStyle.Popup;
                     projectButton.Click += (s, e) => { OpenProject(projectPath); };
                     recentProjectsPanel.Controls.Add(projectButton);
                 }

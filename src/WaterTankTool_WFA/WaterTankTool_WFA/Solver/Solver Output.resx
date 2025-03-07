@@ -732,6 +732,12 @@
   <data name="Check.Width" type="System.Int32, mscorlib">
     <value>110</value>
   </data>
+  <metadata name="ChangeThickness.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="ChangeThickness.HeaderText" xml:space="preserve">
+    <value>Change Thickness</value>
+  </data>
   <data name="dataGridView1.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
@@ -739,7 +745,7 @@
     <value>3, 18</value>
   </data>
   <data name="dataGridView1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>433, 162</value>
+    <value>507, 162</value>
   </data>
   <data name="dataGridView1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -767,7 +773,7 @@
     <value>3, 3, 3, 30</value>
   </data>
   <data name="groupBox4.Size" type="System.Drawing.Size, System.Drawing">
-    <value>439, 183</value>
+    <value>513, 183</value>
   </data>
   <data name="groupBox4.TabIndex" type="System.Int32, mscorlib">
     <value>6</value>
@@ -1223,6 +1229,12 @@
   </data>
   <data name="&gt;&gt;sqliteCommand2.Type" xml:space="preserve">
     <value>Microsoft.Data.Sqlite.SqliteCommand, Microsoft.Data.Sqlite, Culture=neutral, PublicKeyToken=adb9793829ddae60</value>
+  </data>
+  <data name="&gt;&gt;ChangeThickness.Name" xml:space="preserve">
+    <value>ChangeThickness</value>
+  </data>
+  <data name="&gt;&gt;ChangeThickness.Type" xml:space="preserve">
+    <value>System.Windows.Forms.DataGridViewTextBoxColumn, System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Solver_Output</value>
