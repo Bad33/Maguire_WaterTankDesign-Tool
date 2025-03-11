@@ -48,6 +48,9 @@ namespace WaterTankTool_WFA
             maskedTextBox3.TextChanged += InputFields_TextChanged;
             maskedTextBox4.TextChanged += InputFields_TextChanged;
             maskedTextBox5.TextChanged += InputFields_TextChanged;
+            this.FormClosing += SegmentDialogBox_FormClosing;
+
+
 
         }
 
@@ -63,6 +66,9 @@ namespace WaterTankTool_WFA
             _context = context;
 
             showInputFieldsOnType();
+
+            this.FormClosing += SegmentDialogBox_FormClosing;
+
         }
 
 
@@ -76,8 +82,14 @@ namespace WaterTankTool_WFA
             _context = context;
             _waterTankForm = waterTankForm;
             ModifyDialogBox();
+            this.FormClosing += SegmentDialogBox_FormClosing;
+
+
 
         }
+
+
+
 
         public void showInputFieldsOnType()
         {
@@ -348,6 +360,20 @@ namespace WaterTankTool_WFA
             //}
         }
 
+        private void SegmentDialogBox_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (this.DialogResult != DialogResult.OK) // If OK was not set, ask for confirmation
+            {
+                var result = MessageBox.Show("Do you really want to cancel without saving?", "Confirm",
+                                              MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (result == DialogResult.No)
+                {
+                    e.Cancel = true; // Stop the form from closing
+                }
+            }
+        }
+
+
         private void Save_Click(object sender, EventArgs e)
         {
             if (_segmentType == "Base")
@@ -359,7 +385,10 @@ namespace WaterTankTool_WFA
                 Save_ClickCylinder(sender, e);
             }
 
+            this.DialogResult = DialogResult.OK;
+            this.Close();
         }
+
 
         private void ValidateSegment(SegmentProperties segment)
         {
@@ -384,7 +413,8 @@ namespace WaterTankTool_WFA
                 DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
                 if (result == DialogResult.OK)
                 {
-                    this.Close(); // Close the dialog on success
+                    this.DialogResult = DialogResult.OK; 
+                    this.Close();
                 }
             }
             else
@@ -392,10 +422,12 @@ namespace WaterTankTool_WFA
                 DialogResult result = MessageBox.Show("Data might not have been saved!", "Confirmation", MessageBoxButtons.OK);
                 if (result == DialogResult.OK)
                 {
+                    this.DialogResult = DialogResult.Cancel;
                     this.Close();
                 }
             }
         }
+
 
 
         private void richTextBox1_TextChanged(object sender, EventArgs e)

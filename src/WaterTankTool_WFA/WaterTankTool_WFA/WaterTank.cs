@@ -1,9 +1,12 @@
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using WaterTankTool_WFA.Custom_Design_Control;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Load;
 using WaterTankTool_WFA.Solver;
+using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace WaterTankTool_WFA;
 
@@ -57,14 +60,12 @@ public partial class WaterTank : Form
         appStatusLabel = new ToolStripStatusLabel
         {
             Text = "Status: Ready",
-            Spring = false, // To avoid expanding unnecessarily
             TextAlign = ContentAlignment.MiddleLeft
         };
 
         selectedMaterialLabel = new ToolStripStatusLabel
         {
             Text = "Selected Material: None",
-            Spring = false,
             TextAlign = ContentAlignment.MiddleLeft
         };
 
@@ -72,39 +73,35 @@ public partial class WaterTank : Form
         {
             Text = "Please Add the Material Type!",
             ForeColor = Color.Red,
-            Spring = false, // Allow this label to stretch
-            TextAlign = ContentAlignment.MiddleLeft
+            Visible = true, // Keep it visible instead of adding/removing
         };
 
         noLoadStatus = new ToolStripStatusLabel
         {
             Text = "Please add the Load!",
             ForeColor = Color.Red,
-            Spring = true, // Allow this label to stretch
-            TextAlign = ContentAlignment.MiddleLeft
+            Visible = true, // Keep it visible instead of adding/removing
         };
+
         designDetailsLabel = new ToolStripStatusLabel
         {
             Text = "Tank: - | Total Weight: 0Kips | Area: 0ft²",
-            Spring = true, // Allow this label to stretch
+            Spring = true, // Allow it to take up remaining space
             TextAlign = ContentAlignment.MiddleRight
         };
 
-
-        // Add labels to statusStrip2
+        // Add labels to statusStrip2 in order
         statusStrip2.Items.Add(appStatusLabel);
         statusStrip2.Items.Add(new ToolStripSeparator());
         statusStrip2.Items.Add(selectedMaterialLabel);
         statusStrip2.Items.Add(new ToolStripSeparator());
         statusStrip2.Items.Add(noMaterialStatus);
-        if (statusStrip2.Items.Contains(noMaterialStatus))
-        {
-            Console.WriteLine("muji");
-        }
-
         statusStrip2.Items.Add(noLoadStatus);
         statusStrip2.Items.Add(designDetailsLabel);
     }
+
+
+
 
 
     private void ExportDiagram(object sender, EventArgs e)
@@ -116,38 +113,44 @@ public partial class WaterTank : Form
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                // Create a bitmap with the panel's dimensions
-                using (Bitmap bitmap = new Bitmap(panel1.Width, panel1.Height))
+                int exportWidth = panel1.Width * 2; // High-resolution export
+                int exportHeight = panel1.Height * 2;
+
+                // Declare bitmap outside the using block
+                Bitmap bitmap = new Bitmap(exportWidth, exportHeight);
+
+                using (Graphics g = Graphics.FromImage(bitmap))
                 {
-                    using (Graphics g = Graphics.FromImage(bitmap))
+                    g.Clear(Color.White);
+                    g.SmoothingMode = SmoothingMode.AntiAlias;
+                    g.ScaleTransform(2.0f, 2.0f); // Scale for high resolution
+
+                    if (drawingImage != null)
                     {
-                        g.Clear(Color.White);
-                        g.SmoothingMode = SmoothingMode.AntiAlias;
+                        int scaledWidth = (int)(drawingImage.Width * zoomFactor);
+                        int scaledHeight = (int)(drawingImage.Height * zoomFactor);
+                        int x = (panel1.Width - scaledWidth) / 2 + imageOffset.X;
+                        int y = (panel1.Height - scaledHeight) / 2 + imageOffset.Y;
+                        Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
 
-                        // Draw the tank image and dimensions as in the Panel_Paint event
-                        if (drawingImage != null)
-                        {
-                            int scaledWidth = (int)(drawingImage.Width * zoomFactor);
-                            int scaledHeight = (int)(drawingImage.Height * zoomFactor);
-                            int x = (panel1.Width - scaledWidth) / 2;
-                            int y = (panel1.Height - scaledHeight) / 2;
-                            Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
-
-                            g.DrawImage(drawingImage, destRect);
-
-                            // Draw the dimensions
-                            DrawSegmentLabels(g, destRect);
-                        }
+                        g.DrawImage(drawingImage, destRect);
+                        DrawSegmentLabels(g, destRect);
                     }
-
-                    // Save the bitmap to the selected file
-                    bitmap.Save(saveFileDialog.FileName, saveFileDialog.FilterIndex == 1 ? ImageFormat.Png : ImageFormat.Jpeg);
                 }
+
+         
+                bitmap.Save(saveFileDialog.FileName, saveFileDialog.FilterIndex == 1 ? ImageFormat.Png : ImageFormat.Jpeg);
+
+                // Dispose of the bitmap after saving
+                bitmap.Dispose();
 
                 MessageBox.Show("Diagram exported successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
     }
+
+
+
 
 
     private void panelDrawTankCapacity()
@@ -163,24 +166,24 @@ public partial class WaterTank : Form
             {
                 case "150,000 gallon":
                     drawingImage = Properties.Resources._150k;
-                    UpdateAppStatus("Loading Tank...");
+                    UpdateAppStatus("Tank Loaded: 150,000 gallon");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
                     break;
                 case "250,000 gallon":
                     drawingImage = Properties.Resources._250k;
-                    UpdateAppStatus("Loading Tank...");
+                    UpdateAppStatus("Tank Loaded: 250,000 gallon");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
 
                     break;
                 case "500,000 gallon":
                     drawingImage = Properties.Resources._500k;
-                    UpdateAppStatus("Loading Tank...");
+                    UpdateAppStatus("Tank Loaded: 500,000 gallon");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
 
                     break;
                 default:
                     drawingImage = Properties.Resources._150k;
-                    UpdateAppStatus("Loading Tank...");
+                    UpdateAppStatus("Tank Loaded: Unknown");
                     UpdateDesignDetails("-", "0", "0");
                     break;
             }
@@ -201,6 +204,7 @@ public partial class WaterTank : Form
         designDetailsLabel.Text = $"Tank: {tank} | Total Weight: {weight} | Area: {area}";
     }
 
+
     private void UpdateAppStatus(string status)
     {
         appStatusLabel.Text = $"Status: {status}";
@@ -208,24 +212,19 @@ public partial class WaterTank : Form
 
     private void UpdateMaterial()
     {
-
         var material = context.MaterialProperties.FirstOrDefault();
         if (material != null)
         {
-
             selectedMaterialLabel.Text = $"Material: {material.MaterialName}";
-            statusStrip2.Items.Remove(noMaterialStatus);
-
-
+            noMaterialStatus.Visible = false; // Hide warning if material exists
         }
         else
         {
-            selectedMaterialLabel.Text = $"Material: None";
-
+            selectedMaterialLabel.Text = "Material: None";
+            noMaterialStatus.Visible = true;  // Show warning if no material is selected
         }
-
-
     }
+
 
     private void UpdateLoadStatus()
     {
@@ -236,12 +235,14 @@ public partial class WaterTank : Form
 
         if (liveLoad != null && seismicLoad != null && snowLoad != null && windLoad != null)
         {
-
-            statusStrip2.Items.Remove(noLoadStatus);
-
+            noLoadStatus.Visible = false; // Hide warning if all loads are set
         }
-
+        else
+        {
+            noLoadStatus.Visible = true;  // Show warning if any load is missing
+        }
     }
+
 
 
     public void OnSegmentAdded()
@@ -368,7 +369,7 @@ public partial class WaterTank : Form
 
     private void solveToolStripMenuItem_Click(object sender, EventArgs e)
     {
-        Solver_Output solver_Output = new Solver_Output();
+        Solver_Output solver_Output = new Solver_Output(this);
         solver_Output.ShowDialog();
     }
 
@@ -423,7 +424,7 @@ public partial class WaterTank : Form
 
     private void toolStripButton5_Click(object sender, EventArgs e)
     {
-        Solver_Output solver = new Solver_Output();
+        Solver_Output solver = new Solver_Output(this);
         solver.ShowDialog();
     }
 
@@ -439,21 +440,29 @@ public partial class WaterTank : Form
 
     private void panel1_Paint_1(object sender, PaintEventArgs e)
     {
-        Graphics g = e.Graphics;
-        g.SmoothingMode = SmoothingMode.AntiAlias;
-
-        if (drawingImage != null)
+        using (BufferedGraphicsContext context = new BufferedGraphicsContext())
+        using (BufferedGraphics buffer = context.Allocate(e.Graphics, panel1.ClientRectangle))
         {
-            int scaledWidth = (int)(drawingImage.Width * zoomFactor);
-            int scaledHeight = (int)(drawingImage.Height * zoomFactor);
-            int x = (panel1.Width - scaledWidth) / 2 + imageOffset.X;
-            int y = (panel1.Height - scaledHeight) / 2 + imageOffset.Y;
-            Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
-            g.DrawImage(drawingImage, destRect);
+            Graphics g = buffer.Graphics;
+            g.SmoothingMode = SmoothingMode.AntiAlias;
+            g.Clear(panel1.BackColor);
 
-            DrawSegmentLabels(g, destRect);
+            if (drawingImage != null)
+            {
+                int scaledWidth = (int)(drawingImage.Width * zoomFactor);
+                int scaledHeight = (int)(drawingImage.Height * zoomFactor);
+                int x = (panel1.Width - scaledWidth) / 2 + imageOffset.X;
+                int y = (panel1.Height - scaledHeight) / 2 + imageOffset.Y;
+                Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
+
+                g.DrawImage(drawingImage, destRect);
+                DrawSegmentLabels(g, destRect);
+            }
+
+            buffer.Render(e.Graphics);
         }
     }
+
 
     private void DrawSegmentLabels(Graphics g, Rectangle imageBounds)
     {
@@ -633,17 +642,19 @@ public partial class WaterTank : Form
     private void panel1_MouseWheel(object sender, MouseEventArgs e)
     {
         float oldZoom = zoomFactor;
-        if (e.Delta > 0)
-            zoomFactor *= 1.1f;
-        else if (zoomFactor > 0.1f)
-            zoomFactor /= 1.1f;
+        zoomFactor *= (e.Delta > 0) ? 1.1f : 0.9f;
 
-        // Adjust offset to zoom toward cursor position
-        imageOffset.X = (int)(imageOffset.X * (zoomFactor / oldZoom));
-        imageOffset.Y = (int)(imageOffset.Y * (zoomFactor / oldZoom));
+        // Keep the zoom within a reasonable range
+        zoomFactor = Math.Max(0.2f, Math.Min(5.0f, zoomFactor));
+
+        // Calculate the new offset to keep the cursor position stable
+        float scaleChange = zoomFactor / oldZoom;
+        imageOffset.X = (int)((e.X - panel1.Width / 2) * (scaleChange - 1));
+        imageOffset.Y = (int)((e.Y - panel1.Height / 2) * (scaleChange - 1));
 
         panel1.Invalidate();
     }
+
 
     private void panel1_MouseDown(object sender, MouseEventArgs e)
     {

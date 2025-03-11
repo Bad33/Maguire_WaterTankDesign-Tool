@@ -31,6 +31,7 @@ namespace WaterTankTool_WFA.Solver
         public string waterWeight;
         public string snowWeight;
         public string selfWeight;
+        private WaterTank _waterTankForm;
 
         private Label rtcLabel;
 
@@ -48,13 +49,13 @@ namespace WaterTankTool_WFA.Solver
 
         public List<tabelData2> tabelData2s = new List<tabelData2>();
 
-        public Solver_Output()
+        public Solver_Output(WaterTank waterTankForm)
         {
             InitializeComponent();
 
             var context = WaterTankDbContext.GetInstance();
             _context = context;
-
+            _waterTankForm = waterTankForm;
             LoadData();
 
             LoadAllowableCompressiveStress();
@@ -69,6 +70,7 @@ namespace WaterTankTool_WFA.Solver
             LoadTable2();
 
             LoadCheckTableData();
+            _waterTankForm = waterTankForm;
         }
 
         private void WindLoadPerSegment()
@@ -79,7 +81,7 @@ namespace WaterTankTool_WFA.Solver
             Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
 
-            
+
             double cumulativeFwind = 0;
 
             foreach (var segment in segmentData)
@@ -94,7 +96,7 @@ namespace WaterTankTool_WFA.Solver
 
                 windLoadData.Add(new WindTable
                 {
-                    Fwind = Math.Round(fwind,4).ToString(),
+                    Fwind = Math.Round(fwind, 4).ToString(),
                     Vwind = Math.Round(cumulativeFwind, 4).ToString(), // cumulative sum updated per iteration
                     BaseElevation = Math.Round(segment.HeightInitial, 4).ToString(),
                     LoadLocation = Math.Round(loadlocation, 4).ToString(),
@@ -160,7 +162,7 @@ namespace WaterTankTool_WFA.Solver
                                     segment.HeightInitial,
                                     segment.HeightFinal,
                                     segment.Diameter,
-                                    segment.Thickness),4).ToString()
+                                    segment.Thickness), 4).ToString()
 
 
                 }).ToList();
@@ -175,7 +177,7 @@ namespace WaterTankTool_WFA.Solver
                                     segment.HeightFinal,
                                     (double)segment.DiameterInitial,
                                     (double)segment.DiameterFinal,
-                                    segment.Thickness),4).ToString()
+                                    segment.Thickness), 4).ToString()
 
 
                 }).ToList();
@@ -196,7 +198,7 @@ namespace WaterTankTool_WFA.Solver
                 Label label = new Label();
                 label.Text = "No Segments Added. Please add the segments to see the output.";
                 label.ForeColor = Color.Red;
-                
+
                 statusStrip2.Items.Add(label.Text);
                 //label.Controls.Add(statusStrip2);
             }
@@ -219,7 +221,7 @@ namespace WaterTankTool_WFA.Solver
 
 
 
-                
+
 
                 string numericPart = new string(foundTank.Weight_of_Water
                          .Where(c => char.IsDigit(c) || c == '.' || c == '-')
@@ -256,7 +258,7 @@ namespace WaterTankTool_WFA.Solver
                     {
                         waterWeight = waterWeight,
                         snowWeight = snowWeight,
-                        selfWeight = res[index], // Store the cumulative value
+                        selfWeight = Math.Round(Double.Parse(res[index]),4).ToString(), // Store the cumulative value
 
                     };
                 }).ToList();
@@ -273,11 +275,11 @@ namespace WaterTankTool_WFA.Solver
             var segmentData = _context.SegmentProperties.ToList();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            
+
 
             if (segmentData.Count > 0)
             {
-                var viewModelData = segmentData.Select((segment,index) => 
+                var viewModelData = segmentData.Select((segment, index) =>
                 {
 
                     double fa = 0;
@@ -292,16 +294,17 @@ namespace WaterTankTool_WFA.Solver
                     }
                     else
                     {
-                        fa = Math.Round((Double.Parse(cummulativeLoadData[index].waterWeight) + Double.Parse(cummulativeLoadData[index].snowWeight) + Double.Parse(cummulativeLoadData[index].selfWeight)) / segmentPropertiesTableData[index].A,4);
-                        fb = Math.Round((Double.Parse(windLoadData[index].Mwind) * 12) / segmentPropertiesTableData[index].S,4);
+                        fa = Math.Round((Double.Parse(cummulativeLoadData[index].waterWeight) + Double.Parse(cummulativeLoadData[index].snowWeight) + Double.Parse(cummulativeLoadData[index].selfWeight)) / segmentPropertiesTableData[index].A, 4);
+                        fb = Math.Round((Double.Parse(windLoadData[index].Mwind) * 12) / segmentPropertiesTableData[index].S, 4);
 
-                        if((fa + fb) == 0)
+                        if ((fa + fb) == 0)
                         {
                             check = "NA";
                         }
                         else
                         {
-                            check = Math.Round(((fa / tabelData2s[index].Fa) + (fb / tabelData2s[index].Fb)),4).ToString();
+                            check = Math.Round(((fa / tabelData2s[index].Fa) + (fb / tabelData2s[index].Fb)), 4).ToString();
+
 
                         }
                     }
@@ -309,7 +312,7 @@ namespace WaterTankTool_WFA.Solver
 
                     return new CheckTableData
                     {
-
+                        SegmentID = segment.SegmentNumber,
                         Segment = segment.SegmentName,
                         fa = fa,
                         fb = fb,
@@ -323,7 +326,9 @@ namespace WaterTankTool_WFA.Solver
 
                 }).ToList();
 
+
                 dataGridView1.DataSource = viewModelData;
+                dataGridView1.Columns["SegmentID"].Visible = false;
             }
 
         }
@@ -340,22 +345,22 @@ namespace WaterTankTool_WFA.Solver
                 {
                     var rt = Math.Round(((segment.Diameter / 2) / segment.Thickness), 4);
                     var i = Math.Round((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4)), 4);
-                    var a = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2)),4);
-                    var co = Math.Round(1022 / (195 + rt),4);
-                    var r = Math.Round(Math.Sqrt(i / a),4);
+                    var a = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2)), 4);
+                    var co = Math.Round(1022 / (195 + rt), 4);
+                    var r = Math.Round(Math.Sqrt(i / a), 4);
                     double Fl = 0;
                     if (rt <= Double.Parse(rtcLabel.Text))
                     {
-                        Fl = Math.Round((233 * Double.Parse(Fy)) / (2 * (166 + rt)),4);
+                        Fl = Math.Round((233 * Double.Parse(Fy)) / (2 * (166 + rt)), 4);
                     }
                     else if (rt > Double.Parse(rtcLabel.Text))
                     {
-                        Fl = Math.Round((co * 29000000) / (2 * rt),4);
+                        Fl = Math.Round((co * 29000000) / (2 * rt), 4);
                     }
 
-                    var klr = Math.Round((2.1 * 2124) / r,4);
+                    var klr = Math.Round((2.1 * 2124) / r, 4);
 
-                    var cc = Math.Round(Math.Sqrt((Math.Pow(Math.PI, 2) * 29000000) / Fl),4);
+                    var cc = Math.Round(Math.Sqrt((Math.Pow(Math.PI, 2) * 29000000) / Fl), 4);
 
                     double kf = 0;
 
@@ -365,11 +370,11 @@ namespace WaterTankTool_WFA.Solver
                     }
                     else if (klr > 25 && klr <= cc)
                     {
-                        kf = Math.Round(1 - (0.5 * Math.Pow((klr / cc), 2)),4);
+                        kf = Math.Round(1 - (0.5 * Math.Pow((klr / cc), 2)), 4);
                     }
                     else if (klr > cc)
                     {
-                        kf = Math.Round((0.5 * Math.Pow((cc / klr), 2)),4);
+                        kf = Math.Round((0.5 * Math.Pow((cc / klr), 2)), 4);
                     }
 
                     var fa = Fl * kf;
@@ -543,57 +548,76 @@ namespace WaterTankTool_WFA.Solver
 
         }
 
-        private float PrintTableData(Graphics g, List<string> data, float xPos, float yPos, System.Drawing.Font printFont, PrintPageEventArgs e)
+        private float PrintDataGridView(Graphics g, DataGridView dgv, float xPos, float yPos, System.Drawing.Font printFont, string tableName)
         {
-            foreach (string item in data)
+            
+            float startX = xPos;
+            float startY = yPos;
+            float cellHeight = printFont.GetHeight() + 10; // Row height with spacing
+            float colWidth = 100; // Column width (adjust as needed)
+
+            // Draw table name/title
+            g.DrawString(tableName, new System.Drawing.Font("Arial", 12, FontStyle.Bold), Brushes.Black, xPos, yPos);
+            yPos += cellHeight + 5; // Move down for table
+
+            Pen borderPen = new Pen(Color.Black, 1); // Table border lines
+
+            // Draw column headers with borders
+            foreach (DataGridViewColumn col in dgv.Columns)
             {
-                g.DrawString(item, printFont, Brushes.Black, xPos, yPos);
-                yPos += printFont.GetHeight(); // Move to the next line
-                if (yPos > e.MarginBounds.Bottom) // Check if we've reached the bottom of the page
+                RectangleF headerRect = new RectangleF(xPos, yPos, colWidth, cellHeight);
+                g.DrawRectangle(borderPen, xPos, yPos, colWidth, cellHeight);
+                g.DrawString(col.HeaderText, printFont, Brushes.Black, headerRect);
+                xPos += colWidth;
+            }
+            yPos += cellHeight;
+            xPos = startX; // Reset X position
+
+            // Draw each row with borders
+            foreach (DataGridViewRow row in dgv.Rows)
+            {
+                if (!row.IsNewRow) // Skip empty last row
                 {
-                    return yPos; // Return the current yPos to signal that we need more pages
+                    foreach (DataGridViewCell cell in row.Cells)
+                    {
+                        RectangleF cellRect = new RectangleF(xPos, yPos, colWidth, cellHeight);
+                        g.DrawRectangle(borderPen, xPos, yPos, colWidth, cellHeight);
+                        g.DrawString(Convert.ToString(cell.Value), printFont, Brushes.Black, cellRect);
+                        xPos += colWidth;
+                    }
+                    yPos += cellHeight;
+                    xPos = startX; // Reset X position for next row
                 }
             }
-            return yPos;
+
+            return yPos + 20; // Return new Y position (add space after table)
         }
 
 
-        private List<string> GetTable1Data()
-        {
-            // ... your logic to retrieve data from table 1
-            // Example:
-            return new List<string> { "Row 1, Col 1", "Row 1, Col 2", "Row 2, Col 1", "Row 2, Col 2" };
-        }
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
-            //Graphics g = e.Graphics;
-            //float yPos = e.MarginBounds.Top; // Starting Y position
-            //float xPos = e.MarginBounds.Left; // Starting X position
-            //System.Drawing.Font printFont = new System.Drawing.Font("Arial", 12);
+            float yPos = e.MarginBounds.Top; // Start position for printing
+            float xPos = e.MarginBounds.Left; // Left margin position
+            System.Drawing.Font printFont = new System.Drawing.Font("Arial", 10);
 
-            //// Example: Assuming you have lists of data for each table
-            //List<string> table1Data = GetTable1Data(); // Your method to get table 1 data
-            //                                           //List<string> table2Data = GetTable2Data(); 
-            //                                           // ... and so on for other tables
+            // Print First Table (e.g., dataGridView1)
+            yPos = PrintDataGridView(e.Graphics, dataGridView1, xPos, yPos, printFont, "Check Table Data");
+            yPos += 40; // Add space between tables
 
-            //// Print Table 1
-            //yPos = PrintTableData(g, table1Data, xPos, yPos, printFont, e);
+            // Print Second Table (e.g., dataGridView5)
+            yPos = PrintDataGridView(e.Graphics, dataGridView5, xPos, yPos, printFont, "Segment Properties Data");
 
-            //// Print Table 2 (move down a bit for spacing)
-            ////yPos += 20;  
-            ////yPos = PrintTableData(g, table2Data, xPos, yPos, printFont);
-            //// ... print other tables
-
-            //// Check if more pages needed (for long tables)
-            //e.HasMorePages = (yPos < e.MarginBounds.Bottom); // Example condition
+            e.HasMorePages = false; // Only one page
         }
+
+
 
         private void printToolStripButton_Click(object sender, EventArgs e)
         {
-
+            
             PrintDocument printDocument = new PrintDocument();
             printDocument.PrintPage += PrintDocument_PrintPage;
-            printDocument.DocumentName = "My Print Job"; // Set a document name (optional)
+            printDocument.DocumentName = "Output Data"; //
 
             PrintDialog printDialog = new PrintDialog();
             printDialog.Document = printDocument;
@@ -601,58 +625,6 @@ namespace WaterTankTool_WFA.Solver
             if (printDialog.ShowDialog() == DialogResult.OK)
             {
                 printDocument.Print();
-            }
-
-
-            // This is the working code to print each tables in separate page in PDF
-            using (MemoryStream ms = new MemoryStream())
-            using (Document doc = new Document(PageSize.A4, 25, 25, 30, 30))
-            using (PdfWriter writer = PdfWriter.GetInstance(doc, ms))
-            {
-                doc.Open();
-
-                foreach (GroupBox groupBox in this.Controls.OfType<GroupBox>()) // Iterate through GroupBoxes on the form
-                {
-                    // 1. Calculate total content height within the GroupBox (for scrolling)
-                    int totalContentHeight = 0;
-                    foreach (Control c in groupBox.Controls)
-                    {
-                        totalContentHeight = Math.Max(totalContentHeight, c.Bottom);
-                    }
-
-                    int printableHeight = 700; // Adjust as needed
-                    int numPages = (int)Math.Ceiling((double)totalContentHeight / printableHeight);
-
-                    for (int i = 0; i < numPages; i++)
-                    {
-                        Bitmap bmp = new Bitmap(groupBox.Width, printableHeight);
-                        using (Graphics g = Graphics.FromImage(bmp))
-                        {
-                            Rectangle clipRect = new Rectangle(0, i * printableHeight, bmp.Width, printableHeight);
-                            g.SetClip(clipRect);
-
-                            g.TranslateTransform(0, -i * printableHeight);
-                            groupBox.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                            g.ResetTransform();
-                        }
-
-                        iTextSharp.text.Image pdfImage = iTextSharp.text.Image.GetInstance(bmp, ImageFormat.Png);
-                        pdfImage.ScaleToFit(doc.PageSize.Width - doc.LeftMargin - doc.RightMargin, doc.PageSize.Height - doc.TopMargin - doc.BottomMargin);
-                        pdfImage.Alignment = iTextSharp.text.Image.ALIGN_CENTER;
-                        doc.Add(pdfImage);
-
-                        if (i < numPages - 1) doc.NewPage();
-                    }
-                    if (groupBox != this.Controls.OfType<GroupBox>().Last()) doc.NewPage(); // New page after each groupbox except the last one
-                }
-
-
-                doc.Close();
-
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.Filter = "PDF files (*.pdf)|*.pdf";
-                if (sfd.ShowDialog() == DialogResult.OK)
-                    File.WriteAllBytes(sfd.FileName, ms.ToArray());
             }
         }
 
@@ -664,6 +636,66 @@ namespace WaterTankTool_WFA.Solver
         private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex].Name == "Check" && e.Value != null)
+            {
+                // Try converting the cell's value to a number.
+                if (double.TryParse(e.Value.ToString(), out double cellValue))
+                {
+                    if (cellValue >= 1 || cellValue <= 0.5)
+                    {
+                        e.CellStyle.ForeColor = Color.Red;
+                    }
+                    else
+                    {
+                        e.CellStyle.ForeColor = Color.Black; // or your default color
+                    }
+                }
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
+            {
+                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
+
+                // Convert the row's DataBoundItem to our CheckTableData object
+                CheckTableData checkData = row.DataBoundItem as CheckTableData;
+
+                if (checkData != null)
+                {
+                    // We can now retrieve the unique ID
+                    int segmentNumber = checkData.SegmentID;
+
+                    // Open your dialog with that unique ID
+                    SegmentDialogBox segmentDialogBox = new SegmentDialogBox(segmentNumber, "Modify", _waterTankForm);
+                    var result = segmentDialogBox.ShowDialog();
+
+                    if (result == DialogResult.OK)
+                    {
+                        LoadData();
+
+                        LoadSegmentWeightData();
+                        LoadCummulativeWeightData();
+                        WindLoadPerSegment();
+                        LoadTable2();
+                        LoadCheckTableData();
+                    }
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a valid row to modify.");
+            }
         }
     }
 
@@ -720,6 +752,8 @@ namespace WaterTankTool_WFA.Solver
 
     public class CheckTableData
     {
+
+        public int SegmentID { get; set; }
         public string Segment { get; set; }
         public double fa { get; set; }
         public double fb { get; set; }

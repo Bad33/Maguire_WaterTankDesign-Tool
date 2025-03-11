@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "lkjkFyeJFXU=",
+  "dgSpecHash": "74+lUlNbh+8=",
   "success": true,
   "projectFilePath": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
   "expectedPackageFiles": [
@@ -37,7 +37,7 @@
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
-    "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.3\\microsoft.win32.systemevents.9.0.3.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\runtime.native.system.data.sqlclient.sni\\4.7.0\\runtime.native.system.data.sqlclient.sni.4.7.0.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni\\4.4.0\\runtime.win-arm64.runtime.native.system.data.sqlclient.sni.4.4.0.nupkg.sha512",
@@ -62,7 +62,7 @@
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.data.sqlite\\1.0.119\\system.data.sqlite.1.0.119.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.data.sqlite.core\\1.0.119\\system.data.sqlite.core.1.0.119.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.data.sqlite.ef6\\1.0.119\\system.data.sqlite.ef6.1.0.119.nupkg.sha512",
-    "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.drawing.common\\4.7.0\\system.drawing.common.4.7.0.nupkg.sha512",
+    "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.drawing.common\\9.0.3\\system.drawing.common.9.0.3.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.io.pipelines\\6.0.3\\system.io.pipelines.6.0.3.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\system.reflection.metadata\\6.0.1\\system.reflection.metadata.6.0.1.nupkg.sha512",

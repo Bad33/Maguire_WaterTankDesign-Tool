@@ -29,7 +29,10 @@ namespace WaterTankTool_WFA
 
         private void LoadData()
         {
-            dataGridView1.DataSource = _context.SegmentProperties.ToList();
+            var segmentData = _context.SegmentProperties.ToList();
+            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+
+            dataGridView1.DataSource = segmentData;
             foreach (DataGridViewColumn column in dataGridView1.Columns)
             {
                 column.SortMode = DataGridViewColumnSortMode.Programmatic;

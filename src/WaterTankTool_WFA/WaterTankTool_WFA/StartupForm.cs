@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Entity;
 
@@ -164,22 +165,34 @@ namespace WaterTankTool_WFA
 
         private void LoadRecentProjects()
         {
-            string recentProjectsFile = "recent_projects.txt";
+            string recentProjectsFile = "recent_projects.json";
+
             if (File.Exists(recentProjectsFile))
             {
-                recentProjects = File.ReadAllLines(recentProjectsFile).ToList();
+                try
+                {
+                    string json = File.ReadAllText(recentProjectsFile);
+                    recentProjects = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
+                }
+                catch
+                {
+                    recentProjects = new List<string>(); // Reset if file is corrupted
+                }
             }
         }
 
+
         private void DisplayRecentProjects(FlowLayoutPanel recentProjectsPanel)
         {
+            recentProjectsPanel.Controls.Clear(); // Avoid duplicate entries
+
             foreach (var projectPath in recentProjects)
             {
-                if (File.Exists(projectPath))
+                if (Directory.Exists(Path.GetDirectoryName(projectPath))) // Allow folders
                 {
                     Button projectButton = new Button
                     {
-                        Text = Path.GetFileName(projectPath),
+                        Text = Path.GetFileNameWithoutExtension(projectPath),
                         Font = new Font("Segoe UI", 10),
                         Width = 850,
                         Height = 50,
@@ -188,18 +201,17 @@ namespace WaterTankTool_WFA
                         ForeColor = Color.Black,
                         TextAlign = ContentAlignment.MiddleLeft,
                         Padding = new Padding(5),
-                        Margin = new Padding(0, 5, 0, 5),
-                        
+                        Margin = new Padding(0, 5, 0, 5)
                     };
                     projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(97, 97, 102); };
                     projectButton.MouseLeave += (s, e) => { projectButton.BackColor = Color.Transparent; };
-                    projectButton.FlatAppearance.BorderSize = 0;
-                    projectButton.FlatStyle = FlatStyle.Popup;
                     projectButton.Click += (s, e) => { OpenProject(projectPath); };
+
                     recentProjectsPanel.Controls.Add(projectButton);
                 }
             }
         }
+
 
         private void OpenProjectButton_Click(object sender, EventArgs e)
         {
@@ -225,21 +237,14 @@ namespace WaterTankTool_WFA
         {
             using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
             {
-                //folderDialog.Description = "Select a location to create the new project folder";
-
                 if (folderDialog.ShowDialog() == DialogResult.OK)
                 {
                     string selectedFolderPath = folderDialog.SelectedPath;
 
-                    bool projectExists = Directory.EnumerateFiles(selectedFolderPath, "*.proj").Any() ||
-                                         File.Exists(Path.Combine(selectedFolderPath, "project_data.db"));
-
-                    if (projectExists)
+                    if (Directory.Exists(selectedFolderPath) && Directory.EnumerateFileSystemEntries(selectedFolderPath).Any())
                     {
-                        MessageBox.Show("A project already exists in the selected folder. Please choose a different location or folder.",
-                                        "Project Exists",
-                                        MessageBoxButtons.OK,
-                                        MessageBoxIcon.Warning);
+                        MessageBox.Show("The selected folder is not empty. Choose an empty folder.",
+                                        "Invalid Folder", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         return;
                     }
 
@@ -253,66 +258,64 @@ namespace WaterTankTool_WFA
                     string projectFolderPath = Path.Combine(selectedFolderPath, projectName);
                     Directory.CreateDirectory(projectFolderPath);
 
-
-
                     string projectFilePath = Path.Combine(projectFolderPath, $"{projectName}.proj");
-                    File.WriteAllText(projectFilePath, "Default project content or structure.");
+                    File.WriteAllText(projectFilePath, "Default project content.");
 
                     InitializeProjectDatabase(projectFolderPath);
-
-                    string dbFilePath = Path.Combine(projectFolderPath, "project_data.db");
-                    string connectionString = $"Data Source={dbFilePath};";
-
-                    var dbContext = new WaterTankDbContext(connectionString);
-                    dbContext.EnsureDatabaseCreated();
-                    _diContainer.Register<WaterTankDbContext>(dbContext);
-
-                    var mainForm = new WaterTank(this);
-                    this.Hide();
-                    mainForm.Show();
+                    OpenProject(projectFilePath); // Automatically open after creation
 
                     AddToRecentProjects(projectFilePath);
                 }
             }
         }
 
+
         private void AddToRecentProjects(string projectFilePath)
         {
             if (!recentProjects.Contains(projectFilePath))
             {
                 recentProjects.Insert(0, projectFilePath);
-                File.WriteAllLines("recent_projects.txt", recentProjects);
+                string json = JsonSerializer.Serialize(recentProjects);
+                File.WriteAllText("recent_projects.json", json);
             }
         }
 
-        public async void OpenProject(string projectPath)
+
+        public async Task OpenProject(string projectPath)
         {
             using (LoadingWindow loading = new LoadingWindow())
             {
-                // Show the loading window
                 loading.Show();
-                // Force the UI to update immediately so that the loading form is visible
-                Application.DoEvents();
 
-                // Run the heavy project-loading work asynchronously
-                await Task.Run(() =>
+                try
                 {
-                    string dbFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(projectPath), "project_data.db");
-                    string connectionString = $"Data Source={dbFilePath};";
-                    var dbContext = new WaterTankDbContext(connectionString);
-                    dbContext.EnsureDatabaseCreated();
-                    _diContainer.Register<WaterTankDbContext>(dbContext);
-                    // If you have additional heavy work, include it here.
-                });
-
-                // Close the loading window once the work is complete
-                loading.Close();
+                    // Run the project loading in a separate task
+                    await Task.Run(() =>
+                    {
+                        string dbFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "project_data.db");
+                        string connectionString = $"Data Source={dbFilePath};";
+                        var dbContext = new WaterTankDbContext(connectionString);
+                        dbContext.EnsureDatabaseCreated();
+                        _diContainer.Register<WaterTankDbContext>(dbContext);
+                    });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error opening project: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    loading.Close(); // Ensure the loading screen always closes
+                }
             }
 
-            var mainForm = new WaterTank(this);
+            // Open the main application window
+            var mainForm = new WaterTank(this); // Pass the project path
             this.Hide();
             mainForm.Show();
         }
+
+
 
         private void InitializeProjectDatabase(string projectFolderPath)
         {
@@ -479,10 +482,28 @@ namespace WaterTankTool_WFA
             }
         }
 
-            private void StartupForm_Load(object sender, EventArgs e)
+        private void StartupForm_Load(object sender, EventArgs e)
         {
-            // Any additional logic for when the StartupForm loads
+            //if (Settings.Default.WindowMaximized)
+            //{
+            //    this.WindowState = FormWindowState.Maximized;
+            //}
+            //else
+            //{
+            //    this.Size = Settings.Default.WindowSize;
+            //    this.Location = Settings.Default.WindowLocation;
+            //}
         }
+
+
+        private void StartupForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //Settings.Default.WindowMaximized = (this.WindowState == FormWindowState.Maximized);
+            //Settings.Default.WindowSize = this.Size;
+            //Settings.Default.WindowLocation = this.Location;
+            //Settings.Default.Save();
+        }
+
 
     }
 }
