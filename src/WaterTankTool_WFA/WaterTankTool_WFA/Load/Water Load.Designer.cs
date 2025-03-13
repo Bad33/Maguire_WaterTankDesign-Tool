@@ -52,7 +52,7 @@
             // textBox1
             // 
             textBox1.Location = new Point(108, 27);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(106, 23);
             textBox1.TabIndex = 1;
@@ -62,9 +62,9 @@
             // 
             groupBox1.Controls.Add(richTextBox1);
             groupBox1.Location = new Point(34, 69);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(242, 62);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
@@ -73,7 +73,7 @@
             // richTextBox1
             // 
             richTextBox1.Location = new Point(11, 23);
-            richTextBox1.Margin = new Padding(2, 2, 2, 2);
+            richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(220, 31);
             richTextBox1.TabIndex = 0;
@@ -82,7 +82,7 @@
             // button1
             // 
             button1.Location = new Point(108, 150);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 27);
             button1.TabIndex = 3;
@@ -92,7 +92,7 @@
             // button2
             // 
             button2.Location = new Point(197, 150);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 27);
             button2.TabIndex = 4;
@@ -121,8 +121,9 @@
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "Water_Load";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Water Load";
             Load += Water_Load_Load;

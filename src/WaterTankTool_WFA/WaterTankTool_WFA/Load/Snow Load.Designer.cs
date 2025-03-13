@@ -100,7 +100,7 @@
             label5.AutoSize = true;
             label5.Location = new Point(26, 120);
             label5.Name = "label5";
-            label5.Size = new Size(93, 15);
+            label5.Size = new Size(94, 15);
             label5.TabIndex = 6;
             label5.Text = "Total Snow Load";
             // 
@@ -159,6 +159,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "Snow_Load";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Snow Load";
             ResumeLayout(false);

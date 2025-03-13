@@ -31,6 +31,8 @@
             button1 = new Button();
             button2 = new Button();
             groupBox1 = new GroupBox();
+            textBox11 = new TextBox();
+            label15 = new Label();
             textBox9 = new TextBox();
             label13 = new Label();
             label11 = new Label();
@@ -57,8 +59,6 @@
             richTextBox2 = new RichTextBox();
             groupBox3 = new GroupBox();
             label12 = new Label();
-            label15 = new Label();
-            textBox11 = new TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -119,6 +119,23 @@
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Properties";
+            // 
+            // textBox11
+            // 
+            textBox11.Location = new Point(97, 338);
+            textBox11.Name = "textBox11";
+            textBox11.Size = new Size(75, 23);
+            textBox11.TabIndex = 24;
+            textBox11.Text = "0.5";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(17, 338);
+            label15.Name = "label15";
+            label15.Size = new Size(19, 15);
+            label15.TabIndex = 22;
+            label15.Text = "Cf";
             // 
             // textBox9
             // 
@@ -331,7 +348,7 @@
             label1.Location = new Point(16, 27);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
-            label1.Size = new Size(55, 15);
+            label1.Size = new Size(54, 15);
             label1.TabIndex = 0;
             label1.Text = "Exposure";
             // 
@@ -381,23 +398,6 @@
             label12.Text = "q doesnot include velocity pressure exosure coefficient(Kz). The effect will be added for each segment individually.";
             label12.UseCompatibleTextRendering = true;
             // 
-            // label15
-            // 
-            label15.AutoSize = true;
-            label15.Location = new Point(17, 338);
-            label15.Name = "label15";
-            label15.Size = new Size(19, 15);
-            label15.TabIndex = 22;
-            label15.Text = "Cf";
-            // 
-            // textBox11
-            // 
-            textBox11.Location = new Point(97, 338);
-            textBox11.Name = "textBox11";
-            textBox11.Size = new Size(75, 23);
-            textBox11.TabIndex = 24;
-            textBox11.Text = "0.5";
-            // 
             // Wind_Load
             // 
             AcceptButton = button1;
@@ -414,6 +414,7 @@
             Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Wind_Load";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Wind Load";
             groupBox1.ResumeLayout(false);

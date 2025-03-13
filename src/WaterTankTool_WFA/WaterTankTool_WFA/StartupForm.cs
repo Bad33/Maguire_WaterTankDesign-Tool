@@ -73,7 +73,7 @@ namespace WaterTankTool_WFA
                 Font = new Font("Segoe UI", 14, FontStyle.Regular),
                 ForeColor = Color.White,
                 AutoSize = true,
-                Margin = new Padding(0, 0, 0, 10)
+                Margin = new Padding(10, 50, 10, 0)
             };
             recentProjectsPanel.Controls.Add(recentProjectsLabel);
 
@@ -184,11 +184,23 @@ namespace WaterTankTool_WFA
 
         private void DisplayRecentProjects(FlowLayoutPanel recentProjectsPanel)
         {
-            recentProjectsPanel.Controls.Clear(); // Avoid duplicate entries
+            recentProjectsPanel.Controls.Clear(); // This removes all controls, including the label
 
+            // Re-add the label at the top
+            Label recentProjectsLabel = new Label
+            {
+                Text = "Open Recent",
+                Font = new Font("Segoe UI", 14, FontStyle.Regular),
+                ForeColor = Color.White,
+                AutoSize = true,
+                Margin = new Padding(2, 5, 0, 5)
+            };
+            recentProjectsPanel.Controls.Add(recentProjectsLabel);
+
+            // Then add the project buttons
             foreach (var projectPath in recentProjects)
             {
-                if (Directory.Exists(Path.GetDirectoryName(projectPath))) // Allow folders
+                if (Directory.Exists(Path.GetDirectoryName(projectPath)))
                 {
                     Button projectButton = new Button
                     {
@@ -211,6 +223,7 @@ namespace WaterTankTool_WFA
                 }
             }
         }
+
 
 
         private void OpenProjectButton_Click(object sender, EventArgs e)

@@ -160,7 +160,7 @@
             label21.AutoSize = true;
             label21.Location = new Point(14, 294);
             label21.Name = "label21";
-            label21.Size = new Size(19, 15);
+            label21.Size = new Size(20, 15);
             label21.TabIndex = 35;
             label21.Text = "TL";
             // 
@@ -187,7 +187,7 @@
             label18.AutoSize = true;
             label18.Location = new Point(15, 358);
             label18.Name = "label18";
-            label18.Size = new Size(17, 15);
+            label18.Size = new Size(18, 15);
             label18.TabIndex = 32;
             label18.Text = "Ts";
             // 
@@ -401,7 +401,7 @@
             label8.Location = new Point(14, 322);
             label8.Margin = new Padding(2, 0, 2, 0);
             label8.Name = "label8";
-            label8.Size = new Size(16, 15);
+            label8.Size = new Size(17, 15);
             label8.TabIndex = 7;
             label8.Text = "Ti";
             // 
@@ -510,6 +510,7 @@
             Controls.Add(groupBox1);
             Margin = new Padding(2);
             Name = "Seismic";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Seismic Load";
             groupBox1.ResumeLayout(false);

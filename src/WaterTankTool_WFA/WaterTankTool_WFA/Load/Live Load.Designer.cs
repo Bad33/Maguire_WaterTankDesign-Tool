@@ -57,7 +57,7 @@
             // textBox1
             // 
             textBox1.Location = new Point(151, 21);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(113, 23);
             textBox1.TabIndex = 1;
@@ -67,9 +67,9 @@
             // 
             groupBox1.Controls.Add(richTextBox1);
             groupBox1.Location = new Point(20, 130);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(274, 57);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
@@ -78,7 +78,7 @@
             // richTextBox1
             // 
             richTextBox1.Location = new Point(13, 20);
-            richTextBox1.Margin = new Padding(2, 2, 2, 2);
+            richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(247, 30);
             richTextBox1.TabIndex = 0;
@@ -87,7 +87,7 @@
             // button1
             // 
             button1.Location = new Point(115, 191);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 31);
             button1.TabIndex = 3;
@@ -98,7 +98,7 @@
             // button2
             // 
             button2.Location = new Point(202, 191);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 31);
             button2.TabIndex = 4;
@@ -121,7 +121,7 @@
             label3.AutoSize = true;
             label3.Location = new Point(20, 59);
             label3.Name = "label3";
-            label3.Size = new Size(116, 15);
+            label3.Size = new Size(115, 15);
             label3.TabIndex = 6;
             label3.Text = "Area Exposed to Live";
             // 
@@ -130,7 +130,7 @@
             label4.AutoSize = true;
             label4.Location = new Point(20, 94);
             label4.Name = "label4";
-            label4.Size = new Size(85, 15);
+            label4.Size = new Size(86, 15);
             label4.TabIndex = 7;
             label4.Text = "Total Live Load";
             // 
@@ -189,9 +189,10 @@
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Live_Load";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Live Load";
             groupBox1.ResumeLayout(false);

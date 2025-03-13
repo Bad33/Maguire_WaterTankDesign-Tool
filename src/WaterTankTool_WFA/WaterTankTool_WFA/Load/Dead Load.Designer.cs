@@ -52,7 +52,7 @@
             // textBox1
             // 
             textBox1.Location = new Point(106, 26);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(106, 23);
             textBox1.TabIndex = 1;
@@ -62,9 +62,9 @@
             // 
             groupBox1.Controls.Add(richTextBox1);
             groupBox1.Location = new Point(24, 63);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(227, 53);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
@@ -73,7 +73,7 @@
             // richTextBox1
             // 
             richTextBox1.Location = new Point(9, 19);
-            richTextBox1.Margin = new Padding(2, 2, 2, 2);
+            richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(215, 26);
             richTextBox1.TabIndex = 0;
@@ -82,7 +82,7 @@
             // button1
             // 
             button1.Location = new Point(83, 132);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 26);
             button1.TabIndex = 3;
@@ -92,7 +92,7 @@
             // button2
             // 
             button2.Location = new Point(173, 132);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 26);
             button2.TabIndex = 4;
@@ -123,9 +123,10 @@
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Dead_Load";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "Dead Load";
             groupBox1.ResumeLayout(false);
