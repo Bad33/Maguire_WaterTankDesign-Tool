@@ -191,16 +191,24 @@ namespace WaterTankTool_WFA.Solver
                 }
 
                 dataGridView4.DataSource = combineViewModel;
+
+
+                ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
+                toolStripStatusLabel.ForeColor = Color.Red;
+                toolStripStatusLabel.Text = "No Segments Added. Please add the segments to see the output.";
+
+                statusStrip2.Items.Add(toolStripStatusLabel);
             }
             else
             {
-                //MessageBox.Show("Muji");
-                Label label = new Label();
-                label.Text = "No Segments Added. Please add the segments to see the output.";
-                label.ForeColor = Color.Red;
 
-                statusStrip2.Items.Add(label.Text);
-                //label.Controls.Add(statusStrip2);
+                ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
+                toolStripStatusLabel.ForeColor = Color.Red;
+                toolStripStatusLabel.Text = "Double Click on the cell in Segment Check Table to change the thickness of segments. (It is recommended to gradually increase/decrease (T) by 25% each time) | For more info go to Help window. ";
+
+                statusStrip2.Items.Add(toolStripStatusLabel);
+
+
             }
 
         }
@@ -258,7 +266,7 @@ namespace WaterTankTool_WFA.Solver
                     {
                         waterWeight = waterWeight,
                         snowWeight = snowWeight,
-                        selfWeight = Math.Round(Double.Parse(res[index]),4).ToString(), // Store the cumulative value
+                        selfWeight = Math.Round(Double.Parse(res[index]), 4).ToString(), // Store the cumulative value
 
                     };
                 }).ToList();
@@ -550,7 +558,7 @@ namespace WaterTankTool_WFA.Solver
 
         private float PrintDataGridView(Graphics g, DataGridView dgv, float xPos, float yPos, System.Drawing.Font printFont, string tableName)
         {
-            
+
             float startX = xPos;
             float startY = yPos;
             float cellHeight = printFont.GetHeight() + 10; // Row height with spacing
@@ -614,7 +622,7 @@ namespace WaterTankTool_WFA.Solver
 
         private void printToolStripButton_Click(object sender, EventArgs e)
         {
-            
+
             PrintDocument printDocument = new PrintDocument();
             printDocument.PrintPage += PrintDocument_PrintPage;
             printDocument.DocumentName = "Output Data"; //
@@ -650,7 +658,7 @@ namespace WaterTankTool_WFA.Solver
                 // Try converting the cell's value to a number.
                 if (double.TryParse(e.Value.ToString(), out double cellValue))
                 {
-                    if (cellValue >= 1 || cellValue <= 0.5)
+                    if (cellValue >= 0.95 || cellValue <= 0.75)
                     {
                         e.CellStyle.ForeColor = Color.Red;
                     }
@@ -696,6 +704,12 @@ namespace WaterTankTool_WFA.Solver
             {
                 MessageBox.Show("Please select a valid row to modify.");
             }
+        }
+
+        private void helpToolStripButton_Click(object sender, EventArgs e)
+        {
+            Help help = new Help();
+            help.ShowDialog();
         }
     }
 

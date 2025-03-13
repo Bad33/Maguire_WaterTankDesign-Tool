@@ -104,7 +104,6 @@
             sqliteCommand1 = new Microsoft.Data.Sqlite.SqliteCommand();
             sqliteCommand2 = new Microsoft.Data.Sqlite.SqliteCommand();
             statusStrip2 = new StatusStrip();
-            toolStripStatusLabel2 = new ToolStripStatusLabel();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView7).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView6).BeginInit();
@@ -116,7 +115,6 @@
             groupBox4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             toolStrip1.SuspendLayout();
-            statusStrip2.SuspendLayout();
             SuspendLayout();
             // 
             // printDialog1
@@ -155,6 +153,7 @@
             // 
             dataGridView7.AllowUserToDeleteRows = false;
             dataGridView7.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView7.BackgroundColor = SystemColors.ButtonFace;
             dataGridView7.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView7.Columns.AddRange(new DataGridViewColumn[] { Column27, Column28, Column29, Column30, Column31, Column33, Column32 });
             dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -232,6 +231,7 @@
             // 
             dataGridView6.AllowUserToDeleteRows = false;
             dataGridView6.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView6.BackgroundColor = SystemColors.ButtonFace;
             dataGridView6.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView6.Columns.AddRange(new DataGridViewColumn[] { Column24, Column25, Column26 });
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -280,6 +280,8 @@
             // dataGridView4
             // 
             dataGridView4.AllowUserToDeleteRows = false;
+            dataGridView4.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView4.BackgroundColor = SystemColors.ButtonFace;
             dataGridView4.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView4.Columns.AddRange(new DataGridViewColumn[] { Column21, Column22, Column23 });
             dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -328,6 +330,8 @@
             // dataGridView5
             // 
             dataGridView5.AllowUserToDeleteRows = false;
+            dataGridView5.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView5.BackgroundColor = SystemColors.ButtonFace;
             dataGridView5.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView5.Columns.AddRange(new DataGridViewColumn[] { Column15, Column16, Column17, Column18, Column19, Column20 });
             dataGridViewCellStyle7.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -425,6 +429,7 @@
             // 
             dataGridView3.AllowUserToDeleteRows = false;
             dataGridView3.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView3.BackgroundColor = SystemColors.ButtonFace;
             dataGridView3.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView3.Columns.AddRange(new DataGridViewColumn[] { Segments, Radius, Thickness, Column4, Column5, Column6, Column7, Column8, Column9, Column10, Column11, Column12, Column13, Column14 });
             dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
@@ -557,6 +562,8 @@
             // dataGridView1
             // 
             dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.BackgroundColor = SystemColors.ButtonFace;
             dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle11.BackColor = SystemColors.Control;
             dataGridViewCellStyle11.Font = new Font("Segoe UI", 8.25F);
@@ -624,7 +631,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.BackColor = SystemColors.Control;
+            toolStrip1.BackColor = Color.WhiteSmoke;
             toolStrip1.Items.AddRange(new ToolStripItem[] { saveToolStripButton, printToolStripButton, toolStripSeparator, helpToolStripButton, toolStripLabel1 });
             resources.ApplyResources(toolStrip1, "toolStrip1");
             toolStrip1.Name = "toolStrip1";
@@ -652,6 +659,7 @@
             helpToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
             resources.ApplyResources(helpToolStripButton, "helpToolStripButton");
             helpToolStripButton.Name = "helpToolStripButton";
+            helpToolStripButton.Click += helpToolStripButton_Click;
             // 
             // toolStripLabel1
             // 
@@ -675,24 +683,18 @@
             // 
             // statusStrip2
             // 
-            statusStrip2.GripStyle = ToolStripGripStyle.Visible;
-            statusStrip2.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel2 });
+            statusStrip2.BackColor = Color.WhiteSmoke;
             resources.ApplyResources(statusStrip2, "statusStrip2");
+            statusStrip2.GripStyle = ToolStripGripStyle.Visible;
             statusStrip2.Name = "statusStrip2";
             statusStrip2.RenderMode = ToolStripRenderMode.ManagerRenderMode;
-            // 
-            // toolStripStatusLabel2
-            // 
-            toolStripStatusLabel2.ForeColor = Color.Red;
-            toolStripStatusLabel2.Margin = new Padding(10, 3, 0, 2);
-            toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            resources.ApplyResources(toolStripStatusLabel2, "toolStripStatusLabel2");
             // 
             // Solver_Output
             // 
             AccessibleRole = AccessibleRole.None;
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Dpi;
+            BackColor = SystemColors.ButtonHighlight;
             Controls.Add(statusStrip2);
             Controls.Add(toolStrip1);
             Controls.Add(groupBox4);
@@ -717,8 +719,6 @@
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
-            statusStrip2.ResumeLayout(false);
-            statusStrip2.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -770,12 +770,6 @@
         private DataGridViewTextBoxColumn Column12;
         private DataGridViewTextBoxColumn Column13;
         private DataGridViewTextBoxColumn Column14;
-        private DataGridViewTextBoxColumn Column21;
-        private DataGridViewTextBoxColumn Column22;
-        private DataGridViewTextBoxColumn Column23;
-        private DataGridViewTextBoxColumn Column24;
-        private DataGridViewTextBoxColumn Column25;
-        private DataGridViewTextBoxColumn Column26;
         private DataGridViewTextBoxColumn Column27;
         private DataGridViewTextBoxColumn Column28;
         private DataGridViewTextBoxColumn Column29;
@@ -789,6 +783,11 @@
         private DataGridViewTextBoxColumn Fₐ;
         private DataGridViewTextBoxColumn Fb;
         private DataGridViewTextBoxColumn Check;
-        private ToolStripStatusLabel toolStripStatusLabel2;
+        private DataGridViewTextBoxColumn Column24;
+        private DataGridViewTextBoxColumn Column25;
+        private DataGridViewTextBoxColumn Column26;
+        private DataGridViewTextBoxColumn Column21;
+        private DataGridViewTextBoxColumn Column22;
+        private DataGridViewTextBoxColumn Column23;
     }
 }

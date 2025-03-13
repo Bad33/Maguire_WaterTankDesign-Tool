@@ -91,8 +91,8 @@ partial class WaterTank
         toolStripSeparator8 = new ToolStripSeparator();
         toolStripLabel2 = new ToolStripLabel();
         toolStripTextBox2 = new ToolStripTextBox();
-        panel1 = new Panel();
         toolStripButton9 = new ToolStripButton();
+        panel1 = new Panel();
         menuStrip1.SuspendLayout();
         toolStrip1.SuspendLayout();
         toolStrip3.SuspendLayout();
@@ -456,6 +456,7 @@ partial class WaterTank
         // 
         // toolStripTextBox1
         // 
+        toolStripTextBox1.BackColor = SystemColors.Control;
         toolStripTextBox1.Name = "toolStripTextBox1";
         toolStripTextBox1.ReadOnly = true;
         resources.ApplyResources(toolStripTextBox1, "toolStripTextBox1");
@@ -478,14 +479,6 @@ partial class WaterTank
         resources.ApplyResources(toolStripTextBox2, "toolStripTextBox2");
         toolStripTextBox2.Click += toolStripTextBox2_Click;
         // 
-        // panel1
-        // 
-        resources.ApplyResources(panel1, "panel1");
-        panel1.BackColor = SystemColors.ControlLightLight;
-        panel1.BorderStyle = BorderStyle.Fixed3D;
-        panel1.Name = "panel1";
-        panel1.Paint += panel1_Paint_1;
-        // 
         // toolStripButton9
         // 
         toolStripButton9.Alignment = ToolStripItemAlignment.Right;
@@ -495,6 +488,14 @@ partial class WaterTank
         toolStripButton9.Name = "toolStripButton9";
         toolStripButton9.TextDirection = ToolStripTextDirection.Vertical270;
         toolStripButton9.Click += toolStripButton9_Click;
+        // 
+        // panel1
+        // 
+        resources.ApplyResources(panel1, "panel1");
+        panel1.BackColor = SystemColors.ControlLightLight;
+        panel1.BorderStyle = BorderStyle.Fixed3D;
+        panel1.Name = "panel1";
+        panel1.Paint += panel1_Paint_1;
         // 
         // WaterTank
         // 
