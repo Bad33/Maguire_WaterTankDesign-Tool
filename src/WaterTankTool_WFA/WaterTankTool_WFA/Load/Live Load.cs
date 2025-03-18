@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using WaterTankTool_WFA.Entity;
+using WaterTankTool_WFA.Designer_Notes;
 
 namespace WaterTankTool_WFA.Load
 {
@@ -16,12 +17,14 @@ namespace WaterTankTool_WFA.Load
     {
         private WaterTankDbContext _context;
 
+
         public Live_Load()
         {
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
             _context = context;
             ShowInputField();
+            richTextBox1.Text = NotesManager.Notes.LiveLoadNotes ?? "";
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
@@ -53,7 +56,7 @@ namespace WaterTankTool_WFA.Load
         private void ShowInputField()
         {
             var existingData = _context.LiveLoadEntity.FirstOrDefault();
-            if(existingData != null)
+            if (existingData != null)
             {
                 textBox1.Text = existingData.Live_Load.ToString();
                 textBox2.Text = existingData.Area_Exposed.ToString();
@@ -90,15 +93,16 @@ namespace WaterTankTool_WFA.Load
 
 
             AddOrUpdateLiveLoad(liveLoad);
+
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
         }
 
- 
+
 
         public void AddOrUpdateLiveLoad(LiveLoadEntity liveLoad)
         {
             //Check if any WindLoadEntity data already exists in the table
-                var existingData = _context.LiveLoadEntity.FirstOrDefault();
+            var existingData = _context.LiveLoadEntity.FirstOrDefault();
 
             if (existingData == null)
             {
@@ -117,5 +121,14 @@ namespace WaterTankTool_WFA.Load
             // Save changes to the database
             _context.SaveChanges();
         }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            NotesManager.Notes.LiveLoadNotes = richTextBox1.Text;
+
+            // Immediately save changes to the single JSON file
+            NotesManager.SaveNotes();
+
+        }
     }
-   }
+}

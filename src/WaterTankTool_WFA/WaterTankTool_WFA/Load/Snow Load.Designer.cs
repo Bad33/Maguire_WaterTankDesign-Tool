@@ -39,6 +39,9 @@
             label6 = new Label();
             button1 = new Button();
             button2 = new Button();
+            richTextBox1 = new RichTextBox();
+            groupBox1 = new GroupBox();
+            groupBox1.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -106,9 +109,9 @@
             // 
             // textBox3
             // 
-            textBox3.Location = new Point(169, 118);
+            textBox3.Location = new Point(167, 118);
             textBox3.Name = "textBox3";
-            textBox3.Size = new Size(100, 23);
+            textBox3.Size = new Size(102, 23);
             textBox3.TabIndex = 7;
             textBox3.TextChanged += textBox3_TextChanged;
             // 
@@ -124,7 +127,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(127, 177);
+            button1.Location = new Point(140, 226);
             button1.Name = "button1";
             button1.Size = new Size(75, 23);
             button1.TabIndex = 9;
@@ -134,19 +137,39 @@
             // 
             // button2
             // 
-            button2.Location = new Point(230, 177);
+            button2.Location = new Point(221, 226);
             button2.Name = "button2";
             button2.Size = new Size(75, 23);
             button2.TabIndex = 10;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
             // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(19, 19);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(245, 30);
+            richTextBox1.TabIndex = 12;
+            richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(richTextBox1);
+            groupBox1.Location = new Point(26, 147);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Size = new Size(270, 68);
+            groupBox1.TabIndex = 13;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Notes";
+            // 
             // Snow_Load
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(323, 212);
+            ClientSize = new Size(315, 261);
+            Controls.Add(groupBox1);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(label6);
@@ -162,6 +185,7 @@
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Snow Load";
+            groupBox1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -179,5 +203,7 @@
         private Label label6;
         private Button button1;
         private Button button2;
+        private RichTextBox richTextBox1;
+        private GroupBox groupBox1;
     }
 }

@@ -58,7 +58,7 @@
             groupBox2 = new GroupBox();
             richTextBox2 = new RichTextBox();
             groupBox3 = new GroupBox();
-            label12 = new Label();
+            richTextBox1 = new RichTextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -376,7 +376,7 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(label12);
+            groupBox3.Controls.Add(richTextBox1);
             groupBox3.Location = new Point(225, 175);
             groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
@@ -386,17 +386,14 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Notes";
             // 
-            // label12
+            // richTextBox1
             // 
-            label12.BorderStyle = BorderStyle.Fixed3D;
-            label12.FlatStyle = FlatStyle.Flat;
-            label12.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            label12.Location = new Point(14, 32);
-            label12.Name = "label12";
-            label12.Size = new Size(129, 125);
-            label12.TabIndex = 0;
-            label12.Text = "q doesnot include velocity pressure exosure coefficient(Kz). The effect will be added for each segment individually.";
-            label12.UseCompatibleTextRendering = true;
+            richTextBox1.Location = new Point(10, 21);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(133, 134);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // Wind_Load
             // 
@@ -455,8 +452,8 @@
         private Label label11;
         private TextBox textBox9;
         private Label label13;
-        private Label label12;
         private TextBox textBox11;
         private Label label15;
+        private RichTextBox richTextBox1;
     }
 }

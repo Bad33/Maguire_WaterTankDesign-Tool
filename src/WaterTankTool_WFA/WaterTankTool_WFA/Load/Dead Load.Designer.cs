@@ -65,7 +65,7 @@
             groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(2);
-            groupBox1.Size = new Size(227, 53);
+            groupBox1.Size = new Size(215, 53);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Notes";
@@ -75,9 +75,10 @@
             richTextBox1.Location = new Point(9, 19);
             richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(215, 26);
+            richTextBox1.Size = new Size(197, 26);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // button1
             // 
@@ -88,10 +89,11 @@
             button1.TabIndex = 3;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
-            button2.Location = new Point(173, 132);
+            button2.Location = new Point(165, 132);
             button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 26);
@@ -116,7 +118,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(270, 169);
+            ClientSize = new Size(260, 169);
             Controls.Add(label2);
             Controls.Add(button2);
             Controls.Add(button1);

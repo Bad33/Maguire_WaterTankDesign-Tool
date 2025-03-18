@@ -195,16 +195,19 @@ namespace WaterTankTool_WFA.Solver
 
                 ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
                 toolStripStatusLabel.ForeColor = Color.Red;
-                toolStripStatusLabel.Text = "No Segments Added. Please add the segments to see the output.";
+                toolStripStatusLabel.Text = "Double Click on the cell in Segment Check Table to change the thickness of segments. (It is recommended to gradually increase/decrease (T) by 25% each time) | For more info go to Help window. ";
 
                 statusStrip2.Items.Add(toolStripStatusLabel);
+
+
             }
             else
             {
 
+
                 ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
                 toolStripStatusLabel.ForeColor = Color.Red;
-                toolStripStatusLabel.Text = "Double Click on the cell in Segment Check Table to change the thickness of segments. (It is recommended to gradually increase/decrease (T) by 25% each time) | For more info go to Help window. ";
+                toolStripStatusLabel.Text = "No Segments Added. Please add the segments to see the output.";
 
                 statusStrip2.Items.Add(toolStripStatusLabel);
 

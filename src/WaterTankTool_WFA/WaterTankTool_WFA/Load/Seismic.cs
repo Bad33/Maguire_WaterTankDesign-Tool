@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Constants;
+using WaterTankTool_WFA.Designer_Notes;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Migrations;
 
@@ -22,6 +23,8 @@ namespace WaterTankTool_WFA.Load
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
             _context = context;
+            richTextBox1.Text = NotesManager.Notes.SeismicLoadNotes ?? "";
+
             ShowInputField();
         }
 
@@ -60,22 +63,22 @@ namespace WaterTankTool_WFA.Load
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<string> allowedValues = new List<string> { "A", "B", "C" ,"D","E","F"};
+            List<string> allowedValues = new List<string> { "A", "B", "C", "D", "E", "F" };
 
             if (string.IsNullOrWhiteSpace(numericUpDown2.Text) ||
                  string.IsNullOrWhiteSpace(numericUpDown1.Text) ||
                  string.IsNullOrWhiteSpace(comboBox1.Text) || string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text) ||
                 string.IsNullOrWhiteSpace(textBox4.Text) || string.IsNullOrWhiteSpace(textBox5.Text) || string.IsNullOrWhiteSpace(textBox6.Text) || string.IsNullOrWhiteSpace(textBox7.Text) ||
-                string.IsNullOrWhiteSpace(textBox8.Text) || string.IsNullOrWhiteSpace(textBox9.Text) || string.IsNullOrWhiteSpace(textBox10.Text) || string.IsNullOrWhiteSpace(textBox11.Text) || string.IsNullOrWhiteSpace(textBox12.Text)) 
+                string.IsNullOrWhiteSpace(textBox8.Text) || string.IsNullOrWhiteSpace(textBox9.Text) || string.IsNullOrWhiteSpace(textBox10.Text) || string.IsNullOrWhiteSpace(textBox11.Text) || string.IsNullOrWhiteSpace(textBox12.Text))
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
             if (!double.TryParse(textBox1.Text, out double live_Load) || !double.TryParse(textBox5.Text, out double area) || !double.TryParse(textBox9.Text, out double a) || !double.TryParse(textBox12.Text, out double b) ||
-                !double.TryParse(textBox2.Text, out double c) || !double.TryParse(textBox6.Text, out double f) || !double.TryParse(textBox10.Text, out double g)  ||
+                !double.TryParse(textBox2.Text, out double c) || !double.TryParse(textBox6.Text, out double f) || !double.TryParse(textBox10.Text, out double g) ||
                 !double.TryParse(textBox3.Text, out double total) || !double.TryParse(textBox7.Text, out double arfea) || !double.TryParse(textBox11.Text, out double h) ||
-                !double.TryParse(textBox4.Text, out double d) || !double.TryParse(textBox8.Text, out double i) || double.TryParse(comboBox1.Text,out double ggwp))
+                !double.TryParse(textBox4.Text, out double d) || !double.TryParse(textBox8.Text, out double i) || double.TryParse(comboBox1.Text, out double ggwp))
             {
                 MessageBox.Show("Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -101,7 +104,7 @@ namespace WaterTankTool_WFA.Load
                 Tl = double.Parse(textBox12.Text),
                 Ti = double.Parse(textBox8.Text),
                 Ts = double.Parse(textBox2.Text),
-                Sa = double.Parse(textBox9.Text), 
+                Sa = double.Parse(textBox9.Text),
                 Lambda = double.Parse(textBox1.Text),
                 Ai = double.Parse(textBox10.Text)
             };
@@ -324,18 +327,18 @@ namespace WaterTankTool_WFA.Load
 
                 if (Ti >= 0 && Ti <= Ts)
                 {
-                    textBox9.Text = Math.Round(Sds,4).ToString();
+                    textBox9.Text = Math.Round(Sds, 4).ToString();
                 }
 
                 else if (Ti > Ts && Ti <= Tl)
                 {
                     var res = Sd1 / Ti;
-                    textBox9.Text = Math.Round(res,4).ToString();
+                    textBox9.Text = Math.Round(res, 4).ToString();
                 }
                 else if (Ti > Tl)
                 {
                     var result = (Sd1 * Tl) / Math.Pow(Ti, 2);
-                    textBox9.Text = Math.Round(result,4).ToString();
+                    textBox9.Text = Math.Round(result, 4).ToString();
                 }
             }
 
@@ -350,6 +353,14 @@ namespace WaterTankTool_WFA.Load
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            NotesManager.Notes.SeismicLoadNotes = richTextBox1.Text;
+
+            // Immediately save changes to the single JSON file
+            NotesManager.SaveNotes();
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using WaterTankTool_WFA.Entity;
+using WaterTankTool_WFA.Designer_Notes;
 
 namespace WaterTankTool_WFA.Load
 {
@@ -22,7 +23,7 @@ namespace WaterTankTool_WFA.Load
             var context = WaterTankDbContext.GetInstance();
             _context = context;
             ShowInputField();
-
+            richTextBox1.Text = NotesManager.Notes.SnowLoadNotes ?? "";
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -116,6 +117,14 @@ namespace WaterTankTool_WFA.Load
 
             // Save changes to the database
             _context.SaveChanges();
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            NotesManager.Notes.SnowLoadNotes = richTextBox1.Text;
+
+            // Immediately save changes to the single JSON file
+            NotesManager.SaveNotes();
         }
     }
 }

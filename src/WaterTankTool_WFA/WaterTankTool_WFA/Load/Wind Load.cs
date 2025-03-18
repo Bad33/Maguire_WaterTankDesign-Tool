@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Constants;
+using WaterTankTool_WFA.Designer_Notes;
 using WaterTankTool_WFA.Entity;
 
 namespace WaterTankTool_WFA.Load
@@ -18,11 +19,14 @@ namespace WaterTankTool_WFA.Load
         private WaterTankDbContext _context;
         private Double Q;
 
+
+
         public Wind_Load()
         {
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
             _context = context;
+            richTextBox1.Text = NotesManager.Notes.WindLoadNotes ?? "q doesnot include velocity pressure exosure coefficient(Kz). The effect will be added for each segment individually.";
 
             FillTextBox();
             FillCalculatedValue();
@@ -175,6 +179,14 @@ namespace WaterTankTool_WFA.Load
         {
             FillCalculatedValue();
 
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            NotesManager.Notes.WindLoadNotes = richTextBox1.Text;
+
+      
+            NotesManager.SaveNotes();
         }
     }
 }

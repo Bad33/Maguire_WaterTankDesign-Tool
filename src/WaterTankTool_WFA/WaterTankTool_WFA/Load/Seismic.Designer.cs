@@ -68,9 +68,12 @@
             label1 = new Label();
             button1 = new Button();
             button2 = new Button();
+            groupBox2 = new GroupBox();
+            richTextBox1 = new RichTextBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            groupBox2.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
@@ -112,7 +115,7 @@
             groupBox1.Controls.Add(label3);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(18, 16);
+            groupBox1.Location = new Point(18, 11);
             groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(2);
@@ -479,7 +482,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(97, 500);
+            button1.Location = new Point(97, 540);
             button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 24);
@@ -490,7 +493,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(179, 500);
+            button2.Location = new Point(179, 540);
             button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 24);
@@ -498,13 +501,33 @@
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
             // 
+            // groupBox2
+            // 
+            groupBox2.Controls.Add(richTextBox1);
+            groupBox2.Location = new Point(20, 489);
+            groupBox2.Name = "groupBox2";
+            groupBox2.Size = new Size(237, 46);
+            groupBox2.TabIndex = 3;
+            groupBox2.TabStop = false;
+            groupBox2.Text = "Notes";
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(6, 16);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(221, 23);
+            richTextBox1.TabIndex = 0;
+            richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
+            // 
             // Seismic
             // 
             AcceptButton = button1;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(277, 535);
+            ClientSize = new Size(277, 575);
+            Controls.Add(groupBox2);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
@@ -517,6 +540,7 @@
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            groupBox2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -562,5 +586,7 @@
         private TextBox textBox12;
         private TextBox textBox11;
         private TextBox textBox3;
+        private GroupBox groupBox2;
+        private RichTextBox richTextBox1;
     }
 }

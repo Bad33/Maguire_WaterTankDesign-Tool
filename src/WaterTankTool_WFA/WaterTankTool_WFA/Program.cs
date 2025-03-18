@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using WaterTankTool_WFA.Designer_Notes;
 
 namespace WaterTankTool_WFA
 {
@@ -23,7 +24,7 @@ namespace WaterTankTool_WFA
 
             // Initialize the DI container
             _diContainer = new DIContainer();
-
+            NotesManager.LoadNotes();
 
             // Run the StartupForm
             Application.Run(new StartupForm(_diContainer));
