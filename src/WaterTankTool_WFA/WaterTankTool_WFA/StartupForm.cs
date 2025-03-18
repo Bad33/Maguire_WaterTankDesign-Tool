@@ -32,8 +32,8 @@ namespace WaterTankTool_WFA
 
             this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
             this.WindowState = FormWindowState.Maximized;
-        
 
+            this.ShowIcon = false;
 
             this.BackColor = ColorTranslator.FromHtml("#F9F9F9");
 

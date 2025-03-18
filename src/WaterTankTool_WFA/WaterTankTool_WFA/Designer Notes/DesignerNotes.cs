@@ -14,5 +14,6 @@ namespace WaterTankTool_WFA.Designer_Notes
         public string WaterLoadNotes { get; set; }
         public string WindLoadNotes { get; set; }
         public string SeismicLoadNotes { get; set; }
+        public string MaterialNotes { get; set; }
     }
 }

@@ -50,6 +50,7 @@
             button2 = new Button();
             label11 = new Label();
             label12 = new Label();
+            richTextBox1 = new RichTextBox();
             groupBox1.SuspendLayout();
             groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown4).BeginInit();
@@ -65,9 +66,9 @@
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(18, 7);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(338, 74);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
@@ -78,7 +79,7 @@
             comboBox2.FormattingEnabled = true;
             comboBox2.Items.AddRange(new object[] { "Steel" });
             comboBox2.Location = new Point(185, 45);
-            comboBox2.Margin = new Padding(2, 2, 2, 2);
+            comboBox2.Margin = new Padding(2);
             comboBox2.Name = "comboBox2";
             comboBox2.Size = new Size(136, 23);
             comboBox2.TabIndex = 3;
@@ -87,7 +88,7 @@
             // textBox1
             // 
             textBox1.Location = new Point(184, 18);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(137, 23);
             textBox1.TabIndex = 2;
@@ -99,7 +100,7 @@
             label2.Location = new Point(18, 46);
             label2.Margin = new Padding(2, 0, 2, 0);
             label2.Name = "label2";
-            label2.Size = new Size(77, 15);
+            label2.Size = new Size(78, 15);
             label2.TabIndex = 1;
             label2.Text = "Material Type";
             // 
@@ -129,9 +130,9 @@
             groupBox3.Controls.Add(label6);
             groupBox3.Controls.Add(label5);
             groupBox3.Location = new Point(18, 85);
-            groupBox3.Margin = new Padding(2, 2, 2, 2);
+            groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(2, 2, 2, 2);
+            groupBox3.Padding = new Padding(2);
             groupBox3.Size = new Size(338, 133);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
@@ -140,7 +141,7 @@
             // numericUpDown4
             // 
             numericUpDown4.Location = new Point(185, 98);
-            numericUpDown4.Margin = new Padding(2, 2, 2, 2);
+            numericUpDown4.Margin = new Padding(2);
             numericUpDown4.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numericUpDown4.Name = "numericUpDown4";
             numericUpDown4.Size = new Size(106, 23);
@@ -193,14 +194,14 @@
             label3.Location = new Point(18, 102);
             label3.Margin = new Padding(2, 0, 2, 0);
             label3.Name = "label3";
-            label3.Size = new Size(123, 15);
+            label3.Size = new Size(124, 15);
             label3.TabIndex = 12;
             label3.Text = "Tensile Ultimate Stress";
             // 
             // numericUpDown3
             // 
             numericUpDown3.Location = new Point(185, 71);
-            numericUpDown3.Margin = new Padding(2, 2, 2, 2);
+            numericUpDown3.Margin = new Padding(2);
             numericUpDown3.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numericUpDown3.Name = "numericUpDown3";
             numericUpDown3.Size = new Size(106, 23);
@@ -210,7 +211,7 @@
             // numericUpDown2
             // 
             numericUpDown2.Location = new Point(185, 44);
-            numericUpDown2.Margin = new Padding(2, 2, 2, 2);
+            numericUpDown2.Margin = new Padding(2);
             numericUpDown2.Maximum = new decimal(new int[] { 40000, 0, 0, 0 });
             numericUpDown2.Name = "numericUpDown2";
             numericUpDown2.Size = new Size(106, 23);
@@ -220,7 +221,7 @@
             // numericUpDown1
             // 
             numericUpDown1.Location = new Point(184, 19);
-            numericUpDown1.Margin = new Padding(2, 2, 2, 2);
+            numericUpDown1.Margin = new Padding(2);
             numericUpDown1.Maximum = new decimal(new int[] { 1000, 0, 0, 0 });
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(106, 23);
@@ -233,7 +234,7 @@
             label7.Location = new Point(18, 74);
             label7.Margin = new Padding(2, 0, 2, 0);
             label7.Name = "label7";
-            label7.Size = new Size(104, 15);
+            label7.Size = new Size(105, 15);
             label7.TabIndex = 8;
             label7.Text = "Tensile Yield Stress";
             // 
@@ -260,7 +261,7 @@
             // button1
             // 
             button1.Location = new Point(277, 273);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 26);
             button1.TabIndex = 4;
@@ -270,7 +271,7 @@
             // button2
             // 
             button2.Location = new Point(190, 273);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 26);
             button2.TabIndex = 5;
@@ -282,7 +283,7 @@
             // 
             label11.AutoSize = true;
             label11.Font = new Font("Segoe UI", 8F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            label11.Location = new Point(27, 233);
+            label11.Location = new Point(27, 237);
             label11.Margin = new Padding(2, 0, 2, 0);
             label11.Name = "label11";
             label11.Size = new Size(38, 13);
@@ -296,9 +297,18 @@
             label12.Location = new Point(70, 233);
             label12.Margin = new Padding(2, 0, 2, 0);
             label12.Name = "label12";
-            label12.Size = new Size(187, 13);
+            label12.Size = new Size(0, 13);
             label12.TabIndex = 7;
-            label12.Text = "Pre Loaded values are Standard values";
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            richTextBox1.Location = new Point(70, 233);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(286, 25);
+            richTextBox1.TabIndex = 8;
+            richTextBox1.Text = "";
+            richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // Material_Property_Data
             // 
@@ -307,6 +317,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button1;
             ClientSize = new Size(372, 307);
+            Controls.Add(richTextBox1);
             Controls.Add(label12);
             Controls.Add(label11);
             Controls.Add(button2);
@@ -314,7 +325,7 @@
             Controls.Add(groupBox3);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             Name = "Material_Property_Data";
             StartPosition = FormStartPosition.CenterParent;
             Text = "Material Property Data";
@@ -354,5 +365,6 @@
         private Label label9;
         private Label label11;
         private Label label12;
+        private RichTextBox richTextBox1;
     }
 }

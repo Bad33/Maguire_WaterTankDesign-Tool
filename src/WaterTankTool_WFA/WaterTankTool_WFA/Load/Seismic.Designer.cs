@@ -513,6 +513,7 @@
             // 
             // richTextBox1
             // 
+            richTextBox1.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
             richTextBox1.Location = new Point(6, 16);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.Size = new Size(221, 23);

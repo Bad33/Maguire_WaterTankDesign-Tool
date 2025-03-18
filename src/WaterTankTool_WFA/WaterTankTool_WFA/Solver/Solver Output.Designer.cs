@@ -705,6 +705,7 @@
             FormBorderStyle = FormBorderStyle.Fixed3D;
             MaximizeBox = false;
             Name = "Solver_Output";
+            ShowIcon = false;
             Load += Solver_Output_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();

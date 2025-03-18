@@ -158,7 +158,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(11, 26);
+            label1.Location = new Point(11, 23);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new Size(89, 15);
@@ -168,10 +168,10 @@
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(139, 25);
+            richTextBox1.Location = new Point(139, 20);
             richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(178, 19);
+            richTextBox1.Size = new Size(178, 24);
             richTextBox1.TabIndex = 4;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -198,7 +198,7 @@
             groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(2);
-            groupBox2.Size = new Size(466, 104);
+            groupBox2.Size = new Size(466, 110);
             groupBox2.TabIndex = 14;
             groupBox2.TabStop = false;
             groupBox2.Text = "Input";
@@ -212,6 +212,7 @@
             maskedTextBox5.Size = new Size(89, 23);
             maskedTextBox5.TabIndex = 21;
             maskedTextBox5.MaskInputRejected += maskedTextBox5_MaskInputRejected;
+            maskedTextBox5.TextChanged += InputFields_TextChanged;
             // 
             // label26
             // 
@@ -227,7 +228,7 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(11, 76);
+            label25.Location = new Point(11, 80);
             label25.Margin = new Padding(2, 0, 2, 0);
             label25.Name = "label25";
             label25.Size = new Size(59, 15);
@@ -282,7 +283,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(251, 53);
+            label6.Location = new Point(251, 59);
             label6.Margin = new Padding(2, 0, 2, 0);
             label6.Name = "label6";
             label6.Size = new Size(71, 15);
@@ -292,7 +293,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(251, 24);
+            label5.Location = new Point(251, 30);
             label5.Margin = new Padding(2, 0, 2, 0);
             label5.Name = "label5";
             label5.Size = new Size(75, 15);
@@ -302,7 +303,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(11, 52);
+            label4.Location = new Point(11, 54);
             label4.Margin = new Padding(2, 0, 2, 0);
             label4.Name = "label4";
             label4.Size = new Size(59, 15);
