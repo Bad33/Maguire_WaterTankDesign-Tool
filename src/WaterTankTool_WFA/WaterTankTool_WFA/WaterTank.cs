@@ -519,7 +519,7 @@ public partial class WaterTank : Form
             Point arrowEnd = new Point(imageBounds.Right + 20, segmentBottom);
             DrawDoubleArrowVerticalLine(g, arrowStart, arrowEnd, Color.Black);
 
-            string labelText = $"{segment.SegmentName}:{segment.SegmentType}, H={segment.HeightFinal - segment.HeightInitial}ft, D={segment.Diameter}ft, T={segment.Thickness}in";
+            string labelText = $"{segment.SegmentName}:{segment.SegmentType}, H={Math.Round((segment.HeightFinal - segment.HeightInitial),4)}ft, D={segment.Diameter}ft, T={segment.Thickness}in";
             using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
             {
                 SizeF textSize = g.MeasureString(labelText, font);

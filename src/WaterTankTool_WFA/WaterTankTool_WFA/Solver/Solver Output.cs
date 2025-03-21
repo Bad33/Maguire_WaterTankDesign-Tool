@@ -49,6 +49,8 @@ namespace WaterTankTool_WFA.Solver
 
         public List<tabelData2> tabelData2s = new List<tabelData2>();
 
+       
+
         public Solver_Output(WaterTank waterTankForm)
         {
             InitializeComponent();
@@ -106,7 +108,7 @@ namespace WaterTankTool_WFA.Solver
                 });
             }
 
-
+            LoadSegmentWeightData();
             dataGridView7.DataSource = windLoadData;
 
 
@@ -119,18 +121,33 @@ namespace WaterTankTool_WFA.Solver
 
             string json = File.ReadAllText("../../../tanks.json");
 
+            Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
+            Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
+
             if (segmentData.Count > 0)
             {
 
                 var tankCapacity = segmentData[0].SegmentName;
 
+                double fWindData = 0;
+
                 TanksData data = JsonSerializer.Deserialize<TanksData>(json);
                 Tank foundTank = data.tanks.Find(t => t.type == tankCapacity);
 
+                //List<SegmentProperties> cylinderData = new List<SegmentProperties>();
+                //cylinderData = segmentData.Where(x=> x.SegmentType == "Cylinder").ToList();
 
+                //for(int i=0;i<cylinderData.Count();i++){
+
+                //    fWindData += segment_Cylinder_Equations.F(cylinderData[i].HeightInitial, cylinderData[i].HeightFinal, cylinderData[i].Diameter);
+                //}
+
+
+                
 
                 waterWeight = foundTank.Weight_of_Water;
-                snowWeight = _context.SnowLoadEntity.FirstOrDefault().Total_Load.ToString();
+                //snowWeight = Math.Round((_context.SnowLoadEntity.FirstOrDefault().Total_Load + fWindData),4).ToString();
+                snowWeight = (_context.SnowLoadEntity.FirstOrDefault().Total_Load ).ToString();
                 selfWeight = foundTank.Weight_of_Steel;
 
                 string numericPart = new string(selfWeight
@@ -138,8 +155,7 @@ namespace WaterTankTool_WFA.Solver
                  .ToArray());
                 var result = double.Parse(numericPart, CultureInfo.InvariantCulture);
 
-                Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
-                Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
+
 
                 var viewModelData = segmentData.FindAll(x => x.SegmentType == "Tanks").Select(segment => new segmentGravityLoad
                 {

@@ -213,7 +213,7 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            var diameter = (double)(diameterFinal - diameterInitial);
+            var diameter = Math.Round(((double)(diameterFinal + diameterInitial))/2,4);
 
             //using (var context = WaterTankDbContext.GetInstance())
             //{
@@ -536,16 +536,18 @@ namespace WaterTankTool_WFA
         {
             Segment_Conical_Equations conical_Equations = new Segment_Conical_Equations();
 
+            var diameter = (diameterFinal + diameterInitial) / 2;
+
             textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString("F4");
-            textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameterInitial).ToString("F4");
-            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal).ToString("F4");
+            textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString("F4");
+            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal,diameterInitial,diameterFinal).ToString("F4");
             textBox4.Text = conical_Equations.kzi(heightInitial).ToString("F4");
             textBox5.Text = conical_Equations.kzf(heightFinal).ToString("F4");
             textBox6.Text = conical_Equations.qzi(heightInitial).ToString("F4");
             textBox7.Text = conical_Equations.qzf(heightFinal).ToString("F4");
-            textBox8.Text = conical_Equations.F(heightInitial, heightFinal, diameterInitial).ToString("F4");
+            textBox8.Text = conical_Equations.F(heightInitial, heightFinal, diameter).ToString("F4");
             textBox9.Text = conical_Equations.L(heightInitial, heightFinal).ToString("F4");
-            textBox10.Text = conical_Equations.Mbase(heightInitial, heightFinal, diameterInitial).ToString("F4");
+            textBox10.Text = conical_Equations.Mbase(heightInitial, heightFinal, diameter).ToString("F4");
         }
 
 

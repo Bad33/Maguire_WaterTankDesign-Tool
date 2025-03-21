@@ -544,9 +544,9 @@
             label12.Location = new Point(251, 61);
             label12.Margin = new Padding(2, 0, 2, 0);
             label12.Name = "label12";
-            label12.Size = new Size(25, 15);
+            label12.Size = new Size(23, 15);
             label12.TabIndex = 6;
-            label12.Text = "Qzf";
+            label12.Text = "qzf";
             // 
             // label11
             // 
@@ -554,9 +554,9 @@
             label11.Location = new Point(251, 32);
             label11.Margin = new Padding(2, 0, 2, 0);
             label11.Name = "label11";
-            label11.Size = new Size(24, 15);
+            label11.Size = new Size(22, 15);
             label11.TabIndex = 5;
-            label11.Text = "Qzi";
+            label11.Text = "qzi";
             // 
             // label10
             // 

@@ -28,6 +28,7 @@ namespace WaterTankTool_WFA.Load
             _context = context;
             richTextBox1.Text = NotesManager.Notes.WindLoadNotes ?? "q doesnot include velocity pressure exosure coefficient(Kz). The effect will be added for each segment individually.";
 
+            LoadInputBox();
             FillTextBox();
             FillCalculatedValue();
         }
@@ -43,6 +44,32 @@ namespace WaterTankTool_WFA.Load
             {
                 textBox7.Text = WindLoadExposure_D.Zg.ToString();
                 textBox8.Text = WindLoadExposure_D.Alpha.ToString();
+            }
+        }
+
+        private void LoadInputBox()
+        {
+
+            var windData = _context.WindLoadEntity.FirstOrDefault();
+            if (windData != null)
+            {
+                comboBox1.Text = windData.Exposure.ToString();
+                textBox1.Text = windData.Kzt.ToString();
+                textBox2.Text = windData.Ke.ToString();
+                textBox3.Text = windData.Kd.ToString();
+                textBox4.Text = windData.G.ToString();
+                textBox5.Text = windData.I.ToString();
+                textBox6.Text = windData.V.ToString();
+                textBox7.Text = windData.Zg.ToString();
+                textBox8.Text = windData.alpha.ToString();
+                textBox9.Text = windData.lambda.ToString();
+                textBox11.Text = windData.Cf.ToString();
+
+                Q = Lambda.Y * 0.00256 * windData.Kzt * windData.Kd * windData.I * Math.Pow(windData.V, 2);
+
+                richTextBox2.Text = "q = " + Q.ToString("F5");
+
+
             }
         }
 

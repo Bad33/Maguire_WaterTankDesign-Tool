@@ -222,7 +222,7 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(74, 23);
             comboBox1.TabIndex = 13;
-            comboBox1.Text = "C";
+            comboBox1.Text = "Select Exposure Class";
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // textBox6

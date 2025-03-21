@@ -166,24 +166,33 @@ namespace WaterTankTool_WFA.Solver_Equation
             return result;
         }
 
-        public double Centroid(double heightInitial, double heightFinal)
+        public double Centroid(double heightInitial, double heightFinal,double diameterTop, double diameterBottom)
         {
+            var r1 = diameterTop / 2;
+            var r2 = diameterBottom / 2;
+
             var height = heightFinal - heightInitial;
-            var result = heightInitial + (height / 2);
+
+            var num = Math.Pow(r1, 2) + (2 * r1 * r2) + (3 * Math.Pow(r2, 2));
+            var deno = Math.Pow(r1, 2) + (r1 * r2) + Math.Pow(r2, 2);
+
+            var result = heightInitial+((height/4) * (num/deno));
+
+
             return result;
         }
 
         public double weight(double hi, double hf, double di,double df, double t)
         {
-            var thickness = unitsConverter.inch_TO_Ft(t);
+            //var thickness = unitsConverter.inch_TO_Ft(t);
 
             var d = df - di;
             var h = hf - hi;
 
             var S1 = (Math.PI / 4) * Math.Pow(di,2);
             var S2 = (Math.PI / 4) * Math.Pow(df,2);
-            var S3 = (Math.PI / 4) * Math.Pow((di - (thickness/12)),2);
-            var S4 = (Math.PI / 4) * Math.Pow((df - (thickness / 12)), 2);
+            var S3 = (Math.PI / 4) * Math.Pow((di - (2*t/12)),2);
+            var S4 = (Math.PI / 4) * Math.Pow((df - (2*t/ 12)), 2);
 
             var weight = ((h / 3) * (S1 + S2 - S3 - S4 + Math.Sqrt(S1 * S2) - Math.Sqrt(S3*S4))) * (ConstantsClass.rs/1000);
 
@@ -193,20 +202,65 @@ namespace WaterTankTool_WFA.Solver_Equation
 
         public double kzi(double heightinitial)
         {
-            //this need to be changed according to the Exposure class selected
-            var zg = WindLoadExposure_C.Zg;
-            var a = WindLoadExposure_C.Alpha;
-            var result = 2.01 * Math.Pow((heightinitial / zg), 2 / a);
-            return result;
+            double res = 0;
+            if(heightinitial <= 15 && Qwind.Exposure == "C")
+            {
+                res = 0.85;
+            }
+            else if (heightinitial <= 15 && Qwind.Exposure == "D")
+            {
+                res = 1.03;
+            }
+            else if( heightinitial > 15)
+            {
+                if(Qwind.Exposure == "C")
+                {
+                    var zg = WindLoadExposure_C.Zg;
+                    var a = WindLoadExposure_C.Alpha;
+                    res = 2.01 * Math.Pow((heightinitial / zg), 2 / a);
+                }
+                else if(Qwind.Exposure == "D")
+                {
+                    var zg = WindLoadExposure_D.Zg;
+                    var a = WindLoadExposure_D.Alpha;
+                    res = 2.01 * Math.Pow((heightinitial / zg), 2 / a);
+                }
+
+            }
+            return res;
+
         }
 
         public double kzf(double heightfinal)
         {
-            //this need to be changed according to the Exposure class selected
-            var zg = WindLoadExposure_C.Zg;
-            var a = WindLoadExposure_C.Alpha;
-            var result = 2.01 * Math.Pow((heightfinal / zg), 2 / a);
-            return result;
+
+            double res = 0;
+            if (heightfinal <= 15 && Qwind.Exposure == "C")
+            {
+                res = 0.85;
+            }
+            else if (heightfinal <= 15 && Qwind.Exposure == "D")
+            {
+                res = 1.03;
+            }
+            else if (heightfinal > 15)
+            {
+                if (Qwind.Exposure == "C")
+                {
+                    var zg = WindLoadExposure_C.Zg;
+                    var a = WindLoadExposure_C.Alpha;
+                    res = 2.01 * Math.Pow((heightfinal / zg), 2 / a);
+                }
+                else if (Qwind.Exposure == "D")
+                {
+                    var zg = WindLoadExposure_D.Zg;
+                    var a = WindLoadExposure_D.Alpha;
+                    res = 2.01 * Math.Pow((heightfinal / zg), 2 / a);
+                }
+
+            }
+            return res;
+
         }
 
         public double qzi(double heightInitial)
@@ -240,7 +294,7 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double F(double heightInitial, double heightFinal, double diameter)
         {
             var height = heightFinal - heightInitial;
-            var result = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial, heightFinal, diameter);
+            var result = (((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial, heightFinal, diameter))/1000;
 
             return result;
         }
