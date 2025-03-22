@@ -8,11 +8,13 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Constants;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Solver_Equation;
+using WaterTankTool_WFA.Tanks;
 
 namespace WaterTankTool_WFA
 {
@@ -37,6 +39,11 @@ namespace WaterTankTool_WFA
         private double Ag;
 
         private double height;
+
+        TankData tankData = new TankData();
+        TankDataDimensions dimensions = new TankDataDimensions();
+        String _selectedTankCapacity;
+
         public SegmentDialogBox()
         {
             Ag = 0;
@@ -95,8 +102,8 @@ namespace WaterTankTool_WFA
         {
             if (_segmentType == "Base")
             {
-                label3.Text = "DiameterInitial";
-                label4.Text = "DiameterFinal";
+                label3.Text = "Top Diameter"; 
+                label4.Text = "Bottom Diameter";
                 label17.Text = "ft";
                 label25.Visible = true;
                 maskedTextBox5.Visible = true;
@@ -161,6 +168,10 @@ namespace WaterTankTool_WFA
                 }
                 else if (segmentProperties != null && segmentProperties.SegmentType == "Tanks")
                 {
+
+                   
+
+
                     _segmentType = segmentProperties.SegmentType;
 
                     showInputFieldsOnType();
@@ -170,10 +181,25 @@ namespace WaterTankTool_WFA
                     maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
                     maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
 
+
+
                     DoCalculations();
 
                 }
                 //}
+            }
+        }
+
+        private void GetTanksJsonData()
+        {
+            try
+            {
+                string jsonString = File.ReadAllText("../../../tanks.json");
+                tankData = JsonSerializer.Deserialize<TankData>(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
 
@@ -482,7 +508,7 @@ namespace WaterTankTool_WFA
             }
             else if (_segmentType == "Tanks")
             {
-                CalculateCylinderValues(heightInitial, heightFinal, diameter, thickness);
+                CalculateTankValues(heightInitial, heightFinal);
             }
             else
             {
@@ -531,6 +557,60 @@ namespace WaterTankTool_WFA
             textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
             textBox10.Text = cylinder_Equations.Mbase(heightInitial, heightFinal, diameter).ToString("F4");
         }
+
+        private void CalculateTankValues(double heightInitial, double heightFinal)
+        {
+            Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
+            var tankProperties = _context.TankProperties.FirstOrDefault();
+            double projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
+            double totalWeight = ExtractDoubleValue(tankProperties.TotalWeight);
+            double f = calculateF(cylinder_Equations.qzi(heightInitial), cylinder_Equations.qzf(heightFinal), projectedArea);
+
+
+            textBox1.Text = tankProperties.TotalWeight;
+            textBox2.Text = tankProperties.ProjectedArea;
+            textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString("F4");
+            textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
+            textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
+            textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
+            textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
+            textBox8.Text = f.ToString("F4");
+            textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
+            textBox10.Text = (f * cylinder_Equations.L(heightInitial, heightFinal)).ToString("F4");
+
+
+        }
+
+        public static double ExtractDoubleValue(string input)
+        {
+
+            string[] parts = input.Split();
+
+            if (parts.Length == 0)
+            {
+                throw new FormatException("Input string is empty.");
+            }
+
+            if (double.TryParse(parts[0], out double result))
+            {
+                return result;
+            }
+            else
+            {
+                throw new FormatException($"Unable to parse '{parts[0]}' as a double.");
+            }
+        }
+
+
+        private double calculateF(double qzi,double qzf,double projectedArea)
+        {
+
+            var result = (((qzi + qzf) / 2) * projectedArea) / 1000;
+
+            return result;
+            
+        }
+
 
         private void CalculateBaseValues(double heightInitial, double heightFinal, double diameterInitial, double diameterFinal, double thickness)
         {

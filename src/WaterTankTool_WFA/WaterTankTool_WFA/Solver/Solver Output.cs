@@ -32,6 +32,7 @@ namespace WaterTankTool_WFA.Solver
         public string snowWeight;
         public string selfWeight;
         private WaterTank _waterTankForm;
+        UnitsConverter inchToFtConverter = new UnitsConverter();
 
         private Label rtcLabel;
 
@@ -55,6 +56,8 @@ namespace WaterTankTool_WFA.Solver
         {
             InitializeComponent();
 
+
+
             var context = WaterTankDbContext.GetInstance();
             _context = context;
             _waterTankForm = waterTankForm;
@@ -75,6 +78,35 @@ namespace WaterTankTool_WFA.Solver
             _waterTankForm = waterTankForm;
         }
 
+        private double calculateF(double qzi, double qzf, double projectedArea)
+        {
+
+            var result = (((qzi + qzf) / 2) * projectedArea) / 1000;
+
+            return result;
+
+        }
+        public static double ExtractDoubleValue(string input)
+        {
+
+            string[] parts = input.Split();
+
+            if (parts.Length == 0)
+            {
+                throw new FormatException("Input string is empty.");
+            }
+
+            if (double.TryParse(parts[0], out double result))
+            {
+                return result;
+            }
+            else
+            {
+                throw new FormatException($"Unable to parse '{parts[0]}' as a double.");
+            }
+        }
+
+
         private void WindLoadPerSegment()
         {
             var segmentData = _context.SegmentProperties.ToList();
@@ -82,19 +114,32 @@ namespace WaterTankTool_WFA.Solver
 
             Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
-
+            var tankProperties = _context.TankProperties.FirstOrDefault();
+            double projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
 
             double cumulativeFwind = 0;
+            double cummulativeMwind = 0;
 
             foreach (var segment in segmentData)
             {
-                double fwind = segment_Cylinder_Equations.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
-                double loadlocation = segment_Cylinder_Equations.L(segment.HeightInitial, segment.HeightFinal);
+                double fwind = 0;
+                double loadlocation = 0;
+                if (segment.SegmentType == "Tanks")
+                {
+                    fwind = calculateF(segment_Cylinder_Equations.qzi(segment.HeightInitial),segment_Cylinder_Equations.qzf(segment.HeightFinal), projectedArea);
+                    loadlocation = segment_Cylinder_Equations.Centroid(segmentData[1].HeightInitial, segmentData[1].HeightFinal) + segmentData[1].HeightInitial;
+                }
+                else
+                {
+                    fwind = segment_Cylinder_Equations.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
+                    loadlocation = segment_Cylinder_Equations.L(segment.HeightInitial, segment.HeightFinal);
+                }
                 double baseElevation = segment.HeightInitial;
                 double armLength = loadlocation - baseElevation;
                 double farm = fwind * armLength;
 
                 cumulativeFwind += fwind;  // cumulative addition
+                cummulativeMwind += farm;
 
                 windLoadData.Add(new WindTable
                 {
@@ -372,7 +417,7 @@ namespace WaterTankTool_WFA.Solver
                 {
                     var rt = Math.Round(((segment.Diameter / 2) / segment.Thickness), 4);
                     var i = Math.Round((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4)), 4);
-                    var a = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2)), 4);
+                    var a = Math.Round((Math.PI / 4) * (Math.Pow(12 * segment.Diameter, 2) - Math.Pow((12 * segment.Diameter - (2 * segment.Thickness)), 2)), 4);
                     var co = Math.Round(1022 / (195 + rt), 4);
                     var r = Math.Round(Math.Sqrt(i / a), 4);
                     double Fl = 0;
@@ -410,7 +455,7 @@ namespace WaterTankTool_WFA.Solver
                     return new tabelData2
                     {
                         Segment = segment.SegmentName,
-                        Radius = segment.Diameter / 2,
+                        Radius = 12 * (segment.Diameter / 2),
                         Thickness = segment.Thickness,
                         Rt = rt,
                         A = a,
@@ -532,6 +577,7 @@ namespace WaterTankTool_WFA.Solver
         {
             var segmentData = _context.SegmentProperties.ToList();
 
+            var pi = Math.PI;
 
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
@@ -541,15 +587,15 @@ namespace WaterTankTool_WFA.Solver
                 segmentPropertiesTableData = segmentData.Select(segment => new designTableData
                 {
                     Segment = segment.SegmentName,
-                    Diameter = segment.Diameter,
+                    Diameter = (12 * (segment.DiameterFinal ?? segment.Diameter)),
                     Thickness = segment.Thickness,
 
                     // Compute Eq as before
-                    A = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2))),
+                    A = Math.Round((Math.PI / 4) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 2) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness))), 2)),4),
 
-                    I = Math.Round((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4)), 4),
+                    I = Math.Round((Math.PI / 64) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness ))), 4)), 4),
 
-                    S = Math.Round(((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4))) / (2 * segment.Diameter), 4),
+                    S = Math.Round(((Math.PI / 64) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness))), 4))) / (12 * (segment.DiameterFinal ?? segment.Diameter)), 4),
 
                 }).ToList();
 

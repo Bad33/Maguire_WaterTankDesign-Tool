@@ -125,7 +125,7 @@ namespace WaterTankTool_WFA.Solver_Equation
         {
             var h = heightFinal - heightInitial;
 
-            double numerator = (qzi(heightInitial) * Math.Pow(h, 2) / 2) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * Math.Pow(2 * h, 2) / 3);
+            double numerator = (qzi(heightInitial) * Math.Pow(h, 2) / 2) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * 2*(Math.Pow( h, 2)) / 3);
 
             double denominator = (qzi(heightInitial) * h) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * h);
 
@@ -134,6 +134,7 @@ namespace WaterTankTool_WFA.Solver_Equation
             return F;
 
         }
+
 
         public double Mbase(double heightInitial, double heightFinal, double diameter)
         {
@@ -185,20 +186,22 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double weight(double hi, double hf, double di,double df, double t)
         {
             //var thickness = unitsConverter.inch_TO_Ft(t);
+            //di = Top Diameter ------ df = Bottom Diameter
 
             var d = df - di;
-            var h = hf - hi;
+            var h = hf-hi;
 
-            var S1 = (Math.PI / 4) * Math.Pow(di,2);
-            var S2 = (Math.PI / 4) * Math.Pow(df,2);
-            var S3 = (Math.PI / 4) * Math.Pow((di - (2*t/12)),2);
-            var S4 = (Math.PI / 4) * Math.Pow((df - (2*t/ 12)), 2);
+            var S1 = Math.Round(((Math.PI / 4) * Math.Pow(di,2)),4);
+            var S2 = Math.Round(((Math.PI / 4) * Math.Pow(df,2)),4);
+            var S3 = Math.Round(((Math.PI / 4) * Math.Pow((di - (2*t/12)),2)),4);
+            var S4 = Math.Round(((Math.PI / 4) * Math.Pow((df - (2*t/12)), 2)),4);
 
             var weight = ((h / 3) * (S1 + S2 - S3 - S4 + Math.Sqrt(S1 * S2) - Math.Sqrt(S3*S4))) * (ConstantsClass.rs/1000);
 
 
             return weight;
         }
+
 
         public double kzi(double heightinitial)
         {
