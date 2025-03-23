@@ -51,6 +51,8 @@
             label4 = new Label();
             button1 = new Button();
             button2 = new Button();
+            label11 = new Label();
+            textBox9 = new TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -61,9 +63,9 @@
             groupBox1.Controls.Add(textBox1);
             groupBox1.Controls.Add(label1);
             groupBox1.Location = new Point(20, 16);
-            groupBox1.Margin = new Padding(2, 2, 2, 2);
+            groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(2, 2, 2, 2);
+            groupBox1.Padding = new Padding(2);
             groupBox1.Size = new Size(288, 58);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
@@ -72,7 +74,7 @@
             // textBox1
             // 
             textBox1.Location = new Point(120, 23);
-            textBox1.Margin = new Padding(2, 2, 2, 2);
+            textBox1.Margin = new Padding(2);
             textBox1.Name = "textBox1";
             textBox1.ReadOnly = true;
             textBox1.Size = new Size(118, 23);
@@ -97,9 +99,9 @@
             groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(label2);
             groupBox2.Location = new Point(20, 77);
-            groupBox2.Margin = new Padding(2, 2, 2, 2);
+            groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(2, 2, 2, 2);
+            groupBox2.Padding = new Padding(2);
             groupBox2.Size = new Size(288, 88);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
@@ -130,7 +132,7 @@
             // textBox3
             // 
             textBox3.Location = new Point(120, 57);
-            textBox3.Margin = new Padding(2, 2, 2, 2);
+            textBox3.Margin = new Padding(2);
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(118, 23);
             textBox3.TabIndex = 3;
@@ -138,7 +140,7 @@
             // textBox2
             // 
             textBox2.Location = new Point(120, 28);
-            textBox2.Margin = new Padding(2, 2, 2, 2);
+            textBox2.Margin = new Padding(2);
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(118, 23);
             textBox2.TabIndex = 2;
@@ -165,6 +167,8 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(textBox9);
+            groupBox3.Controls.Add(label11);
             groupBox3.Controls.Add(textBox8);
             groupBox3.Controls.Add(textBox7);
             groupBox3.Controls.Add(textBox6);
@@ -176,10 +180,10 @@
             groupBox3.Controls.Add(textBox4);
             groupBox3.Controls.Add(label4);
             groupBox3.Location = new Point(20, 169);
-            groupBox3.Margin = new Padding(2, 2, 2, 2);
+            groupBox3.Margin = new Padding(2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(2, 2, 2, 2);
-            groupBox3.Size = new Size(288, 166);
+            groupBox3.Padding = new Padding(2);
+            groupBox3.Size = new Size(288, 208);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "Properties";
@@ -188,7 +192,7 @@
             // textBox8
             // 
             textBox8.Location = new Point(120, 137);
-            textBox8.Margin = new Padding(2, 2, 2, 2);
+            textBox8.Margin = new Padding(2);
             textBox8.Name = "textBox8";
             textBox8.ReadOnly = true;
             textBox8.Size = new Size(118, 23);
@@ -198,7 +202,7 @@
             // textBox7
             // 
             textBox7.Location = new Point(120, 110);
-            textBox7.Margin = new Padding(2, 2, 2, 2);
+            textBox7.Margin = new Padding(2);
             textBox7.Name = "textBox7";
             textBox7.ReadOnly = true;
             textBox7.Size = new Size(118, 23);
@@ -208,7 +212,7 @@
             // textBox6
             // 
             textBox6.Location = new Point(120, 83);
-            textBox6.Margin = new Padding(2, 2, 2, 2);
+            textBox6.Margin = new Padding(2);
             textBox6.Name = "textBox6";
             textBox6.ReadOnly = true;
             textBox6.Size = new Size(118, 23);
@@ -218,7 +222,7 @@
             // textBox5
             // 
             textBox5.Location = new Point(120, 54);
-            textBox5.Margin = new Padding(2, 2, 2, 2);
+            textBox5.Margin = new Padding(2);
             textBox5.Name = "textBox5";
             textBox5.ReadOnly = true;
             textBox5.Size = new Size(118, 23);
@@ -228,7 +232,7 @@
             // label10
             // 
             label10.AutoSize = true;
-            label10.Location = new Point(15, 137);
+            label10.Location = new Point(15, 140);
             label10.Margin = new Padding(2, 0, 2, 0);
             label10.Name = "label10";
             label10.Size = new Size(84, 15);
@@ -238,7 +242,7 @@
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(15, 110);
+            label9.Location = new Point(14, 113);
             label9.Margin = new Padding(2, 0, 2, 0);
             label9.Name = "label9";
             label9.Size = new Size(74, 15);
@@ -248,7 +252,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(15, 83);
+            label8.Location = new Point(15, 86);
             label8.Margin = new Padding(2, 0, 2, 0);
             label8.Name = "label8";
             label8.Size = new Size(87, 15);
@@ -268,7 +272,7 @@
             // textBox4
             // 
             textBox4.Location = new Point(120, 26);
-            textBox4.Margin = new Padding(2, 2, 2, 2);
+            textBox4.Margin = new Padding(2);
             textBox4.Name = "textBox4";
             textBox4.ReadOnly = true;
             textBox4.Size = new Size(118, 23);
@@ -287,8 +291,8 @@
             // 
             // button1
             // 
-            button1.Location = new Point(140, 353);
-            button1.Margin = new Padding(2, 2, 2, 2);
+            button1.Location = new Point(140, 381);
+            button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 20);
             button1.TabIndex = 3;
@@ -298,13 +302,30 @@
             // 
             // button2
             // 
-            button2.Location = new Point(229, 353);
-            button2.Margin = new Padding(2, 2, 2, 2);
+            button2.Location = new Point(230, 381);
+            button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 20);
             button2.TabIndex = 4;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(15, 172);
+            label11.Name = "label11";
+            label11.Size = new Size(53, 15);
+            label11.TabIndex = 10;
+            label11.Text = "Centroid";
+            // 
+            // textBox9
+            // 
+            textBox9.Location = new Point(119, 172);
+            textBox9.Name = "textBox9";
+            textBox9.ReadOnly = true;
+            textBox9.Size = new Size(119, 23);
+            textBox9.TabIndex = 11;
             // 
             // TankProperty
             // 
@@ -312,13 +333,13 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(326, 385);
+            ClientSize = new Size(326, 412);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
-            Margin = new Padding(2, 2, 2, 2);
+            Margin = new Padding(2);
             MaximizeBox = false;
             Name = "TankProperty";
             ShowIcon = false;
@@ -358,5 +379,7 @@
         private TextBox textBox7;
         private TextBox textBox6;
         private TextBox textBox5;
+        private Label label11;
+        private TextBox textBox9;
     }
 }

@@ -127,7 +127,7 @@ namespace WaterTankTool_WFA.Solver
                 if (segment.SegmentType == "Tanks")
                 {
                     fwind = calculateF(segment_Cylinder_Equations.qzi(segment.HeightInitial),segment_Cylinder_Equations.qzf(segment.HeightFinal), projectedArea);
-                    loadlocation = segment_Cylinder_Equations.Centroid(segmentData[1].HeightInitial, segmentData[1].HeightFinal) + segmentData[1].HeightInitial;
+                    loadlocation = Double.Parse(tankProperties.Centroid) + segment.HeightInitial;
                 }
                 else
                 {
@@ -192,7 +192,7 @@ namespace WaterTankTool_WFA.Solver
 
                 waterWeight = foundTank.Weight_of_Water;
                 //snowWeight = Math.Round((_context.SnowLoadEntity.FirstOrDefault().Total_Load + fWindData),4).ToString();
-                snowWeight = (_context.SnowLoadEntity.FirstOrDefault().Total_Load ).ToString();
+                snowWeight = (_context.SnowLoadEntity?.FirstOrDefault().Total_Load ).ToString();
                 selfWeight = foundTank.Weight_of_Steel;
 
                 string numericPart = new string(selfWeight

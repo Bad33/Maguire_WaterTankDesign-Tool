@@ -22,7 +22,7 @@ namespace WaterTankTool_WFA.Entity
         public string TotalWeight { get; set; }
         public string ProjectedArea {  get; set; }
 
-        //public string Centroid { get; set; }
+        public string Centroid { get; set; }
 
     }
 }

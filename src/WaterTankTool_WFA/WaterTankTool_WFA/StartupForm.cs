@@ -306,6 +306,7 @@ namespace WaterTankTool_WFA
                     await Task.Run(() =>
                     {
                         string dbFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "project_data.db");
+                        //MigrateDatabaseIfNeeded(dbFilePath);
                         string connectionString = $"Data Source={dbFilePath};";
                         var dbContext = new WaterTankDbContext(connectionString);
                         dbContext.EnsureDatabaseCreated();
@@ -327,6 +328,42 @@ namespace WaterTankTool_WFA
             this.Hide();
             mainForm.Show();
         }
+        //private void MigrateDatabaseIfNeeded(string dbFilePath)
+        //{
+        //    using (var connection = new System.Data.SQLite.SQLiteConnection($"Data Source={dbFilePath};Version=3;"))
+        //    {
+        //        connection.Open();
+
+        //        // 1) Check if 'Centroid' column exists
+        //        using (var cmdCheck = new System.Data.SQLite.SQLiteCommand("PRAGMA table_info(TankProperties);", connection))
+        //        {
+        //            bool centroidExists = false;
+
+        //            using (var reader = cmdCheck.ExecuteReader())
+        //            {
+        //                while (reader.Read())
+        //                {
+        //                    string colName = reader["name"].ToString();
+        //                    if (colName.Equals("Centroid", StringComparison.OrdinalIgnoreCase))
+        //                    {
+        //                        centroidExists = true;
+        //                        break;
+        //                    }
+        //                }
+        //            }
+
+        //            // 2) If missing, add it
+        //            if (!centroidExists)
+        //            {
+        //                using (var cmdAlter = new System.Data.SQLite.SQLiteCommand(
+        //                    "ALTER TABLE TankProperties ADD COLUMN Centroid TEXT;", connection))
+        //                {
+        //                    cmdAlter.ExecuteNonQuery();
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
 
 
@@ -374,7 +411,8 @@ namespace WaterTankTool_WFA
                         WeightOfWater TEXT,
                         WeightOfSteel TEXT,
                         TotalWeight TEXT,
-                        ProjectedArea TEXT
+                        ProjectedArea TEXT,
+                        Centroid TEXT
                     );
                     CREATE TABLE IF NOT EXISTS WindLoadEntity (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,

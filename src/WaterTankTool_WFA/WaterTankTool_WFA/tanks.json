@@ -9,7 +9,7 @@
       "height": "10 meters",
       "diameter": "34 meters",
       "thickness": "0.375 meters",
-      "centroid": "22.9"
+      "Centroid": "22.9"
       
 
     },
@@ -22,7 +22,7 @@
         "height": "10 meters",
         "diameter": "5 meters",
         "thickness": "20 meters",
-        "centroid": "22.9"
+        "Centroid": "22.9"
 
     },
     {
@@ -34,7 +34,7 @@
         "height": "10 meters",
         "diameter": "5 meters",
         "thickness": "0.546 meters",
-        "centroid": "22.9"
+        "Centroid": "22.9"
 
     },
     {
@@ -46,7 +46,7 @@
         "height": "10 meters",
         "diameter": "5 meters",
         "thickness": "0.1 meters",
-        "centroid": "22.9"
+        "Centroid": "22.9"
 
     },
     {
@@ -58,7 +58,7 @@
         "height": "10 meters",
         "diameter": "5 meters",
         "thickness": "0.1 meters",
-        "centroid": "22.9"
+        "Centroid": "22.9"
 
     }
 

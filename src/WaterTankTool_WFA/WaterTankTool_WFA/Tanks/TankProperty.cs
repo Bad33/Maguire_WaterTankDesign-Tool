@@ -41,7 +41,7 @@ namespace WaterTankTool_WFA
             textBox6.Text = _properties.Weight_of_Steel.ToString();
             textBox5.Text = _properties.Weight_of_Water.ToString();
             textBox8.Text = _properties.Projected_Area.ToString();
-
+            textBox9.Text = _properties.Centroid.ToString();
 
         }
 
@@ -86,6 +86,7 @@ namespace WaterTankTool_WFA
                     WeightOfSteel = textBox6.Text,
                     TotalWeight = textBox7.Text,
                     ProjectedArea = textBox8.Text,
+                    Centroid = textBox9.Text
                 };
 
                 _context.TankProperties.Add(properties);

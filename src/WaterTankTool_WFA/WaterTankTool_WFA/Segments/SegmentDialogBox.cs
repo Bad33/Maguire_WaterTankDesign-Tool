@@ -102,7 +102,7 @@ namespace WaterTankTool_WFA
         {
             if (_segmentType == "Base")
             {
-                label3.Text = "Top Diameter"; 
+                label3.Text = "Top Diameter";
                 label4.Text = "Bottom Diameter";
                 label17.Text = "ft";
                 label25.Visible = true;
@@ -169,7 +169,7 @@ namespace WaterTankTool_WFA
                 else if (segmentProperties != null && segmentProperties.SegmentType == "Tanks")
                 {
 
-                   
+
 
 
                     _segmentType = segmentProperties.SegmentType;
@@ -239,7 +239,7 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            var diameter = Math.Round(((double)(diameterFinal + diameterInitial))/2,4);
+            var diameter = Math.Round(((double)(diameterFinal + diameterInitial)) / 2, 4);
 
             //using (var context = WaterTankDbContext.GetInstance())
             //{
@@ -439,7 +439,7 @@ namespace WaterTankTool_WFA
                 DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
                 if (result == DialogResult.OK)
                 {
-                    this.DialogResult = DialogResult.OK; 
+                    this.DialogResult = DialogResult.OK;
                     this.Close();
                 }
             }
@@ -569,7 +569,7 @@ namespace WaterTankTool_WFA
 
             textBox1.Text = tankProperties.TotalWeight;
             textBox2.Text = tankProperties.ProjectedArea;
-            textBox3.Text = cylinder_Equations.Centroid(heightInitial, heightFinal).ToString("F4");
+            textBox3.Text = tankProperties.Centroid;
             textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
             textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
             textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
@@ -602,13 +602,13 @@ namespace WaterTankTool_WFA
         }
 
 
-        private double calculateF(double qzi,double qzf,double projectedArea)
+        private double calculateF(double qzi, double qzf, double projectedArea)
         {
 
             var result = (((qzi + qzf) / 2) * projectedArea) / 1000;
 
             return result;
-            
+
         }
 
 
@@ -620,7 +620,7 @@ namespace WaterTankTool_WFA
 
             textBox1.Text = conical_Equations.weight(heightInitial, heightFinal, diameterInitial, diameterFinal, thickness).ToString("F4");
             textBox2.Text = conical_Equations.ProjectedArea(heightInitial, heightFinal, diameter).ToString("F4");
-            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal,diameterInitial,diameterFinal).ToString("F4");
+            textBox3.Text = conical_Equations.Centroid(heightInitial, heightFinal, diameterInitial, diameterFinal).ToString("F4");
             textBox4.Text = conical_Equations.kzi(heightInitial).ToString("F4");
             textBox5.Text = conical_Equations.kzf(heightFinal).ToString("F4");
             textBox6.Text = conical_Equations.qzi(heightInitial).ToString("F4");
@@ -690,6 +690,11 @@ namespace WaterTankTool_WFA
         }
 
         private void textBox9_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
         {
 
         }
