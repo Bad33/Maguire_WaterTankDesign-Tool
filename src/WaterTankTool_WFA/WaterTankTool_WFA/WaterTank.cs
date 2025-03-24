@@ -165,7 +165,7 @@ public partial class WaterTank : Form
             switch (tankCap.Capacity)
             {
                 case "150,000 gallon":
-                    drawingImage = Properties.Resources._150k;
+                    drawingImage = Properties.Resources.Tank_Design;
                     UpdateAppStatus("Tank Loaded: 150,000 gallon");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
                     break;
@@ -182,7 +182,7 @@ public partial class WaterTank : Form
 
                     break;
                 default:
-                    drawingImage = Properties.Resources._150k;
+                    drawingImage = Properties.Resources.Tank_Design;
                     UpdateAppStatus("Tank Loaded: Unknown");
                     UpdateDesignDetails("-", "0", "0");
                     break;
@@ -456,7 +456,7 @@ public partial class WaterTank : Form
                 Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
 
                 g.DrawImage(drawingImage, destRect);
-                DrawSegmentLabels(g, destRect);
+                //DrawSegmentLabels(g, destRect);
             }
 
             buffer.Render(e.Graphics);

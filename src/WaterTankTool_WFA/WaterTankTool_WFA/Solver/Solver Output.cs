@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Migrations;
 using WaterTankTool_WFA.Solver_Equation;
@@ -112,52 +113,67 @@ namespace WaterTankTool_WFA.Solver
             var segmentData = _context.SegmentProperties.ToList();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
-            Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
+            var segmentCylinderEquations = new Segment_Cylinder_Equations();
+            var segmentConicalEquations = new Segment_Conical_Equations();
             var tankProperties = _context.TankProperties.FirstOrDefault();
             double projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
 
             double cumulativeFwind = 0;
-            double cummulativeMwind = 0;
 
+
+            int index = 0;
             foreach (var segment in segmentData)
             {
                 double fwind = 0;
-                double loadlocation = 0;
+                double loadLocation = 0;
                 if (segment.SegmentType == "Tanks")
                 {
-                    fwind = calculateF(segment_Cylinder_Equations.qzi(segment.HeightInitial),segment_Cylinder_Equations.qzf(segment.HeightFinal), projectedArea);
-                    loadlocation = Double.Parse(tankProperties.Centroid) + segment.HeightInitial;
+                    fwind = calculateF(
+                        segmentCylinderEquations.qzi(segment.HeightInitial),
+                        segmentCylinderEquations.qzf(segment.HeightFinal),
+                        projectedArea);
+                    loadLocation = double.Parse(tankProperties.Centroid) + segment.HeightInitial;
                 }
                 else
                 {
-                    fwind = segment_Cylinder_Equations.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
-                    loadlocation = segment_Cylinder_Equations.L(segment.HeightInitial, segment.HeightFinal);
+                    fwind = segmentCylinderEquations.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
+                    loadLocation = segmentCylinderEquations.L(segment.HeightInitial, segment.HeightFinal);
                 }
-                double baseElevation = segment.HeightInitial;
-                double armLength = loadlocation - baseElevation;
-                double farm = fwind * armLength;
 
-                cumulativeFwind += fwind;  // cumulative addition
-                cummulativeMwind += farm;
+                double baseElevation = segment.HeightInitial;
+                double armLength = loadLocation - baseElevation;
+                double farm = fwind * armLength; 
+
+                cumulativeFwind += fwind;
+
+                double sumContributions = 0;
+                for (int j = 0; j < windLoadData.Count; j++)
+                {
+                    double prevFwind = Double.Parse(windLoadData[j].Fwind);
+                    double prevLoadLocation = Double.Parse(windLoadData[j].LoadLocation);
+                    sumContributions += prevFwind * (prevLoadLocation - baseElevation);
+                }
+
+                double mwind = farm + sumContributions;
 
                 windLoadData.Add(new WindTable
                 {
                     Fwind = Math.Round(fwind, 4).ToString(),
-                    Vwind = Math.Round(cumulativeFwind, 4).ToString(), // cumulative sum updated per iteration
+                    Vwind = Math.Round(cumulativeFwind, 4).ToString(),
                     BaseElevation = Math.Round(segment.HeightInitial, 4).ToString(),
-                    LoadLocation = Math.Round(loadlocation, 4).ToString(),
+                    LoadLocation = Math.Round(loadLocation, 4).ToString(),
                     ArmLength = Math.Round(armLength, 4).ToString(),
                     FArm = Math.Round(farm, 4).ToString(),
-                    Mwind = Math.Round(segment_Cylinder_Equations.Mbase(segment.HeightInitial, segment.HeightFinal, segment.Diameter), 4).ToString()
+                    Mwind = Math.Round(mwind, 4).ToString()
                 });
+
+                index++;
             }
 
             LoadSegmentWeightData();
             dataGridView7.DataSource = windLoadData;
-
-
         }
+
 
         private void LoadSegmentWeightData()
         {
@@ -169,6 +185,8 @@ namespace WaterTankTool_WFA.Solver
             Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
 
+            double miscLoad = 15;
+
             if (segmentData.Count > 0)
             {
 
@@ -179,19 +197,9 @@ namespace WaterTankTool_WFA.Solver
                 TanksData data = JsonSerializer.Deserialize<TanksData>(json);
                 Tank foundTank = data.tanks.Find(t => t.type == tankCapacity);
 
-                //List<SegmentProperties> cylinderData = new List<SegmentProperties>();
-                //cylinderData = segmentData.Where(x=> x.SegmentType == "Cylinder").ToList();
-
-                //for(int i=0;i<cylinderData.Count();i++){
-
-                //    fWindData += segment_Cylinder_Equations.F(cylinderData[i].HeightInitial, cylinderData[i].HeightFinal, cylinderData[i].Diameter);
-                //}
-
-
-                
 
                 waterWeight = foundTank.Weight_of_Water;
-                //snowWeight = Math.Round((_context.SnowLoadEntity.FirstOrDefault().Total_Load + fWindData),4).ToString();
+
                 snowWeight = (_context.SnowLoadEntity?.FirstOrDefault().Total_Load ).ToString();
                 selfWeight = foundTank.Weight_of_Steel;
 
@@ -206,7 +214,7 @@ namespace WaterTankTool_WFA.Solver
                 {
 
                     waterWeight = waterWeight,
-                    snowWeight = snowWeight,
+                    snowWeight = (Double.Parse(snowWeight) + miscLoad).ToString(),
                     selfWeight = Math.Round(result, 4).ToString(),
 
 
@@ -281,6 +289,7 @@ namespace WaterTankTool_WFA.Solver
         {
             var segmentData = _context.SegmentProperties.ToList();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+            double miscLoad = 15;
 
             string json = File.ReadAllText("../../../tanks.json");
 
@@ -329,7 +338,7 @@ namespace WaterTankTool_WFA.Solver
                     return new segmentGravityLoad
                     {
                         waterWeight = waterWeight,
-                        snowWeight = snowWeight,
+                        snowWeight = (Double.Parse(snowWeight) + miscLoad).ToString(),
                         selfWeight = Math.Round(Double.Parse(res[index]), 4).ToString(), // Store the cumulative value
 
                     };
@@ -415,17 +424,19 @@ namespace WaterTankTool_WFA.Solver
 
                 tabelData2s = segmentData.Select(segment =>
                 {
-                    var rt = Math.Round(((segment.Diameter / 2) / segment.Thickness), 4);
-                    var i = Math.Round((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4)), 4);
-                    var a = Math.Round((Math.PI / 4) * (Math.Pow(12 * segment.Diameter, 2) - Math.Pow((12 * segment.Diameter - (2 * segment.Thickness)), 2)), 4);
+                    var rt = Math.Round(((12 * (segment.DiameterFinal ?? segment.Diameter) / 2) / segment.Thickness), 4);
+                    var i = Math.Round((Math.PI / 64) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow((12 * (segment.DiameterFinal ?? segment.Diameter) - (2 * segment.Thickness)), 4)), 4);
+                    var a = Math.Round((Math.PI / 4) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 2) - Math.Pow((12 * (segment.DiameterFinal ?? segment.Diameter) - (2 * segment.Thickness)), 2)), 4);
                     var co = Math.Round(1022 / (195 + rt), 4);
                     var r = Math.Round(Math.Sqrt(i / a), 4);
                     double Fl = 0;
-                    if (rt <= Double.Parse(rtcLabel.Text))
+                    if (rt < Double.Parse(rtcLabel.Text))
                     {
-                        Fl = Math.Round((233 * Double.Parse(Fy)) / (2 * (166 + rt)), 4);
+                        var value1 = Math.Round((233 * Double.Parse(Fy)) / (2 * (166 + rt)), 4);
+                        var value2 = Math.Round((Double.Parse(Fy) / 2), 4);
+                        Fl = double.Min(value1, value2);
                     }
-                    else if (rt > Double.Parse(rtcLabel.Text))
+                    else if (rt >= Double.Parse(rtcLabel.Text))
                     {
                         Fl = Math.Round((co * 29000000) / (2 * rt), 4);
                     }
@@ -448,26 +459,26 @@ namespace WaterTankTool_WFA.Solver
                     {
                         kf = Math.Round((0.5 * Math.Pow((cc / klr), 2)), 4);
                     }
-
+                    Fl = Fl / 1000;
                     var fa = Fl * kf;
                     var fb = Fl;
 
                     return new tabelData2
                     {
                         Segment = segment.SegmentName,
-                        Radius = 12 * (segment.Diameter / 2),
-                        Thickness = segment.Thickness,
-                        Rt = rt,
-                        A = a,
-                        I = i,
-                        r = r,
+                        Radius = Math.Round((12 * ((segment.DiameterFinal ?? segment.Diameter) / 2)),4),
+                        Thickness = Math.Round(segment.Thickness,4),
+                        Rt = Math.Round(rt,4),
+                        A = Math.Round(a,4),
+                        I = Math.Round(i,4),
+                        r = Math.Round(r,4),
                         Co = co,
-                        Fl = Fl,
-                        KLr = klr,
-                        Cc = cc,
-                        Kf = kf,
-                        Fa = fa,
-                        Fb = fb,
+                        Fl = Math.Round(Fl,4),
+                        KLr = Math.Round(klr,4),
+                        Cc = Math.Round(cc,4),
+                        Kf = Math.Round(kf,4),
+                        Fa = Math.Round(fa,4),
+                        Fb = Math.Round(fb,4),
                     };
 
 
@@ -542,7 +553,7 @@ namespace WaterTankTool_WFA.Solver
             // Map the selected value to the appropriate computed string
             if (selectedValue == "36000")
             {
-                rtc = "403";
+                rtc = "334";
             }
             else if (selectedValue == "32000")
             {
@@ -595,7 +606,7 @@ namespace WaterTankTool_WFA.Solver
 
                     I = Math.Round((Math.PI / 64) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness ))), 4)), 4),
 
-                    S = Math.Round(((Math.PI / 64) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness))), 4))) / (12 * (segment.DiameterFinal ?? segment.Diameter)), 4),
+                    S = Math.Round(((Math.PI / 64) * 2 *(Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness))), 4))) / (12 * (segment.DiameterFinal ?? segment.Diameter)), 4),
 
                 }).ToList();
 
