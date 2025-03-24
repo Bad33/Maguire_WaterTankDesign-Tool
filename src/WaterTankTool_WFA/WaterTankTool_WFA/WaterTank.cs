@@ -7,6 +7,7 @@ using WaterTankTool_WFA.Load;
 using WaterTankTool_WFA.Solver;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace WaterTankTool_WFA;
 
@@ -39,6 +40,7 @@ public partial class WaterTank : Form
         _startupForm = startupForm;
 
         InitializeStatusStrip2();
+        InitializeDataGridView();
         //InitializeLayout();
         panelDrawTankCapacity();
         //LoadDimensionsToGrid();
@@ -138,7 +140,7 @@ public partial class WaterTank : Form
                     }
                 }
 
-         
+
                 bitmap.Save(saveFileDialog.FileName, saveFileDialog.FilterIndex == 1 ? ImageFormat.Png : ImageFormat.Jpeg);
 
                 // Dispose of the bitmap after saving
@@ -519,7 +521,7 @@ public partial class WaterTank : Form
             Point arrowEnd = new Point(imageBounds.Right + 20, segmentBottom);
             DrawDoubleArrowVerticalLine(g, arrowStart, arrowEnd, Color.Black);
 
-            string labelText = $"{segment.SegmentName}:{segment.SegmentType}, H={Math.Round((segment.HeightFinal - segment.HeightInitial),4)}ft, D={segment.Diameter}ft, T={segment.Thickness}in";
+            string labelText = $"{segment.SegmentName}:{segment.SegmentType}, H={Math.Round((segment.HeightFinal - segment.HeightInitial), 4)}ft, D={segment.Diameter}ft, T={segment.Thickness}in";
             using (Font font = new Font("Segoe UI", 9, FontStyle.Bold))
             {
                 SizeF textSize = g.MeasureString(labelText, font);
@@ -818,4 +820,55 @@ public partial class WaterTank : Form
     {
         ExportDiagram(sender, e);
     }
+    private DataGridView dataGridView1;
+
+    private void InitializeDataGridView()
+    {
+        dataGridView1 = new DataGridView
+        {
+            Dock = DockStyle.Fill,
+            AutoGenerateColumns = true,
+            RowHeadersVisible = false,
+            AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+
+        };
+        
+        panel2.Controls.Add(dataGridView1);
+    }
+
+
+
+    private bool isExpanded = false;
+    private int expandedWidth = 420; // desired width when expanded
+
+    private void button1_Click(object sender, EventArgs e)
+    {
+        if (!isExpanded)
+        {
+            panel2.Width = expandedWidth;
+            panel2.Visible = true;
+            dataGridView1.Visible = true; // Make sure the DataGridView is visible
+
+            // Retrieve and sort the data
+            var data = context.SegmentProperties.ToList();
+            data.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+
+            // Bind the data to the DataGridView.
+            dataGridView1.DataSource = data;
+
+            button1.Text = "Close";
+        }
+        else
+        {
+            // Collapse the panel by reducing its width.
+            panel2.Width = 30;
+            dataGridView1.Visible = false; // Hide the grid when collapsed
+
+            button1.Text = "<";
+
+        }
+        isExpanded = !isExpanded;
+    }
+
+
 }
