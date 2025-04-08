@@ -6,9 +6,11 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Constants;
@@ -75,6 +77,8 @@ namespace WaterTankTool_WFA
             showInputFieldsOnType();
 
             this.FormClosing += SegmentDialogBox_FormClosing;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+
 
         }
 
@@ -90,11 +94,45 @@ namespace WaterTankTool_WFA
             _waterTankForm = waterTankForm;
             ModifyDialogBox();
             this.FormClosing += SegmentDialogBox_FormClosing;
-
-
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
 
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Get the newly selected tank type.
+            string selectedTank = comboBox1.SelectedItem.ToString();
+
+            // Optionally update the private field.
+            _selectedTankCapacity = selectedTank;
+
+            GetTanksJsonData();
+            // Look up the corresponding dimensions from your JSON or data source.
+            if (tankData?.Tanks != null)
+            {
+                dimensions = tankData.Tanks.FirstOrDefault(data => data.Type == selectedTank);
+                if (dimensions != null)
+                {
+                    // Update input fields based on the new selection.
+                    maskedTextBox2.Text = ExtractNumericValue(dimensions.Diameter);
+                    maskedTextBox3.Text = ExtractNumericValue(dimensions.Thickness);
+                    // Optionally, update Height if it's part of the tank's data:
+                    //maskedTextBox1.Text = dimensions.HeightInitial.ToString();
+                    //maskedTextBox4.Text = dimensions.HeightFinal.ToString();
+
+                    // Recalculate if needed.
+                    DoCalculations();
+                }
+                else
+                {
+                    Console.WriteLine("No matching tank found for selection.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Tank data is not available.");
+            }
+        }
 
 
 
@@ -102,6 +140,8 @@ namespace WaterTankTool_WFA
         {
             if (_segmentType == "Base")
             {
+                comboBox1.Visible = false;
+
                 label3.Text = "Top Diameter";
                 label4.Text = "Bottom Diameter";
                 label17.Text = "ft";
@@ -109,8 +149,20 @@ namespace WaterTankTool_WFA
                 maskedTextBox5.Visible = true;
                 label26.Visible = true;
             }
-            else if (_segmentType == "Cylinder" || _segmentType == "Tanks")
+            else if (_segmentType == "Cylinder")
             {
+                comboBox1.Visible = false;
+
+                label3.Text = "Diameter";
+                label17.Text = "in";
+                label25.Visible = false;
+                maskedTextBox5.Visible = false;
+                label26.Visible = false;
+            }
+            else if (_segmentType == "Tanks")
+            {
+                comboBox1.Visible = true;
+
                 label3.Text = "Diameter";
                 label17.Text = "in";
                 label25.Visible = false;
@@ -137,7 +189,9 @@ namespace WaterTankTool_WFA
                 if (segmentProperties != null && segmentProperties.SegmentType == "Base")
                 {
                     _segmentType = segmentProperties.SegmentType;
+                    richTextBox1.Visible = true;
 
+                    comboBox1.Visible = false;
                     showInputFieldsOnType();
 
                     richTextBox1.Text = segmentProperties.SegmentName;
@@ -153,6 +207,8 @@ namespace WaterTankTool_WFA
                 else if (segmentProperties != null && segmentProperties.SegmentType == "Cylinder")
                 {
                     _segmentType = segmentProperties.SegmentType;
+                    comboBox1.Visible = false;
+                    richTextBox1.Visible = true;
 
                     showInputFieldsOnType();
 
@@ -169,25 +225,63 @@ namespace WaterTankTool_WFA
                 else if (segmentProperties != null && segmentProperties.SegmentType == "Tanks")
                 {
 
-
-
-
+                    GetTanksJsonData();
                     _segmentType = segmentProperties.SegmentType;
+                    comboBox1.Visible = true;
+                    richTextBox1.Visible = false;
+                    _selectedTankCapacity = segmentProperties.SegmentName;
 
-                    showInputFieldsOnType();
-                    richTextBox1.Text = segmentProperties.SegmentName;
-                    maskedTextBox2.Text = segmentProperties.Diameter.ToString();
-                    maskedTextBox3.Text = segmentProperties.Thickness.ToString();
-                    maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
-                    maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
+                    if (comboBox1.Items.Contains(_selectedTankCapacity))
+                    {
+                        if (tankData?.Tanks != null)
+                        {
+                            dimensions = tankData.Tanks.FirstOrDefault(data => data.Type == _selectedTankCapacity);
+                            showInputFieldsOnType();
+                            //richTextBox1.Text = segmentProperties.SegmentName;
+
+                            comboBox1.Text = _selectedTankCapacity;
+                            maskedTextBox2.Text = ExtractNumericValue(dimensions.Diameter);
+                            maskedTextBox3.Text = ExtractNumericValue(dimensions.Thickness);
+                            maskedTextBox1.Text = segmentProperties.HeightInitial.ToString();
+                            maskedTextBox4.Text = segmentProperties.HeightFinal.ToString();
+
+                            DoCalculations();
+                        }
+                        else
+                        {
+                            Console.WriteLine("No tanks found in the JSON file.");
+                        }
+
+                    }
 
 
 
-                    DoCalculations();
+
+
+
 
                 }
                 //}
             }
+        }
+
+
+        public static string ExtractNumericValue(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                return string.Empty;
+            string pattern = @"[+-]?(?:\d+\.?\d*|\.\d+)";
+            Regex regex = new Regex(pattern);
+            Match match = regex.Match(input);
+            if (match.Success)
+            {
+                if (double.TryParse(match.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out double numericValue))
+                {
+                    return numericValue.ToString("0.##", CultureInfo.InvariantCulture);
+                }
+                return match.Value;
+            }
+            return string.Empty;
         }
 
         private void GetTanksJsonData()
@@ -406,13 +500,194 @@ namespace WaterTankTool_WFA
             {
                 Save_ClickBase(sender, e);
             }
-            else if (_segmentType == "Cylinder" || _segmentType == "Tanks")
+            else if (_segmentType == "Cylinder" )
             {
                 Save_ClickCylinder(sender, e);
+            }
+            else if(_segmentType == "Tanks")
+            {
+                Save_ClickTank(sender, e);
+
             }
 
             this.DialogResult = DialogResult.OK;
             this.Close();
+        }
+
+        public bool SaveTankProperties()
+        {
+            //using (var context = WaterTankDbContext.GetInstance())
+            //{
+
+            
+
+            TankProperties properties = new TankProperties()
+            {
+                Capacity = dimensions.Type,
+                WeightOfWater = ExtractNumericValue(dimensions.Weight_of_Water).ToString(),
+                WeightOfSteel = ExtractNumericValue(dimensions.Weight_of_Steel).ToString(),
+                TotalWeight = ExtractNumericValue(dimensions.Total_Weight).ToString(),
+                ProjectedArea = ExtractNumericValue(dimensions.Projected_Area).ToString(),
+                Centroid = ExtractNumericValue(dimensions.Centroid).ToString()
+            };
+
+            _context.TankProperties.Add(properties);
+
+
+            try
+            {
+                int rowsAffected = _context.SaveChanges();
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while saving Tank Properties data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            //}
+        }
+
+        private void Save_ClickTank(object sender, EventArgs e)
+        {
+
+            if (string.IsNullOrWhiteSpace(comboBox1.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
+                 string.IsNullOrWhiteSpace(maskedTextBox4.Text))
+            {
+                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Try parsing numeric fields for Diameter, Thickness, and Heights
+            if (!double.TryParse(maskedTextBox2.Text, out double diameter) ||
+                !double.TryParse(maskedTextBox3.Text, out double thickness) ||
+                !double.TryParse(maskedTextBox1.Text, out double heightInitial) ||
+                !double.TryParse(maskedTextBox4.Text, out double heightFinal))
+            {
+                MessageBox.Show("Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            if (!SaveTankProperties())
+            {
+                return;
+            }
+
+            //using (var context = WaterTankDbContext.GetInstance())
+            //{
+            SegmentProperties segmentProperties;
+
+
+            if (_dialogType == "Modify")
+            {
+                // Modify existing segment
+                segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
+
+                ValidateSegment(segmentProperties);
+
+                if (segmentProperties == null)
+                {
+                    MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                segmentProperties.SegmentName = comboBox1.Text;
+                segmentProperties.SegmentType = _segmentType;
+                segmentProperties.Diameter = diameter;
+                segmentProperties.Thickness = thickness;
+                segmentProperties.HeightInitial = heightInitial;
+                segmentProperties.HeightFinal = heightFinal;
+            }
+            else
+            {
+    
+                if (_selectedTankCapacity != null)
+                {
+                    GetTanksJsonData();
+                    if (tankData?.Tanks != null)
+                    {
+                        dimensions = tankData.Tanks.FirstOrDefault(data => data.Type == _selectedTankCapacity);
+                        showInputFieldsOnType();
+                        if(dimensions != null)
+                        {
+                            segmentProperties = new SegmentProperties()
+                            {
+                                SegmentName = comboBox1.Text,
+                                SegmentType = _segmentType,
+                                Diameter = Double.Parse(ExtractNumericValue(dimensions.Diameter)),
+                                Thickness = Double.Parse(ExtractNumericValue(dimensions.Thickness)),
+                                HeightInitial = heightInitial,
+                                HeightFinal = heightFinal
+                            };
+
+                            ValidateSegment(segmentProperties);
+
+                            var existingTank = _context.SegmentProperties
+                            .FirstOrDefault(s => s.SegmentType == "Tanks");
+
+                            if (existingTank != null)
+                            {
+                                // Warn the user that this will override the existing tank
+                                DialogResult result = MessageBox.Show(
+                                    $"A tank already exists with name: {existingTank.SegmentName}.\n" +
+                                    "Saving this will override/delete the previous tank.\nDo you want to continue?",
+                                    "Tank Already Exists",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Warning
+                                );
+
+                                if (result == DialogResult.No)
+                                {
+                                    // Cancel save
+                                    return;
+                                }
+                                else
+                                {
+
+                                    // Optional: Remove the previous tank if you want only one tank in the project
+                                    _context.SegmentProperties.Remove(existingTank);
+                                    _context.SegmentProperties.Add(segmentProperties);
+
+                                }
+
+                            }
+                            else
+                            {
+
+                                _context.SegmentProperties.Add(segmentProperties);
+                            }
+
+
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("No tanks found in the JSON file.");
+                    }
+
+
+                }
+
+            }
+            try
+            {
+                int rowsAffected = _context.SaveChanges();
+                successDialog(rowsAffected);
+                //WaterTank form1 = new WaterTank();
+                //form1.OnSegmentAdded();
+                _waterTankForm.OnSegmentAdded();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            //}
         }
 
 
@@ -562,21 +837,47 @@ namespace WaterTankTool_WFA
         {
             Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
             var tankProperties = _context.TankProperties.FirstOrDefault();
-            double projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
-            double totalWeight = ExtractDoubleValue(tankProperties.TotalWeight);
-            double f = calculateF(cylinder_Equations.qzi(heightInitial), cylinder_Equations.qzf(heightFinal), projectedArea);
+
+            if(tankProperties != null)
+            {
+                double projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
+                double totalWeight = ExtractDoubleValue(tankProperties.TotalWeight);
+                double f = calculateF(cylinder_Equations.qzi(heightInitial), cylinder_Equations.qzf(heightFinal), projectedArea);
 
 
-            textBox1.Text = tankProperties.TotalWeight;
-            textBox2.Text = tankProperties.ProjectedArea;
-            textBox3.Text = tankProperties.Centroid;
-            textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
-            textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
-            textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
-            textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
-            textBox8.Text = f.ToString("F4");
-            textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
-            textBox10.Text = (f * cylinder_Equations.L(heightInitial, heightFinal)).ToString("F4");
+                textBox1.Text = tankProperties.TotalWeight;
+                textBox2.Text = tankProperties.ProjectedArea;
+                textBox3.Text = tankProperties.Centroid;
+                textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
+                textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
+                textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
+                textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
+                textBox8.Text = f.ToString("F4");
+                textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
+                textBox10.Text = (f * cylinder_Equations.L(heightInitial, heightFinal)).ToString("F4");
+            }
+            else
+            {
+
+                var dimensions = tankData.Tanks.FirstOrDefault(data => data.Type == _selectedTankCapacity);
+
+                double projectedArea = ExtractDoubleValue(dimensions.Projected_Area);
+                double totalWeight = ExtractDoubleValue(dimensions.Total_Weight);
+                double f = calculateF(cylinder_Equations.qzi(heightInitial), cylinder_Equations.qzf(heightFinal), projectedArea);
+
+
+                textBox1.Text = projectedArea.ToString("F4");
+                textBox2.Text = totalWeight.ToString("F4");
+                textBox3.Text = dimensions.Centroid;
+                textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
+                textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
+                textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
+                textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
+                textBox8.Text = f.ToString("F4");
+                textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
+                textBox10.Text = (f * cylinder_Equations.L(heightInitial, heightFinal)).ToString("F4");
+            }
+
 
 
         }

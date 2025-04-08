@@ -39,6 +39,8 @@
             label3 = new Label();
             label2 = new Label();
             groupBox3 = new GroupBox();
+            textBox9 = new TextBox();
+            label11 = new Label();
             textBox8 = new TextBox();
             textBox7 = new TextBox();
             textBox6 = new TextBox();
@@ -51,8 +53,6 @@
             label4 = new Label();
             button1 = new Button();
             button2 = new Button();
-            label11 = new Label();
-            textBox9 = new TextBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -189,6 +189,23 @@
             groupBox3.Text = "Properties";
             groupBox3.Enter += groupBox3_Enter;
             // 
+            // textBox9
+            // 
+            textBox9.Location = new Point(119, 172);
+            textBox9.Name = "textBox9";
+            textBox9.ReadOnly = true;
+            textBox9.Size = new Size(119, 23);
+            textBox9.TabIndex = 11;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(15, 172);
+            label11.Name = "label11";
+            label11.Size = new Size(53, 15);
+            label11.TabIndex = 10;
+            label11.Text = "Centroid";
+            // 
             // textBox8
             // 
             textBox8.Location = new Point(120, 137);
@@ -291,10 +308,10 @@
             // 
             // button1
             // 
-            button1.Location = new Point(140, 381);
+            button1.Location = new Point(140, 382);
             button1.Margin = new Padding(2);
             button1.Name = "button1";
-            button1.Size = new Size(78, 20);
+            button1.Size = new Size(78, 29);
             button1.TabIndex = 3;
             button1.Text = "Confirm";
             button1.UseVisualStyleBackColor = true;
@@ -302,30 +319,13 @@
             // 
             // button2
             // 
-            button2.Location = new Point(230, 381);
+            button2.Location = new Point(230, 382);
             button2.Margin = new Padding(2);
             button2.Name = "button2";
-            button2.Size = new Size(78, 20);
+            button2.Size = new Size(78, 29);
             button2.TabIndex = 4;
             button2.Text = "Cancel";
             button2.UseVisualStyleBackColor = true;
-            // 
-            // label11
-            // 
-            label11.AutoSize = true;
-            label11.Location = new Point(15, 172);
-            label11.Name = "label11";
-            label11.Size = new Size(53, 15);
-            label11.TabIndex = 10;
-            label11.Text = "Centroid";
-            // 
-            // textBox9
-            // 
-            textBox9.Location = new Point(119, 172);
-            textBox9.Name = "textBox9";
-            textBox9.ReadOnly = true;
-            textBox9.Size = new Size(119, 23);
-            textBox9.TabIndex = 11;
             // 
             // TankProperty
             // 
@@ -333,7 +333,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(326, 412);
+            ClientSize = new Size(326, 422);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox3);

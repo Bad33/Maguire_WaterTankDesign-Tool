@@ -172,13 +172,13 @@ public partial class WaterTank : Form
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
                     break;
                 case "250,000 gallon":
-                    drawingImage = Properties.Resources._250k;
+                    drawingImage = Properties.Resources.Tank_Design;
                     UpdateAppStatus("Tank Loaded: 250,000 gallon");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
 
                     break;
                 case "500,000 gallon":
-                    drawingImage = Properties.Resources._500k;
+                    drawingImage = Properties.Resources.Tank_Design;
                     UpdateAppStatus("Tank Loaded: 500,000 gallon");
                     UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
 

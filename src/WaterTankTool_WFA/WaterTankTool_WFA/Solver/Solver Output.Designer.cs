@@ -331,6 +331,7 @@
             // 
             dataGridView5.AllowUserToDeleteRows = false;
             dataGridView5.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView5.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             dataGridView5.BackgroundColor = SystemColors.ButtonFace;
             dataGridView5.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView5.Columns.AddRange(new DataGridViewColumn[] { Column15, Column16, Column17, Column18, Column19, Column20 });
@@ -405,8 +406,8 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(tableLayoutPanel1);
             resources.ApplyResources(groupBox2, "groupBox2");
+            groupBox2.Controls.Add(tableLayoutPanel1);
             groupBox2.ForeColor = Color.Red;
             groupBox2.Name = "groupBox2";
             groupBox2.TabStop = false;
@@ -420,8 +421,8 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(dataGridView3);
             resources.ApplyResources(groupBox3, "groupBox3");
+            groupBox3.Controls.Add(dataGridView3);
             groupBox3.Name = "groupBox3";
             groupBox3.TabStop = false;
             // 

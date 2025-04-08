@@ -35,6 +35,7 @@
             Save = new Button();
             button2 = new Button();
             groupBox1 = new GroupBox();
+            comboBox1 = new ComboBox();
             label1 = new Label();
             richTextBox1 = new RichTextBox();
             groupBox2 = new GroupBox();
@@ -143,6 +144,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(comboBox1);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(richTextBox1);
             groupBox1.Location = new Point(8, 13);
@@ -154,6 +156,15 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Segment";
             groupBox1.Enter += groupBox1_Enter;
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "50,000 gallon", "75,000 gallon", "100,000 gallon", "125,000 gallon", "150,000 gallon", "200,000 gallon", "250,000 gallon", "300,000 gallon", "400,000 gallon", "500,000 gallon", "600,000 gallon", "750,000 gallon" });
+            comboBox1.Location = new Point(139, 21);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(178, 23);
+            comboBox1.TabIndex = 5;
             // 
             // label1
             // 
@@ -685,5 +696,6 @@
         private Label label26;
         private Label label25;
         private MaskedTextBox maskedTextBox5;
+        private ComboBox comboBox1;
     }
 }

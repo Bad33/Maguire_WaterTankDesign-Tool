@@ -713,7 +713,6 @@ C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTa
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.SegmentDialogBox.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.Solver.Solver_Output.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.SplashScreen.resources
-C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.StartupForm.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.TankProperty.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.TanksList.resources
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.WaterTank.resources
@@ -1188,3 +1187,10 @@ C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTa
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Release\net8.0-windows\win-x64\zh-Hant\UIAutomationTypes.resources.dll
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Release\net8.0-windows\win-x64\zh-Hant\WindowsBase.resources.dll
 C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Release\net8.0-windows\win-x64\zh-Hant\WindowsFormsIntegration.resources.dll
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Release\net8.0-windows\win-x64\BouncyCastle.Cryptography.dll
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Release\net8.0-windows\win-x64\itextsharp.dll
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Release\net8.0-windows\win-x64\Newtonsoft.Json.dll
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\bin\Release\net8.0-windows\win-x64\System.Private.Windows.Core.dll
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.ModernProgressBar.resources
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.Solver.Help.resources
+C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\win-x64\WaterTankTool_WFA.DoubleBufferedFlowLayoutPanel.resources

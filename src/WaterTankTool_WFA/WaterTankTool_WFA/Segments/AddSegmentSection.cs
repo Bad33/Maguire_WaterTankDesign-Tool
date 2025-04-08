@@ -102,12 +102,12 @@ namespace WaterTankTool_WFA
             _selectedPictureBox = (PictureBox)sender;
             _selectedPictureBox.BorderStyle = BorderStyle.Fixed3D;
 
-            TanksList tanksList = new TanksList(_waterTankForm);
-            DialogResult result = tanksList.ShowDialog();
-            if (result == DialogResult.OK || result == DialogResult.Cancel)
-            {
-                this.Close();
-            }
+            //TanksList tanksList = new TanksList(_waterTankForm);
+            //DialogResult result = tanksList.ShowDialog();
+            //if (result == DialogResult.OK || result == DialogResult.Cancel)
+            //{
+            //    this.Close();
+            //}
 
 
         }
