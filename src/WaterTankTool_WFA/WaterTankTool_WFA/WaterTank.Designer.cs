@@ -78,7 +78,6 @@ partial class WaterTank
         toolStripSeparator7 = new ToolStripSeparator();
         toolStripButton4 = new ToolStripButton();
         toolStripSeparator10 = new ToolStripSeparator();
-        toolStripLabel3 = new ToolStripLabel();
         toolStripButton2 = new ToolStripDropDownButton();
         toolStripButton10 = new ToolStripButton();
         toolStripButton11 = new ToolStripButton();
@@ -346,7 +345,7 @@ partial class WaterTank
         toolStrip3.BackColor = SystemColors.ControlLight;
         toolStrip3.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip3.ImageScalingSize = new Size(24, 24);
-        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripSeparator9, toolStripButton6, toolStripSeparator7, toolStripButton4, toolStripSeparator10, toolStripLabel3, toolStripButton2, toolStripButton10, toolStripButton11, toolStripButton1, toolStripButton7, toolStripButton8, toolStripSeparator1, toolStripButton5 });
+        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripSeparator9, toolStripButton6, toolStripSeparator7, toolStripButton7, toolStripButton4, toolStripSeparator10, toolStripButton2, toolStripButton10, toolStripButton11, toolStripButton1, toolStripButton8, toolStripSeparator1, toolStripButton5 });
         toolStrip3.Name = "toolStrip3";
         // 
         // toolStripButton3
@@ -393,11 +392,6 @@ partial class WaterTank
         // 
         toolStripSeparator10.Name = "toolStripSeparator10";
         resources.ApplyResources(toolStripSeparator10, "toolStripSeparator10");
-        // 
-        // toolStripLabel3
-        // 
-        resources.ApplyResources(toolStripLabel3, "toolStripLabel3");
-        toolStripLabel3.Name = "toolStripLabel3";
         // 
         // toolStripButton2
         // 
@@ -636,7 +630,6 @@ partial class WaterTank
     private ToolStripSeparator toolStripSeparator1;
     private ToolStripButton toolStripButton7;
     private ToolStripButton toolStripButton8;
-    private ToolStripLabel toolStripLabel3;
     private ToolStripSeparator toolStripSeparator9;
     private ToolStripButton toolStripButton9;
     private GroupBox groupBox1;
