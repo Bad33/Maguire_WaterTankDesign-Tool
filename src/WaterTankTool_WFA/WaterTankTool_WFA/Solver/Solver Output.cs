@@ -18,6 +18,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Migrations;
 using WaterTankTool_WFA.Solver_Equation;
+using WaterTankTool_WFA.Tanks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Rectangle = System.Drawing.Rectangle;
 
@@ -116,8 +117,19 @@ namespace WaterTankTool_WFA.Solver
             var segmentCylinderEquations = new Segment_Cylinder_Equations();
             var segmentConicalEquations = new Segment_Conical_Equations();
             var tankProperties = _context.TankProperties.FirstOrDefault();
-            double projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
 
+            double projectedArea = 0;
+
+            if (tankProperties == null)
+            {
+                MessageBox.Show("Please add segments first!", "No Segments added", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            else
+            {
+                projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
+
+            }
             double cumulativeFwind = 0;
 
 
@@ -180,7 +192,14 @@ namespace WaterTankTool_WFA.Solver
             var segmentData = _context.SegmentProperties.ToList();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            string json = File.ReadAllText("../../../tanks.json");
+            //string json = File.ReadAllText("../../../tanks.json");
+            string jsonStringPath = Path.Combine(Application.StartupPath, "tanks.json");
+            if (!File.Exists(jsonStringPath))
+            {
+                MessageBox.Show("Tanks File not Found");
+            }
+            string json = File.ReadAllText(jsonStringPath);
+           
 
             Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
@@ -291,7 +310,14 @@ namespace WaterTankTool_WFA.Solver
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
             double miscLoad = 15;
 
-            string json = File.ReadAllText("../../../tanks.json");
+            string jsonStringPath = Path.Combine(Application.StartupPath, "tanks.json");
+            if (!File.Exists(jsonStringPath))
+            {
+                MessageBox.Show("Tanks File not Found");
+            }
+            string json = File.ReadAllText(jsonStringPath);
+
+
 
             if (segmentData.Count > 0)
             {

@@ -29,7 +29,12 @@ namespace WaterTankTool_WFA
         {
             try
             {
-                string jsonString = File.ReadAllText("../../../tanks.json");
+                string jsonStringPath = Path.Combine(Application.StartupPath, "tanks.json");
+                if (!File.Exists(jsonStringPath))
+                {
+                    MessageBox.Show("Tanks File not Found");
+                }
+                string jsonString = File.ReadAllText(jsonStringPath);
                 tankData = JsonSerializer.Deserialize<TankData>(jsonString);
             }
             catch (Exception ex)

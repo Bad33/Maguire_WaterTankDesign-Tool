@@ -165,6 +165,7 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(178, 23);
             comboBox1.TabIndex = 5;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged_1;
             // 
             // label1
             // 

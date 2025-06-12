@@ -1,66 +1,157 @@
 {
-  "tanks": [
-    {
-      "type": "150,000 gallon",
-      "Weight_of_Water": "1283 Kips",
-      "Weight_of_Steel": "54.9636 Kips",
-      "Total_Weight": "1338 Kips",
-      "Projected_Area": "710.42 ft²",
-      "height": "10 meters",
-      "diameter": "34 meters",
-      "thickness": "0.375 meters",
-      "Centroid": "22.9"
-      
+    "tanks": [
 
-    },
-    {
-        "type": "250,000 gallon",
-        "Weight_of_Water": "2122 Kips",
-        "Weight_of_Steel": "77.4918 Kips",
-        "Total_Weight": "2199 Kips",
-        "Projected_Area": "1292 ft²",
-        "height": "10 meters",
-        "diameter": "5 meters",
-        "thickness": "20 meters",
-        "Centroid": "22.9"
+        {
+            "type": "50,000 gallon",
+            "diameter": "34 meters",
+            "Centroid": "14.91",
+            "height": "27.5416 meters",
+            "Weight_of_Water": "448 Kips",
+            "Weight_of_Steel": "19.1583 Kips",
+            "Total_Weight": "467.1583 Kips",
+            "Projected_Area": "478.77 ft²",
+            "thickness": "0.375 meters"
 
-    },
-    {
-        "type": "500,000 gallon",
-        "Weight_of_Water": "4305 Kips",
-        "Weight_of_Steel": "142.8001 Kips",
-        "Total_Weight": "4448 Kips",
-        "Projected_Area": "1530 ft²",
-        "height": "10 meters",
-        "diameter": "5 meters",
-        "thickness": "0.546 meters",
-        "Centroid": "22.9"
 
-    },
-    {
-        "type": "750,000 gallon",
-        "Weight_of_Water": "1283 Kips",
-        "Weight_of_Steel": "54,9636 Kips",
-        "Total_Weight": "1338 Kips",
-        "Projected_Area": "710.42 ft²",
-        "height": "10 meters",
-        "diameter": "5 meters",
-        "thickness": "0.1 meters",
-        "Centroid": "22.9"
+        },
+        {
+            "type": "75,000 gallon",
+            "diameter": "27 meters",
+            "Centroid": "16.88",
+            "height": "31.1629 meters",
+            "Weight_of_Water": "641 Kips",
+            "Weight_of_Steel": "25.2145 Kips",
+            "Total_Weight": "666.2145 Kips",
+            "Projected_Area": "609.33 ft²",
+            "thickness": "0.375 meters"
 
-    },
-    {
-        "type": "1,000,000 gallon",
-        "Weight_of_Water": "1283 Kips",
-        "Weight_of_Steel": "54,9636 Kips",
-        "Total_Weight": "1338 Kips",
-        "Projected_Area": "710.42 ft²",
-        "height": "10 meters",
-        "diameter": "5 meters",
-        "thickness": "0.1 meters",
-        "Centroid": "22.9"
 
-    }
+        },
+        {
+            "type": "100,000 gallon",
+            "diameter": "30 meters",
+            "Centroid": "18.77",
+            "height": "34.7842 meters",
+            "Weight_of_Water": "883 Kips",
+            "Weight_of_Steel": "31.1024 Kips",
+            "Total_Weight": "914.1024 Kips",
+            "Projected_Area": "755.11 ft²",
+            "thickness": "0.375 meters"
 
-  ]
+
+        },
+        {
+            "type": "125,000 gallon",
+            "diameter": "32.33 meters",
+            "Centroid": "20.18",
+            "height": "37.1004 meters",
+            "Weight_of_Water": "1107 Kips",
+            "Weight_of_Steel": "40.3902 Kips",
+            "Total_Weight": "1147.3902 Kips",
+            "Projected_Area": "874.96 ft²",
+            "thickness": "0.375 meters"
+
+
+        },
+        {
+            "type": "150,000 gallon",
+            "diameter": "34 meters",
+            "Centroid": "21.27",
+            "height": "39.1126 meters",
+            "Weight_of_Water": "1283 Kips",
+            "Weight_of_Steel": "54.9636 Kips",
+            "Total_Weight": "1338 Kips",
+            "Projected_Area": "966 ft²",
+            "thickness": "0.375 meters"
+
+
+        },
+        {
+            "type": "200,000 gallon",
+            "diameter": "40.5 meters",
+            "Centroid": "22.56",
+            "height": "21.2088 meters",
+            "Weight_of_Water": "1969 Kips",
+            "Weight_of_Steel": "61.8419 Kips",
+            "Total_Weight": "2030.8419 Kips",
+            "Projected_Area": "1163 ft²",
+            "thickness": "20 meters"
+
+        },
+
+        {
+            "type": "250,000 gallon",
+            "diameter": "43.67 meters",
+            "Centroid": "24.24",
+            "height": "43.9459 meters",
+            "Weight_of_Water": "2122 Kips",
+            "Weight_of_Steel": "77.4918 Kips",
+            "Total_Weight": "2199 Kips",
+            "Projected_Area": "1747.18 ft²",
+            "thickness": "20 meters"
+
+        },
+        {
+            "type": "300,000 gallon",
+            "diameter": "46.5 meters",
+            "Centroid": "26.04",
+            "height": "46.9616 meters",
+            "Weight_of_Water": "2603 Kips",
+            "Weight_of_Steel": "87.7734 Kips",
+            "Total_Weight": "2690.7734 Kips",
+            "Projected_Area": "1552.23 ft²",
+            "thickness": "0.546 meters"
+
+        },
+        {
+            "type": "400,000 gallon",
+            "diameter": "51.5 meters",
+            "Centroid": "28.83",
+            "height": "51.9871 meters",
+            "Weight_of_Water": "3455 Kips",
+            "Weight_of_Steel": "123.9745 Kips",
+            "Total_Weight": "3578.9745 Kips",
+            "Projected_Area": "1900.48 ft²",
+            "thickness": "0.546 meters"
+
+        },
+        {
+            "type": "500,000 gallon",
+            "diameter": "54 meters",
+            "Centroid": "30.96",
+            "height": "54.2548 meters",
+            "Weight_of_Water": "4305 Kips",
+            "Weight_of_Steel": "142.8001 Kips",
+            "Total_Weight": "4447.8001 Kips",
+            "Projected_Area": "2111.58 ft²",
+            "thickness": "0.546 meters"
+
+        },
+        {
+            "type": "600,000 gallon",
+            "diameter": "62.5 meters",
+            "Centroid": "22.9",
+            "height": "57.2651 meters",
+            "Weight_of_Water": "5474 Kips",
+            "Weight_of_Steel": "189.7228 Kips",
+            "Total_Weight": "5663.72228 Kips",
+            "Projected_Area": "710.42 ft²",
+            "thickness": "0.1 meters"
+
+        },
+        {
+            "type": "750,000 gallon",
+            "diameter": "83 meters",
+            "Centroid": "35.12",
+            "height": "62.1187 meters",
+            "Weight_of_Water": "6789 Kips",
+            "Weight_of_Steel": "234.3149 Kips",
+            "Total_Weight": "7032.3149 Kips",
+            "Projected_Area": "2828.77.58 ft²",
+            "thickness": "0.546 meters"
+
+        }
+
+
+    ]
 }

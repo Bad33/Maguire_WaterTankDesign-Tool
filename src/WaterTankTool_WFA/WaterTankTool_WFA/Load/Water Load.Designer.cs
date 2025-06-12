@@ -115,8 +115,10 @@
             // 
             // Water_Load
             // 
+            AcceptButton = button1;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            CancelButton = button2;
             ClientSize = new Size(280, 188);
             Controls.Add(label2);
             Controls.Add(button2);

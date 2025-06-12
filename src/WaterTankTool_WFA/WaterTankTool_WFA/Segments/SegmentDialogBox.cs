@@ -51,7 +51,7 @@ namespace WaterTankTool_WFA
             Ag = 0;
             height = 0;
             InitializeComponent();
-
+            GetTanksJsonData();
             maskedTextBox1.TextChanged += InputFields_TextChanged;
             maskedTextBox2.TextChanged += InputFields_TextChanged;
             maskedTextBox3.TextChanged += InputFields_TextChanged;
@@ -69,7 +69,7 @@ namespace WaterTankTool_WFA
             _waterTankForm = waterTankForm;
 
             InitializeComponent();
-
+            GetTanksJsonData();
             var context = WaterTankDbContext.GetInstance();
 
             _context = context;
@@ -88,6 +88,7 @@ namespace WaterTankTool_WFA
             _dialogType = dialogType;
             _segmentNumber = segmentNumber;
             InitializeComponent();
+            GetTanksJsonData();
             var context = WaterTankDbContext.GetInstance();
 
             _context = context;
@@ -106,7 +107,7 @@ namespace WaterTankTool_WFA
             // Optionally update the private field.
             _selectedTankCapacity = selectedTank;
 
-            GetTanksJsonData();
+
             // Look up the corresponding dimensions from your JSON or data source.
             if (tankData?.Tanks != null)
             {
@@ -168,12 +169,19 @@ namespace WaterTankTool_WFA
                 label25.Visible = false;
                 maskedTextBox5.Visible = false;
                 label26.Visible = false;
+                maskedTextBox3.ReadOnly = true;
+                maskedTextBox4.ReadOnly = true;
+                maskedTextBox2.ReadOnly = true;
             }
         }
 
         private void InputFields_TextChanged(object sender, EventArgs e)
         {
+            if(maskedTextBox1.Text != "" && _selectedTankCapacity != null)
+            {
+                maskedTextBox4.Text = (Double.Parse(maskedTextBox1.Text) + Double.Parse(ExtractNumericValue(dimensions.Height) )).ToString();
 
+            }
             DoCalculations();
         }
 
@@ -225,7 +233,7 @@ namespace WaterTankTool_WFA
                 else if (segmentProperties != null && segmentProperties.SegmentType == "Tanks")
                 {
 
-                    GetTanksJsonData();
+
                     _segmentType = segmentProperties.SegmentType;
                     comboBox1.Visible = true;
                     richTextBox1.Visible = false;
@@ -288,7 +296,12 @@ namespace WaterTankTool_WFA
         {
             try
             {
-                string jsonString = File.ReadAllText("../../../tanks.json");
+                string jsonStringPath = Path.Combine(Application.StartupPath, "tanks.json");
+                if (!File.Exists(jsonStringPath))
+                {
+                    MessageBox.Show("Tanks File not Found");
+                }
+                string jsonString = File.ReadAllText(jsonStringPath);
                 tankData = JsonSerializer.Deserialize<TankData>(jsonString);
             }
             catch (Exception ex)
@@ -500,11 +513,11 @@ namespace WaterTankTool_WFA
             {
                 Save_ClickBase(sender, e);
             }
-            else if (_segmentType == "Cylinder" )
+            else if (_segmentType == "Cylinder")
             {
                 Save_ClickCylinder(sender, e);
             }
-            else if(_segmentType == "Tanks")
+            else if (_segmentType == "Tanks")
             {
                 Save_ClickTank(sender, e);
 
@@ -519,7 +532,7 @@ namespace WaterTankTool_WFA
             //using (var context = WaterTankDbContext.GetInstance())
             //{
 
-            
+
 
             TankProperties properties = new TankProperties()
             {
@@ -604,15 +617,15 @@ namespace WaterTankTool_WFA
             }
             else
             {
-    
+
                 if (_selectedTankCapacity != null)
                 {
-                    GetTanksJsonData();
+
                     if (tankData?.Tanks != null)
                     {
                         dimensions = tankData.Tanks.FirstOrDefault(data => data.Type == _selectedTankCapacity);
                         showInputFieldsOnType();
-                        if(dimensions != null)
+                        if (dimensions != null)
                         {
                             segmentProperties = new SegmentProperties()
                             {
@@ -836,17 +849,18 @@ namespace WaterTankTool_WFA
         private void CalculateTankValues(double heightInitial, double heightFinal)
         {
             Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
-            var tankProperties = _context.TankProperties.FirstOrDefault();
+            //var tankProperties = _context.TankProperties.FirstOrDefault();
+            var tankProperties = tankData.Tanks.FirstOrDefault(data => data.Type == _selectedTankCapacity);
 
-            if(tankProperties != null)
+            if (tankProperties != null)
             {
-                double projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
-                double totalWeight = ExtractDoubleValue(tankProperties.TotalWeight);
+                double projectedArea = Double.Parse(ExtractNumericValue(tankProperties.Projected_Area));
+                double totalWeight = Double.Parse(ExtractNumericValue(tankProperties.Total_Weight));
                 double f = calculateF(cylinder_Equations.qzi(heightInitial), cylinder_Equations.qzf(heightFinal), projectedArea);
 
 
-                textBox1.Text = tankProperties.TotalWeight;
-                textBox2.Text = tankProperties.ProjectedArea;
+                textBox1.Text = projectedArea.ToString();
+                textBox2.Text = totalWeight.ToString();
                 textBox3.Text = tankProperties.Centroid;
                 textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
                 textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
@@ -996,6 +1010,11 @@ namespace WaterTankTool_WFA
         }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
 
         }

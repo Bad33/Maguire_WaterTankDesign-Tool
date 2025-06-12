@@ -76,14 +76,16 @@ partial class WaterTank
         toolStripSeparator9 = new ToolStripSeparator();
         toolStripButton6 = new ToolStripButton();
         toolStripSeparator7 = new ToolStripSeparator();
+        toolStripButton4 = new ToolStripButton();
+        toolStripSeparator10 = new ToolStripSeparator();
         toolStripLabel3 = new ToolStripLabel();
         toolStripButton2 = new ToolStripDropDownButton();
+        toolStripButton10 = new ToolStripButton();
+        toolStripButton11 = new ToolStripButton();
         toolStripButton1 = new ToolStripButton();
         toolStripButton7 = new ToolStripButton();
         toolStripButton8 = new ToolStripButton();
         toolStripSeparator1 = new ToolStripSeparator();
-        toolStripButton4 = new ToolStripButton();
-        toolStripSeparator10 = new ToolStripSeparator();
         toolStripButton5 = new ToolStripButton();
         statusStrip2 = new StatusStrip();
         toolStrip2 = new ToolStrip();
@@ -344,7 +346,7 @@ partial class WaterTank
         toolStrip3.BackColor = SystemColors.ControlLight;
         toolStrip3.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip3.ImageScalingSize = new Size(24, 24);
-        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripSeparator9, toolStripButton6, toolStripSeparator7, toolStripLabel3, toolStripButton2, toolStripButton1, toolStripButton7, toolStripButton8, toolStripSeparator1, toolStripButton4, toolStripSeparator10, toolStripButton5 });
+        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripSeparator9, toolStripButton6, toolStripSeparator7, toolStripButton4, toolStripSeparator10, toolStripLabel3, toolStripButton2, toolStripButton10, toolStripButton11, toolStripButton1, toolStripButton7, toolStripButton8, toolStripSeparator1, toolStripButton5 });
         toolStrip3.Name = "toolStrip3";
         // 
         // toolStripButton3
@@ -380,6 +382,18 @@ partial class WaterTank
         toolStripSeparator7.Name = "toolStripSeparator7";
         resources.ApplyResources(toolStripSeparator7, "toolStripSeparator7");
         // 
+        // toolStripButton4
+        // 
+        toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        resources.ApplyResources(toolStripButton4, "toolStripButton4");
+        toolStripButton4.Name = "toolStripButton4";
+        toolStripButton4.Click += toolStripButton4_Click;
+        // 
+        // toolStripSeparator10
+        // 
+        toolStripSeparator10.Name = "toolStripSeparator10";
+        resources.ApplyResources(toolStripSeparator10, "toolStripSeparator10");
+        // 
         // toolStripLabel3
         // 
         resources.ApplyResources(toolStripLabel3, "toolStripLabel3");
@@ -392,6 +406,22 @@ partial class WaterTank
         toolStripButton2.Name = "toolStripButton2";
         toolStripButton2.ShowDropDownArrow = false;
         toolStripButton2.Click += toolStripButton2_Click;
+        // 
+        // toolStripButton10
+        // 
+        toolStripButton10.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton10.Image = Properties.Resources.icons8_hex_wrench_96;
+        resources.ApplyResources(toolStripButton10, "toolStripButton10");
+        toolStripButton10.Name = "toolStripButton10";
+        toolStripButton10.Click += toolStripButton10_Click;
+        // 
+        // toolStripButton11
+        // 
+        toolStripButton11.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton11.Image = Properties.Resources.drops;
+        resources.ApplyResources(toolStripButton11, "toolStripButton11");
+        toolStripButton11.Name = "toolStripButton11";
+        toolStripButton11.Click += toolStripButton11_Click;
         // 
         // toolStripButton1
         // 
@@ -421,18 +451,6 @@ partial class WaterTank
         // 
         toolStripSeparator1.Name = "toolStripSeparator1";
         resources.ApplyResources(toolStripSeparator1, "toolStripSeparator1");
-        // 
-        // toolStripButton4
-        // 
-        toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        resources.ApplyResources(toolStripButton4, "toolStripButton4");
-        toolStripButton4.Name = "toolStripButton4";
-        toolStripButton4.Click += toolStripButton4_Click;
-        // 
-        // toolStripSeparator10
-        // 
-        toolStripSeparator10.Name = "toolStripSeparator10";
-        resources.ApplyResources(toolStripSeparator10, "toolStripSeparator10");
         // 
         // toolStripButton5
         // 
@@ -626,4 +644,6 @@ partial class WaterTank
     private Panel panel2;
     private Button button1;
     private ToolStripSeparator toolStripSeparator10;
+    private ToolStripButton toolStripButton10;
+    private ToolStripButton toolStripButton11;
 }

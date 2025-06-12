@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "RZch7OaRKc8=",
+  "dgSpecHash": "sctFPQ0u9QI=",
   "success": true,
   "projectFilePath": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
   "expectedPackageFiles": [
@@ -35,6 +35,7 @@
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\8.0.0\\microsoft.extensions.logging.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.extensions.options\\8.0.0\\microsoft.extensions.options.8.0.0.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.net.illink.tasks\\8.0.12\\microsoft.net.illink.tasks.8.0.12.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.3\\microsoft.win32.systemevents.9.0.3.nupkg.sha512",
@@ -82,6 +83,12 @@
     "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.12\\microsoft.aspnetcore.app.runtime.win-x64.8.0.12.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "NU1900",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
+    },
     {
       "code": "NU1701",
       "level": "Warning",

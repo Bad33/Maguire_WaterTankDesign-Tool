@@ -810,6 +810,11 @@ public partial class WaterTank : Form
         wind_Load.ShowDialog();
     }
 
+    private void toolStripButton10_Click(object sender, EventArgs e)
+    {
+        Dead_Load dead_Load = new Dead_Load();
+        dead_Load.ShowDialog();
+    }
     private void toolStripButton8_Click(object sender, EventArgs e)
     {
         Seismic seismic = new Seismic();
@@ -832,7 +837,7 @@ public partial class WaterTank : Form
             AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
 
         };
-        
+
         panel2.Controls.Add(dataGridView1);
     }
 
@@ -870,5 +875,9 @@ public partial class WaterTank : Form
         isExpanded = !isExpanded;
     }
 
-
+    private void toolStripButton11_Click(object sender, EventArgs e)
+    {
+        Water_Load water_= new Water_Load();
+        water_.ShowDialog();    
+    }
 }
