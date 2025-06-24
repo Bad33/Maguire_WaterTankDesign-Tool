@@ -4,11 +4,20 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Entity;
 
 namespace WaterTankTool_WFA
 {
+    public enum TankType { None, SingleColumn, MultiColumn }
+
+    public class ProjectMetadata
+    {
+        public string ProjectName { get; set; }
+        public TankType Type { get; set; }
+        public string ProjectFilePath { get; set; }
+    }
 
     public class DoubleBufferedFlowLayoutPanel : FlowLayoutPanel
     {
@@ -19,43 +28,200 @@ namespace WaterTankTool_WFA
             this.UpdateStyles();
         }
     }
+
     public partial class StartupForm : Form
     {
         private readonly DIContainer _diContainer;
-        private List<string> recentProjects = new List<string>();
+        private List<ProjectMetadata> recentProjects = new List<ProjectMetadata>();
+        private TankType _selectedTankType = TankType.None;
 
+        private Panel tankTypeSelectionPanel;
+        private Panel mainStartupPanel;
+        private DoubleBufferedFlowLayoutPanel recentProjectsPanel;
+        private DoubleBufferedFlowLayoutPanel buttonPanel;
 
-        public StartupForm(DIContainer diContainer)
+        public StartupForm(DIContainer diContainer, TankType selectedTankType)
         {
             InitializeComponent();
             _diContainer = diContainer;
+            _selectedTankType = selectedTankType;
 
-            this.MaximizedBounds = Screen.FromHandle(this.Handle).WorkingArea;
+            // --- Main window setup (startup panel for projects) ---
             this.WindowState = FormWindowState.Maximized;
-
+            this.StartPosition = FormStartPosition.CenterScreen;
             this.ShowIcon = false;
-
             this.BackColor = ColorTranslator.FromHtml("#F9F9F9");
-
             this.FormBorderStyle = FormBorderStyle.Fixed3D;
             this.AutoScaleMode = AutoScaleMode.None;
             this.AutoScaleDimensions = new SizeF(96F, 96F);
             this.Font = new Font("Segoe UI", 10);
 
-            TableLayoutPanel mainLayout = new TableLayoutPanel
+            mainStartupPanel = CreateMainStartupPanel();
+            this.Controls.Add(mainStartupPanel);
+            mainStartupPanel.Dock = DockStyle.Fill;
+            mainStartupPanel.Visible = true;
+
+            // Immediately show the recent projects for selected tank type
+            LoadRecentProjects();
+            DisplayRecentProjects(recentProjectsPanel);
+        }
+
+        #region Tank Type Selection UI
+
+        private Panel CreateTankTypeSelectionPanel()
+        {
+            // Set 1.5x larger base dimensions for visibility
+            int width = (int)(900 );   // ~1350px
+            int height = (int)(400);  // ~600px
+
+            var panel = new Panel
+            {
+                Size = new Size(width, height),
+                BackColor = ColorTranslator.FromHtml("#292C36"),
+                Anchor = AnchorStyles.None,
+                Dock = DockStyle.None,
+                Location = new Point(
+                    (Screen.PrimaryScreen.WorkingArea.Width - width) / 2,
+                    (Screen.PrimaryScreen.WorkingArea.Height - height) / 2
+                )
+            };
+
+            // Use TableLayoutPanel for vertical centering and separation
+            var outerLayout = new TableLayoutPanel
+            {
+                RowCount = 3,
+                ColumnCount = 1,
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent,
+                Padding = new Padding(40, 30, 40, 30)
+            };
+            outerLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            outerLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 40F));
+            outerLayout.RowStyles.Add(new RowStyle(SizeType.Percent, 30F));
+            panel.Controls.Add(outerLayout);
+
+            // --- Title ---
+            var title = new Label
+            {
+                Text = "Select Tank Type",
+                Font = new Font("Segoe UI", 38, FontStyle.Bold),
+                ForeColor = Color.White,
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 0)
+            };
+            outerLayout.Controls.Add(title, 0, 0);
+
+            // --- Button Layout ---
+            var btnLayout = new TableLayoutPanel
+            {
+                Dock = DockStyle.Fill,
+                RowCount = 1,
+                ColumnCount = 2,
+                BackColor = Color.Transparent,
+                Padding = new Padding(30, 0, 30, 0)
+            };
+            btnLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            btnLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            outerLayout.Controls.Add(btnLayout, 0, 1);
+
+            // --- Single Pedestal Button ---
+            var btnSingle = new Button
+            {
+                Text = "Single Column (Pedestal)\n\n🗼",
+                Font = new Font("Segoe UI", 28, FontStyle.Bold),
+                Size = new Size(400, 220),
+                BackColor = Color.FromArgb(75, 156, 211),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Margin = new Padding(15, 20, 15, 20),
+                Anchor = AnchorStyles.None
+            };
+            btnSingle.FlatAppearance.BorderSize = 0;
+            btnSingle.Click += (s, e) => { OnTankTypeSelected(TankType.SingleColumn); };
+            btnLayout.Controls.Add(btnSingle, 0, 0);
+
+            // --- Multi Column Button ---
+            var btnMulti = new Button
+            {
+                Text = "Multi-Column (Multi-Leg)\n\n🏗️",
+                Font = new Font("Segoe UI", 28, FontStyle.Bold),
+                Size = new Size(400, 220),
+                BackColor = Color.FromArgb(120, 89, 184),
+                ForeColor = Color.White,
+                FlatStyle = FlatStyle.Flat,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Margin = new Padding(15, 20, 15, 20),
+                Anchor = AnchorStyles.None
+            };
+            btnMulti.FlatAppearance.BorderSize = 0;
+            btnMulti.Click += (s, e) => { OnTankTypeSelected(TankType.MultiColumn); };
+            btnLayout.Controls.Add(btnMulti, 1, 0);
+
+            // Optional footer (can be empty, or copyright etc)
+            var footer = new Label
+            {
+                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.",
+                Font = new Font("Segoe UI", 11, FontStyle.Regular),
+                ForeColor = Color.White,
+                AutoSize = false,
+                TextAlign = ContentAlignment.MiddleCenter,
+                Dock = DockStyle.Fill,
+                Margin = new Padding(0, 0, 0, 0)
+            };
+            outerLayout.Controls.Add(footer, 0, 2);
+
+            // Center the panel on form startup
+            panel.Left = (this.ClientSize.Width - panel.Width) / 2;
+            panel.Top = (this.ClientSize.Height - panel.Height) / 2;
+
+            return panel;
+        }
+
+
+        private void OnTankTypeSelected(TankType type)
+        {
+            _selectedTankType = type;
+            // Load projects for this type
+            LoadRecentProjects();
+            DisplayRecentProjects(recentProjectsPanel);
+            // Show main panel, hide selection panel
+            tankTypeSelectionPanel.Visible = false;
+            mainStartupPanel.Visible = true;
+            mainStartupPanel.BringToFront();
+        }
+
+        #endregion
+
+        #region Main Startup Panel UI
+
+
+
+
+        private Panel CreateMainStartupPanel()
+        {
+            var mainPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent
+            };
+
+            // Main layout
+            var mainLayout = new TableLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 ColumnCount = 2,
                 RowCount = 1,
                 BackColor = Color.Transparent
-
             };
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 60F));
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
-            this.Controls.Add(mainLayout);
-            //this.BackgroundImageLayout = ImageLayout.Stretch;
-            // Use the custom double-buffered panel for the recent projects list
-            DoubleBufferedFlowLayoutPanel recentProjectsPanel = new DoubleBufferedFlowLayoutPanel
+            mainPanel.Controls.Add(mainLayout);
+
+            // Recent Projects
+            recentProjectsPanel = new DoubleBufferedFlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(10),
@@ -67,53 +233,27 @@ namespace WaterTankTool_WFA
             };
             mainLayout.Controls.Add(recentProjectsPanel, 0, 0);
 
-            Label recentProjectsLabel = new Label
-            {
-                Text = "Open Recent",
-                Font = new Font("Segoe UI", 14, FontStyle.Regular),
-                ForeColor = Color.White,
-                AutoSize = true,
-                Margin = new Padding(10, 50, 10, 0)
-            };
-            recentProjectsPanel.Controls.Add(recentProjectsLabel);
-
-
-
-
-
-            LoadRecentProjects();
-            DisplayRecentProjects(recentProjectsPanel);
-
-
+            // Copyright
             Panel copyrightPanel = new Panel
             {
                 Dock = DockStyle.Bottom,
                 Height = 70,
-                BackColor = Color.Transparent // Match the panel color
+                BackColor = Color.Transparent
             };
-
             Label copyrightText = new Label
             {
-                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n" ,
-                //"This software and its associated materials are proprietary to Iron Maguire and are protected by applicable copyright and intellectual property laws.\n" +
-                //"Unauthorized use, reproduction, or distribution of this software or any of its components is strictly prohibited.\n\n" +
-                //"For licensing information, please contact: im@gmail.com\n\n" +
-                //"Version: 1.1.0\n" +
-                //"Developed by Nikhil Chaudhary, under the guidance of Dr. Akram Jwadhari at SDSU.",
+                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n",
                 Font = new Font("Segoe UI", 8, FontStyle.Regular),
                 ForeColor = Color.White,
                 AutoSize = true,
                 TextAlign = ContentAlignment.MiddleCenter,
                 Dock = DockStyle.Fill,
-
-
-
             };
             copyrightPanel.Controls.Add(copyrightText);
             recentProjectsPanel.Controls.Add(copyrightPanel);
 
-            // Use the custom double-buffered panel for the button section
-            DoubleBufferedFlowLayoutPanel buttonPanel = new DoubleBufferedFlowLayoutPanel
+            // Buttons (Right Panel)
+            buttonPanel = new DoubleBufferedFlowLayoutPanel
             {
                 Dock = DockStyle.Fill,
                 Padding = new Padding(20),
@@ -142,7 +282,75 @@ namespace WaterTankTool_WFA
             Button newProjectButton = CreateStyledButton("Create New Project");
             newProjectButton.Click += NewProjectButton_Click;
             buttonPanel.Controls.Add(newProjectButton);
+
+            // Back button to reselect type
+            Button backBtn = CreateStyledButton("← Change Tank Type");
+            backBtn.Click += (s, e) => { mainStartupPanel.Visible = false; tankTypeSelectionPanel.Visible = true; };
+            buttonPanel.Controls.Add(backBtn);
+
+            return mainPanel;
         }
+
+        #endregion
+
+        #region Recent Projects Filtering & Display
+
+        private void LoadRecentProjects()
+        {
+            string recentProjectsFile = "recent_projects.json";
+            if (File.Exists(recentProjectsFile))
+            {
+                try
+                {
+                    string json = File.ReadAllText(recentProjectsFile);
+                    recentProjects = JsonSerializer.Deserialize<List<ProjectMetadata>>(json) ?? new List<ProjectMetadata>();
+                }
+                catch
+                {
+                    recentProjects = new List<ProjectMetadata>();
+                }
+            }
+        }
+
+        private void DisplayRecentProjects(FlowLayoutPanel panel)
+        {
+            panel.Controls.Clear();
+            Label lbl = new Label
+            {
+                Text = $"Open Recent ({(_selectedTankType == TankType.SingleColumn ? "Single Column" : "Multi-Column")})",
+                Font = new Font("Segoe UI", 14, FontStyle.Regular),
+                ForeColor = Color.White,
+                AutoSize = true,
+                Margin = new Padding(2, 5, 0, 5)
+            };
+            panel.Controls.Add(lbl);
+
+            foreach (var proj in recentProjects.Where(p => p.Type == _selectedTankType))
+            {
+                if (!File.Exists(proj.ProjectFilePath))
+                    continue;
+                Button projectButton = new Button
+                {
+                    Text = Path.GetFileNameWithoutExtension(proj.ProjectFilePath),
+                    Font = new Font("Segoe UI", 10),
+                    Width = 850,
+                    Height = 50,
+                    BackColor = Color.Transparent,
+                    FlatStyle = FlatStyle.Popup,
+                    ForeColor = Color.Black,
+                    TextAlign = ContentAlignment.MiddleLeft,
+                    Padding = new Padding(5),
+                    Margin = new Padding(0, 5, 0, 5)
+                };
+                projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(97, 97, 102); };
+                projectButton.MouseLeave += (s, e) => { projectButton.BackColor = Color.Transparent; };
+                projectButton.Click += async (s, e) => { await OpenProject(proj.ProjectFilePath, proj.Type); };
+
+                panel.Controls.Add(projectButton);
+            }
+        }
+
+        #endregion
 
         private Button CreateStyledButton(string text)
         {
@@ -163,68 +371,7 @@ namespace WaterTankTool_WFA
             return button;
         }
 
-        private void LoadRecentProjects()
-        {
-            string recentProjectsFile = "recent_projects.json";
-
-            if (File.Exists(recentProjectsFile))
-            {
-                try
-                {
-                    string json = File.ReadAllText(recentProjectsFile);
-                    recentProjects = JsonSerializer.Deserialize<List<string>>(json) ?? new List<string>();
-                }
-                catch
-                {
-                    recentProjects = new List<string>(); // Reset if file is corrupted
-                }
-            }
-        }
-
-
-        private void DisplayRecentProjects(FlowLayoutPanel recentProjectsPanel)
-        {
-            recentProjectsPanel.Controls.Clear(); // This removes all controls, including the label
-
-            // Re-add the label at the top
-            Label recentProjectsLabel = new Label
-            {
-                Text = "Open Recent",
-                Font = new Font("Segoe UI", 14, FontStyle.Regular),
-                ForeColor = Color.White,
-                AutoSize = true,
-                Margin = new Padding(2, 5, 0, 5)
-            };
-            recentProjectsPanel.Controls.Add(recentProjectsLabel);
-
-            // Then add the project buttons
-            foreach (var projectPath in recentProjects)
-            {
-                if (Directory.Exists(Path.GetDirectoryName(projectPath)))
-                {
-                    Button projectButton = new Button
-                    {
-                        Text = Path.GetFileNameWithoutExtension(projectPath),
-                        Font = new Font("Segoe UI", 10),
-                        Width = 850,
-                        Height = 50,
-                        BackColor = Color.Transparent,
-                        FlatStyle = FlatStyle.Popup,
-                        ForeColor = Color.Black,
-                        TextAlign = ContentAlignment.MiddleLeft,
-                        Padding = new Padding(5),
-                        Margin = new Padding(0, 5, 0, 5)
-                    };
-                    projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(97, 97, 102); };
-                    projectButton.MouseLeave += (s, e) => { projectButton.BackColor = Color.Transparent; };
-                    projectButton.Click += (s, e) => { OpenProject(projectPath); };
-
-                    recentProjectsPanel.Controls.Add(projectButton);
-                }
-            }
-        }
-
-
+        #region Project Open/Create
 
         private void OpenProjectButton_Click(object sender, EventArgs e)
         {
@@ -232,11 +379,17 @@ namespace WaterTankTool_WFA
             {
                 openFileDialog.Filter = "Project Files (*.proj)|*.proj";
                 openFileDialog.Title = "Open Existing Project";
-
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string projectPath = openFileDialog.FileName;
-                    OpenProject(projectPath);
+                    // Check metadata for type
+                    TankType fileType = GetProjectTypeFromMetadata(projectPath);
+                    if (fileType != _selectedTankType)
+                    {
+                        MessageBox.Show("Selected project does not match chosen tank type.", "Type Mismatch", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    _ = OpenProject(projectPath, fileType);
                 }
             }
         }
@@ -274,40 +427,60 @@ namespace WaterTankTool_WFA
                     string projectFilePath = Path.Combine(projectFolderPath, $"{projectName}.proj");
                     File.WriteAllText(projectFilePath, "Default project content.");
 
-                    InitializeProjectDatabase(projectFolderPath);
-                    OpenProject(projectFilePath); // Automatically open after creation
+                    // -- Save metadata --
+                    var metadata = new ProjectMetadata
+                    {
+                        ProjectName = projectName,
+                        Type = _selectedTankType,
+                        ProjectFilePath = projectFilePath
+                    };
+                    string metaPath = Path.Combine(projectFolderPath, "project.json");
+                    File.WriteAllText(metaPath, JsonSerializer.Serialize(metadata, new JsonSerializerOptions { WriteIndented = true }));
 
-                    AddToRecentProjects(projectFilePath);
+                    InitializeProjectDatabase(projectFolderPath);
+                    AddToRecentProjects(metadata);
+
+                    _ = OpenProject(projectFilePath, _selectedTankType); // Automatically open after creation
                 }
             }
         }
 
-
-        private void AddToRecentProjects(string projectFilePath)
+        private void AddToRecentProjects(ProjectMetadata metadata)
         {
-            if (!recentProjects.Contains(projectFilePath))
+            if (!recentProjects.Any(p => p.ProjectFilePath == metadata.ProjectFilePath))
             {
-                recentProjects.Insert(0, projectFilePath);
-                string json = JsonSerializer.Serialize(recentProjects);
+                recentProjects.Insert(0, metadata);
+                string json = JsonSerializer.Serialize(recentProjects, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText("recent_projects.json", json);
             }
         }
 
+        private TankType GetProjectTypeFromMetadata(string projectPath)
+        {
+            string metaPath = Path.Combine(Path.GetDirectoryName(projectPath), "project.json");
+            if (!File.Exists(metaPath)) return TankType.None;
+            try
+            {
+                var md = JsonSerializer.Deserialize<ProjectMetadata>(File.ReadAllText(metaPath));
+                return md?.Type ?? TankType.None;
+            }
+            catch { return TankType.None; }
+        }
 
-        public async Task OpenProject(string projectPath)
+        public async Task OpenProject(string projectPath, TankType tankType)
         {
             using (LoadingWindow loading = new LoadingWindow())
             {
                 loading.Show();
+                Application.DoEvents();
 
                 try
                 {
-                    // Run the project loading in a separate task
                     await Task.Run(() =>
                     {
-                        string dbFilePath = Path.Combine(Path.GetDirectoryName(projectPath), "project_data.db");
-                        //MigrateDatabaseIfNeeded(dbFilePath);
+                        string dbFilePath = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(projectPath), "project_data.db");
                         string connectionString = $"Data Source={dbFilePath};";
+                        //EnsureDatabaseSchema(dbFilePath);
                         var dbContext = new WaterTankDbContext(connectionString);
                         dbContext.EnsureDatabaseCreated();
                         _diContainer.Register<WaterTankDbContext>(dbContext);
@@ -319,69 +492,27 @@ namespace WaterTankTool_WFA
                 }
                 finally
                 {
-                    loading.Close(); // Ensure the loading screen always closes
+                    loading.Close();
                 }
             }
 
-            // Open the main application window
-            var mainForm = new WaterTank(this); // Pass the project path
+            // Open main window based on type
             this.Hide();
+            var mainForm = new WaterTank(this, tankType); // tankType is either SingleColumn or MultiColumn
             mainForm.Show();
         }
-        //private void MigrateDatabaseIfNeeded(string dbFilePath)
-        //{
-        //    using (var connection = new System.Data.SQLite.SQLiteConnection($"Data Source={dbFilePath};Version=3;"))
-        //    {
-        //        connection.Open();
 
-        //        // 1) Check if 'Centroid' column exists
-        //        using (var cmdCheck = new System.Data.SQLite.SQLiteCommand("PRAGMA table_info(TankProperties);", connection))
-        //        {
-        //            bool centroidExists = false;
+        #endregion
 
-        //            using (var reader = cmdCheck.ExecuteReader())
-        //            {
-        //                while (reader.Read())
-        //                {
-        //                    string colName = reader["name"].ToString();
-        //                    if (colName.Equals("Centroid", StringComparison.OrdinalIgnoreCase))
-        //                    {
-        //                        centroidExists = true;
-        //                        break;
-        //                    }
-        //                }
-        //            }
-
-        //            // 2) If missing, add it
-        //            if (!centroidExists)
-        //            {
-        //                using (var cmdAlter = new System.Data.SQLite.SQLiteCommand(
-        //                    "ALTER TABLE TankProperties ADD COLUMN Centroid TEXT;", connection))
-        //                {
-        //                    cmdAlter.ExecuteNonQuery();
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
-
+        // ---- DB setup and Prompt unchanged below ----
 
         private void InitializeProjectDatabase(string projectFolderPath)
         {
             string dbFilePath = Path.Combine(projectFolderPath, "project_data.db");
-
-
-
-            if (File.Exists(dbFilePath))
-            {
-                File.Delete(dbFilePath);
-            }
-
+            if (File.Exists(dbFilePath)) File.Delete(dbFilePath);
             using (var connection = new System.Data.SQLite.SQLiteConnection($"Data Source={dbFilePath};Version=3;"))
             {
                 connection.Open();
-
                 string createTableSQL = @"
                     CREATE TABLE IF NOT EXISTS SegmentProperties (
                         SegmentNumber INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -394,7 +525,6 @@ namespace WaterTankTool_WFA
                         DiameterInitial REAL CHECK(DiameterInitial >= 0),
                         DiameterFinal REAL CHECK(DiameterFinal >= 0)
                     );
-
                     CREATE TABLE IF NOT EXISTS MaterialProperties (
                         MaterialNumber INTEGER PRIMARY KEY AUTOINCREMENT,
                         MaterialName TEXT NOT NULL,
@@ -404,7 +534,6 @@ namespace WaterTankTool_WFA
                         TensileYieldStress INTEGER NOT NULL CHECK(TensileYieldStress >= 0),
                         TensileUltimateStress INTEGER NOT NULL CHECK(TensileUltimateStress >= 0)
                     );
-
                     CREATE TABLE IF NOT EXISTS TankProperties (
                         TankNumber INTEGER PRIMARY KEY AUTOINCREMENT,
                         Capacity TEXT,
@@ -429,7 +558,6 @@ namespace WaterTankTool_WFA
                         Cf REAL NOT NULL CHECK(Cf >= 0),
                         Q REAL NOT NULL CHECK(Q >= 0)
                     );
-
                     CREATE TABLE IF NOT EXISTS SeismicLoadEntity (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
                         Ss REAL NOT NULL CHECK(Ss >= 0),
@@ -454,15 +582,102 @@ namespace WaterTankTool_WFA
                         Area_Exposed REAL NOT NULL CHECK(Area_Exposed >= 0),
                         Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
                     );
-
                     CREATE TABLE IF NOT EXISTS SnowLoadEntity (
-                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    Snow_Pressure REAL NOT NULL CHECK(Snow_Pressure >= 0),
-                    Area_Subjected REAL NOT NULL CHECK(Area_Subjected >= 0),
-                    Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
-                );
-
+                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Snow_Pressure REAL NOT NULL CHECK(Snow_Pressure >= 0),
+                        Area_Subjected REAL NOT NULL CHECK(Area_Subjected >= 0),
+                        Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
+                    );
                 ";
+
+                using (var command = new System.Data.SQLite.SQLiteCommand(createTableSQL, connection))
+                {
+                    command.ExecuteNonQuery();
+                }
+                connection.Close();
+            }
+        }
+        private void EnsureDatabaseSchema(string dbFilePath)
+        {
+            using (var connection = new System.Data.SQLite.SQLiteConnection($"Data Source={dbFilePath};Version=3;"))
+            {
+                connection.Open();
+
+                string createTableSQL = @"
+            CREATE TABLE IF NOT EXISTS SegmentProperties (
+                SegmentNumber INTEGER PRIMARY KEY AUTOINCREMENT,
+                SegmentName TEXT NOT NULL,
+                SegmentType TEXT NOT NULL,
+                Diameter REAL CHECK(Diameter >= 0),
+                Thickness REAL CHECK(Thickness >= 0),
+                HeightInitial REAL CHECK(HeightInitial >= 0),
+                HeightFinal REAL CHECK(HeightFinal >= 0),
+                DiameterInitial REAL CHECK(DiameterInitial >= 0),
+                DiameterFinal REAL CHECK(DiameterFinal >= 0)
+            );
+            CREATE TABLE IF NOT EXISTS MaterialProperties (
+                MaterialNumber INTEGER PRIMARY KEY AUTOINCREMENT,
+                MaterialName TEXT NOT NULL,
+                MaterialType TEXT NOT NULL,
+                Density INTEGER NOT NULL CHECK(Density >= 0),
+                ModulusOfElasticity INTEGER NOT NULL CHECK(ModulusOfElasticity >= 0),
+                TensileYieldStress INTEGER NOT NULL CHECK(TensileYieldStress >= 0),
+                TensileUltimateStress INTEGER NOT NULL CHECK(TensileUltimateStress >= 0)
+            );
+            CREATE TABLE IF NOT EXISTS TankProperties (
+                TankNumber INTEGER PRIMARY KEY AUTOINCREMENT,
+                Capacity TEXT,
+                WeightOfWater TEXT,
+                WeightOfSteel TEXT,
+                TotalWeight TEXT,
+                ProjectedArea TEXT
+            );
+            CREATE TABLE IF NOT EXISTS WindLoadEntity (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Exposure TEXT NOT NULL,
+                Kzt REAL NOT NULL CHECK(Kzt >= 0),
+                Ke REAL NOT NULL CHECK(Ke >= 0),
+                Kd REAL NOT NULL CHECK(Kd >= 0),
+                G REAL NOT NULL CHECK(G >= 0),
+                I REAL NOT NULL CHECK(I >= 0),
+                V REAL NOT NULL CHECK(V >= 0),
+                Zg REAL NOT NULL CHECK(Zg >= 0),
+                alpha REAL NOT NULL CHECK(alpha >= 0),
+                lambda REAL NOT NULL CHECK(lambda >= 0),
+                Cf REAL NOT NULL CHECK(Cf >= 0),
+                Q REAL NOT NULL CHECK(Q >= 0)
+            );
+            CREATE TABLE IF NOT EXISTS SeismicLoadEntity (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Ss REAL NOT NULL CHECK(Ss >= 0),
+                S1 REAL NOT NULL CHECK(S1 >= 0),
+                SiteClass TEXT NOT NULL,
+                Fa REAL NOT NULL CHECK(Fa >= 0),
+                Fv REAL NOT NULL CHECK(Fv >= 0),
+                Sds REAL NOT NULL CHECK(Sds >= 0),
+                Sd1 REAL NOT NULL CHECK(Sd1 >= 0),
+                Ri REAL NOT NULL CHECK(Ri >= 0),
+                Ie REAL NOT NULL CHECK(Ie >= 0),
+                Tl REAL NOT NULL CHECK(Tl >= 0),
+                Ti REAL NOT NULL CHECK(Ti >= 0),
+                Ts REAL NOT NULL CHECK(Ts >= 0),
+                Sa REAL NOT NULL CHECK(Sa >= 0),
+                Lambda REAL NOT NULL CHECK(Lambda >= 0),
+                Ai REAL NOT NULL CHECK(Ai >= 0)
+            );
+            CREATE TABLE IF NOT EXISTS LiveLoadEntity (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Live_Load REAL NOT NULL CHECK(Live_Load >= 0),
+                Area_Exposed REAL NOT NULL CHECK(Area_Exposed >= 0),
+                Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
+            );
+            CREATE TABLE IF NOT EXISTS SnowLoadEntity (
+                Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                Snow_Pressure REAL NOT NULL CHECK(Snow_Pressure >= 0),
+                Area_Subjected REAL NOT NULL CHECK(Area_Subjected >= 0),
+                Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
+            );
+        ";
 
                 using (var command = new System.Data.SQLite.SQLiteCommand(createTableSQL, connection))
                 {
@@ -472,7 +687,6 @@ namespace WaterTankTool_WFA
                 connection.Close();
             }
         }
-
 
         public static class Prompt
         {
@@ -488,7 +702,6 @@ namespace WaterTankTool_WFA
                     BackColor = ColorTranslator.FromHtml("#F9F9F9"),
                     Font = new Font("Segoe UI", 10)
                 };
-
                 Label textLabel = new Label()
                 {
                     Left = 20,
@@ -497,7 +710,6 @@ namespace WaterTankTool_WFA
                     AutoSize = true,
                     ForeColor = ColorTranslator.FromHtml("#383D46")
                 };
-
                 TextBox inputBox = new TextBox()
                 {
                     Left = 20,
@@ -508,7 +720,6 @@ namespace WaterTankTool_WFA
                     ForeColor = ColorTranslator.FromHtml("#383D46"),
                     BorderStyle = BorderStyle.FixedSingle
                 };
-
                 Button confirmation = new Button()
                 {
                     Text = "OK",
@@ -523,38 +734,15 @@ namespace WaterTankTool_WFA
                 };
                 confirmation.FlatAppearance.BorderSize = 0;
                 confirmation.Click += (sender, e) => { prompt.Close(); };
-
                 prompt.Controls.Add(textLabel);
                 prompt.Controls.Add(inputBox);
                 prompt.Controls.Add(confirmation);
                 prompt.AcceptButton = confirmation;
-
                 return prompt.ShowDialog() == DialogResult.OK ? inputBox.Text : "";
             }
         }
 
-        private void StartupForm_Load(object sender, EventArgs e)
-        {
-            //if (Settings.Default.WindowMaximized)
-            //{
-            //    this.WindowState = FormWindowState.Maximized;
-            //}
-            //else
-            //{
-            //    this.Size = Settings.Default.WindowSize;
-            //    this.Location = Settings.Default.WindowLocation;
-            //}
-        }
-
-
-        private void StartupForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //Settings.Default.WindowMaximized = (this.WindowState == FormWindowState.Maximized);
-            //Settings.Default.WindowSize = this.Size;
-            //Settings.Default.WindowLocation = this.Location;
-            //Settings.Default.Save();
-        }
-
-
+        private void StartupForm_Load(object sender, EventArgs e) { }
+        private void StartupForm_FormClosing(object sender, FormClosingEventArgs e) { }
     }
 }

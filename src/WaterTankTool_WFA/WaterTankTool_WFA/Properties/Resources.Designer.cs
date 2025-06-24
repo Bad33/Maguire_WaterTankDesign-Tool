@@ -123,6 +123,16 @@ namespace WaterTankTool_WFA.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Katy {
+            get {
+                object obj = ResourceManager.GetObject("Katy", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap seismic {
             get {
                 object obj = ResourceManager.GetObject("seismic", resourceCulture);

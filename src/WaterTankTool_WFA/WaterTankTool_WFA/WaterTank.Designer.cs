@@ -516,7 +516,7 @@ partial class WaterTank
         panel1.BackColor = SystemColors.ControlLightLight;
         panel1.BorderStyle = BorderStyle.Fixed3D;
         panel1.Name = "panel1";
-        panel1.Paint += panel1_Paint_1;
+        panel1.Paint += panel1_Paint;
         // 
         // panel2
         // 

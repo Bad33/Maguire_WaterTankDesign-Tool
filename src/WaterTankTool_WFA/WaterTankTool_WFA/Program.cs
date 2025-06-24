@@ -17,17 +17,34 @@ namespace WaterTankTool_WFA
         [STAThread]
         static void Main()
         {
-  
             SetProcessDpiAwareness(2);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            // Initialize the DI container
             _diContainer = new DIContainer();
             NotesManager.LoadNotes();
 
-            // Run the StartupForm
-            Application.Run(new StartupForm(_diContainer));
+            TankType selectedType = TankType.None;
+            using (var dlg = new TankTypeSelectionForm())
+            {
+                var result = dlg.ShowDialog();
+                if (result == DialogResult.OK)
+                    selectedType = dlg.SelectedTankType;
+                else
+                    MessageBox.Show("You must select a tank type to proceed.");
+            }
+
+            if (selectedType != TankType.None)
+            {
+                try
+                {
+                    Application.Run(new StartupForm(_diContainer, selectedType));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Application crashed: " + ex);
+                }
+            }
         }
 
         public static DIContainer GetContainer()

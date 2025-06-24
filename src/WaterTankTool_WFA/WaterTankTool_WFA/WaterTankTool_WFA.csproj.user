@@ -43,10 +43,10 @@
     <Compile Update="SplashScreen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="StartupForm.cs">
+    <Compile Update="TankTypeCard.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="WaterTank.cs">
+    <Compile Update="TankTypeSelectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Load\Dead Load.cs">
@@ -74,6 +74,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Tanks\TanksList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="WaterTank.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
