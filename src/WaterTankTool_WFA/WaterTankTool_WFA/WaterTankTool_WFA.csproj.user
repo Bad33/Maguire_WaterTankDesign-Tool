@@ -25,6 +25,12 @@
     <Compile Update="Load\Snow Load.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="MultiColumn\Segments\AddNoOfColumns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MultiColumn\Segments\DefineMultiLegSegments.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Segments\AddSegmentSection.cs">
       <SubType>Form</SubType>
     </Compile>

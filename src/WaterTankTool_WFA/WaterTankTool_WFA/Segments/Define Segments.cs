@@ -17,9 +17,13 @@ namespace WaterTankTool_WFA
         MessageBoxButtons buttons = MessageBoxButtons.YesNoCancel;
         DialogResult result;
         private WaterTank _waterTankForm;
-        public Define_Segments(WaterTank waterTank)
+        private TankType _tankType;
+        public Define_Segments(WaterTank waterTank, TankType tankType)
         {
+
             _waterTankForm = waterTank;
+            _tankType = tankType;
+
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
 
@@ -41,13 +45,24 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            AddSegmentSection addSegmentSection = new AddSegmentSection(_waterTankForm);
+            //if(_tankType == TankType.SingleColumn)
+            //{
+            AddSegmentSection addSegmentSection = new AddSegmentSection(_waterTankForm, _tankType);
             DialogResult result = addSegmentSection.ShowDialog();
             //if (result == DialogResult.Cancel || result == DialogResult.OK)
             //{
             //    this.Close();
             //}
             LoadData();
+            //}
+
+            //else if(_tankType == TankType.MultiColumn)
+            //{
+            //    MultiColumn.Segments.AddNoOfColumns addNoOfColumns = new MultiColumn.Segments.AddNoOfColumns(_waterTankForm);
+            //    DialogResult result = addNoOfColumns.ShowDialog();
+            //    LoadData();
+            //}
+
 
 
         }

@@ -42,6 +42,8 @@ namespace WaterTankTool_WFA
 
         private double height;
 
+        private TankType _tankType;
+
         TankData tankData = new TankData();
         TankDataDimensions dimensions = new TankDataDimensions();
         String _selectedTankCapacity;
@@ -64,6 +66,25 @@ namespace WaterTankTool_WFA
         }
 
         public SegmentDialogBox(string segmentType, WaterTank waterTankForm)
+        {
+            _segmentType = segmentType;
+            _waterTankForm = waterTankForm;
+
+            InitializeComponent();
+            GetTanksJsonData();
+            var context = WaterTankDbContext.GetInstance();
+
+            _context = context;
+
+            showInputFieldsOnType();
+
+            this.FormClosing += SegmentDialogBox_FormClosing;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+
+
+        }
+
+        public SegmentDialogBox(string segmentType, WaterTank waterTankForm,TankType tankType)
         {
             _segmentType = segmentType;
             _waterTankForm = waterTankForm;

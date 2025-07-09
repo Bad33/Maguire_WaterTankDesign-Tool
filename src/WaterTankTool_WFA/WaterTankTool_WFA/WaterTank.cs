@@ -10,6 +10,7 @@ using WaterTankTool_WFA.Custom_Design_Control;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Load;
 using WaterTankTool_WFA.Solver;
+using WaterTankTool_WFA.MultiColumn.Segments;
 
 namespace WaterTankTool_WFA
 {
@@ -154,7 +155,7 @@ namespace WaterTankTool_WFA
             UpdateLoadStatus();
 
             // ?? Image and status changes according to tank type
-            Image singleImg = Properties.Resources.Sheldon_IA_New_Tank_Paint_2;
+            Image singleImg = Properties.Resources._150k;
             Image multiImg = Properties.Resources.Katy;
 
             if (tankCap?.Capacity != null)
@@ -263,14 +264,26 @@ namespace WaterTankTool_WFA
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Define_Segments define_Segments = new Define_Segments(this);
+            Define_Segments define_Segments = new Define_Segments(this, _tankType);
             define_Segments.ShowDialog();
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            Define_Segments define_Segments = new Define_Segments(this);
-            define_Segments.ShowDialog();
+            if(_tankType == TankType.SingleColumn)
+            {
+                Define_Segments define_Segments = new Define_Segments(this, _tankType);
+                define_Segments.ShowDialog();
+            }
+            else if(_tankType == TankType.MultiColumn)
+            {
+                //DefineMultiLegSegments define_ = new DefineMultiLegSegments(this);
+                //define_.ShowDialog();
+
+                Define_Segments define_Segments = new Define_Segments(this, _tankType);
+                define_Segments.ShowDialog();
+            }
+
         }
 
         private void windLoadToolStripMenuItem_Click(object sender, EventArgs e)
