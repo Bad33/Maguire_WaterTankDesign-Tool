@@ -155,7 +155,7 @@ namespace WaterTankTool_WFA
             UpdateLoadStatus();
 
             // ?? Image and status changes according to tank type
-            Image singleImg = Properties.Resources._150k;
+            Image singleImg = Properties.Resources.Tank_Design;
             Image multiImg = Properties.Resources.Katy;
 
             if (tankCap?.Capacity != null)
@@ -414,7 +414,7 @@ namespace WaterTankTool_WFA
                     Rectangle destRect = new Rectangle(x, y, scaledWidth, scaledHeight);
 
                     g.DrawImage(drawingImage, destRect);
-                    DrawSegmentLabels(g, destRect);
+                    //DrawSegmentLabels(g, destRect);
                 }
                 buffer.Render(e.Graphics);
             }

@@ -322,4 +322,19 @@ namespace WaterTankTool_WFA.Solver_Equation
         }
 
     }
+
+    public class Multileg_Cylinders
+    {
+        UnitsConverter unitsConverter = new UnitsConverter();
+
+        private WaterTankDbContext _context;
+
+        private WindLoadEntity Qwind;
+
+        public Multileg_Cylinders()
+        {
+            _context = WaterTankDbContext.GetInstance();
+            Qwind = _context.WindLoadEntity.FirstOrDefault();
+        }
+    }
 }

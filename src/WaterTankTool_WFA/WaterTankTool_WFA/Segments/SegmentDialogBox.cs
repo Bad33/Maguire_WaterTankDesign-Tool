@@ -44,6 +44,8 @@ namespace WaterTankTool_WFA
 
         private TankType _tankType;
 
+        private int _noOfCols;
+
         TankData tankData = new TankData();
         TankDataDimensions dimensions = new TankDataDimensions();
         String _selectedTankCapacity;
@@ -84,11 +86,12 @@ namespace WaterTankTool_WFA
 
         }
 
-        public SegmentDialogBox(string segmentType, WaterTank waterTankForm,TankType tankType)
+        public SegmentDialogBox(string segmentType, WaterTank waterTankForm,TankType tankType,int NoOfCols)
         {
             _segmentType = segmentType;
             _waterTankForm = waterTankForm;
-
+            _tankType = tankType;
+            _noOfCols = NoOfCols;
             InitializeComponent();
             GetTanksJsonData();
             var context = WaterTankDbContext.GetInstance();
@@ -435,84 +438,118 @@ namespace WaterTankTool_WFA
 
         private void Save_ClickCylinder(object sender, EventArgs e)
         {
+            // ──────────────────────────────────────────────────────────────
+            // 1) Basic validation – unchanged
+            // ──────────────────────────────────────────────────────────────
             if (string.IsNullOrWhiteSpace(richTextBox1.Text) ||
-                 string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
-                 string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
-                 string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
-                 string.IsNullOrWhiteSpace(maskedTextBox4.Text))
+                string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox4.Text))
             {
-                MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please fill in all fields.", "Validation Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Try parsing numeric fields for Diameter, Thickness, and Heights
             if (!double.TryParse(maskedTextBox2.Text, out double diameter) ||
                 !double.TryParse(maskedTextBox3.Text, out double thickness) ||
                 !double.TryParse(maskedTextBox1.Text, out double heightInitial) ||
                 !double.TryParse(maskedTextBox4.Text, out double heightFinal))
             {
-                MessageBox.Show("Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please enter valid numbers.", "Input Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            //using (var context = WaterTankDbContext.GetInstance())
-            //{
-            SegmentProperties segmentProperties;
-
-
-            if (_dialogType == "Modify")
-            {
-                // Modify existing segment
-                segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
-
-                ValidateSegment(segmentProperties);
-
-                if (segmentProperties == null)
-                {
-                    MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                segmentProperties.SegmentName = richTextBox1.Text;
-                segmentProperties.SegmentType = _segmentType;
-                segmentProperties.Diameter = diameter;
-                segmentProperties.Thickness = thickness;
-                segmentProperties.HeightInitial = heightInitial;
-                segmentProperties.HeightFinal = heightFinal;
-            }
-            else
-            {
-                // Add new segment
-                segmentProperties = new SegmentProperties()
-                {
-                    SegmentName = richTextBox1.Text,
-                    SegmentType = _segmentType,
-                    Diameter = diameter,
-                    Thickness = thickness,
-                    HeightInitial = heightInitial,
-                    HeightFinal = heightFinal
-                };
-
-                ValidateSegment(segmentProperties);
-
-
-                _context.SegmentProperties.Add(segmentProperties);
-            }
-
+            // ──────────────────────────────────────────────────────────────
+            // 2) Save / modify logic
+            // ──────────────────────────────────────────────────────────────
             try
             {
-                int rowsAffected = _context.SaveChanges();
-                successDialog(rowsAffected);
-                //WaterTank form1 = new WaterTank();
-                //form1.OnSegmentAdded();
-                _waterTankForm.OnSegmentAdded();
+                if (_dialogType == "Modify")
+                {
+                    // ------------------------------------------------------
+                    // 2a) MODIFY an existing single segment
+                    // ------------------------------------------------------
+                    SegmentProperties seg =
+                        _context.SegmentProperties
+                                .FirstOrDefault(s => s.SegmentNumber == _segmentNumber);
+
+                    if (seg == null)
+                    {
+                        MessageBox.Show("Error: Segment not found!", "Error",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    seg.SegmentName = richTextBox1.Text;
+                    seg.SegmentType = _segmentType;
+                    seg.Diameter = diameter;
+                    seg.Thickness = thickness;
+                    seg.HeightInitial = heightInitial;
+                    seg.HeightFinal = heightFinal;
+
+                    ValidateSegment(seg);
+                }
+                else
+                {
+                    // ------------------------------------------------------
+                    // 2b) ADD – single-column or multi-column
+                    // ------------------------------------------------------
+                    bool isMultiColumn = _tankType == TankType.MultiColumn && _noOfCols > 1;
+
+                    if (isMultiColumn)
+                    {
+                        // Make _noOfCols separate entries:  name_1, name_2, …
+                        for (int i = 1; i <= _noOfCols; i++)
+                        {
+                            var seg = new SegmentProperties
+                            {
+                                SegmentName = $"{richTextBox1.Text}_{i}",
+                                SegmentType = _segmentType,
+                                Diameter = diameter,
+                                Thickness = thickness,
+                                HeightInitial = heightInitial,
+                                HeightFinal = heightFinal
+                            };
+
+                            ValidateSegment(seg);
+                            _context.SegmentProperties.Add(seg);
+                        }
+                    }
+                    else
+                    {
+                        // Classic single entry
+                        var seg = new SegmentProperties
+                        {
+                            SegmentName = richTextBox1.Text,
+                            SegmentType = _segmentType,
+                            Diameter = diameter,
+                            Thickness = thickness,
+                            HeightInitial = heightInitial,
+                            HeightFinal = heightFinal
+                        };
+
+                        ValidateSegment(seg);
+                        _context.SegmentProperties.Add(seg);
+                    }
+                }
+
+                // ──────────────────────────────────────────────────────────
+                // 3) Commit
+                // ──────────────────────────────────────────────────────────
+                int rows = _context.SaveChanges();
+                successDialog(rows);
+                _waterTankForm.OnSegmentAdded();   // refresh main form
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"An error occurred while saving data: {ex.Message}",
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            //}
         }
+
 
         private void SegmentDialogBox_FormClosing(object sender, FormClosingEventArgs e)
         {

@@ -22,6 +22,7 @@ namespace WaterTankTool_WFA
         List<string> ggwp = new List<string>();
 
         private TankType _type;
+        private int _noOfCol;
         public AddSegmentSection(WaterTank waterTankForm)
         {
 
@@ -32,7 +33,8 @@ namespace WaterTankTool_WFA
             setComboboxItems();
 
         }
-        public AddSegmentSection(WaterTank waterTankForm,TankType tankType)
+
+        public AddSegmentSection(WaterTank waterTankForm, TankType tankType)
         {
             _type = tankType;
             _waterTankForm = waterTankForm;
@@ -41,15 +43,15 @@ namespace WaterTankTool_WFA
 
             setComboboxItems();
 
-            if(_type == TankType.MultiColumn)
+            if (_type == TankType.MultiColumn)
             {
                 label3.Visible = false;
                 pictureBox2.Visible = false;
             }
-  
- 
 
         }
+
+
 
 
         private void setComboboxItems()
@@ -77,12 +79,17 @@ namespace WaterTankTool_WFA
             if(_type == TankType.MultiColumn && SegmentType == "Cylinder")
             {
                 MultiColumn.Segments.AddNoOfColumns addNoOfColumns = new MultiColumn.Segments.AddNoOfColumns(_waterTankForm,SegmentType);
-                addNoOfColumns.ShowDialog();
+                DialogResult result2 = addNoOfColumns.ShowDialog();
+
+                if (result2 == DialogResult.OK || result2 == DialogResult.Cancel)
+                {
+                    this.Close();
+                }
             }
 
             else if (_type == TankType.MultiColumn && SegmentType == "Tanks")
             {
-                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm, TankType.MultiColumn);
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm, TankType.MultiColumn,1);
                 this.Close();
                 DialogResult result1 = segmentDialogBox.ShowDialog();
                 if (result1 == DialogResult.OK || result1 == DialogResult.Cancel)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region Using directives
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,8 +7,8 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -21,808 +22,742 @@ using WaterTankTool_WFA.Solver_Equation;
 using WaterTankTool_WFA.Tanks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Rectangle = System.Drawing.Rectangle;
+#endregion
 
 namespace WaterTankTool_WFA.Solver
 {
-
-
     public partial class Solver_Output : Form
     {
+        #region Fields / Properties
+        private readonly WaterTankDbContext _context;
+        private readonly WaterTank _waterTankForm;
 
-        private WaterTankDbContext _context;
+        private readonly UnitsConverter inchToFtConverter = new UnitsConverter();   //  kept; not used here but left intact
+
+        private Label rtcLabel;                 // set in LoadAllowableCompressiveStress()
+
+        // Exposed to other members
         public string waterWeight;
         public string snowWeight;
         public string selfWeight;
-        private WaterTank _waterTankForm;
-        UnitsConverter inchToFtConverter = new UnitsConverter();
-
-        private Label rtcLabel;
-
         public string Fy;
 
-        public segmentGravityLoad segmentGravityLoad;
-
+        // Data caches
         public List<string> selfWeightData = new List<string>();
-
         public List<segmentGravityLoad> cummulativeLoadData = new List<segmentGravityLoad>();
-
         public List<WindTable> windLoadData = new List<WindTable>();
-
         public List<designTableData> segmentPropertiesTableData = new List<designTableData>();
-
         public List<tabelData2> tabelData2s = new List<tabelData2>();
+        #endregion
 
-       
-
+        #region Constructor
         public Solver_Output(WaterTank waterTankForm)
         {
             InitializeComponent();
 
-
-
-            var context = WaterTankDbContext.GetInstance();
-            _context = context;
+            // Context (singleton)
+            _context = WaterTankDbContext.GetInstance();
             _waterTankForm = waterTankForm;
-            LoadData();
 
-            LoadAllowableCompressiveStress();
+            if (_context.SnowLoadEntity.FirstOrDefault() == null)
+            {
+                ShowError("Please add Snow Load first!");   // shows once
+                return;                                     // skip the rest
+            }
 
-
-            LoadSegmentWeightData();
-
-            LoadCummulativeWeightData();
-
-            WindLoadPerSegment();
-
-            LoadTable2();
-
-            LoadCheckTableData();
-            _waterTankForm = waterTankForm;
+            try
+            {
+                LoadData();
+                LoadAllowableCompressiveStress();
+                LoadSegmentWeightData();
+                LoadCummulativeWeightData();
+                WindLoadPerSegment();
+                LoadTable2();
+                LoadCheckTableData();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Unexpected error while initialising Solver Output: {ex.Message}");
+            }
         }
+        #endregion
 
-        private double calculateF(double qzi, double qzf, double projectedArea)
+        #region *** Utilities ***
+
+        /// <summary> Small helper to show consistent error pop-ups. </summary>
+        private void ShowError(string msg, string title = "Error")
+            => MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        /// <summary> Reads a JSON file safely. </summary>
+        private bool TryReadJson(string path, out string json)
         {
-
-            var result = (((qzi + qzf) / 2) * projectedArea) / 1000;
-
-            return result;
-
+            json = null!;
+            try
+            {
+                json = File.ReadAllText(path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to read '{path}': {ex.Message}");
+                return false;
+            }
         }
+
+        /// <summary> Converts a string that may contain units / text to a double. </summary>
         public static double ExtractDoubleValue(string input)
         {
-
-            string[] parts = input.Split();
-
-            if (parts.Length == 0)
-            {
-                throw new FormatException("Input string is empty.");
-            }
-
-            if (double.TryParse(parts[0], out double result))
-            {
-                return result;
-            }
-            else
-            {
-                throw new FormatException($"Unable to parse '{parts[0]}' as a double.");
-            }
+            string[] parts = input?.Split() ?? Array.Empty<string>();
+            if (parts.Length == 0 || !double.TryParse(parts[0], out double result))
+                throw new FormatException($"Unable to parse '{input}' as a double.");
+            return result;
         }
 
+        /// <summary> Helper to add a red status label once. </summary>
+        private void AddStatusLabel(string message)
+        {
+            if (statusStrip2.Items.OfType<ToolStripStatusLabel>().Any(l => l.Text == message)) return;
 
+            statusStrip2.Items.Add(new ToolStripStatusLabel
+            {
+                ForeColor = Color.Red,
+                Text = message
+            });
+        }
+        #endregion
+
+        #region Wind Load
         private void WindLoadPerSegment()
         {
-            var segmentData = _context.SegmentProperties.ToList();
+            // Defensive fetch
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            var segmentCylinderEquations = new Segment_Cylinder_Equations();
-            var segmentConicalEquations = new Segment_Conical_Equations();
-            var tankProperties = _context.TankProperties.FirstOrDefault();
-
-            double projectedArea = 0;
-
+            var tankProperties = _context?.TankProperties?.FirstOrDefault();
             if (tankProperties == null)
             {
-                MessageBox.Show("Please add segments first!", "No Segments added", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ShowError("Please add segments first! (Tank Properties were not found)");
+                return;
             }
 
-            else
+            double projectedArea;
+            try
             {
                 projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
-
             }
+            catch (Exception ex)
+            {
+                ShowError($"Invalid projected area in Tank Properties: {ex.Message}");
+                return;
+            }
+
+            var cylinderEq = new Segment_Cylinder_Equations();
+
             double cumulativeFwind = 0;
-
-
-            int index = 0;
             foreach (var segment in segmentData)
             {
-                double fwind = 0;
-                double loadLocation = 0;
+                double fwind, loadLocation;
+
                 if (segment.SegmentType == "Tanks")
                 {
                     fwind = calculateF(
-                        segmentCylinderEquations.qzi(segment.HeightInitial),
-                        segmentCylinderEquations.qzf(segment.HeightFinal),
-                        projectedArea);
-                    loadLocation = double.Parse(tankProperties.Centroid) + segment.HeightInitial;
+                                        cylinderEq.qzi(segment.HeightInitial),
+                                        cylinderEq.qzf(segment.HeightFinal),
+                                        projectedArea);
+                    loadLocation = ExtractDoubleValue(tankProperties.Centroid) + segment.HeightInitial;
                 }
                 else
                 {
-                    fwind = segmentCylinderEquations.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
-                    loadLocation = segmentCylinderEquations.L(segment.HeightInitial, segment.HeightFinal);
+                    fwind = cylinderEq.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
+                    loadLocation = cylinderEq.L(segment.HeightInitial, segment.HeightFinal);
                 }
 
                 double baseElevation = segment.HeightInitial;
                 double armLength = loadLocation - baseElevation;
-                double farm = fwind * armLength; 
-
+                double farm = fwind * armLength;
                 cumulativeFwind += fwind;
 
-                double sumContributions = 0;
-                for (int j = 0; j < windLoadData.Count; j++)
-                {
-                    double prevFwind = Double.Parse(windLoadData[j].Fwind);
-                    double prevLoadLocation = Double.Parse(windLoadData[j].LoadLocation);
-                    sumContributions += prevFwind * (prevLoadLocation - baseElevation);
-                }
+                double prevContrib = windLoadData
+                                     .Sum(row => Double.Parse(row.Fwind) *
+                                                 (Double.Parse(row.LoadLocation) - baseElevation));
 
-                double mwind = farm + sumContributions;
+                double mwind = farm + prevContrib;
 
                 windLoadData.Add(new WindTable
                 {
                     Fwind = Math.Round(fwind, 4).ToString(),
                     Vwind = Math.Round(cumulativeFwind, 4).ToString(),
-                    BaseElevation = Math.Round(segment.HeightInitial, 4).ToString(),
+                    BaseElevation = Math.Round(baseElevation, 4).ToString(),
                     LoadLocation = Math.Round(loadLocation, 4).ToString(),
                     ArmLength = Math.Round(armLength, 4).ToString(),
                     FArm = Math.Round(farm, 4).ToString(),
                     Mwind = Math.Round(mwind, 4).ToString()
                 });
-
-                index++;
             }
 
-            LoadSegmentWeightData();
+            // ensure segment weights are loaded once (no duplicates)
+            if (selfWeightData.Count == 0)
+                LoadSegmentWeightData();
+
             dataGridView7.DataSource = windLoadData;
         }
 
+        private double calculateF(double qzi, double qzf, double projectedArea)
+            => (((qzi + qzf) / 2) * projectedArea) / 1000;
+        #endregion
 
+        #region Segment Gravity Loads
         private void LoadSegmentWeightData()
         {
-            var segmentData = _context.SegmentProperties.ToList();
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            //string json = File.ReadAllText("../../../tanks.json");
-            string jsonStringPath = Path.Combine(Application.StartupPath, "tanks.json");
-            if (!File.Exists(jsonStringPath))
+            var snowEntity = _context?.SnowLoadEntity?.FirstOrDefault();
+            if (snowEntity == null)
             {
-                MessageBox.Show("Tanks File not Found");
+                ShowError("Please add Snow Load first!");
+                return;
             }
-            string json = File.ReadAllText(jsonStringPath);
-           
 
-            Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
-            Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
+            if (segmentData.Count == 0)
+            {
+                AddStatusLabel("No Segments Added. Please add the segments to see the output.");
+                return;
+            }
+
+            string jsonPath = Path.Combine(Application.StartupPath, "tanks.json");
+            if (!File.Exists(jsonPath))
+            {
+                ShowError("tanks.json file not found.");
+                return;
+            }
+
+            if (!TryReadJson(jsonPath, out string json)) return;
+
+            TanksData data;
+            try
+            {
+                data = JsonSerializer.Deserialize<TanksData>(json);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to parse tanks.json: {ex.Message}");
+                return;
+            }
+
+            string tankCapacity = segmentData[0].SegmentName;
+            Tank foundTank = data?.tanks?.Find(t => t.type == tankCapacity);
+            if (foundTank == null)
+            {
+                ShowError("Tank type not found in tanks.json!");
+                return;
+            }
+
+            string numericPart = new(foundTank.Weight_of_Water
+                                      .Where(c => char.IsDigit(c) || c == '.' || c == '-').ToArray());
+
+            if (!double.TryParse(numericPart, NumberStyles.Any, CultureInfo.InvariantCulture,
+                                 out double waterWeightDbl))
+            {
+                ShowError("Failed to parse Weight_of_Water.");
+                return;
+            }
+            waterWeight = numericPart;
+
+            string snowWeightStr = snowEntity.Total_Load.ToString();
+            snowWeight = snowWeightStr;
+            selfWeight = foundTank.Weight_of_Steel;
 
             double miscLoad = 15;
 
-            if (segmentData.Count > 0)
-            {
+            var cylinderEq = new Segment_Cylinder_Equations();
+            var conicalEq = new Segment_Conical_Equations();
 
-                var tankCapacity = segmentData[0].SegmentName;
-
-                double fWindData = 0;
-
-                TanksData data = JsonSerializer.Deserialize<TanksData>(json);
-                Tank foundTank = data.tanks.Find(t => t.type == tankCapacity);
-
-
-                waterWeight = foundTank.Weight_of_Water;
-
-                snowWeight = (_context.SnowLoadEntity?.FirstOrDefault().Total_Load ).ToString();
-                selfWeight = foundTank.Weight_of_Steel;
-
-                string numericPart = new string(selfWeight
-                 .Where(c => char.IsDigit(c) || c == '.' || c == '-')
-                 .ToArray());
-                var result = double.Parse(numericPart, CultureInfo.InvariantCulture);
-
-
-
-                var viewModelData = segmentData.FindAll(x => x.SegmentType == "Tanks").Select(segment => new segmentGravityLoad
+            // Tanks
+            var viewModelData = segmentData
+                .Where(x => x.SegmentType == "Tanks")
+                .Select(_ => new segmentGravityLoad
                 {
-
                     waterWeight = waterWeight,
-                    snowWeight = (Double.Parse(snowWeight) + miscLoad).ToString(),
-                    selfWeight = Math.Round(result, 4).ToString(),
-
-
+                    snowWeight = (double.Parse(snowWeightStr) + miscLoad).ToString(),
+                    selfWeight = Math.Round(waterWeightDbl, 4).ToString()
                 }).ToList();
 
-
-
-                var viewModelData1 = segmentData.FindAll(x => x.SegmentType == "Cylinder").Select(segment => new segmentGravityLoad
+            // Cylinder
+            var viewModelData1 = segmentData
+                .Where(x => x.SegmentType == "Cylinder")
+                .Select(segment => new segmentGravityLoad
                 {
-
                     waterWeight = "0",
                     snowWeight = "0",
-                    selfWeight = Math.Round(segment_Cylinder_Equations.weightOfPedestal(
+                    selfWeight = Math.Round(cylinderEq.weightOfPedestal(
                                     segment.HeightInitial,
                                     segment.HeightFinal,
                                     segment.Diameter,
                                     segment.Thickness), 4).ToString()
-
-
                 }).ToList();
 
-                var viewModelData2 = segmentData.FindAll(x => x.SegmentType == "Base").Select(segment => new segmentGravityLoad
+            // Base
+            var viewModelData2 = segmentData
+                .Where(x => x.SegmentType == "Base")
+                .Select(segment => new segmentGravityLoad
                 {
-
                     waterWeight = "0",
                     snowWeight = "0",
-                    selfWeight = Math.Round(segment_Conical_Equations.weight(
+                    selfWeight = Math.Round(conicalEq.weight(
                                     segment.HeightInitial,
                                     segment.HeightFinal,
                                     (double)segment.DiameterInitial,
                                     (double)segment.DiameterFinal,
                                     segment.Thickness), 4).ToString()
-
-
                 }).ToList();
 
+            var combined = viewModelData.Concat(viewModelData1).Concat(viewModelData2).ToList();
 
-                var combineViewModel = viewModelData.Concat(viewModelData1).Concat(viewModelData2).ToList();
+            selfWeightData.AddRange(combined.Select(x => x.selfWeight));
 
-                foreach (var item in combineViewModel)
-                {
-                    selfWeightData.Add(item.selfWeight);
-                }
+            dataGridView4.DataSource = combined;
 
-                dataGridView4.DataSource = combineViewModel;
-
-
-                ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
-                toolStripStatusLabel.ForeColor = Color.Red;
-                toolStripStatusLabel.Text = "Double Click on the cell in Segment Check Table to change the thickness of segments. (It is recommended to gradually increase/decrease (T) by 25% each time) | For more info go to Help window. ";
-
-                statusStrip2.Items.Add(toolStripStatusLabel);
-
-
-            }
-            else
-            {
-
-
-                ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
-                toolStripStatusLabel.ForeColor = Color.Red;
-                toolStripStatusLabel.Text = "No Segments Added. Please add the segments to see the output.";
-
-                statusStrip2.Items.Add(toolStripStatusLabel);
-
-
-            }
-
+            AddStatusLabel("Double-click a cell in the Segment Check Table to change thickness. (It’s recommended to change T by ±25 % each time) | For more info open Help.");
         }
+        #endregion
 
+        #region Cumulative Gravity Loads
         private void LoadCummulativeWeightData()
         {
-            var segmentData = _context.SegmentProperties.ToList();
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+
+            if (segmentData.Count == 0)
+            {
+                ShowError("No segment data found. Please add segments before proceeding.");
+                return;
+            }
+
+            string jsonPath = Path.Combine(Application.StartupPath, "tanks.json");
+            if (!File.Exists(jsonPath))
+            {
+                ShowError("tanks.json file not found.");
+                return;
+            }
+
+            if (!TryReadJson(jsonPath, out string json)) return;
+
+            TanksData data;
+            try
+            {
+                data = JsonSerializer.Deserialize<TanksData>(json);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to parse tanks.json: {ex.Message}");
+                return;
+            }
+
+            string tankCapacity = segmentData[0].SegmentName;
+            Tank foundTank = data?.tanks?.Find(t => t.type == tankCapacity);
+            if (foundTank == null)
+            {
+                ShowError("Tank type not found in tanks.json!");
+                return;
+            }
+
+            string numericPart = new(foundTank.Weight_of_Water
+                                      .Where(c => char.IsDigit(c) || c == '.' || c == '-').ToArray());
+            string waterWeightStr = numericPart;
+
+            var snowEntity = _context?.SnowLoadEntity?.FirstOrDefault();
+            if (snowEntity == null)
+            {
+                ShowError("Please add Snow Load first!");
+                return;
+            }
+            string snowWeightStr = snowEntity.Total_Load.ToString();
+
             double miscLoad = 15;
 
-            string jsonStringPath = Path.Combine(Application.StartupPath, "tanks.json");
-            if (!File.Exists(jsonStringPath))
+            // Build cumulative self-weight list (res[i] holds Σ selfWeight[0..i])
+            List<string> cumulative = new();
+            for (int i = 0; i < selfWeightData.Count; i++)
             {
-                MessageBox.Show("Tanks File not Found");
-            }
-            string json = File.ReadAllText(jsonStringPath);
-
-
-
-            if (segmentData.Count > 0)
-            {
-                var tankCapacity = segmentData[0].SegmentName;
-
-                TanksData data = JsonSerializer.Deserialize<TanksData>(json);
-                Tank foundTank = data.tanks.Find(t => t.type == tankCapacity);
-
-
-
-
-
-                string numericPart = new string(foundTank.Weight_of_Water
-                         .Where(c => char.IsDigit(c) || c == '.' || c == '-')
-                         .ToArray());
-                waterWeight = numericPart;
-
-                snowWeight = _context.SnowLoadEntity.FirstOrDefault().Total_Load.ToString();
-                selfWeight = foundTank.Weight_of_Steel;
-                int cumulativeIndex = 0;
-
-
-                Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
-                Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
-
-                List<string> res = new List<string>();
-                for (int i = 0; i < selfWeightData.Count; i++)
+                if (!double.TryParse(selfWeightData[i], out double thisWeight))
                 {
-                    if (i == 0)
-                    {
-                        res.Add(selfWeightData[i]);
-
-                    }
-                    else
-                    {
-                        var gg = Double.Parse(selfWeightData[i]) + Double.Parse(res[i - 1]);
-                        res.Add(gg.ToString());
-                    }
+                    ShowError($"Invalid selfWeight '{selfWeightData[i]}' at index {i}.");
+                    return;
                 }
-
-                cummulativeLoadData = segmentData.Select((segment, index) =>
-                {
-                    // Accumulate selfWeight in each iteration
-                    return new segmentGravityLoad
-                    {
-                        waterWeight = waterWeight,
-                        snowWeight = (Double.Parse(snowWeight) + miscLoad).ToString(),
-                        selfWeight = Math.Round(Double.Parse(res[index]), 4).ToString(), // Store the cumulative value
-
-                    };
-                }).ToList();
-
-                dataGridView6.DataSource = cummulativeLoadData;
-
+                double previous = i == 0 ? 0
+                                         : double.Parse(cumulative[i - 1]);
+                cumulative.Add((thisWeight + previous).ToString());
             }
 
+            cummulativeLoadData = segmentData.Select((segment, index) =>
+            {
+                string cumSelf = index < cumulative.Count
+                               ? Math.Round(double.Parse(cumulative[index]), 4).ToString()
+                               : "0";
 
+                double snowDbl = double.TryParse(snowWeightStr, out double sn) ? sn : 0;
+                string snowSum = (snowDbl + miscLoad).ToString();
+
+                return new segmentGravityLoad
+                {
+                    waterWeight = waterWeightStr,
+                    snowWeight = snowSum,
+                    selfWeight = cumSelf
+                };
+            }).ToList();
+
+            dataGridView6.DataSource = cummulativeLoadData;
         }
+        #endregion
 
+        #region Check Table (fa / fb / check)
         private void LoadCheckTableData()
         {
-            var segmentData = _context.SegmentProperties.ToList();
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
+            if (segmentData.Count == 0) return;
 
-
-            if (segmentData.Count > 0)
+            var viewModel = segmentData.Select((segment, i) =>
             {
-                var viewModelData = segmentData.Select((segment, index) =>
+                double fa = 0, fb = 0;
+                string chk = "NA";
+
+                if (segment.SegmentType != "Tanks")
                 {
+                    fa = Math.Round(
+                            (Double.Parse(cummulativeLoadData[i].waterWeight) +
+                             Double.Parse(cummulativeLoadData[i].snowWeight) +
+                             Double.Parse(cummulativeLoadData[i].selfWeight)) /
+                            segmentPropertiesTableData[i].A, 4);
 
-                    double fa = 0;
-                    double fb = 0;
-                    string check = null;
+                    fb = Math.Round(
+                            (Double.Parse(windLoadData[i].Mwind) * 12) /
+                             segmentPropertiesTableData[i].S, 4);
 
-                    if (segmentData[index].SegmentType == "Tanks")
-                    {
-                        fa = 0;
-                        fb = 0;
-                        check = "NA";
-                    }
-                    else
-                    {
-                        fa = Math.Round((Double.Parse(cummulativeLoadData[index].waterWeight) + Double.Parse(cummulativeLoadData[index].snowWeight) + Double.Parse(cummulativeLoadData[index].selfWeight)) / segmentPropertiesTableData[index].A, 4);
-                        fb = Math.Round((Double.Parse(windLoadData[index].Mwind) * 12) / segmentPropertiesTableData[index].S, 4);
+                    if ((fa + fb) != 0)
+                        chk = Math.Round(
+                                (fa / tabelData2s[i].Fa) +
+                                (fb / tabelData2s[i].Fb), 4).ToString();
+                }
 
-                        if ((fa + fb) == 0)
-                        {
-                            check = "NA";
-                        }
-                        else
-                        {
-                            check = Math.Round(((fa / tabelData2s[index].Fa) + (fb / tabelData2s[index].Fb)), 4).ToString();
+                return new CheckTableData
+                {
+                    SegmentID = segment.SegmentNumber,
+                    Segment = segment.SegmentName,
+                    fa = fa,
+                    fb = fb,
+                    check = chk
+                };
+            }).ToList();
 
-
-                        }
-                    }
-
-
-                    return new CheckTableData
-                    {
-                        SegmentID = segment.SegmentNumber,
-                        Segment = segment.SegmentName,
-                        fa = fa,
-                        fb = fb,
-                        check = check,
-
-
-                        //A = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2))),
-                    };
-
-
-
-                }).ToList();
-
-
-                dataGridView1.DataSource = viewModelData;
-                dataGridView1.Columns["SegmentID"].Visible = false;
-            }
-
+            dataGridView1.DataSource = viewModel;
+            dataGridView1.Columns["SegmentID"].Visible = false;
         }
+        #endregion
 
+        #region Table-2 (Design parameters)
         private void LoadTable2()
         {
-            var segmentData = _context.SegmentProperties.ToList();
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            if (segmentData.Count > 0)
-            {
+            if (segmentData.Count == 0) return;
 
+            try
+            {
                 tabelData2s = segmentData.Select(segment =>
                 {
-                    var rt = Math.Round(((12 * (segment.DiameterFinal ?? segment.Diameter) / 2) / segment.Thickness), 4);
-                    var i = Math.Round((Math.PI / 64) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow((12 * (segment.DiameterFinal ?? segment.Diameter) - (2 * segment.Thickness)), 4)), 4);
-                    var a = Math.Round((Math.PI / 4) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 2) - Math.Pow((12 * (segment.DiameterFinal ?? segment.Diameter) - (2 * segment.Thickness)), 2)), 4);
-                    var co = Math.Round(1022 / (195 + rt), 4);
-                    var r = Math.Round(Math.Sqrt(i / a), 4);
-                    double Fl = 0;
-                    if (rt < Double.Parse(rtcLabel.Text))
+                    double dFinal = segment.DiameterFinal ?? segment.Diameter;
+                    double radius = 12 * dFinal / 2.0;
+                    double rt = Math.Round((12 * dFinal / 2.0) / segment.Thickness, 4);
+                    double i = Math.Round((Math.PI / 64) *
+                                  (Math.Pow(12 * dFinal, 4) -
+                                   Math.Pow((12 * dFinal - 2 * segment.Thickness), 4)), 4);
+                    double a = Math.Round((Math.PI / 4) *
+                                  (Math.Pow(12 * dFinal, 2) -
+                                   Math.Pow((12 * dFinal - 2 * segment.Thickness), 2)), 4);
+
+                    double co = Math.Round(1022 / (195 + rt), 4);
+                    double r = Math.Round(Math.Sqrt(i / a), 4);
+
+                    double Fl;
+                    double rtcValue = double.TryParse(rtcLabel?.Text, out double rtc) ? rtc : 0;
+                    double fyVal = double.TryParse(Fy, out double fy) ? fy : 0;
+
+                    if (rt < rtcValue)
                     {
-                        var value1 = Math.Round((233 * Double.Parse(Fy)) / (2 * (166 + rt)), 4);
-                        var value2 = Math.Round((Double.Parse(Fy) / 2), 4);
-                        Fl = double.Min(value1, value2);
+                        double v1 = Math.Round((233 * fyVal) / (2 * (166 + rt)), 4);
+                        double v2 = Math.Round(fyVal / 2, 4);
+                        Fl = Math.Min(v1, v2);
                     }
-                    else if (rt >= Double.Parse(rtcLabel.Text))
+                    else
                     {
                         Fl = Math.Round((co * 29000000) / (2 * rt), 4);
                     }
 
-                    var klr = Math.Round((2.1 * 2124) / r, 4);
+                    double klr = Math.Round((2.1 * 2124) / r, 4);
+                    double Cc = Math.Round(Math.Sqrt((Math.Pow(Math.PI, 2) * 29000000) / Fl), 4);
 
-                    var cc = Math.Round(Math.Sqrt((Math.Pow(Math.PI, 2) * 29000000) / Fl), 4);
+                    double Kf = klr <= 25 ? 1
+                              : klr <= Cc ? Math.Round(1 - 0.5 * Math.Pow(klr / Cc, 2), 4)
+                              : Math.Round(0.5 * Math.Pow(Cc / klr, 2), 4);
 
-                    double kf = 0;
-
-                    if (klr <= 25)
-                    {
-                        kf = 1;
-                    }
-                    else if (klr > 25 && klr <= cc)
-                    {
-                        kf = Math.Round(1 - (0.5 * Math.Pow((klr / cc), 2)), 4);
-                    }
-                    else if (klr > cc)
-                    {
-                        kf = Math.Round((0.5 * Math.Pow((cc / klr), 2)), 4);
-                    }
-                    Fl = Fl / 1000;
-                    var fa = Fl * kf;
-                    var fb = Fl;
+                    double Fa = Math.Round((Fl / 1000) * Kf, 4);
+                    double Fb = Math.Round(Fl / 1000, 4);
 
                     return new tabelData2
                     {
                         Segment = segment.SegmentName,
-                        Radius = Math.Round((12 * ((segment.DiameterFinal ?? segment.Diameter) / 2)),4),
-                        Thickness = Math.Round(segment.Thickness,4),
-                        Rt = Math.Round(rt,4),
-                        A = Math.Round(a,4),
-                        I = Math.Round(i,4),
-                        r = Math.Round(r,4),
+                        Radius = Math.Round(radius, 4),
+                        Thickness = Math.Round(segment.Thickness, 4),
+                        Rt = rt,
+                        A = a,
+                        I = i,
+                        r = r,
                         Co = co,
-                        Fl = Math.Round(Fl,4),
-                        KLr = Math.Round(klr,4),
-                        Cc = Math.Round(cc,4),
-                        Kf = Math.Round(kf,4),
-                        Fa = Math.Round(fa,4),
-                        Fb = Math.Round(fb,4),
+                        Fl = Math.Round(Fl / 1000, 4),
+                        KLr = klr,
+                        Cc = Cc,
+                        Kf = Kf,
+                        Fa = Fa,
+                        Fb = Fb
                     };
-
-
                 }).ToList();
 
                 dataGridView3.DataSource = tabelData2s;
             }
-
+            catch (Exception ex)
+            {
+                ShowError($"Error while computing Table-2 values: {ex.Message}");
+            }
         }
+        #endregion
 
-
+        #region Allowable Compressive Stress (TableLayout initial setup)
         private void LoadAllowableCompressiveStress()
         {
-            // Clear any existing controls if needed
             tableLayoutPanel1.Controls.Clear();
 
-            // Left column labels (static text)
-            tableLayoutPanel1.Controls.Add(new Label { Text = "Fv" }, 0, 0);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "k" }, 0, 1);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "l" }, 0, 2);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "(R/t)c" }, 0, 3);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "E" }, 0, 4);
+            // static labels
+            string[] leftLabels = { "Fv", "k", "l", "(R/t)c", "E" };
+            string[] rightLabels = { "psi", null, "in", null, "psi" };
 
-            // ComboBox for the first row, second column
-            ComboBox dropdown = new ComboBox();
-            dropdown.Dock = DockStyle.Fill;
-            dropdown.Margin = new Padding(0);
-            dropdown.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            for (int i = 0; i < leftLabels.Length; i++)
+                tableLayoutPanel1.Controls.Add(new Label { Text = leftLabels[i] }, 0, i);
 
-            tableLayoutPanel1.Controls.Add(dropdown, 1, 0);
-            dropdown.Items.Add("30000");
-            dropdown.Items.Add("32000");
-            dropdown.Items.Add("34000");
-            dropdown.Items.Add("36000");
-            dropdown.Items.Add("38000");
-            dropdown.Items.Add("40000");
-            dropdown.SelectedItem = dropdown.Items[3]; // Set default to "36000"
-            Fy = dropdown.SelectedItem.ToString();
-            // Other static labels
+            // Dropdown for Fy
+            ComboBox fyBox = new ComboBox { Dock = DockStyle.Fill };
+            fyBox.Items.AddRange(new[] { "30000", "32000", "34000", "36000", "38000", "40000" });
+            fyBox.SelectedItem = "36000";
+            Fy = "36000";
+            tableLayoutPanel1.Controls.Add(fyBox, 1, 0);
+
+            // Fixed cells
             tableLayoutPanel1.Controls.Add(new Label { Text = "2.1" }, 1, 1);
             tableLayoutPanel1.Controls.Add(new Label { Text = "2124" }, 1, 2);
-
-            // Create the rtc label that will be updated dynamically
             rtcLabel = new Label();
             tableLayoutPanel1.Controls.Add(rtcLabel, 1, 3);
-            UpdateRtcLabel(dropdown.SelectedItem.ToString()); // Set initial value
-
             tableLayoutPanel1.Controls.Add(new Label { Text = "29000000" }, 1, 4);
 
-            // Right column (unit labels)
-            tableLayoutPanel1.Controls.Add(new Label { Text = "psi" }, 2, 0);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "in" }, 2, 2);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "psi" }, 2, 4);
+            for (int i = 0; i < rightLabels.Length; i++)
+                if (rightLabels[i] != null)
+                    tableLayoutPanel1.Controls.Add(new Label { Text = rightLabels[i] }, 2, i);
 
-            // Attach event handler so that when the dropdown value changes, the rtc label updates
-            dropdown.SelectedIndexChanged += (sender, e) =>
+            UpdateRtcLabel(Fy);
+
+            fyBox.SelectedIndexChanged += (_, __) =>
             {
-                ComboBox cb = sender as ComboBox;
-                if (cb?.SelectedItem != null)
-                {
-                    Fy = cb.SelectedItem.ToString();
-                    UpdateRtcLabel(cb.SelectedItem.ToString());
-                    LoadTable2();
-
-                }
+                Fy = fyBox.SelectedItem!.ToString();
+                UpdateRtcLabel(Fy);
+                LoadTable2();               // refresh design table
             };
         }
 
-        private void UpdateRtcLabel(string selectedValue)
+        private void UpdateRtcLabel(string selectedFy)
         {
-            string rtc;
-            // Map the selected value to the appropriate computed string
-            if (selectedValue == "36000")
+            rtcLabel.Text = selectedFy switch
             {
-                rtc = "334";
-            }
-            else if (selectedValue == "32000")
-            {
-                rtc = "377";
-            }
-            else if (selectedValue == "34000")
-            {
-                rtc = "354";
-            }
-            else if (selectedValue == "38000")
-            {
-                rtc = "316";
-            }
-            else if (selectedValue == "40000")
-            {
-                rtc = "299";
-            }
-            else if (selectedValue == "30000")
-            {
-                // Provide a value for "30000", for example:
-                rtc = "420";  // Change this value as needed
-            }
-            else
-            {
-                rtc = "0";
-            }
-            rtcLabel.Text = rtc;
+                "30000" => "420",
+                "32000" => "377",
+                "34000" => "354",
+                "36000" => "334",
+                "38000" => "316",
+                "40000" => "299",
+                _ => "0"
+            };
         }
+        #endregion
 
-
+        #region Segment Properties Table (dataGridView5)
         private void LoadData()
         {
-            var segmentData = _context.SegmentProperties.ToList();
-
-            var pi = Math.PI;
-
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            if (segmentData.Count > 0)
-            {
+            if (segmentData.Count == 0) return;
 
-                segmentPropertiesTableData = segmentData.Select(segment => new designTableData
+            segmentPropertiesTableData = segmentData.Select(segment =>
+            {
+                double dFinal = segment.DiameterFinal ?? segment.Diameter;
+                double A = Math.Round((Math.PI / 4) *
+                         (Math.Pow(12 * dFinal, 2) -
+                          Math.Pow((12 * dFinal - 2 * segment.Thickness), 2)), 4);
+
+                double I = Math.Round((Math.PI / 64) *
+                         (Math.Pow(12 * dFinal, 4) -
+                          Math.Pow((12 * dFinal - 2 * segment.Thickness), 4)), 4);
+
+                double S = Math.Round((I * 2) / (12 * dFinal), 4);
+
+                return new designTableData
                 {
                     Segment = segment.SegmentName,
-                    Diameter = (12 * (segment.DiameterFinal ?? segment.Diameter)),
+                    Diameter = 12 * dFinal,
                     Thickness = segment.Thickness,
+                    A = A,
+                    I = I,
+                    S = S
+                };
+            }).ToList();
 
-                    // Compute Eq as before
-                    A = Math.Round((Math.PI / 4) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 2) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness))), 2)),4),
-
-                    I = Math.Round((Math.PI / 64) * (Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness ))), 4)), 4),
-
-                    S = Math.Round(((Math.PI / 64) * 2 *(Math.Pow(12 * (segment.DiameterFinal ?? segment.Diameter), 4) - Math.Pow(((12 * (segment.DiameterFinal ?? segment.Diameter)) - (2 * (segment.Thickness))), 4))) / (12 * (segment.DiameterFinal ?? segment.Diameter)), 4),
-
-                }).ToList();
-
-                dataGridView5.DataSource = segmentPropertiesTableData;
-            }
-
+            dataGridView5.DataSource = segmentPropertiesTableData;
         }
+        #endregion
 
+        #region --- Printing ---
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        private float PrintDataGridView(
+            Graphics g, DataGridView dgv, float xPos, float yPos,
+            System.Drawing.Font printFont, string title)
         {
-
-        }
-
-        private void dataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-
-        }
-
-        private void Solver_Output_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private float PrintDataGridView(Graphics g, DataGridView dgv, float xPos, float yPos, System.Drawing.Font printFont, string tableName)
-        {
-
             float startX = xPos;
-            float startY = yPos;
-            float cellHeight = printFont.GetHeight() + 10; // Row height with spacing
-            float colWidth = 100; // Column width (adjust as needed)
+            float cellHeight = printFont.GetHeight() + 10;
+            float colWidth = 100;
 
-            // Draw table name/title
-            g.DrawString(tableName, new System.Drawing.Font("Arial", 12, FontStyle.Bold), Brushes.Black, xPos, yPos);
-            yPos += cellHeight + 5; // Move down for table
+            g.DrawString(title, new System.Drawing.Font("Arial", 12, FontStyle.Bold), Brushes.Black, xPos, yPos);
+            yPos += cellHeight + 5;
 
-            Pen borderPen = new Pen(Color.Black, 1); // Table border lines
+            Pen pen = Pens.Black;
 
-            // Draw column headers with borders
             foreach (DataGridViewColumn col in dgv.Columns)
             {
-                RectangleF headerRect = new RectangleF(xPos, yPos, colWidth, cellHeight);
-                g.DrawRectangle(borderPen, xPos, yPos, colWidth, cellHeight);
-                g.DrawString(col.HeaderText, printFont, Brushes.Black, headerRect);
+                g.DrawRectangle(pen, xPos, yPos, colWidth, cellHeight);
+                g.DrawString(col.HeaderText, printFont, Brushes.Black,
+                             new RectangleF(xPos, yPos, colWidth, cellHeight));
                 xPos += colWidth;
             }
             yPos += cellHeight;
-            xPos = startX; // Reset X position
+            xPos = startX;
 
-            // Draw each row with borders
             foreach (DataGridViewRow row in dgv.Rows)
             {
-                if (!row.IsNewRow) // Skip empty last row
+                if (row.IsNewRow) continue;
+
+                foreach (DataGridViewCell cell in row.Cells)
                 {
-                    foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        RectangleF cellRect = new RectangleF(xPos, yPos, colWidth, cellHeight);
-                        g.DrawRectangle(borderPen, xPos, yPos, colWidth, cellHeight);
-                        g.DrawString(Convert.ToString(cell.Value), printFont, Brushes.Black, cellRect);
-                        xPos += colWidth;
-                    }
-                    yPos += cellHeight;
-                    xPos = startX; // Reset X position for next row
+                    g.DrawRectangle(pen, xPos, yPos, colWidth, cellHeight);
+                    g.DrawString(Convert.ToString(cell.Value), printFont, Brushes.Black,
+                                 new RectangleF(xPos, yPos, colWidth, cellHeight));
+                    xPos += colWidth;
                 }
+                yPos += cellHeight;
+                xPos = startX;
             }
 
-            return yPos + 20; // Return new Y position (add space after table)
+            return yPos + 20;
         }
-
 
         private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
         {
-            float yPos = e.MarginBounds.Top; // Start position for printing
-            float xPos = e.MarginBounds.Left; // Left margin position
-            System.Drawing.Font printFont = new System.Drawing.Font("Arial", 10);
+            float y = e.MarginBounds.Top;
+            float x = e.MarginBounds.Left;
+            var f = new System.Drawing.Font("Arial", 10);
 
-            // Print First Table (e.g., dataGridView1)
-            yPos = PrintDataGridView(e.Graphics, dataGridView1, xPos, yPos, printFont, "Check Table Data");
-            yPos += 40; // Add space between tables
+            y = PrintDataGridView(e.Graphics, dataGridView1, x, y, f, "Check Table Data") + 40;
+            PrintDataGridView(e.Graphics, dataGridView5, x, y, f, "Segment Properties Data");
 
-            // Print Second Table (e.g., dataGridView5)
-            yPos = PrintDataGridView(e.Graphics, dataGridView5, xPos, yPos, printFont, "Segment Properties Data");
-
-            e.HasMorePages = false; // Only one page
+            e.HasMorePages = false;
         }
-
-
 
         private void printToolStripButton_Click(object sender, EventArgs e)
         {
-
-            PrintDocument printDocument = new PrintDocument();
-            printDocument.PrintPage += PrintDocument_PrintPage;
-            printDocument.DocumentName = "Output Data"; //
-
-            PrintDialog printDialog = new PrintDialog();
-            printDialog.Document = printDocument;
-
-            if (printDialog.ShowDialog() == DialogResult.OK)
+            try
             {
-                printDocument.Print();
+                PrintDocument doc = new PrintDocument();
+                doc.PrintPage += PrintDocument_PrintPage;
+                doc.DocumentName = "Output Data";
+
+                PrintDialog dlg = new PrintDialog { Document = doc };
+                if (dlg.ShowDialog() == DialogResult.OK) doc.Print();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Printing failed: {ex.Message}");
             }
         }
+        #endregion
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
+        #region --- Event Handlers (grid formatting / double-click) ---
 
         private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dataGridView1.Columns[e.ColumnIndex].Name == "Check" && e.Value != null)
-            {
-                // Try converting the cell's value to a number.
-                if (double.TryParse(e.Value.ToString(), out double cellValue))
-                {
-                    if (cellValue >= 0.95 || cellValue <= 0.75)
-                    {
-                        e.CellStyle.ForeColor = Color.Red;
-                    }
-                    else
-                    {
-                        e.CellStyle.ForeColor = Color.Black; // or your default color
-                    }
-                }
-            }
+            if (dataGridView1.Columns[e.ColumnIndex].Name != "Check" || e.Value == null) return;
+
+            if (double.TryParse(e.Value.ToString(), out double val))
+                e.CellStyle.ForeColor = (val >= 0.95 || val <= 0.75) ? Color.Red : Color.Black;
         }
 
         private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0 && e.RowIndex < dataGridView1.Rows.Count)
+            if (e.RowIndex < 0 || e.RowIndex >= dataGridView1.Rows.Count)
             {
-                DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
-
-                // Convert the row's DataBoundItem to our CheckTableData object
-                CheckTableData checkData = row.DataBoundItem as CheckTableData;
-
-                if (checkData != null)
-                {
-                    // We can now retrieve the unique ID
-                    int segmentNumber = checkData.SegmentID;
-
-                    // Open your dialog with that unique ID
-                    SegmentDialogBox segmentDialogBox = new SegmentDialogBox(segmentNumber, "Modify", _waterTankForm);
-                    var result = segmentDialogBox.ShowDialog();
-
-                    if (result == DialogResult.OK)
-                    {
-                        LoadData();
-
-                        LoadSegmentWeightData();
-                        LoadCummulativeWeightData();
-                        WindLoadPerSegment();
-                        LoadTable2();
-                        LoadCheckTableData();
-                    }
-                }
+                ShowError("Please select a valid row to modify.");
+                return;
             }
-            else
+
+            if (dataGridView1.Rows[e.RowIndex].DataBoundItem is not CheckTableData check) return;
+
+            SegmentDialogBox dlg = new SegmentDialogBox(check.SegmentID, "Modify", _waterTankForm);
+            if (dlg.ShowDialog() != DialogResult.OK) return;
+
+            // refresh all dependent tables
+            try
             {
-                MessageBox.Show("Please select a valid row to modify.");
+                selfWeightData.Clear();
+                windLoadData.Clear();
+                LoadData();
+                LoadSegmentWeightData();
+                LoadCummulativeWeightData();
+                WindLoadPerSegment();
+                LoadTable2();
+                LoadCheckTableData();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error while refreshing data after modification: {ex.Message}");
             }
         }
 
         private void helpToolStripButton_Click(object sender, EventArgs e)
         {
-            Help help = new Help();
-            help.ShowDialog();
+            using Help h = new Help();
+            h.ShowDialog();
         }
+        #endregion
     }
+
+    #region --- DTO / ViewModel classes (unchanged) ---
 
     public class designTableData
     {
         public string Segment { get; set; }
-        public Double Diameter { get; set; }
-        public Double Thickness { get; set; }
-        public Double A { get; set; }
-        public Double I { get; set; }
-        public Double S { get; set; }
+        public double Diameter { get; set; }
+        public double Thickness { get; set; }
+        public double A { get; set; }
+        public double I { get; set; }
+        public double S { get; set; }
     }
 
     public class segmentGravityLoad
@@ -843,38 +778,29 @@ namespace WaterTankTool_WFA.Solver
     {
         public string Segment { get; set; }
         public double Radius { get; set; }
-
         public double Thickness { get; set; }
         public double Rt { get; set; }
         public double A { get; set; }
-
         public double I { get; set; }
-
         public double r { get; set; }
-
         public double Co { get; set; }
-
         public double Fl { get; set; }
         public double KLr { get; set; }
-
         public double Cc { get; set; }
-
         public double Kf { get; set; }
-
         public double Fa { get; set; }
-
         public double Fb { get; set; }
     }
 
     public class CheckTableData
     {
-
         public int SegmentID { get; set; }
         public string Segment { get; set; }
         public double fa { get; set; }
         public double fb { get; set; }
-        public string check {  get; set; }
+        public string check { get; set; }
     }
+
     public class TanksData
     {
         public List<Tank> tanks { get; set; }
@@ -897,16 +823,33 @@ namespace WaterTankTool_WFA.Solver
         public string Fwind { get; set; }
         public string Vwind { get; set; }
         public string BaseElevation { get; set; }
-
         public string LoadLocation { get; set; }
-
         public string ArmLength { get; set; }
-
         public string FArm { get; set; }
-
         public string Mwind { get; set; }
+
+        // ==================================================================
+        //  Designer-generated event hooks – keep these methods even if empty
+        // ==================================================================
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // No action needed – left for Designer compatibility
+        }
+
+        private void dataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // No action needed – left for Designer compatibility
+        }
+
+        private void Solver_Output_Load(object sender, EventArgs e)
+        {
+            // Form-load logic is already handled in the constructor.
+            // Keep this stub so the Designer remains happy.
+        }
 
     }
 
 
+
+    #endregion
 }

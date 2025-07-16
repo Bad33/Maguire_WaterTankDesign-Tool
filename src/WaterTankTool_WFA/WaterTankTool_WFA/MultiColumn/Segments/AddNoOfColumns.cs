@@ -14,7 +14,7 @@ namespace WaterTankTool_WFA.MultiColumn.Segments
     {
         private WaterTank _waterTankForm;
         private String SegmentType;
-
+        private int noOfCol;
 
         public AddNoOfColumns(WaterTank waterTankForm,String _segmentType)
         {
@@ -27,8 +27,8 @@ namespace WaterTankTool_WFA.MultiColumn.Segments
         {
             //AddSegmentSection addSegmentSection = new AddSegmentSection(_waterTankForm,TankType.MultiColumn);
             //DialogResult result = addSegmentSection.ShowDialog();
-
-            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm, TankType.MultiColumn);
+            noOfCol = (int)numericUpDown1.Value;
+            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm, TankType.MultiColumn, noOfCol);
             this.Close();
             DialogResult result1 = segmentDialogBox.ShowDialog();
             if (result1 == DialogResult.OK || result1 == DialogResult.Cancel)

@@ -357,7 +357,7 @@
             dataGridView5.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
             dataGridView5.RowHeadersVisible = false;
             dataGridView5.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView5.CellContentClick += dataGridView5_CellContentClick;
+            //dataGridView5.CellContentClick += dataGridView5_CellContentClick;
             // 
             // Column15
             // 
@@ -598,7 +598,7 @@
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.ShowEditingIcon = false;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
+            //dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             dataGridView1.CellDoubleClick += dataGridView1_CellDoubleClick;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting;
             // 
@@ -707,7 +707,7 @@
             MaximizeBox = false;
             Name = "Solver_Output";
             ShowIcon = false;
-            Load += Solver_Output_Load;
+            //Load += Solver_Output_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView7).EndInit();
