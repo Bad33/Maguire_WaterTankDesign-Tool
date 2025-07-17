@@ -40,11 +40,11 @@ namespace WaterTankTool_WFA
         private DoubleBufferedFlowLayoutPanel recentProjectsPanel;
         private DoubleBufferedFlowLayoutPanel buttonPanel;
 
-        public StartupForm(DIContainer diContainer, TankType selectedTankType)
+        public StartupForm(DIContainer diContainer)
         {
             InitializeComponent();
             _diContainer = diContainer;
-            _selectedTankType = selectedTankType;
+            _selectedTankType = AppState.CurrentTankType;
 
             // --- Main window setup (startup panel for projects) ---
             this.WindowState = FormWindowState.Maximized;
@@ -498,7 +498,7 @@ namespace WaterTankTool_WFA
 
             // Open main window based on type
             this.Hide();
-            var mainForm = new WaterTank(this, tankType); // tankType is either SingleColumn or MultiColumn
+            var mainForm = new WaterTank(this); // tankType is either SingleColumn or MultiColumn
             mainForm.Show();
         }
 

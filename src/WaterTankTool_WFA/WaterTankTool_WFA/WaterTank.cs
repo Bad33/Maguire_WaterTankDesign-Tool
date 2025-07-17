@@ -45,13 +45,13 @@ namespace WaterTankTool_WFA
 
         private TankType _tankType;
 
-        public WaterTank(StartupForm startupForm, TankType tankType = TankType.SingleColumn)
+        public WaterTank(StartupForm startupForm)
         {
             InitializeComponent();
             var _context = WaterTankDbContext.GetInstance();
             context = _context;
             _startupForm = startupForm;
-            _tankType = tankType;
+            _tankType = AppState.CurrentTankType;
 
             InitializeStatusStrip2();
             InitializeDataGridView();
@@ -264,7 +264,7 @@ namespace WaterTankTool_WFA
 
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Define_Segments define_Segments = new Define_Segments(this, _tankType);
+            Define_Segments define_Segments = new Define_Segments(this);
             define_Segments.ShowDialog();
         }
 
@@ -272,7 +272,7 @@ namespace WaterTankTool_WFA
         {
             if(_tankType == TankType.SingleColumn)
             {
-                Define_Segments define_Segments = new Define_Segments(this, _tankType);
+                Define_Segments define_Segments = new Define_Segments(this);
                 define_Segments.ShowDialog();
             }
             else if(_tankType == TankType.MultiColumn)
@@ -280,7 +280,7 @@ namespace WaterTankTool_WFA
                 //DefineMultiLegSegments define_ = new DefineMultiLegSegments(this);
                 //define_.ShowDialog();
 
-                Define_Segments define_Segments = new Define_Segments(this, _tankType);
+                Define_Segments define_Segments = new Define_Segments(this);
                 define_Segments.ShowDialog();
             }
 

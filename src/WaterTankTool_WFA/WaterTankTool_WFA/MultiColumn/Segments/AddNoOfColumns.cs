@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,16 +26,15 @@ namespace WaterTankTool_WFA.MultiColumn.Segments
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //AddSegmentSection addSegmentSection = new AddSegmentSection(_waterTankForm,TankType.MultiColumn);
-            //DialogResult result = addSegmentSection.ShowDialog();
-            noOfCol = (int)numericUpDown1.Value;
-            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm, TankType.MultiColumn, noOfCol);
-            this.Close();
-            DialogResult result1 = segmentDialogBox.ShowDialog();
-            if (result1 == DialogResult.OK || result1 == DialogResult.Cancel)
-            {
-                this.Close();
-            }
+            // 1) Store globally
+            AppState.NoOfColumns = (int)numericUpDown1.Value;
+
+            // 2) Launch the dialog – pass it only what’s unique (segment type)
+            var dlg = new SegmentDialogBox(SegmentType,_waterTankForm); 
+
+            DialogResult dr = dlg.ShowDialog();
+            if (dr == DialogResult.OK || dr == DialogResult.Cancel) this.Close();
         }
+
     }
 }

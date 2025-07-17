@@ -67,31 +67,31 @@ namespace WaterTankTool_WFA
 
         }
 
+        //public SegmentDialogBox(string segmentType, WaterTank waterTankForm)
+        //{
+        //    _segmentType = segmentType;
+        //    _waterTankForm = waterTankForm;
+
+        //    InitializeComponent();
+        //    GetTanksJsonData();
+        //    var context = WaterTankDbContext.GetInstance();
+
+        //    _context = context;
+
+        //    showInputFieldsOnType();
+
+        //    this.FormClosing += SegmentDialogBox_FormClosing;
+        //    comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+
+
+        //}
+
         public SegmentDialogBox(string segmentType, WaterTank waterTankForm)
         {
             _segmentType = segmentType;
             _waterTankForm = waterTankForm;
-
-            InitializeComponent();
-            GetTanksJsonData();
-            var context = WaterTankDbContext.GetInstance();
-
-            _context = context;
-
-            showInputFieldsOnType();
-
-            this.FormClosing += SegmentDialogBox_FormClosing;
-            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
-
-
-        }
-
-        public SegmentDialogBox(string segmentType, WaterTank waterTankForm,TankType tankType,int NoOfCols)
-        {
-            _segmentType = segmentType;
-            _waterTankForm = waterTankForm;
-            _tankType = tankType;
-            _noOfCols = NoOfCols;
+            _tankType = AppState.CurrentTankType;
+            _noOfCols = AppState.NoOfColumns;
             InitializeComponent();
             GetTanksJsonData();
             var context = WaterTankDbContext.GetInstance();
@@ -111,6 +111,9 @@ namespace WaterTankTool_WFA
         {
             _dialogType = dialogType;
             _segmentNumber = segmentNumber;
+            _tankType = AppState.CurrentTankType;
+            _noOfCols = AppState.NoOfColumns;
+
             InitializeComponent();
             GetTanksJsonData();
             var context = WaterTankDbContext.GetInstance();
@@ -427,7 +430,7 @@ namespace WaterTankTool_WFA
                 successDialog(rowsAffected);
                 //WaterTank form1 = new WaterTank();
                 //form1.OnSegmentAdded();
-                _waterTankForm.OnSegmentAdded();
+                //_waterTankForm.OnSegmentAdded();
             }
             catch (Exception ex)
             {
@@ -436,11 +439,21 @@ namespace WaterTankTool_WFA
             //}
         }
 
+        // ======================================================================
+        //  Save_ClickCylinder  –  full, self-contained method
+        //  • Validates input fields
+        //  • ADD  : creates 1 row   (Single-column)  or N rows   (Multileg)
+        //  • MODIFY:
+        //      – Single-column tank → edits just the selected row
+        //      – Multileg tank     → edits ALL rows whose SegmentName shares the
+        //                            same base name (text before the numeric _n)
+        //  • Commits once, shows confirmation, notifies parent form
+        // ======================================================================
         private void Save_ClickCylinder(object sender, EventArgs e)
         {
-            // ──────────────────────────────────────────────────────────────
-            // 1) Basic validation – unchanged
-            // ──────────────────────────────────────────────────────────────
+            // ──────────────────────────────────────────────────────────
+            // 1) Validate UI fields
+            // ──────────────────────────────────────────────────────────
             if (string.IsNullOrWhiteSpace(richTextBox1.Text) ||
                 string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
                 string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
@@ -462,46 +475,79 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            // ──────────────────────────────────────────────────────────────
-            // 2) Save / modify logic
-            // ──────────────────────────────────────────────────────────────
+            bool isMultileg = _tankType == TankType.MultiColumn && AppState.NoOfColumns > 1;
+            bool isModifyMode = _dialogType == "Modify";
+
+            // ──────────────────────────────────────────────────────────
+            // 2) ADD  vs  MODIFY
+            // ──────────────────────────────────────────────────────────
             try
             {
-                if (_dialogType == "Modify")
+                if (isModifyMode)
                 {
-                    // ------------------------------------------------------
-                    // 2a) MODIFY an existing single segment
-                    // ------------------------------------------------------
-                    SegmentProperties seg =
+                    //------------------------------------------------------------------
+                    // MODIFY
+                    //------------------------------------------------------------------
+                    SegmentProperties seed =
                         _context.SegmentProperties
                                 .FirstOrDefault(s => s.SegmentNumber == _segmentNumber);
 
-                    if (seg == null)
+                    if (seed == null)
                     {
                         MessageBox.Show("Error: Segment not found!", "Error",
                                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
-                    seg.SegmentName = richTextBox1.Text;
-                    seg.SegmentType = _segmentType;
-                    seg.Diameter = diameter;
-                    seg.Thickness = thickness;
-                    seg.HeightInitial = heightInitial;
-                    seg.HeightFinal = heightFinal;
+                    // Build list of targets
+                    List<SegmentProperties> targets;
+                    if (isMultileg)
+                    {
+                        int idx = seed.SegmentName.LastIndexOf('_');
+                        string baseName = (idx > 0 && int.TryParse(seed.SegmentName[(idx + 1)..], out _))
+                                        ? seed.SegmentName[..idx]
+                                        : seed.SegmentName;
 
-                    ValidateSegment(seg);
+                        targets = _context.SegmentProperties
+                                          .Where(s => s.SegmentName == baseName ||
+                                                      s.SegmentName.StartsWith(baseName + "_"))
+                                          .ToList();
+                    }
+                    else
+                    {
+                        targets = new() { seed };
+                    }
+
+                    // Apply edits to each target
+                    foreach (var seg in targets)
+                    {
+                        // Preserve suffix in multileg rename
+                        string suffix = "";
+                        if (isMultileg)
+                        {
+                            int idx = seg.SegmentName.LastIndexOf('_');
+                            suffix = (idx > 0 && int.TryParse(seg.SegmentName[(idx + 1)..], out _))
+                                      ? seg.SegmentName[idx..]   // "_n"
+                                      : "";
+                        }
+
+                        seg.SegmentName = richTextBox1.Text + suffix;
+                        seg.SegmentType = _segmentType;
+                        seg.Diameter = diameter;
+                        seg.Thickness = thickness;
+                        seg.HeightInitial = heightInitial;
+                        seg.HeightFinal = heightFinal;
+
+                        ValidateSegment(seg);
+                    }
                 }
                 else
                 {
-                    // ------------------------------------------------------
-                    // 2b) ADD – single-column or multi-column
-                    // ------------------------------------------------------
-                    bool isMultiColumn = _tankType == TankType.MultiColumn && _noOfCols > 1;
-
-                    if (isMultiColumn)
+                    //------------------------------------------------------------------
+                    // ADD (single or multileg)
+                    //------------------------------------------------------------------
+                    if (isMultileg)
                     {
-                        // Make _noOfCols separate entries:  name_1, name_2, …
                         for (int i = 1; i <= _noOfCols; i++)
                         {
                             var seg = new SegmentProperties
@@ -520,7 +566,6 @@ namespace WaterTankTool_WFA
                     }
                     else
                     {
-                        // Classic single entry
                         var seg = new SegmentProperties
                         {
                             SegmentName = richTextBox1.Text,
@@ -536,12 +581,12 @@ namespace WaterTankTool_WFA
                     }
                 }
 
-                // ──────────────────────────────────────────────────────────
+                // ──────────────────────────────────────────────────────
                 // 3) Commit
-                // ──────────────────────────────────────────────────────────
+                // ──────────────────────────────────────────────────────
                 int rows = _context.SaveChanges();
                 successDialog(rows);
-                _waterTankForm.OnSegmentAdded();   // refresh main form
+                //_waterTankForm.OnSegmentAdded();   // refresh parent
             }
             catch (Exception ex)
             {
@@ -549,6 +594,7 @@ namespace WaterTankTool_WFA
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
 
         private void SegmentDialogBox_FormClosing(object sender, FormClosingEventArgs e)

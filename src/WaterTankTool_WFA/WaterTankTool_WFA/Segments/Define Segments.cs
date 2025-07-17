@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using WaterTankTool_WFA.Entity;
 
 namespace WaterTankTool_WFA
 {
@@ -18,11 +19,11 @@ namespace WaterTankTool_WFA
         DialogResult result;
         private WaterTank _waterTankForm;
         private TankType _tankType;
-        public Define_Segments(WaterTank waterTank, TankType tankType)
+        public Define_Segments(WaterTank waterTank)
         {
 
             _waterTankForm = waterTank;
-            _tankType = tankType;
+            _tankType = AppState.CurrentTankType;
 
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
@@ -84,46 +85,88 @@ namespace WaterTankTool_WFA
 
         }
 
+        // ──────────────────────────────────────────────────────────────
+        //  Utility: return the part before "_n" when suffix is numeric
+        //  "TankWall_3" → "TankWall"   ;   "TopRing" → "TopRing"
+        // ──────────────────────────────────────────────────────────────
+        private static string BaseName(string name)
+        {
+            int idx = name.LastIndexOf('_');
+            return (idx > 0 && int.TryParse(name[(idx + 1)..], out _))
+                   ? name[..idx]          // strip numeric suffix
+                   : name;
+        }
+
         private void button3_Click(object sender, EventArgs e)
         {
-            if (dataGridView1.SelectedRows.Count > 0)
+            if (dataGridView1.SelectedRows.Count == 0)
             {
-                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
-                int segmentNumber = (int)selectedRow.Cells[0].Value;
-                string segmentName = selectedRow.Cells[1].Value.ToString();
+                MessageBox.Show("Please select a row to delete");
+                return;
+            }
 
-                result = MessageBox.Show($"Do you want to delete {segmentName}?", "Confirm Delete", buttons, MessageBoxIcon.Question);
+            DataGridViewRow selRow = dataGridView1.SelectedRows[0];
+            int segNumber = (int)selRow.Cells[0].Value;
+            string segName = selRow.Cells[1].Value.ToString();
 
-                if (result == DialogResult.Yes)
-                {
-                    //using (var context = WaterTankDbContext.GetInstance())
-                    //{
-                        var segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == segmentNumber);
-                        var tankProperties = _context.TankProperties.ToList();
+            // ---------------------------------------------
+            // MULTILEG: get the base part before last '_n'
+            // ---------------------------------------------
+            List<SegmentProperties> segmentsToDelete;
+            string confirmMessage;
 
-                        if (segmentProperties != null)
-                        {
-                            _context.TankProperties.RemoveRange(tankProperties);
+            if (_tankType == TankType.MultiColumn)
+            {
+                int idx = segName.LastIndexOf('_');
+                string baseName = (idx > 0 && int.TryParse(segName[(idx + 1)..], out _))
+                                ? segName[..idx]
+                                : segName;
 
-                            _context.SegmentProperties.Remove(segmentProperties);
-                            _context.SaveChanges();
-                            //MessageBox.Show($"Segment {segmentName} deleted successfully.");
-                            LoadData();
-                            
-                            _waterTankForm.OnSegmentDeleted();
-                        }
-                        else
-                        {
-                            MessageBox.Show("Selected Segment not found");
-                        }
-                    //}
-                }
+                // SQL-translateable predicate (StartsWith / ==)
+                segmentsToDelete = _context.SegmentProperties
+                                           .Where(s => s.SegmentName == baseName
+                                                   || s.SegmentName.StartsWith(baseName + "_"))
+                                           .ToList();
+
+                confirmMessage = segmentsToDelete.Count == 1
+                    ? $"Do you want to delete {segName}?"
+                    : $"Do you want to delete ALL {segmentsToDelete.Count} columns of '{baseName}'?";
             }
             else
             {
-                MessageBox.Show("Please select a row to delete");
+                var seg = _context.SegmentProperties
+                                  .FirstOrDefault(s => s.SegmentNumber == segNumber);
+
+                if (seg == null)
+                {
+                    MessageBox.Show("Selected segment not found");
+                    return;
+                }
+
+                segmentsToDelete = new() { seg };
+                confirmMessage = $"Do you want to delete {segName}?";
             }
+
+            // ---------------------------------------------
+            // Confirm & delete
+            // ---------------------------------------------
+            if (MessageBox.Show(confirmMessage, "Confirm Delete",
+                                buttons, MessageBoxIcon.Question) != DialogResult.Yes)
+                return;
+
+            // If you still want to wipe TankProperties like before:
+            _context.TankProperties.RemoveRange(_context.TankProperties);
+
+            _context.SegmentProperties.RemoveRange(segmentsToDelete);
+            _context.SaveChanges();
+
+            LoadData();
+            if (segmentsToDelete[0].SegmentType == "Tanks") 
+            { 
+                _waterTankForm.OnSegmentDeleted();  // notify parent form
+            }// refresh grid
         }
+
 
         private void button2_Click(object sender, EventArgs e)
         {

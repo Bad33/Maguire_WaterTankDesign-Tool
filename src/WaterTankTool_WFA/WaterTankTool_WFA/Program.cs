@@ -27,24 +27,23 @@ namespace WaterTankTool_WFA
             TankType selectedType = TankType.None;
             using (var dlg = new TankTypeSelectionForm())
             {
-                var result = dlg.ShowDialog();
-                if (result == DialogResult.OK)
-                    selectedType = dlg.SelectedTankType;
-                else
+                if (dlg.ShowDialog() != DialogResult.OK ||
+                    AppState.CurrentTankType == TankType.None)
+                {
                     MessageBox.Show("You must select a tank type to proceed.");
+                    return;
+                }
             }
 
-            if (selectedType != TankType.None)
+            try
             {
-                try
-                {
-                    Application.Run(new StartupForm(_diContainer, selectedType));
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Application crashed: " + ex);
-                }
+                Application.Run(new StartupForm(_diContainer));
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Application crashed: " + ex);
+            }
+            
         }
 
         public static DIContainer GetContainer()

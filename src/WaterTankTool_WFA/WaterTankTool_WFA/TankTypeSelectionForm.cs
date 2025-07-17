@@ -70,7 +70,8 @@ namespace WaterTankTool_WFA
             };
             cardSingle.CardClick += (s, e) =>
             {
-                SelectedTankType = TankType.SingleColumn;
+                AppState.CurrentTankType = TankType.SingleColumn;   // ① set global
+                SelectedTankType = TankType.SingleColumn;   // ② keep local return value
                 this.DialogResult = DialogResult.OK;
             };
             cardsPanel.Controls.Add(cardSingle, 0, 0);
@@ -85,7 +86,8 @@ namespace WaterTankTool_WFA
             };
             cardMulti.CardClick += (s, e) =>
             {
-                SelectedTankType = TankType.MultiColumn;
+                AppState.CurrentTankType = TankType.MultiColumn;    // ①
+                SelectedTankType = TankType.MultiColumn;    // ②
                 this.DialogResult = DialogResult.OK;
             };
             cardsPanel.Controls.Add(cardMulti, 1, 0);

@@ -89,7 +89,7 @@ namespace WaterTankTool_WFA
 
             else if (_type == TankType.MultiColumn && SegmentType == "Tanks")
             {
-                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm, TankType.MultiColumn,1);
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm);
                 this.Close();
                 DialogResult result1 = segmentDialogBox.ShowDialog();
                 if (result1 == DialogResult.OK || result1 == DialogResult.Cancel)
