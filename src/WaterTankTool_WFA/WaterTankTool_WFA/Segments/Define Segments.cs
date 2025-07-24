@@ -161,11 +161,13 @@ namespace WaterTankTool_WFA
             _context.SaveChanges();
 
             LoadData();
-            if (segmentsToDelete[0].SegmentType == "Tanks") 
-            { 
+            if (segmentsToDelete[0].SegmentType == "Tanks")
+            {
                 _waterTankForm.OnSegmentDeleted();  // notify parent form
             }// refresh grid
         }
+
+
 
 
         private void button2_Click(object sender, EventArgs e)
@@ -175,7 +177,7 @@ namespace WaterTankTool_WFA
                 DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
                 int segmentNumber = (int)selectedRow.Cells[0].Value;
 
-                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(segmentNumber, "Modify",_waterTankForm);
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(segmentNumber, "Modify", _waterTankForm);
                 var result = segmentDialogBox.ShowDialog();
 
                 if (result == DialogResult.OK)
@@ -186,6 +188,16 @@ namespace WaterTankTool_WFA
             else
             {
                 MessageBox.Show("Please select a row to modify");
+            }
+        }
+
+        private void dataGridView1_CellFormatting_1(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex].DataPropertyName == "SegmentType"
+                && e.Value?.ToString() == "Cylinder"
+                && AppState.CurrentTankType == TankType.MultiColumn)
+            {
+                e.Value = "Column";
             }
         }
     }

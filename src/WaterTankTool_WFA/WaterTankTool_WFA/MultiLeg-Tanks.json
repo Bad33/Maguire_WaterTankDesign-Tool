@@ -1,0 +1,81 @@
+{
+  "tanks": [
+    {
+      "type": "50K-DE",
+      "diameter": "24.00",
+      "Centroid": "11.50",
+      "height": "23.00 ft",
+      "Weight_of_Water": "421.00 Kips",
+      "Weight_of_Steel": "20.53 Kips",
+      "Total_Weight": "441.53 Kips",
+      "Projected_Area": "470.00 ft²",
+      "thickness": "0.5"
+    },
+    {
+      "type": "100K-DE",
+      "diameter": "32.00",
+      "Centroid": "12.60",
+      "height": "25.21 ft",
+      "Weight_of_Water": "880.00 Kips",
+      "Weight_of_Steel": "34.02 Kips",
+      "Total_Weight": "914.02 Kips",
+      "Projected_Area": "612.00 ft²",
+      "thickness": "0.5"
+    },
+    {
+      "type": "200K-DE",
+      "diameter": "38.00",
+      "Centroid": "16.00",
+      "height": "31.83 ft",
+      "Weight_of_Water": "1728.00 Kips",
+      "Weight_of_Steel": "56.57 Kips",
+      "Total_Weight": "1784.57 Kips",
+      "Projected_Area": "982.00 ft²",
+      "thickness": "0.5"
+    },
+    {
+      "type": "250K-TORO",
+      "diameter": "43.00",
+      "Centroid": "14.10",
+      "height": "29.31 ft",
+      "Weight_of_Water": "2280.00 Kips",
+      "Weight_of_Steel": "63.37 Kips",
+      "Total_Weight": "2347.00 Kips",
+      "Projected_Area": "1067.00 ft²",
+      "thickness": "0.5"
+    },
+    {
+      "type": "300K-TORO",
+      "diameter": "43.00",
+      "Centroid": "16.00",
+      "height": "33.71 ft",
+      "Weight_of_Water": "2708.00 Kips",
+      "Weight_of_Steel": "79.01 Kips",
+      "Total_Weight": "2787.01 Kips",
+      "Projected_Area": "1278.00 ft²",
+      "thickness": "0.5"
+    },
+    {
+      "type": "400K-TORO",
+      "diameter": "50.00",
+      "Centroid": "15.80",
+      "height": "33.43 ft",
+      "Weight_of_Water": "3539.00 Kips",
+      "Weight_of_Steel": "61.34 Kips",
+      "Total_Weight": "3622.50 Kips",
+      "Projected_Area": "1437.00 ft²",
+      "thickness": "0.5"
+    },
+    {
+      "type": "500K-TORO",
+      "diameter": "56.00",
+      "Centroid": "15.00",
+      "height": "32.94 ft",
+      "Weight_of_Water": "4320.00 Kips",
+      "Weight_of_Steel": "124.04 Kips",
+      "Total_Weight": "4444.04 Kips",
+      "Projected_Area": "1617.00 ft²",
+      "thickness": "0.5"
+    }
+  ]
+}

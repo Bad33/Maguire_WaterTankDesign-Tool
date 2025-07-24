@@ -20,7 +20,8 @@ namespace WaterTankTool_WFA
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterScreen;
             this.ClientSize = new Size(760, 400);
-            this.BackColor = ColorTranslator.FromHtml("#22232d");
+            this.BackColor = ColorTranslator.FromHtml("#55959e");
+           
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.ShowIcon = false;

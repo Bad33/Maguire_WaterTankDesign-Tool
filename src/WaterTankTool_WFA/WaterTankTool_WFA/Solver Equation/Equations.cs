@@ -336,5 +336,180 @@ namespace WaterTankTool_WFA.Solver_Equation
             _context = WaterTankDbContext.GetInstance();
             Qwind = _context.WindLoadEntity.FirstOrDefault();
         }
+
+
+        public double ProjectedArea(double heightInitial, double heightfinal, double diameter)
+        {
+            var height = heightfinal - heightInitial;
+            var result = (Math.Round(Math.PI, 4) * height * (diameter / 2));
+            return result;
+        }
+
+        public double weightOfPedestal(double heightInitial, double heightFinal, double Diameter, double t)
+        {
+            var thickness = unitsConverter.inch_TO_Ft(t);
+
+            var height = heightFinal - heightInitial;
+
+            var outerVolume = (Math.PI / 4) * (Math.Pow(Diameter, 2) * height);
+
+            var innerVolume = (Math.PI / 4) * Math.Pow((Diameter - (2 * thickness)), 2) * height;
+
+            var segmentVolume = outerVolume - innerVolume;
+
+            var weight = (segmentVolume * ConstantsClass.rs) / 1000;
+
+            return weight;
+        }
+
+        public double Centroid(double heightInitial, double heightFinal)
+        {
+            var height = heightFinal - heightInitial;
+            var result = heightInitial + (height / 2);
+            return result;
+        }
+
+        public double weight(double hi, double hf, double di, double df, double t)
+        {
+            //var thickness = unitsConverter.inch_TO_Ft(t);
+            //di = Top Diameter ------ df = Bottom Diameter
+
+            var d = df - di;
+            var h = hf - hi;
+
+            var S1 = Math.Round(((Math.PI / 4) * Math.Pow(di, 2)), 4);
+            var S2 = Math.Round(((Math.PI / 4) * Math.Pow(df, 2)), 4);
+            var S3 = Math.Round(((Math.PI / 4) * Math.Pow((di - (2 * t / 12)), 2)), 4);
+            var S4 = Math.Round(((Math.PI / 4) * Math.Pow((df - (2 * t / 12)), 2)), 4);
+
+            var weight = ((h / 3) * (S1 + S2 - S3 - S4 + Math.Sqrt(S1 * S2) - Math.Sqrt(S3 * S4))) * (ConstantsClass.rs / 1000);
+
+
+            return weight;
+        }
+
+
+        public double kzi(double heightinitial)
+        {
+            double res = 0;
+            if (heightinitial <= 15 && Qwind.Exposure == "C")
+            {
+                res = 0.85;
+            }
+            else if (heightinitial <= 15 && Qwind.Exposure == "D")
+            {
+                res = 1.03;
+            }
+            else if (heightinitial > 15)
+            {
+                if (Qwind.Exposure == "C")
+                {
+                    var zg = WindLoadExposure_C.Zg;
+                    var a = WindLoadExposure_C.Alpha;
+                    res = 2.01 * Math.Pow((heightinitial / zg), 2 / a);
+                }
+                else if (Qwind.Exposure == "D")
+                {
+                    var zg = WindLoadExposure_D.Zg;
+                    var a = WindLoadExposure_D.Alpha;
+                    res = 2.01 * Math.Pow((heightinitial / zg), 2 / a);
+                }
+
+            }
+            return res;
+
+        }
+
+        public double kzf(double heightfinal)
+        {
+
+            double res = 0;
+            if (heightfinal <= 15 && Qwind.Exposure == "C")
+            {
+                res = 0.85;
+            }
+            else if (heightfinal <= 15 && Qwind.Exposure == "D")
+            {
+                res = 1.03;
+            }
+            else if (heightfinal > 15)
+            {
+                if (Qwind.Exposure == "C")
+                {
+                    var zg = WindLoadExposure_C.Zg;
+                    var a = WindLoadExposure_C.Alpha;
+                    res = 2.01 * Math.Pow((heightfinal / zg), 2 / a);
+                }
+                else if (Qwind.Exposure == "D")
+                {
+                    var zg = WindLoadExposure_D.Zg;
+                    var a = WindLoadExposure_D.Alpha;
+                    res = 2.01 * Math.Pow((heightfinal / zg), 2 / a);
+                }
+
+            }
+            return res;
+
+        }
+
+        public double qzi(double heightInitial)
+        {
+            double result = 0;
+            if (Qwind != null)
+            {
+
+                var value1 = Qwind.Q * kzi(heightInitial) * Qwind.G;
+                var value2 = 30 * Qwind.Cf;
+                result = Math.Max(value1, value2);
+            }
+
+            return result;
+        }
+
+        public double qzf(double heightFinal)
+        {
+            double result = 0;
+            if (Qwind != null)
+            {
+
+                var value1 = Qwind.Q * kzf(heightFinal) * Qwind.G;
+                var value2 = 30 * Qwind.Cf;
+                result = Math.Max(value1, value2);
+            }
+
+            return result;
+        }
+
+        public double F(double heightInitial, double heightFinal, double diameter)
+        {
+            var height = heightFinal - heightInitial;
+            var result1 = 30 * Qwind.Cf * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
+
+            var result2 = (((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial, heightFinal, diameter) * Qwind.Cf * Qwind.G) / 1000;
+
+
+            return Math.Max(result1, result2);
+        }
+
+        public double L(double heightInitial, double heightFinal)
+        {
+            var h = heightFinal - heightInitial;
+
+            double numerator = (qzi(heightInitial) * Math.Pow(h, 2) / 2) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * 2 * (Math.Pow(h, 2)) / 3);
+
+            double denominator = (qzi(heightInitial) * h) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * h);
+
+            double F = heightInitial + (numerator / denominator);
+
+            return F;
+
+        }
+
+
+        public double Mbase(double heightInitial, double heightFinal, double diameter)
+        {
+            var result = L(heightInitial, heightFinal) * F(heightInitial, heightFinal, diameter);
+            return result;
+        }
     }
 }

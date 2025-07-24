@@ -40,6 +40,38 @@ namespace WaterTankTool_WFA.Constants
         public const int Zg = 700;
     }
 
+    public static class SnowRiskCategoryII
+    {
+        public const double Is = 1.0;
+    }
+
+    public static class SnowRiskCategoryIII
+    {
+        public const double Is = 1.1;
+
+    }
+
+
+
+    public static class SnowRiskCategoryIV
+    {
+        public const double Is = 1.2;
+
+    }
+
+
+    public static class SnowExposureC
+    {
+        public const double Ce = 0.9; 
+    }
+
+    public static class SnowExposureD
+    {
+        public const double Ce = 0.8;
+
+    }
+
+
     public class Range
     {
         public double Start { get; }

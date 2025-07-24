@@ -13,10 +13,21 @@ namespace WaterTankTool_WFA.Entity
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public double HeightToConsider { get; set; }
 
-        public double Snow_Pressure {  get; set; }
-        public double Area_Subjected { get; set; }
-        public double Total_Load {  get; set; }
+        public double GroundSnowLoad { get; set; }
+
+        public String RiskCategory { get; set; }
+
+        public double ImportanceFactor { get; set; }
+
+
+
+        public String Exposure {  get; set; }
+        public double ExposureFactor { get; set; }
+        public double AreaSubjectedToSnow {  get; set; }
+        public double TotalSnowLoad { get; set; }
+
 
 
     }

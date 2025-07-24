@@ -118,6 +118,7 @@
             dataGridView1.Size = new Size(839, 132);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
+            dataGridView1.CellFormatting += dataGridView1_CellFormatting_1;
             // 
             // Define_Segments
             // 

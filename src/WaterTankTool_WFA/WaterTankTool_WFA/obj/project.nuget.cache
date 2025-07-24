@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "PKbbUsfJPVc=",
+  "dgSpecHash": "01LM1IxdQ9k=",
   "success": true,
   "projectFilePath": "C:\\Users\\nikhil.chaudhary\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\nikhil.chaudhary\\.nuget\\packages\\bouncycastle.cryptography\\2.4.0\\bouncycastle.cryptography.2.4.0.nupkg.sha512",
+    "C:\\Users\\nikhil.chaudhary\\.nuget\\packages\\dg.advanceddatagridview\\1.2.30115.18\\dg.advanceddatagridview.1.2.30115.18.nupkg.sha512",
     "C:\\Users\\nikhil.chaudhary\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",
     "C:\\Users\\nikhil.chaudhary\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\nikhil.chaudhary\\.nuget\\packages\\itextsharp\\5.5.13.4\\itextsharp.5.5.13.4.nupkg.sha512",

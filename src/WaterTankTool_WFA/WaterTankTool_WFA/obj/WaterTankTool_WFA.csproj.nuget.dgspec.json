@@ -51,6 +51,10 @@
         "net8.0-windows7.0": {
           "targetAlias": "net8.0-windows",
           "dependencies": {
+            "DG.AdvancedDataGridView": {
+              "target": "Package",
+              "version": "[1.2.30115.18, )"
+            },
             "MetroModernUI": {
               "target": "Package",
               "version": "[1.4.0, )"

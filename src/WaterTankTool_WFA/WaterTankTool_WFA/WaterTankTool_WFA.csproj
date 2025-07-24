@@ -9,16 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="MultiLeg-Tanks.json" />
       <None Remove="tanks.json" />
     </ItemGroup>
 
     <ItemGroup>
+      <Content Include="MultiLeg-Tanks.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
       <Content Include="tanks.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="DG.AdvancedDataGridView" Version="1.2.30115.18" />
       <PackageReference Include="iTextSharp" Version="5.5.13.4" />
       <PackageReference Include="MetroModernUI" Version="1.4.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />

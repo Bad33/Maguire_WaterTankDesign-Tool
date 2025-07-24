@@ -15,6 +15,18 @@
           }
         }
       },
+      "DG.AdvancedDataGridView/1.2.30115.18": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows7.0/AdvancedDataGridView.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0-windows7.0/AdvancedDataGridView.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ]
+      },
       "EntityFramework/6.4.4": {
         "type": "package",
         "dependencies": {
@@ -686,7 +698,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.NET.ILLink.Tasks/8.0.12": {
+      "Microsoft.NET.ILLink.Tasks/8.0.17": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -1477,6 +1489,18 @@
           }
         }
       },
+      "DG.AdvancedDataGridView/1.2.30115.18": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows7.0/AdvancedDataGridView.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0-windows7.0/AdvancedDataGridView.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ]
+      },
       "EntityFramework/6.4.4": {
         "type": "package",
         "dependencies": {
@@ -2148,7 +2172,7 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.NET.ILLink.Tasks/8.0.12": {
+      "Microsoft.NET.ILLink.Tasks/8.0.17": {
         "type": "package",
         "build": {
           "build/Microsoft.NET.ILLink.Tasks.props": {}
@@ -2770,6 +2794,26 @@
         "lib/netstandard2.0/BouncyCastle.Cryptography.dll",
         "lib/netstandard2.0/BouncyCastle.Cryptography.xml",
         "packageIcon.png"
+      ]
+    },
+    "DG.AdvancedDataGridView/1.2.30115.18": {
+      "sha512": "natekCFqarfedCa7IpUZxqRdhNqI/QqLh5EzJhVDrCy9cY3Qm0W9RwXjaLol1g64sIiEiRKghTIRjhnjAcwDzw==",
+      "type": "package",
+      "path": "dg.advanceddatagridview/1.2.30115.18",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "AdvancedDataGridView_logo.png",
+        "LICENSE",
+        "README.md",
+        "dg.advanceddatagridview.1.2.30115.18.nupkg.sha512",
+        "dg.advanceddatagridview.nuspec",
+        "lib/net40/AdvancedDataGridView.dll",
+        "lib/net5.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/net6.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/net7.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/net8.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/netcoreapp3.1/AdvancedDataGridView.dll"
       ]
     },
     "EntityFramework/6.4.4": {
@@ -3915,10 +3959,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.NET.ILLink.Tasks/8.0.12": {
-      "sha512": "FV4HnQ3JI15PHnJ5PGTbz+rYvrih42oLi/7UMIshNwCwUZhTq13UzrggtXk4ygrcMcN+4jsS6hhshx2p/Zd0ig==",
+    "Microsoft.NET.ILLink.Tasks/8.0.17": {
+      "sha512": "x5/y4l8AtshpBOrCZdlE4txw8K3e3s9meBFeZeR3l8hbbku2V7kK6ojhXvrbjg1rk3G+JqL1BI26gtgc1ZrdUw==",
       "type": "package",
-      "path": "microsoft.net.illink.tasks/8.0.12",
+      "path": "microsoft.net.illink.tasks/8.0.17",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
@@ -3932,7 +3976,7 @@
         "build/Microsoft.NET.ILLink.Analyzers.props",
         "build/Microsoft.NET.ILLink.Tasks.props",
         "build/Microsoft.NET.ILLink.targets",
-        "microsoft.net.illink.tasks.8.0.12.nupkg.sha512",
+        "microsoft.net.illink.tasks.8.0.17.nupkg.sha512",
         "microsoft.net.illink.tasks.nuspec",
         "tools/net472/ILLink.Tasks.dll",
         "tools/net472/ILLink.Tasks.dll.config",
@@ -5219,11 +5263,12 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
+      "DG.AdvancedDataGridView >= 1.2.30115.18",
       "MetroModernUI >= 1.4.0",
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Tools >= 8.0.8",
-      "Microsoft.NET.ILLink.Tasks >= 8.0.12",
+      "Microsoft.NET.ILLink.Tasks >= 8.0.17",
       "Newtonsoft.Json >= 13.0.3",
       "System.Data.SQLite >= 1.0.119",
       "System.Drawing.Common >= 9.0.3",
@@ -5231,23 +5276,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\": {},
+    "C:\\Users\\nikhil.chaudhary\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
+      "projectUniqueName": "C:\\Users\\nikhil.chaudhary\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
       "projectName": "WaterTankTool_WFA",
-      "projectPath": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
-      "packagesPath": "C:\\Users\\DTS Loaner 25\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DTS Loaner 25\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\obj\\publish\\win-x64\\",
+      "projectPath": "C:\\Users\\nikhil.chaudhary\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\WaterTankTool_WFA.csproj",
+      "packagesPath": "C:\\Users\\nikhil.chaudhary\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\nikhil.chaudhary\\Desktop\\Nikhil\\Maguire Water Tank Project\\Maguire_WaterTankDesign-Tool\\src\\WaterTankTool_WFA\\WaterTankTool_WFA\\obj\\publish\\win-x64\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\DTS Loaner 25\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\nikhil.chaudhary\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -5275,12 +5320,16 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "net8.0-windows7.0": {
         "targetAlias": "net8.0-windows",
         "dependencies": {
+          "DG.AdvancedDataGridView": {
+            "target": "Package",
+            "version": "[1.2.30115.18, )"
+          },
           "MetroModernUI": {
             "target": "Package",
             "version": "[1.4.0, )"
@@ -5302,7 +5351,7 @@
           "Microsoft.NET.ILLink.Tasks": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[8.0.12, )",
+            "version": "[8.0.17, )",
             "autoReferenced": true
           },
           "Newtonsoft.Json": {
@@ -5336,15 +5385,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[8.0.12, 8.0.12]"
+            "version": "[8.0.17, 8.0.17]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[8.0.12, 8.0.12]"
+            "version": "[8.0.17, 8.0.17]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[8.0.12, 8.0.12]"
+            "version": "[8.0.17, 8.0.17]"
           }
         ],
         "frameworkReferences": {
@@ -5355,7 +5404,7 @@
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.301/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
@@ -5365,12 +5414,6 @@
     }
   },
   "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
-    },
     {
       "code": "NU1701",
       "level": "Warning",

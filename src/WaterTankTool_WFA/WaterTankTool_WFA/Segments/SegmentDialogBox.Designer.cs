@@ -165,6 +165,7 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(178, 23);
             comboBox1.TabIndex = 5;
+            comboBox1.UseWaitCursor = true;
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged_1;
             // 
             // label1
@@ -243,7 +244,7 @@
             label25.Location = new Point(11, 80);
             label25.Margin = new Padding(2, 0, 2, 0);
             label25.Name = "label25";
-            label25.Size = new Size(59, 15);
+            label25.Size = new Size(58, 15);
             label25.TabIndex = 18;
             label25.Text = "Thickness";
             label25.Click += label25_Click;
@@ -318,7 +319,7 @@
             label4.Location = new Point(11, 54);
             label4.Margin = new Padding(2, 0, 2, 0);
             label4.Name = "label4";
-            label4.Size = new Size(59, 15);
+            label4.Size = new Size(58, 15);
             label4.TabIndex = 11;
             label4.Text = "Thickness";
             label4.Click += label4_Click;

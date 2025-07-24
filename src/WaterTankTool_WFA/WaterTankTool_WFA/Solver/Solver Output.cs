@@ -225,10 +225,16 @@ namespace WaterTankTool_WFA.Solver
                 return;
             }
 
-            string jsonPath = Path.Combine(Application.StartupPath, "tanks.json");
+            // Choose the correct file depending on tank type
+            string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                              ? "MultiLeg-Tanks.json"
+                              : "tanks.json";
+
+            string jsonPath = Path.Combine(Application.StartupPath, fileName);
+
             if (!File.Exists(jsonPath))
             {
-                ShowError("tanks.json file not found.");
+                ShowError($"{fileName} file not found.");
                 return;
             }
 
@@ -241,17 +247,22 @@ namespace WaterTankTool_WFA.Solver
             }
             catch (Exception ex)
             {
-                ShowError($"Failed to parse tanks.json: {ex.Message}");
+                ShowError($"Failed to parse {fileName}: {ex.Message}");
                 return;
             }
 
+            // Find matching tank record
             string tankCapacity = segmentData[0].SegmentName;
             Tank foundTank = data?.tanks?.Find(t => t.type == tankCapacity);
+
             if (foundTank == null)
             {
-                ShowError("Tank type not found in tanks.json!");
+                ShowError($"Tank type '{tankCapacity}' not found in {fileName}!");
                 return;
             }
+
+            // … proceed with foundTank …
+
 
             string numericPart = new(foundTank.Weight_of_Water
                                       .Where(c => char.IsDigit(c) || c == '.' || c == '-').ToArray());
@@ -264,7 +275,7 @@ namespace WaterTankTool_WFA.Solver
             }
             waterWeight = numericPart;
 
-            string snowWeightStr = snowEntity.Total_Load.ToString();
+            string snowWeightStr = snowEntity.TotalSnowLoad.ToString();
             snowWeight = snowWeightStr;
             selfWeight = foundTank.Weight_of_Steel;
 
@@ -333,11 +344,16 @@ namespace WaterTankTool_WFA.Solver
                 ShowError("No segment data found. Please add segments before proceeding.");
                 return;
             }
+            // Choose the correct file depending on tank type
+            string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                              ? "MultiLeg-Tanks.json"
+                              : "tanks.json";
 
-            string jsonPath = Path.Combine(Application.StartupPath, "tanks.json");
+            string jsonPath = Path.Combine(Application.StartupPath, fileName);
+
             if (!File.Exists(jsonPath))
             {
-                ShowError("tanks.json file not found.");
+                ShowError($"{fileName} file not found.");
                 return;
             }
 
@@ -350,17 +366,22 @@ namespace WaterTankTool_WFA.Solver
             }
             catch (Exception ex)
             {
-                ShowError($"Failed to parse tanks.json: {ex.Message}");
+                ShowError($"Failed to parse {fileName}: {ex.Message}");
                 return;
             }
 
+            // Find matching tank record
             string tankCapacity = segmentData[0].SegmentName;
             Tank foundTank = data?.tanks?.Find(t => t.type == tankCapacity);
+
             if (foundTank == null)
             {
-                ShowError("Tank type not found in tanks.json!");
+                ShowError($"Tank type '{tankCapacity}' not found in {fileName}!");
                 return;
             }
+
+            // … proceed with foundTank …
+
 
             string numericPart = new(foundTank.Weight_of_Water
                                       .Where(c => char.IsDigit(c) || c == '.' || c == '-').ToArray());
@@ -372,7 +393,7 @@ namespace WaterTankTool_WFA.Solver
                 ShowError("Please add Snow Load first!");
                 return;
             }
-            string snowWeightStr = snowEntity.Total_Load.ToString();
+            string snowWeightStr = snowEntity.TotalSnowLoad.ToString();
 
             double miscLoad = 15;
 

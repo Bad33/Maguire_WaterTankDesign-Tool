@@ -15,6 +15,18 @@
           }
         }
       },
+      "DG.AdvancedDataGridView/1.2.30115.18": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows7.0/AdvancedDataGridView.dll": {}
+        },
+        "runtime": {
+          "lib/net8.0-windows7.0/AdvancedDataGridView.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ]
+      },
       "EntityFramework/6.4.4": {
         "type": "package",
         "dependencies": {
@@ -1477,6 +1489,26 @@
         "lib/netstandard2.0/BouncyCastle.Cryptography.dll",
         "lib/netstandard2.0/BouncyCastle.Cryptography.xml",
         "packageIcon.png"
+      ]
+    },
+    "DG.AdvancedDataGridView/1.2.30115.18": {
+      "sha512": "natekCFqarfedCa7IpUZxqRdhNqI/QqLh5EzJhVDrCy9cY3Qm0W9RwXjaLol1g64sIiEiRKghTIRjhnjAcwDzw==",
+      "type": "package",
+      "path": "dg.advanceddatagridview/1.2.30115.18",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "AdvancedDataGridView_logo.png",
+        "LICENSE",
+        "README.md",
+        "dg.advanceddatagridview.1.2.30115.18.nupkg.sha512",
+        "dg.advanceddatagridview.nuspec",
+        "lib/net40/AdvancedDataGridView.dll",
+        "lib/net5.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/net6.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/net7.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/net8.0-windows7.0/AdvancedDataGridView.dll",
+        "lib/netcoreapp3.1/AdvancedDataGridView.dll"
       ]
     },
     "EntityFramework/6.4.4": {
@@ -3875,6 +3907,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0-windows7.0": [
+      "DG.AdvancedDataGridView >= 1.2.30115.18",
       "MetroModernUI >= 1.4.0",
       "Microsoft.EntityFrameworkCore >= 8.0.8",
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.8",
@@ -3936,6 +3969,10 @@
       "net8.0-windows7.0": {
         "targetAlias": "net8.0-windows",
         "dependencies": {
+          "DG.AdvancedDataGridView": {
+            "target": "Package",
+            "version": "[1.2.30115.18, )"
+          },
           "MetroModernUI": {
             "target": "Package",
             "version": "[1.4.0, )"

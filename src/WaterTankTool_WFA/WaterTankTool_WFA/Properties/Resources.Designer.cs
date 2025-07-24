@@ -133,6 +133,16 @@ namespace WaterTankTool_WFA.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Multileg_Tank {
+            get {
+                object obj = ResourceManager.GetObject("Multileg_Tank", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap seismic {
             get {
                 object obj = ResourceManager.GetObject("seismic", resourceCulture);
@@ -146,6 +156,16 @@ namespace WaterTankTool_WFA.Properties {
         internal static System.Drawing.Bitmap Sheldon_IA_New_Tank_Paint_2 {
             get {
                 object obj = ResourceManager.GetObject("Sheldon IA New Tank Paint-2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SIRWA_New_Tank_No {
+            get {
+                object obj = ResourceManager.GetObject("SIRWA-New-Tank-No", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

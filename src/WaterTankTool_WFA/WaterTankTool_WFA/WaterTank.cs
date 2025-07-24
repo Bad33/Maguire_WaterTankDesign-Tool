@@ -156,7 +156,7 @@ namespace WaterTankTool_WFA
 
             // ?? Image and status changes according to tank type
             Image singleImg = Properties.Resources.Tank_Design;
-            Image multiImg = Properties.Resources.Katy;
+            Image multiImg = Properties.Resources.Multileg_Tank;
 
             if (tankCap?.Capacity != null)
             {
@@ -175,8 +175,8 @@ namespace WaterTankTool_WFA
                         drawingImage = (_tankType == TankType.SingleColumn)
                             ? singleImg
                             : multiImg;
-                        UpdateAppStatus("Tank Loaded: Unknown");
-                        UpdateDesignDetails("-", "0", "0");
+                        UpdateAppStatus($"Tank Loaded: {tankCap.Capacity}");
+                        UpdateDesignDetails(tankCap.Capacity, tankCap.TotalWeight, tankCap.ProjectedArea);
                         break;
                 }
             }

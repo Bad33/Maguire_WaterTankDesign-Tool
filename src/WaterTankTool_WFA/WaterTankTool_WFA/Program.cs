@@ -30,7 +30,7 @@ namespace WaterTankTool_WFA
                 if (dlg.ShowDialog() != DialogResult.OK ||
                     AppState.CurrentTankType == TankType.None)
                 {
-                    MessageBox.Show("You must select a tank type to proceed.");
+                    
                     return;
                 }
             }

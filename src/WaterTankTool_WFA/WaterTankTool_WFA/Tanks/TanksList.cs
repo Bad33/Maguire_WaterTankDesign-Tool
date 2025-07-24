@@ -29,19 +29,28 @@ namespace WaterTankTool_WFA
         {
             try
             {
-                string jsonStringPath = Path.Combine(Application.StartupPath, "tanks.json");
-                if (!File.Exists(jsonStringPath))
+                // Decide which file to load
+                string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                                  ? "MultiLeg-Tanks.json"
+                                  : "tanks.json";
+
+                string jsonPath = Path.Combine(Application.StartupPath, fileName);
+
+                if (!File.Exists(jsonPath))
                 {
-                    MessageBox.Show("Tanks File not Found");
+                    MessageBox.Show($"{fileName} not found in application folder.");
+                    return;
                 }
-                string jsonString = File.ReadAllText(jsonStringPath);
+
+                string jsonString = File.ReadAllText(jsonPath);
                 tankData = JsonSerializer.Deserialize<TankData>(jsonString);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.WriteLine($"An error occurred while reading tank JSON: {ex.Message}");
             }
         }
+
 
         private void button1_Click(object sender, EventArgs e)
         {

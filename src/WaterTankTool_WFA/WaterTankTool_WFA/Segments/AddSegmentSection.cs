@@ -45,6 +45,7 @@ namespace WaterTankTool_WFA
 
             if (_type == TankType.MultiColumn)
             {
+                label2.Text = "Columns";
                 label3.Visible = false;
                 pictureBox2.Visible = false;
             }
@@ -76,26 +77,48 @@ namespace WaterTankTool_WFA
         private void button1_Click(object sender, EventArgs e)
         {
 
-            if(_type == TankType.MultiColumn && SegmentType == "Cylinder")
+            var columnCount = _context.SegmentProperties.Where(x => x.SegmentType == "Cylinder").ToList();
+
+
+            if(_type == TankType.MultiColumn && SegmentType == "Cylinder" && columnCount.Count() == 0)
             {
                 MultiColumn.Segments.AddNoOfColumns addNoOfColumns = new MultiColumn.Segments.AddNoOfColumns(_waterTankForm,SegmentType);
                 DialogResult result2 = addNoOfColumns.ShowDialog();
-
                 if (result2 == DialogResult.OK || result2 == DialogResult.Cancel)
+                {
+
+                    this.Close();
+                }
+
+            }
+            else if (_type == TankType.MultiColumn && SegmentType == "Cylinder" && columnCount.Count() > 0)
+            {
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm);
+
+                DialogResult result2 = segmentDialogBox.ShowDialog();
+                if (result2 == DialogResult.OK)
+                {
+                    SegmentDialogBox segmentDialogBoxRizor = new SegmentDialogBox("Rizor", _waterTankForm, "Add Rizor");
+                    this.Close();
+                    DialogResult result1 = segmentDialogBoxRizor.ShowDialog();
+                    this.Close();
+                }
+                else if (result2 == DialogResult.Cancel)
                 {
                     this.Close();
                 }
             }
-
-            else if (_type == TankType.MultiColumn && SegmentType == "Tanks")
+            else if (_type == TankType.MultiColumn && SegmentType == "Tanks" )
             {
                 SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm);
                 this.Close();
                 DialogResult result1 = segmentDialogBox.ShowDialog();
                 if (result1 == DialogResult.OK || result1 == DialogResult.Cancel)
                 {
+
                     this.Close();
                 }
+         
             }
 
             else

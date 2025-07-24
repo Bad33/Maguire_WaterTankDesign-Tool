@@ -55,10 +55,10 @@ namespace WaterTankTool_WFA.Load
             {
                 comboBox1.Text = windData.Exposure.ToString();
                 textBox1.Text = windData.Kzt.ToString();
-                textBox2.Text = windData.Ke.ToString();
+                //textBox2.Text = windData.Ke.ToString();
                 textBox3.Text = windData.Kd.ToString();
                 textBox4.Text = windData.G.ToString();
-                textBox5.Text = windData.I.ToString();
+                //textBox5.Text = windData.I.ToString();
                 textBox6.Text = windData.V.ToString();
                 textBox7.Text = windData.Zg.ToString();
                 textBox8.Text = windData.alpha.ToString();
@@ -75,25 +75,27 @@ namespace WaterTankTool_WFA.Load
 
         private void FillCalculatedValue()
         {
-            if (textBox1.Text != string.Empty && textBox2.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty && textBox5.Text != string.Empty && textBox6.Text != string.Empty && textBox7.Text != string.Empty && textBox8.Text != string.Empty)
+            if (textBox1.Text != string.Empty && textBox3.Text != string.Empty && textBox4.Text != string.Empty && textBox6.Text != string.Empty && textBox7.Text != string.Empty && textBox8.Text != string.Empty)
             {
                 var Kzt = Double.Parse(textBox1.Text);
                 var Kd = Double.Parse(textBox3.Text);
-                var I = Double.Parse(textBox5.Text);
+                //var I = Double.Parse(textBox5.Text);
                 var V = Double.Parse(textBox6.Text);
 
-                Q = Lambda.Y * 0.00256 * Kzt * Kd * I * Math.Pow(V, 2);
+                Q = Lambda.Y * 0.00256 * Kzt * Kd * Math.Pow(V, 2);
                 richTextBox2.Text = "q = " + Q.ToString("F5");
             }
         }
 
         private void richTextBox2_TextChanged(object sender, EventArgs e)
         {
+            FillCalculatedValue();
 
         }
 
         private void textBox7_TextChanged(object sender, EventArgs e)
         {
+            FillCalculatedValue();
 
         }
 
@@ -110,10 +112,10 @@ namespace WaterTankTool_WFA.Load
             {
                 Exposure = comboBox1.Text,
                 Kzt = double.Parse(textBox1.Text),
-                Ke = double.Parse(textBox2.Text),
+                Ke = 1.0,
                 Kd = double.Parse(textBox3.Text),
                 G = double.Parse(textBox4.Text),
-                I = double.Parse(textBox5.Text),
+                I = 1.0,
                 V = double.Parse(textBox6.Text),
                 Zg = double.Parse(textBox7.Text),
                 alpha = double.Parse(textBox8.Text),
@@ -159,19 +161,6 @@ namespace WaterTankTool_WFA.Load
             _context.SaveChanges();
         }
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            if (textBox1.Text != null && textBox2.Text != null && textBox3.Text != null && textBox4.Text != null && textBox5.Text != null && textBox6.Text != null && textBox7.Text != null && textBox8.Text != null)
-            {
-                var Kzt = Double.Parse(textBox1.Text);
-                var Kd = Double.Parse(textBox3.Text);
-                var I = Double.Parse(textBox5.Text);
-                var V = Double.Parse(textBox6.Text);
-
-                Q = Lambda.Y * 0.00256 * Kzt * Kd * I * Math.Pow(V, 2);
-                richTextBox2.Text = "q = " + Q.ToString("F5");
-            }
-        }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {
@@ -182,6 +171,25 @@ namespace WaterTankTool_WFA.Load
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             FillCalculatedValue();
+        }
+
+
+
+
+
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            NotesManager.Notes.WindLoadNotes = richTextBox1.Text;
+
+
+            NotesManager.SaveNotes();
+        }
+
+        private void textBox6_TextChanged_1(object sender, EventArgs e)
+        {
+            FillCalculatedValue();
+
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -196,24 +204,22 @@ namespace WaterTankTool_WFA.Load
 
         }
 
-        private void textBox5_TextChanged(object sender, EventArgs e)
+        private void textBox8_TextChanged(object sender, EventArgs e)
         {
             FillCalculatedValue();
 
         }
 
-        private void textBox6_TextChanged(object sender, EventArgs e)
+        private void textBox9_TextChanged(object sender, EventArgs e)
         {
             FillCalculatedValue();
 
         }
 
-        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        private void textBox11_TextChanged(object sender, EventArgs e)
         {
-            NotesManager.Notes.WindLoadNotes = richTextBox1.Text;
+            FillCalculatedValue();
 
-      
-            NotesManager.SaveNotes();
         }
     }
 }

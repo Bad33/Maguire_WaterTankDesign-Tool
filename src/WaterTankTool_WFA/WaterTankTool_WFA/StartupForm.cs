@@ -40,6 +40,10 @@ namespace WaterTankTool_WFA
         private DoubleBufferedFlowLayoutPanel recentProjectsPanel;
         private DoubleBufferedFlowLayoutPanel buttonPanel;
 
+
+        private Image backGroundImageRight;
+        private Image backGroundImageLeft;
+
         public StartupForm(DIContainer diContainer)
         {
             InitializeComponent();
@@ -56,6 +60,7 @@ namespace WaterTankTool_WFA
             this.AutoScaleDimensions = new SizeF(96F, 96F);
             this.Font = new Font("Segoe UI", 10);
 
+
             mainStartupPanel = CreateMainStartupPanel();
             this.Controls.Add(mainStartupPanel);
             mainStartupPanel.Dock = DockStyle.Fill;
@@ -64,6 +69,7 @@ namespace WaterTankTool_WFA
             // Immediately show the recent projects for selected tank type
             LoadRecentProjects();
             DisplayRecentProjects(recentProjectsPanel);
+            UpdateBackgroundImages();
         }
 
         #region Tank Type Selection UI
@@ -220,6 +226,19 @@ namespace WaterTankTool_WFA
             mainLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 40F));
             mainPanel.Controls.Add(mainLayout);
 
+            if (AppState.CurrentTankType == TankType.MultiColumn)
+            {
+                //backGroundImageRight = Properties.Resources.Katy;
+                backGroundImageRight = Properties.Resources.Sheldon_IA_New_Tank_Paint_2;
+
+                backGroundImageLeft = Properties.Resources.SIRWA_New_Tank_No;
+            }
+            else
+            {
+                backGroundImageRight = Properties.Resources.Sheldon_IA_New_Tank_Paint_2;
+                backGroundImageLeft = Properties.Resources.Tea__SD_9;
+            }
+
             // Recent Projects
             recentProjectsPanel = new DoubleBufferedFlowLayoutPanel
             {
@@ -227,7 +246,7 @@ namespace WaterTankTool_WFA
                 Padding = new Padding(10),
                 AutoScroll = true,
                 FlowDirection = FlowDirection.TopDown,
-                BackgroundImage = Properties.Resources.Tea__SD_9,
+                BackgroundImage = backGroundImageLeft,
                 BackgroundImageLayout = ImageLayout.Stretch,
                 WrapContents = false
             };
@@ -252,17 +271,19 @@ namespace WaterTankTool_WFA
             copyrightPanel.Controls.Add(copyrightText);
             recentProjectsPanel.Controls.Add(copyrightPanel);
 
-            // Buttons (Right Panel)
-            buttonPanel = new DoubleBufferedFlowLayoutPanel
-            {
-                Dock = DockStyle.Fill,
-                Padding = new Padding(20),
-                FlowDirection = FlowDirection.TopDown,
-                BackgroundImage = Properties.Resources.Sheldon_IA_New_Tank_Paint_2,
-                BackgroundImageLayout = ImageLayout.Stretch,
-                AutoSize = true,
-                WrapContents = false
-            };
+
+
+                // Buttons (Right Panel)
+                buttonPanel = new DoubleBufferedFlowLayoutPanel
+                {
+                    Dock = DockStyle.Fill,
+                    Padding = new Padding(20),
+                    FlowDirection = FlowDirection.TopDown,
+                    BackgroundImage = backGroundImageRight,
+                    BackgroundImageLayout = ImageLayout.Stretch,
+                    AutoSize = true,
+                    WrapContents = false
+                };
             mainLayout.Controls.Add(buttonPanel, 1, 0);
 
             Label headerLabel = new Label
@@ -285,11 +306,50 @@ namespace WaterTankTool_WFA
 
             // Back button to reselect type
             Button backBtn = CreateStyledButton("← Change Tank Type");
-            backBtn.Click += (s, e) => { mainStartupPanel.Visible = false; tankTypeSelectionPanel.Visible = true; };
+            backBtn.Click +=  ChangeTankType_Click;
             buttonPanel.Controls.Add(backBtn);
 
             return mainPanel;
         }
+
+        // Opens the modal selector again and refreshes the UI
+        private void ChangeTankType_Click(object sender, EventArgs e)
+        {
+            using (var dlg = new TankTypeSelectionForm())
+            {
+                // if user picked something and AppState was updated inside the dialog
+                if (dlg.ShowDialog() == DialogResult.OK &&
+                    AppState.CurrentTankType != TankType.None)
+                {
+                    _selectedTankType = AppState.CurrentTankType;
+
+                    // reload recent list + background images
+                    LoadRecentProjects();
+                    UpdateBackgroundImages();            // see step 3
+                    DisplayRecentProjects(recentProjectsPanel);
+                }
+            }
+        }
+
+        private void UpdateBackgroundImages()
+        {
+            if (_selectedTankType == TankType.MultiColumn)
+            {
+                backGroundImageRight = Properties.Resources.Sheldon_IA_New_Tank_Paint_2;
+                backGroundImageLeft = Properties.Resources.SIRWA_New_Tank_No;
+            }
+            else            // SingleColumn
+            {
+                backGroundImageRight = Properties.Resources.Sheldon_IA_New_Tank_Paint_2;
+                backGroundImageLeft = Properties.Resources.Tea__SD_9;
+            }
+
+            // apply to panels (may already be null in ctor)
+            if (recentProjectsPanel != null) recentProjectsPanel.BackgroundImage = backGroundImageLeft;
+            if (buttonPanel != null) buttonPanel.BackgroundImage = backGroundImageRight;
+        }
+
+
 
         #endregion
 
@@ -583,10 +643,15 @@ namespace WaterTankTool_WFA
                         Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
                     );
                     CREATE TABLE IF NOT EXISTS SnowLoadEntity (
-                        Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Snow_Pressure REAL NOT NULL CHECK(Snow_Pressure >= 0),
-                        Area_Subjected REAL NOT NULL CHECK(Area_Subjected >= 0),
-                        Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
+                        Id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+                        HeightToConsider    REAL    NOT NULL CHECK(HeightToConsider    >= 0),
+                        GroundSnowLoad      REAL    NOT NULL CHECK(GroundSnowLoad      >= 0),
+                        RiskCategory        TEXT    NOT NULL,
+                        ImportanceFactor    REAL    NOT NULL CHECK(ImportanceFactor    >= 0),
+                        Exposure            TEXT    NOT NULL,
+                        ExposureFactor      REAL    NOT NULL CHECK(ExposureFactor      >= 0),
+                        AreaSubjectedToSnow REAL    NOT NULL CHECK(AreaSubjectedToSnow >= 0),
+                        TotalSnowLoad       REAL    NOT NULL CHECK(TotalSnowLoad       >= 0)
                     );
                 ";
 
