@@ -220,7 +220,7 @@ namespace WaterTankTool_WFA
         {
             var liveLoad = context.LiveLoadEntity.FirstOrDefault();
             var seismicLoad = context.SeismicLoadEntity.FirstOrDefault();
-            var snowLoad = context.SnowLoadEntity.FirstOrDefault();
+            var snowLoad = context.SnowLoadEntity?.FirstOrDefault();
             var windLoad = context.WindLoadEntity.FirstOrDefault();
 
             noLoadStatus.Visible = (liveLoad == null || seismicLoad == null || snowLoad == null || windLoad == null);
@@ -270,12 +270,12 @@ namespace WaterTankTool_WFA
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            if(_tankType == TankType.SingleColumn)
+            if (_tankType == TankType.SingleColumn)
             {
                 Define_Segments define_Segments = new Define_Segments(this);
                 define_Segments.ShowDialog();
             }
-            else if(_tankType == TankType.MultiColumn)
+            else if (_tankType == TankType.MultiColumn)
             {
                 //DefineMultiLegSegments define_ = new DefineMultiLegSegments(this);
                 //define_.ShowDialog();
@@ -664,6 +664,12 @@ namespace WaterTankTool_WFA
         {
             Water_Load water_ = new Water_Load();
             water_.ShowDialog();
+        }
+
+        private void toolStripButton12_Click(object sender, EventArgs e)
+        {
+            Load_Combinations load_Combinations = new Load_Combinations();
+            load_Combinations.ShowDialog();
         }
     }
 }

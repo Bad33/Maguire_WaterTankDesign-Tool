@@ -35,7 +35,7 @@ namespace WaterTankTool_WFA.MultiColumn.Segments
             DialogResult dr = dlg.ShowDialog();
             if (dr == DialogResult.OK || dr == DialogResult.Cancel)
             {
-                SegmentDialogBox segmentDialogBoxRizor = new SegmentDialogBox("Rizor", _waterTankForm, "Add Rizor");
+                SegmentDialogBox segmentDialogBoxRizor = new SegmentDialogBox("Riser", _waterTankForm, "Add Riser");
                 this.Close();
                 DialogResult result1 = segmentDialogBoxRizor.ShowDialog();
             }

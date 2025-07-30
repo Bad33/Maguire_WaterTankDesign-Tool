@@ -98,7 +98,7 @@ namespace WaterTankTool_WFA
                 DialogResult result2 = segmentDialogBox.ShowDialog();
                 if (result2 == DialogResult.OK)
                 {
-                    SegmentDialogBox segmentDialogBoxRizor = new SegmentDialogBox("Rizor", _waterTankForm, "Add Rizor");
+                    SegmentDialogBox segmentDialogBoxRizor = new SegmentDialogBox("Riser", _waterTankForm, "Add Riser");
                     this.Close();
                     DialogResult result1 = segmentDialogBoxRizor.ShowDialog();
                     this.Close();

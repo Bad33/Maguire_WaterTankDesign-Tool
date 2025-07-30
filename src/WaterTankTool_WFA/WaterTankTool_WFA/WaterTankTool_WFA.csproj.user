@@ -22,6 +22,9 @@
     <Compile Update="LoadingWindow.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Load\Load Combinations.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Load\Snow Load.cs">
       <SubType>Form</SubType>
     </Compile>

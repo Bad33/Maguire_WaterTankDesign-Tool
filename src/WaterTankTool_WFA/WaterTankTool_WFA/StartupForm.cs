@@ -638,9 +638,7 @@ namespace WaterTankTool_WFA
                     );
                     CREATE TABLE IF NOT EXISTS LiveLoadEntity (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        Live_Load REAL NOT NULL CHECK(Live_Load >= 0),
-                        Area_Exposed REAL NOT NULL CHECK(Area_Exposed >= 0),
-                        Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
+                        Live_Load REAL NOT NULL CHECK(Live_Load >= 0)
                     );
                     CREATE TABLE IF NOT EXISTS SnowLoadEntity (
                         Id                  INTEGER PRIMARY KEY AUTOINCREMENT,

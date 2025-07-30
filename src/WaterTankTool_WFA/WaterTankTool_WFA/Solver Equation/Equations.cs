@@ -40,8 +40,8 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double ProjectedArea(double heightInitial,double heightfinal, double diameter)
         {
             var height = heightfinal - heightInitial;
-            var result = (height * diameter);
-            return result;
+            var result = (height * diameter * 0.5 * Math.PI);
+            return Math.Round(result,5);
         }
 
         public double Centroid(double heightInitial,double heightFinal)
@@ -117,9 +117,12 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double F(double heightInitial,double heightFinal,double diameter)
         {
             var height = heightFinal - heightInitial;
-            var result = (((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial,heightFinal, diameter)) / 1000;
 
-            return result;
+            var result1 = 30 * Qwind.Cf * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
+
+            var result2 = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * Qwind.Cf * Qwind.G * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
+
+            return Math.Max(result1,result2);
         }
         public double L(double heightInitial,double heightFinal)
         {
@@ -163,14 +166,14 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double ProjectedArea(double heightInitial, double heightfinal, double diameter)
         {
             var height = heightfinal - heightInitial;
-            var result = (height * diameter);
-            return result;
+            var result = (height * diameter * 0.5);
+            return Math.Round(result,5);
         }
 
         public double Centroid(double heightInitial, double heightFinal,double diameterTop, double diameterBottom)
         {
-            var r1 = diameterTop / 2;
-            var r2 = diameterBottom / 2;
+            var r1 = diameterBottom / 2;
+            var r2 = diameterTop / 2; 
 
             var height = heightFinal - heightInitial;
 
@@ -277,7 +280,7 @@ namespace WaterTankTool_WFA.Solver_Equation
                 result = Math.Max(value1, value2);
             }
 
-            return result;
+            return Math.Round(result,5);
         }
 
         public double qzf(double heightFinal)
@@ -291,23 +294,26 @@ namespace WaterTankTool_WFA.Solver_Equation
                 result = Math.Max(value1, value2);
             }
 
-            return result;
+            return Math.Round(result,5);
         }
 
         public double F(double heightInitial, double heightFinal, double diameter)
         {
             var height = heightFinal - heightInitial;
-            var result = (((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial, heightFinal, diameter))/1000;
 
-            return result;
+            var result1 = 30 * Qwind.Cf * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
+
+            var result2 = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * Qwind.Cf * Qwind.G * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
+
+            return Math.Max(result1,result2);
         }
         public double L(double heightInitial, double heightFinal)
         {
             var h = heightFinal - heightInitial;
 
-            double numerator = (qzi(heightInitial) * Math.Pow(h, 2) / 2) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * Math.Pow(2 * h, 2) / 3);
+            double numerator = Math.Round(((qzi(heightInitial) * Math.Pow(h, 2) / 2) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * Math.Pow(2 * h, 2) / 3)), 4);
 
-            double denominator = (qzi(heightInitial) * h) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * h);
+            double denominator = Math.Round(((qzi(heightInitial) * h) + (0.5 * (qzf(heightFinal) - qzi(heightInitial)) * h)),4);
 
             double F = heightInitial + (numerator / denominator);
 
@@ -485,10 +491,28 @@ namespace WaterTankTool_WFA.Solver_Equation
             var height = heightFinal - heightInitial;
             var result1 = 30 * Qwind.Cf * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
 
-            var result2 = (((qzi(heightInitial) + qzf(heightFinal)) / 2) * ProjectedArea(heightInitial, heightFinal, diameter) * Qwind.Cf * Qwind.G) / 1000;
+            var result2 = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * Qwind.Cf * Qwind.G * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
 
 
             return Math.Max(result1, result2);
+        }
+
+        public double F_Tank(double heightInitial, double heightFinal, double diameter,double projectedArea)
+        {
+            var height = heightFinal - heightInitial;
+            var result1 = 30 * Qwind.Cf * (projectedArea / 1000);
+
+            var result2 = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * Qwind.Cf * Qwind.G * (projectedArea / 1000);
+
+
+            return Math.Max(result1, result2);
+        }
+
+        public double L_Tank(double heightInitial, double centroid)
+        {
+            var result = heightInitial + centroid;
+            return result;
+
         }
 
         public double L(double heightInitial, double heightFinal)

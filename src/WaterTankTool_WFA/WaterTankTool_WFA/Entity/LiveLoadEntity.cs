@@ -14,7 +14,6 @@ namespace WaterTankTool_WFA.Entity
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
         public double Live_Load {  get; set; }
-        public double Area_Exposed {  get; set; }
-        public double Total_Load {  get; set; }
+
     }
 }

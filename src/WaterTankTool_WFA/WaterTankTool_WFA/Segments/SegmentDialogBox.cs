@@ -60,6 +60,7 @@ namespace WaterTankTool_WFA
             GetTanksJsonData();
             maskedTextBox1.TextChanged += InputFields_TextChanged;
             maskedTextBox2.TextChanged += InputFields_TextChanged;
+            
             maskedTextBox3.TextChanged += InputFields_TextChanged;
             maskedTextBox4.TextChanged += InputFields_TextChanged;
             maskedTextBox5.TextChanged += InputFields_TextChanged;
@@ -239,7 +240,7 @@ namespace WaterTankTool_WFA
                 maskedTextBox5.Visible = true;
                 label26.Visible = true;
             }
-            else if (_segmentType == "Cylinder" || _segmentType == "Rizor")
+            else if (_segmentType == "Cylinder" || _segmentType == "Riser")
             {
                 comboBox1.Visible = false;
 
@@ -268,7 +269,7 @@ namespace WaterTankTool_WFA
         {
             if (maskedTextBox1.Text != "" && _selectedTankCapacity != null)
             {
-                maskedTextBox4.Text = (Double.Parse(maskedTextBox1.Text) + Double.Parse(ExtractNumericValue(dimensions.Height))).ToString("F4");
+               maskedTextBox4.Text = (Double.Parse(maskedTextBox1.Text) + Double.Parse(ExtractNumericValue(dimensions.Height))).ToString("F4");
 
             }
             DoCalculations();
@@ -301,7 +302,7 @@ namespace WaterTankTool_WFA
                     DoCalculations();
 
                 }
-                else if (segmentProperties.SegmentType == "Cylinder" || segmentProperties.SegmentType == "Rizor")
+                else if (segmentProperties.SegmentType == "Cylinder" || segmentProperties.SegmentType == "Riser")
                 {
                     _segmentType = segmentProperties.SegmentType;
                     comboBox1.Visible = false;
@@ -602,7 +603,7 @@ namespace WaterTankTool_WFA
                         }
 
                         seg.SegmentName = richTextBox1.Text + suffix;
-                        seg.SegmentType = _segmentType;          // "Cylinder" or "Rizor"
+                        seg.SegmentType = _segmentType;          // "Cylinder" or "Riser"
                         seg.Diameter = diameter;
                         seg.Thickness = thickness;
                         seg.HeightInitial = heightInitial;
@@ -637,11 +638,11 @@ namespace WaterTankTool_WFA
                     }
                     else
                     {
-                        // Single entry (Rizor or single‑column Cylinder)
+                        // Single entry (Riser or single‑column Cylinder)
                         var seg = new SegmentProperties
                         {
                             SegmentName = richTextBox1.Text,
-                            SegmentType = _segmentType,               // "Rizor" or "Cylinder"
+                            SegmentType = _segmentType,               // "Riser" or "Cylinder"
                             Diameter = diameter,
                             Thickness = thickness,
                             HeightInitial = heightInitial,
@@ -689,7 +690,7 @@ namespace WaterTankTool_WFA
             {
                 Save_ClickBase(sender, e);
             }
-            else if (_segmentType == "Cylinder" || _segmentType == "Rizor")
+            else if (_segmentType == "Cylinder" || _segmentType == "Riser")
             {
                 Save_ClickCylinder(sender, e);
             }
@@ -962,7 +963,7 @@ namespace WaterTankTool_WFA
                 return;
             }
 
-            if (_segmentType == "Cylinder" || _segmentType == "Rizor")
+            if (_segmentType == "Cylinder" || _segmentType == "Riser")
             {
                 CalculateCylinderValues(heightInitial, heightFinal, diameter, thickness);
             }
@@ -986,7 +987,7 @@ namespace WaterTankTool_WFA
         {
             diameter = diameterFinal = thickness = heightInitial = heightFinal = 0.0;
 
-            bool isCylinderValid = (_segmentType == "Cylinder" || _segmentType == "Rizor") &&
+            bool isCylinderValid = (_segmentType == "Cylinder" || _segmentType == "Riser") &&
                                    double.TryParse(maskedTextBox2.Text, out diameter) &&
                                    double.TryParse(maskedTextBox3.Text, out thickness) &&
                                    double.TryParse(maskedTextBox1.Text, out heightInitial) &&
@@ -1046,26 +1047,29 @@ namespace WaterTankTool_WFA
         private void CalculateTankValues(double heightInitial, double heightFinal)
         {
             Segment_Cylinder_Equations cylinder_Equations = new Segment_Cylinder_Equations();
+
+            Multileg_Cylinders multileg_Cylinders = new Multileg_Cylinders();
             //var tankProperties = _context.TankProperties.FirstOrDefault();
             var tankProperties = tankData.Tanks.FirstOrDefault(data => data.Type == _selectedTankCapacity);
 
             if (tankProperties != null)
             {
                 double projectedArea = Double.Parse(ExtractNumericValue(tankProperties.Projected_Area));
-                double totalWeight = Double.Parse(ExtractNumericValue(tankProperties.Total_Weight));
+                double totalWeight = Double.Parse(ExtractNumericValue(tankProperties.Weight_of_Steel));
+                double diameter = Double.Parse(ExtractNumericValue(tankProperties.Diameter));
                 double f = calculateF(cylinder_Equations.qzi(heightInitial), cylinder_Equations.qzf(heightFinal), projectedArea);
+                double centroid = Double.Parse(ExtractNumericValue(tankProperties.Centroid));
 
-
-                textBox1.Text = projectedArea.ToString();
-                textBox2.Text = totalWeight.ToString();
+                textBox1.Text = totalWeight.ToString();
+                textBox2.Text = projectedArea.ToString();
                 textBox3.Text = tankProperties.Centroid;
-                textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
-                textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
-                textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
-                textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
-                textBox8.Text = f.ToString("F4");
-                textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
-                textBox10.Text = (f * cylinder_Equations.L(heightInitial, heightFinal)).ToString("F4");
+                textBox4.Text = multileg_Cylinders.kzi(heightInitial).ToString("F4");
+                textBox5.Text = multileg_Cylinders.kzf(heightFinal).ToString("F4");
+                textBox6.Text = multileg_Cylinders.qzi(heightInitial).ToString("F4");
+                textBox7.Text = multileg_Cylinders.qzf(heightFinal).ToString("F4");
+                textBox8.Text = multileg_Cylinders.F_Tank(heightInitial,heightFinal,diameter, projectedArea).ToString("F4");
+                textBox9.Text = multileg_Cylinders.L_Tank(heightInitial, centroid).ToString("F4");
+                textBox10.Text = (multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea) * multileg_Cylinders.L_Tank(heightInitial, centroid)).ToString("F4");
             }
             else
             {
@@ -1075,18 +1079,20 @@ namespace WaterTankTool_WFA
                 double projectedArea = ExtractDoubleValue(dimensions.Projected_Area);
                 double totalWeight = ExtractDoubleValue(dimensions.Total_Weight);
                 double f = calculateF(cylinder_Equations.qzi(heightInitial), cylinder_Equations.qzf(heightFinal), projectedArea);
+                double diameter = Double.Parse(ExtractNumericValue(dimensions.Diameter));
+                double centroid = Double.Parse(ExtractNumericValue(dimensions.Centroid));
 
 
-                textBox1.Text = projectedArea.ToString("F4");
-                textBox2.Text = totalWeight.ToString("F4");
-                textBox3.Text = dimensions.Centroid;
-                textBox4.Text = cylinder_Equations.kzi(heightInitial).ToString("F4");
-                textBox5.Text = cylinder_Equations.kzf(heightFinal).ToString("F4");
-                textBox6.Text = cylinder_Equations.qzi(heightInitial).ToString("F4");
-                textBox7.Text = cylinder_Equations.qzf(heightFinal).ToString("F4");
-                textBox8.Text = f.ToString("F4");
-                textBox9.Text = cylinder_Equations.L(heightInitial, heightFinal).ToString("F4");
-                textBox10.Text = (f * cylinder_Equations.L(heightInitial, heightFinal)).ToString("F4");
+                textBox1.Text = totalWeight.ToString();
+                textBox2.Text = projectedArea.ToString();
+                textBox3.Text = tankProperties.Centroid;
+                textBox4.Text = multileg_Cylinders.kzi(heightInitial).ToString("F4");
+                textBox5.Text = multileg_Cylinders.kzf(heightFinal).ToString("F4");
+                textBox6.Text = multileg_Cylinders.qzi(heightInitial).ToString("F4");
+                textBox7.Text = multileg_Cylinders.qzf(heightFinal).ToString("F4");
+                textBox8.Text = multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea).ToString("F4");
+                textBox9.Text = multileg_Cylinders.L_Tank(heightInitial, centroid).ToString("F4");
+                textBox10.Text = (multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea) * multileg_Cylinders.L_Tank(heightInitial, centroid)).ToString("F4");
             }
 
 
