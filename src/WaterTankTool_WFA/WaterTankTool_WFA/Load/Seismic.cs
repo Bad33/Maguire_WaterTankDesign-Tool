@@ -287,6 +287,20 @@ namespace WaterTankTool_WFA.Load
 
                 var res = Math.Max(val1, val2);
                 textBox10.Text = Math.Round((double)res, 4).ToString();
+
+
+                List<SegmentProperties> segmentData = _context.SegmentProperties.ToList();
+
+
+                Load_Combinations lc = new Load_Combinations();
+
+                var totalLoad = lc.GetTotalSegmentLoad(segmentData);
+
+                var v = res * totalLoad;
+
+                textBox13.Text = v.ToString();
+
+
             }
 
         }

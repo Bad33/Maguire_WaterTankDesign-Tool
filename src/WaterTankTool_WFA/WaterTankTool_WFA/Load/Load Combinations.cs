@@ -22,6 +22,13 @@ namespace WaterTankTool_WFA.Load
 
         double m = 0;
 
+        double D = 0;
+
+        double liveLoad = 0;
+        double windLoad = 0;
+        double snowLoad = 0;
+        double seismicLoad = 0;
+
         List<double> calculatedP = new List<double> { };
         List<double> calculatedM = new List<double> { };
         private void ShowError(string msg, string title = "Error")
@@ -59,6 +66,19 @@ namespace WaterTankTool_WFA.Load
                 advancedDataGridView1.Rows[index].Cells["Load Combination"].Value = val;
             }
 
+            var _liveLoad = _context.LiveLoadEntity.FirstOrDefault();
+            liveLoad = _liveLoad.Live_Load;
+            var _snowLoad = _context.SnowLoadEntity.FirstOrDefault();
+            snowLoad = _snowLoad.TotalSnowLoad;
+
+            var _windLoad = _context.WindLoadEntity.FirstOrDefault();
+            windLoad = _windLoad.Q;
+
+            //var _siesmic = _context.SeismicLoadEntity.FirstOrDefault();
+            //seismicLoad = _siesmic.;
+
+
+
             // Fill calculation data
             fillTableL1();
             fillTableL2();
@@ -94,8 +114,8 @@ namespace WaterTankTool_WFA.Load
 
             if (miscLoad != null)
             {
-                var result = Math.Round(otherWeight + miscLoad.Live_Load + totalSegmentWeight, 5);
-                calculatedP.Add(result);
+                D = Math.Round(otherWeight + miscLoad.Live_Load + totalSegmentWeight, 5);
+                calculatedP.Add(D);
                 calculatedM.Add(m);
             }
 
@@ -103,19 +123,27 @@ namespace WaterTankTool_WFA.Load
 
         private void fillTableL2()
         {
-            calculatedP.Add(m);
+
+            var result = liveLoad + D;
+
+            calculatedP.Add(result);
             calculatedM.Add(m);
         }
 
         private void fillTableL3()
         {
-            calculatedP.Add(m);
+
+            var result = snowLoad + D;
+
+            calculatedP.Add(result);
             calculatedM.Add(m);
         }
 
         private void fillTableL4()
         {
-            calculatedP.Add(m);
+            var result = D + (0.75 * (liveLoad + snowLoad));
+
+            calculatedP.Add(result);
             calculatedM.Add(m);
         }
 
@@ -143,7 +171,7 @@ namespace WaterTankTool_WFA.Load
             calculatedM.Add(m);
         }
 
-        private double GetTotalSegmentLoad(List<SegmentProperties> segment)
+        public double GetTotalSegmentLoad(List<SegmentProperties> segment)
         {
             Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();

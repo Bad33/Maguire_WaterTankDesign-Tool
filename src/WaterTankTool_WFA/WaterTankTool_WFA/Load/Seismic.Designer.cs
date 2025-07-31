@@ -70,6 +70,9 @@
             button2 = new Button();
             groupBox2 = new GroupBox();
             richTextBox1 = new RichTextBox();
+            label23 = new Label();
+            textBox13 = new TextBox();
+            label24 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
@@ -78,6 +81,9 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label24);
+            groupBox1.Controls.Add(textBox13);
+            groupBox1.Controls.Add(label23);
             groupBox1.Controls.Add(label22);
             groupBox1.Controls.Add(textBox12);
             groupBox1.Controls.Add(textBox11);
@@ -119,7 +125,7 @@
             groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(2);
-            groupBox1.Size = new Size(239, 470);
+            groupBox1.Size = new Size(239, 521);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Enter += groupBox1_Enter;
@@ -163,7 +169,7 @@
             label21.AutoSize = true;
             label21.Location = new Point(14, 294);
             label21.Name = "label21";
-            label21.Size = new Size(20, 15);
+            label21.Size = new Size(19, 15);
             label21.TabIndex = 35;
             label21.Text = "TL";
             // 
@@ -190,7 +196,7 @@
             label18.AutoSize = true;
             label18.Location = new Point(15, 358);
             label18.Name = "label18";
-            label18.Size = new Size(18, 15);
+            label18.Size = new Size(17, 15);
             label18.TabIndex = 32;
             label18.Text = "Ts";
             // 
@@ -404,7 +410,7 @@
             label8.Location = new Point(14, 322);
             label8.Margin = new Padding(2, 0, 2, 0);
             label8.Name = "label8";
-            label8.Size = new Size(17, 15);
+            label8.Size = new Size(16, 15);
             label8.TabIndex = 7;
             label8.Text = "Ti";
             // 
@@ -482,7 +488,7 @@
             // 
             // button1
             // 
-            button1.Location = new Point(97, 540);
+            button1.Location = new Point(88, 588);
             button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 24);
@@ -493,7 +499,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(179, 540);
+            button2.Location = new Point(179, 588);
             button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 24);
@@ -504,7 +510,7 @@
             // groupBox2
             // 
             groupBox2.Controls.Add(richTextBox1);
-            groupBox2.Location = new Point(20, 489);
+            groupBox2.Location = new Point(18, 537);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(237, 46);
             groupBox2.TabIndex = 3;
@@ -521,13 +527,40 @@
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
+            // label23
+            // 
+            label23.AutoSize = true;
+            label23.Location = new Point(15, 479);
+            label23.Name = "label23";
+            label23.Size = new Size(14, 15);
+            label23.TabIndex = 40;
+            label23.Text = "V";
+            // 
+            // textBox13
+            // 
+            textBox13.Location = new Point(88, 476);
+            textBox13.Name = "textBox13";
+            textBox13.ReadOnly = true;
+            textBox13.Size = new Size(108, 23);
+            textBox13.TabIndex = 41;
+            // 
+            // label24
+            // 
+            label24.AutoSize = true;
+            label24.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
+            label24.Location = new Point(200, 481);
+            label24.Name = "label24";
+            label24.Size = new Size(27, 13);
+            label24.TabIndex = 42;
+            label24.Text = "Kips";
+            // 
             // Seismic
             // 
             AcceptButton = button1;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(277, 575);
+            ClientSize = new Size(277, 623);
             Controls.Add(groupBox2);
             Controls.Add(button2);
             Controls.Add(button1);
@@ -589,5 +622,8 @@
         private TextBox textBox3;
         private GroupBox groupBox2;
         private RichTextBox richTextBox1;
+        private Label label23;
+        private Label label24;
+        private TextBox textBox13;
     }
 }

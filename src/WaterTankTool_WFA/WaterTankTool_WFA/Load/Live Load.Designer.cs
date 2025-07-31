@@ -45,7 +45,7 @@
             groupBox1.Margin = new Padding(2);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(2);
-            groupBox1.Size = new Size(274, 66);
+            groupBox1.Size = new Size(241, 66);
             groupBox1.TabIndex = 2;
             groupBox1.TabStop = false;
             groupBox1.Text = "Notes";
@@ -56,14 +56,14 @@
             richTextBox1.Location = new Point(13, 20);
             richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(247, 32);
+            richTextBox1.Size = new Size(212, 32);
             richTextBox1.TabIndex = 0;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
             // button1
             // 
-            button1.Location = new Point(121, 181);
+            button1.Location = new Point(99, 181);
             button1.Margin = new Padding(2);
             button1.Name = "button1";
             button1.Size = new Size(78, 31);
@@ -74,7 +74,7 @@
             // 
             // button2
             // 
-            button2.Location = new Point(216, 181);
+            button2.Location = new Point(183, 181);
             button2.Margin = new Padding(2);
             button2.Name = "button2";
             button2.Size = new Size(78, 31);
@@ -87,23 +87,22 @@
             label7.AutoSize = true;
             label7.Location = new Point(20, 44);
             label7.Name = "label7";
-            label7.Size = new Size(111, 15);
+            label7.Size = new Size(57, 15);
             label7.TabIndex = 12;
-            label7.Text = "Miscellaneous Load";
+            label7.Text = "Live Load";
             // 
             // textBox4
             // 
-            textBox4.Location = new Point(150, 44);
+            textBox4.Location = new Point(121, 41);
             textBox4.Name = "textBox4";
-            textBox4.Size = new Size(112, 23);
+            textBox4.Size = new Size(93, 23);
             textBox4.TabIndex = 13;
-            textBox4.Text = "15";
             // 
             // label8
             // 
             label8.AutoSize = true;
             label8.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            label8.Location = new Point(271, 44);
+            label8.Location = new Point(232, 44);
             label8.Name = "label8";
             label8.Size = new Size(29, 15);
             label8.TabIndex = 14;
@@ -115,7 +114,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(312, 232);
+            ClientSize = new Size(284, 232);
             Controls.Add(label8);
             Controls.Add(textBox4);
             Controls.Add(label7);
@@ -127,7 +126,7 @@
             Name = "Live_Load";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
-            Text = "Miscellaneous Load";
+            Text = "Live Load";
             groupBox1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();

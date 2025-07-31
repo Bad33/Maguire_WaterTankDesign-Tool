@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             advancedDataGridView1 = new Zuby.ADGV.AdvancedDataGridView();
             label1 = new Label();
@@ -55,8 +55,8 @@
             advancedDataGridView1.AllowUserToAddRows = false;
             advancedDataGridView1.AllowUserToDeleteRows = false;
             advancedDataGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle4.BackColor = Color.FromArgb(224, 224, 224);
-            advancedDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle3.BackColor = Color.FromArgb(224, 224, 224);
+            advancedDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
             advancedDataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             advancedDataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             advancedDataGridView1.BackgroundColor = SystemColors.ControlLight;
@@ -131,7 +131,7 @@
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = SystemColors.ButtonHighlight;
-            ClientSize = new Size(449, 338);
+            ClientSize = new Size(449, 346);
             Controls.Add(groupBox2);
             Controls.Add(label2);
             Controls.Add(textBox1);
@@ -164,5 +164,14 @@
         private Label label2;
         private GroupBox groupBox2;
         private RichTextBox richTextBox1;
+        private GroupBox groupBox3;
+        private Label label6;
+        private Label label5;
+        private Label label4;
+        private TextBox textBox2;
+        private Label label3;
+        private TextBox textBox5;
+        private TextBox textBox4;
+        private TextBox textBox3;
     }
 }
