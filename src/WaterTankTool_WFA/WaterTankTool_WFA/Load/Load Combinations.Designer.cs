@@ -28,25 +28,27 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             advancedDataGridView1 = new Zuby.ADGV.AdvancedDataGridView();
-            label1 = new Label();
-            textBox1 = new TextBox();
-            label2 = new Label();
             groupBox2 = new GroupBox();
             richTextBox1 = new RichTextBox();
+            button1 = new Button();
+            button2 = new Button();
+            button3 = new Button();
+            groupBox4 = new GroupBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)advancedDataGridView1).BeginInit();
             groupBox2.SuspendLayout();
+            groupBox4.SuspendLayout();
             SuspendLayout();
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(advancedDataGridView1);
-            groupBox1.Location = new Point(12, 70);
+            groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(428, 188);
+            groupBox1.Size = new Size(428, 189);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             // 
@@ -55,8 +57,8 @@
             advancedDataGridView1.AllowUserToAddRows = false;
             advancedDataGridView1.AllowUserToDeleteRows = false;
             advancedDataGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle3.BackColor = Color.FromArgb(224, 224, 224);
-            advancedDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(224, 224, 224);
+            advancedDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
             advancedDataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             advancedDataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             advancedDataGridView1.BackgroundColor = SystemColors.ControlLight;
@@ -74,43 +76,16 @@
             advancedDataGridView1.RowHeadersVisible = false;
             advancedDataGridView1.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
             advancedDataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            advancedDataGridView1.Size = new Size(422, 166);
+            advancedDataGridView1.Size = new Size(422, 167);
             advancedDataGridView1.SortStringChangedInvokeBeforeDatasourceUpdate = true;
             advancedDataGridView1.TabIndex = 0;
             advancedDataGridView1.CellContentClick += advancedDataGridView1_CellContentClick;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new Point(15, 34);
-            label1.Name = "label1";
-            label1.Size = new Size(141, 15);
-            label1.TabIndex = 1;
-            label1.Text = "Weights from Plate Steels";
-            // 
-            // textBox1
-            // 
-            textBox1.Location = new Point(230, 30);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(172, 23);
-            textBox1.TabIndex = 2;
-            textBox1.TextChanged += textBox1_TextChanged_1;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 8.25F, FontStyle.Italic, GraphicsUnit.Point, 0);
-            label2.Location = new Point(408, 34);
-            label2.Name = "label2";
-            label2.Size = new Size(27, 13);
-            label2.TabIndex = 3;
-            label2.Text = "Kips";
             // 
             // groupBox2
             // 
             groupBox2.BackColor = SystemColors.ButtonHighlight;
             groupBox2.Controls.Add(richTextBox1);
-            groupBox2.Location = new Point(15, 276);
+            groupBox2.Location = new Point(15, 290);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(422, 54);
             groupBox2.TabIndex = 4;
@@ -126,16 +101,56 @@
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
             // 
+            // button1
+            // 
+            button1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button1.Location = new Point(6, 31);
+            button1.Name = "button1";
+            button1.Size = new Size(109, 23);
+            button1.TabIndex = 5;
+            button1.Text = "0.6D + 0.6(W or E)";
+            button1.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            button2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button2.Location = new Point(153, 31);
+            button2.Name = "button2";
+            button2.Size = new Size(114, 23);
+            button2.TabIndex = 6;
+            button2.Text = "D + 0.75L + 0.75(0.6W or 0.6E) + 0.75(Lr or S)";
+            button2.UseVisualStyleBackColor = true;
+            // 
+            // button3
+            // 
+            button3.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            button3.Location = new Point(312, 31);
+            button3.Name = "button3";
+            button3.Size = new Size(106, 23);
+            button3.TabIndex = 7;
+            button3.Text = "D + 0.6(W or E)";
+            button3.UseVisualStyleBackColor = true;
+            // 
+            // groupBox4
+            // 
+            groupBox4.Controls.Add(button1);
+            groupBox4.Controls.Add(button3);
+            groupBox4.Controls.Add(button2);
+            groupBox4.Location = new Point(15, 208);
+            groupBox4.Name = "groupBox4";
+            groupBox4.Size = new Size(424, 76);
+            groupBox4.TabIndex = 8;
+            groupBox4.TabStop = false;
+            groupBox4.Text = "Select Load Combination for Check Table";
+            // 
             // Load_Combinations
             // 
             AutoScaleDimensions = new SizeF(96F, 96F);
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = SystemColors.ButtonHighlight;
-            ClientSize = new Size(449, 346);
+            ClientSize = new Size(449, 356);
+            Controls.Add(groupBox4);
             Controls.Add(groupBox2);
-            Controls.Add(label2);
-            Controls.Add(textBox1);
-            Controls.Add(label1);
             Controls.Add(groupBox1);
             Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 0);
             FormBorderStyle = FormBorderStyle.Fixed3D;
@@ -148,8 +163,8 @@
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)advancedDataGridView1).EndInit();
             groupBox2.ResumeLayout(false);
+            groupBox4.ResumeLayout(false);
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -173,5 +188,9 @@
         private TextBox textBox5;
         private TextBox textBox4;
         private TextBox textBox3;
+        private Button button1;
+        private Button button2;
+        private Button button3;
+        private GroupBox groupBox4;
     }
 }

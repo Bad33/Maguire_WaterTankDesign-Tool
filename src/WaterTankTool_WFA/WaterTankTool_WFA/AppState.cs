@@ -13,5 +13,7 @@ namespace WaterTankTool_WFA
         public static TankType CurrentTankType { get; set; } = TankType.None;
 
 
+        public static double SeismicV { get; set; } = 0;
+
     }
 }

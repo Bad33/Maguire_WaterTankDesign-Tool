@@ -19,6 +19,8 @@ public class WaterTankDbContext : DbContext
     public DbSet<SnowLoadEntity> SnowLoadEntity { get; set; }
     public DbSet<SeismicLoadEntity> SeismicLoadEntity { get; set; }   
 
+    public DbSet<DeadLoadEntity> DeadLoadEntity { get; set; }
+
     // Private constructor to prevent direct instantiation
 
     public WaterTankDbContext() : base() { }

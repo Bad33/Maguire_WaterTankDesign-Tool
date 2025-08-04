@@ -297,7 +297,7 @@ namespace WaterTankTool_WFA.Load
                 var totalLoad = lc.GetTotalSegmentLoad(segmentData);
 
                 var v = res * totalLoad;
-
+                AppState.SeismicV = v;
                 textBox13.Text = v.ToString();
 
 

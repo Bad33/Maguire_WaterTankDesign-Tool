@@ -56,11 +56,11 @@
         {
             "type": "150,000 gallon",
             "diameter": "34 meters",
-            "Centroid": "21.27",
+            "Centroid": "159.10",
             "height": "39.1126 meters",
             "Weight_of_Water": "1283 Kips",
-            "Weight_of_Steel": "54.9636 Kips",
-            "Total_Weight": "1337.9636 Kips",
+            "Weight_of_Steel": "66.2382 Kips",
+            "Total_Weight": "1349.2382 Kips",
             "Projected_Area": "966.01 ft²",
             "thickness": "0.0"
 

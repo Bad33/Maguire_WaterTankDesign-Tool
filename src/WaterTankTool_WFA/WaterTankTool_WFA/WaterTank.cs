@@ -671,5 +671,11 @@ namespace WaterTankTool_WFA
             Load_Combinations load_Combinations = new Load_Combinations();
             load_Combinations.ShowDialog();
         }
+
+        private void toolStripButton13_Click(object sender, EventArgs e)
+        {
+            DesignTable designTable = new DesignTable();
+            designTable.ShowDialog();
+        }
     }
 }

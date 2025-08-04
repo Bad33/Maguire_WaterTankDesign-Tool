@@ -1068,8 +1068,8 @@ namespace WaterTankTool_WFA
                 textBox6.Text = multileg_Cylinders.qzi(heightInitial).ToString("F4");
                 textBox7.Text = multileg_Cylinders.qzf(heightFinal).ToString("F4");
                 textBox8.Text = multileg_Cylinders.F_Tank(heightInitial,heightFinal,diameter, projectedArea).ToString("F4");
-                textBox9.Text = multileg_Cylinders.L_Tank(heightInitial, centroid).ToString("F4");
-                textBox10.Text = (multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea) * multileg_Cylinders.L_Tank(heightInitial, centroid)).ToString("F4");
+                textBox9.Text = tankProperties.Centroid;
+                textBox10.Text = (multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea) * Double.Parse(tankProperties.Centroid)).ToString("F4");
             }
             else
             {
@@ -1091,8 +1091,8 @@ namespace WaterTankTool_WFA
                 textBox6.Text = multileg_Cylinders.qzi(heightInitial).ToString("F4");
                 textBox7.Text = multileg_Cylinders.qzf(heightFinal).ToString("F4");
                 textBox8.Text = multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea).ToString("F4");
-                textBox9.Text = multileg_Cylinders.L_Tank(heightInitial, centroid).ToString("F4");
-                textBox10.Text = (multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea) * multileg_Cylinders.L_Tank(heightInitial, centroid)).ToString("F4");
+                textBox9.Text = tankProperties.Centroid;
+                textBox10.Text = (multileg_Cylinders.F_Tank(heightInitial, heightFinal, diameter, projectedArea) *Double.Parse(tankProperties.Centroid)).ToString("F4");
             }
 
 

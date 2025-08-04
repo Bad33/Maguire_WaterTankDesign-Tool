@@ -64,15 +64,15 @@ namespace WaterTankTool_WFA.Solver
                 ShowError("Please add Snow Load first!");   // shows once
                 return;                                     // skip the rest
             }
+            var solverForm = new DesignTable();
+            tabelData2s = (List<tabelData2>)solverForm.TableData2Results;
 
             try
             {
                 LoadData();
-                LoadAllowableCompressiveStress();
                 LoadSegmentWeightData();
                 LoadCummulativeWeightData();
                 WindLoadPerSegment();
-                LoadTable2();
                 LoadCheckTableData();
             }
             catch (Exception ex)
@@ -435,6 +435,8 @@ namespace WaterTankTool_WFA.Solver
         #region Check Table (fa / fb / check)
         private void LoadCheckTableData()
         {
+
+
             List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
@@ -478,138 +480,9 @@ namespace WaterTankTool_WFA.Solver
         }
         #endregion
 
-        #region Table-2 (Design parameters)
-        private void LoadTable2()
-        {
-            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
-            if (segmentData.Count == 0) return;
 
-            try
-            {
-                tabelData2s = segmentData.Select(segment =>
-                {
-                    double dFinal = segment.DiameterFinal ?? segment.Diameter;
-                    double radius = 12 * dFinal / 2.0;
-                    double rt = Math.Round((12 * dFinal / 2.0) / segment.Thickness, 4);
-                    double i = Math.Round((Math.PI / 64) *
-                                  (Math.Pow(12 * dFinal, 4) -
-                                   Math.Pow((12 * dFinal - 2 * segment.Thickness), 4)), 4);
-                    double a = Math.Round((Math.PI / 4) *
-                                  (Math.Pow(12 * dFinal, 2) -
-                                   Math.Pow((12 * dFinal - 2 * segment.Thickness), 2)), 4);
 
-                    double co = Math.Round(1022 / (195 + rt), 4);
-                    double r = Math.Round(Math.Sqrt(i / a), 4);
-
-                    double Fl;
-                    double rtcValue = double.TryParse(rtcLabel?.Text, out double rtc) ? rtc : 0;
-                    double fyVal = double.TryParse(Fy, out double fy) ? fy : 0;
-
-                    if (rt < rtcValue)
-                    {
-                        double v1 = Math.Round((233 * fyVal) / (2 * (166 + rt)), 4);
-                        double v2 = Math.Round(fyVal / 2, 4);
-                        Fl = Math.Min(v1, v2);
-                    }
-                    else
-                    {
-                        Fl = Math.Round((co * 29000000) / (2 * rt), 4);
-                    }
-
-                    double klr = Math.Round((2.1 * 2124) / r, 4);
-                    double Cc = Math.Round(Math.Sqrt((Math.Pow(Math.PI, 2) * 29000000) / Fl), 4);
-
-                    double Kf = klr <= 25 ? 1
-                              : klr <= Cc ? Math.Round(1 - 0.5 * Math.Pow(klr / Cc, 2), 4)
-                              : Math.Round(0.5 * Math.Pow(Cc / klr, 2), 4);
-
-                    double Fa = Math.Round((Fl / 1000) * Kf, 4);
-                    double Fb = Math.Round(Fl / 1000, 4);
-
-                    return new tabelData2
-                    {
-                        Segment = segment.SegmentName,
-                        Radius = Math.Round(radius, 4),
-                        Thickness = Math.Round(segment.Thickness, 4),
-                        Rt = rt,
-                        A = a,
-                        I = i,
-                        r = r,
-                        Co = co,
-                        Fl = Math.Round(Fl / 1000, 4),
-                        KLr = klr,
-                        Cc = Cc,
-                        Kf = Kf,
-                        Fa = Fa,
-                        Fb = Fb
-                    };
-                }).ToList();
-
-                dataGridView3.DataSource = tabelData2s;
-            }
-            catch (Exception ex)
-            {
-                ShowError($"Error while computing Table-2 values: {ex.Message}");
-            }
-        }
-        #endregion
-
-        #region Allowable Compressive Stress (TableLayout initial setup)
-        private void LoadAllowableCompressiveStress()
-        {
-            tableLayoutPanel1.Controls.Clear();
-
-            // static labels
-            string[] leftLabels = { "Fv", "k", "l", "(R/t)c", "E" };
-            string[] rightLabels = { "psi", null, "in", null, "psi" };
-
-            for (int i = 0; i < leftLabels.Length; i++)
-                tableLayoutPanel1.Controls.Add(new Label { Text = leftLabels[i] }, 0, i);
-
-            // Dropdown for Fy
-            ComboBox fyBox = new ComboBox { Dock = DockStyle.Fill };
-            fyBox.Items.AddRange(new[] { "30000", "32000", "34000", "36000", "38000", "40000" });
-            fyBox.SelectedItem = "36000";
-            Fy = "36000";
-            tableLayoutPanel1.Controls.Add(fyBox, 1, 0);
-
-            // Fixed cells
-            tableLayoutPanel1.Controls.Add(new Label { Text = "2.1" }, 1, 1);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "2124" }, 1, 2);
-            rtcLabel = new Label();
-            tableLayoutPanel1.Controls.Add(rtcLabel, 1, 3);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "29000000" }, 1, 4);
-
-            for (int i = 0; i < rightLabels.Length; i++)
-                if (rightLabels[i] != null)
-                    tableLayoutPanel1.Controls.Add(new Label { Text = rightLabels[i] }, 2, i);
-
-            UpdateRtcLabel(Fy);
-
-            fyBox.SelectedIndexChanged += (_, __) =>
-            {
-                Fy = fyBox.SelectedItem!.ToString();
-                UpdateRtcLabel(Fy);
-                LoadTable2();               // refresh design table
-            };
-        }
-
-        private void UpdateRtcLabel(string selectedFy)
-        {
-            rtcLabel.Text = selectedFy switch
-            {
-                "30000" => "420",
-                "32000" => "377",
-                "34000" => "354",
-                "36000" => "334",
-                "38000" => "316",
-                "40000" => "299",
-                _ => "0"
-            };
-        }
-        #endregion
 
         #region Segment Properties Table (dataGridView5)
         private void LoadData()
@@ -752,7 +625,6 @@ namespace WaterTankTool_WFA.Solver
                 LoadSegmentWeightData();
                 LoadCummulativeWeightData();
                 WindLoadPerSegment();
-                LoadTable2();
                 LoadCheckTableData();
             }
             catch (Exception ex)
@@ -767,6 +639,16 @@ namespace WaterTankTool_WFA.Solver
             h.ShowDialog();
         }
         #endregion
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void dataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 
     #region --- DTO / ViewModel classes (unchanged) ---
@@ -795,23 +677,7 @@ namespace WaterTankTool_WFA.Solver
         public double selfWeight { get; set; }
     }
 
-    public class tabelData2
-    {
-        public string Segment { get; set; }
-        public double Radius { get; set; }
-        public double Thickness { get; set; }
-        public double Rt { get; set; }
-        public double A { get; set; }
-        public double I { get; set; }
-        public double r { get; set; }
-        public double Co { get; set; }
-        public double Fl { get; set; }
-        public double KLr { get; set; }
-        public double Cc { get; set; }
-        public double Kf { get; set; }
-        public double Fa { get; set; }
-        public double Fb { get; set; }
-    }
+
 
     public class CheckTableData
     {

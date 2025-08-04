@@ -8,14 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Designer_Notes;
+using WaterTankTool_WFA.Entity;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace WaterTankTool_WFA.Load
 {
     public partial class Dead_Load : Form
     {
+
+        private WaterTankDbContext _context;
+
         public Dead_Load()
         {
             InitializeComponent();
+            var context = WaterTankDbContext.GetInstance();
+            _context = context;
+
 
             richTextBox1.Text = NotesManager.Notes.DeadLoadNotes ?? "";
         }
@@ -30,8 +38,29 @@ namespace WaterTankTool_WFA.Load
 
         private void button1_Click(object sender, EventArgs e)
         {
+            var deadload = new DeadLoadEntity
+            {
+                Miscellaneous_Load = double.Parse(textBox2.Text)
+            };
+            AddOrUpdateDeadLoad(deadload);
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
 
+        }
+
+        public void AddOrUpdateDeadLoad(DeadLoadEntity DeadLoad)
+        {
+            var existingData = _context.DeadLoadEntity.FirstOrDefault();
+
+            if (existingData == null)
+            {
+                _context.DeadLoadEntity.Add(DeadLoad);
+            }
+            else
+            {
+                existingData.Miscellaneous_Load = Double.Parse(textBox2.Text);
+            }
+
+            _context.SaveChanges();
         }
     }
 }

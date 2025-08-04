@@ -43,6 +43,12 @@
     <Compile Update="Segments\Define Segments.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Solver\AllowableStress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Solver\DesignTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Solver\Help.cs">
       <SubType>Form</SubType>
     </Compile>

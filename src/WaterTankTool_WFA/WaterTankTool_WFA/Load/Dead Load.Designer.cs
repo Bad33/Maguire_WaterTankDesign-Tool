@@ -123,7 +123,7 @@
             label3.Name = "label3";
             label3.Size = new Size(111, 15);
             label3.TabIndex = 6;
-            label3.Text = "Miscelleneous Load";
+            label3.Text = "Miscellaneous Load";
             // 
             // textBox2
             // 

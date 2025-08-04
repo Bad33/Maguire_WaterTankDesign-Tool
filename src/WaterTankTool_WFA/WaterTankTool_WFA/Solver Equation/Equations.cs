@@ -40,7 +40,7 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double ProjectedArea(double heightInitial,double heightfinal, double diameter)
         {
             var height = heightfinal - heightInitial;
-            var result = (height * diameter * 0.5 * Math.PI);
+            var result = (height * diameter );
             return Math.Round(result,5);
         }
 
@@ -166,7 +166,7 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double ProjectedArea(double heightInitial, double heightfinal, double diameter)
         {
             var height = heightfinal - heightInitial;
-            var result = (height * diameter * 0.5);
+            var result = (height * diameter );
             return Math.Round(result,5);
         }
 

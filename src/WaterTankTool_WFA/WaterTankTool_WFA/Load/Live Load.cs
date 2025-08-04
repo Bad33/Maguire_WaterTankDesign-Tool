@@ -23,7 +23,7 @@ namespace WaterTankTool_WFA.Load
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
             _context = context;
-           
+
             richTextBox1.Text = NotesManager.Notes.LiveLoadNotes ?? "";
         }
 
@@ -33,7 +33,9 @@ namespace WaterTankTool_WFA.Load
         {
             var LiveLoad = new LiveLoadEntity
             {
-                Live_Load = Double.Parse(textBox4.Text)
+                Live_Load = Double.Parse(textBox4.Text),
+                Roof_Live_Load = Double.Parse(textBox1.Text),
+                Design_Roof_Live_Load = Double.Parse(textBox3.Text)
             };
 
             AddOrUpdateLiveLoad(LiveLoad);
@@ -68,6 +70,37 @@ namespace WaterTankTool_WFA.Load
             // Immediately save changes to the single JSON file
             NotesManager.SaveNotes();
 
+        }
+
+        private void Live_Load_Load(object sender, EventArgs e)
+        {
+            var snowLoad = _context.SnowLoadEntity.FirstOrDefault();
+
+            if (snowLoad != null)
+            {
+                textBox2.Text = snowLoad.AreaSubjectedToSnow.ToString();
+
+            }
+
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (!(string.IsNullOrWhiteSpace(textBox1.Text)))
+            {
+                var roof = double.Parse(textBox1.Text);
+                var area = double.Parse(textBox2.Text);
+
+                var result = Math.Round((roof * area) / 1000, 5);
+
+                textBox3.Text = result.ToString();
+
+            }
+            else
+            {
+                textBox3.Text = string.Empty;
+            }
         }
     }
 }

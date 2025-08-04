@@ -1,23 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WaterTankTool_WFA.Entity
 {
-    public class LiveLoadEntity
+    public class DeadLoadEntity
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public double Live_Load {  get; set; }
 
-        public double Roof_Live_Load { get; set; }
-
-        public double Design_Roof_Live_Load { get; set; }
-
+        public Double Miscellaneous_Load { get; set; }
     }
 }

@@ -237,6 +237,8 @@ namespace WaterTankTool_WFA.Constants
 
 
 
+
+
     public static class RiskCategoryConstants
     {
         public static readonly Dictionary<string, Dictionary<string, double>> RiskCategoryTable =
