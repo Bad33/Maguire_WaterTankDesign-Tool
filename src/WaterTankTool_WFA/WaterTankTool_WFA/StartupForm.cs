@@ -634,7 +634,9 @@ namespace WaterTankTool_WFA
                         Ts REAL NOT NULL CHECK(Ts >= 0),
                         Sa REAL NOT NULL CHECK(Sa >= 0),
                         Lambda REAL NOT NULL CHECK(Lambda >= 0),
-                        Ai REAL NOT NULL CHECK(Ai >= 0)
+                        Ai REAL NOT NULL CHECK(Ai >= 0),
+                        V REAL NOT NULL CHECK(V >= 0)
+
                     );
                     CREATE TABLE IF NOT EXISTS LiveLoadEntity (
                         Id INTEGER PRIMARY KEY AUTOINCREMENT,

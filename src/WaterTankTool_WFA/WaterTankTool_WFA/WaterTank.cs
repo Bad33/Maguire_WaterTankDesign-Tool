@@ -330,8 +330,8 @@ namespace WaterTankTool_WFA
 
         private void solveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Solver_Output solver_Output = new Solver_Output(this);
-            solver_Output.ShowDialog();
+            //Solver_Output solver_Output = new Solver_Output(this);
+            //solver_Output.ShowDialog();
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -386,8 +386,8 @@ namespace WaterTankTool_WFA
 
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-            Solver_Output solver = new Solver_Output(this);
-            solver.ShowDialog();
+            //Solver_Output solver = new Solver_Output(this);
+            //solver.ShowDialog();
         }
 
         private void toolStripButton6_Click(object sender, EventArgs e)

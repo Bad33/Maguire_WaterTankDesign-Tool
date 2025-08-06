@@ -24,6 +24,25 @@ namespace WaterTankTool_WFA.Load
             var context = WaterTankDbContext.GetInstance();
             _context = context;
 
+            var snowLoad = _context.SnowLoadEntity.FirstOrDefault();
+            if (snowLoad != null)
+                textBox2.Text = snowLoad.AreaSubjectedToSnow.ToString();
+
+            // 2) Now load any existing LiveLoadEntity and populate the fields
+            var existing = _context.LiveLoadEntity.FirstOrDefault();
+            if (existing != null)
+            {
+                // Live load input
+                textBox4.Text = existing.Live_Load.ToString();
+
+                // Roof live load input
+                textBox1.Text = existing.Roof_Live_Load.ToString();
+
+                // Design roof live load (you could also let your TextChanged event recalc,
+                // but to keep exactly what was saved, assign it directly)
+                textBox3.Text = existing.Design_Roof_Live_Load.ToString();
+            }
+
             richTextBox1.Text = NotesManager.Notes.LiveLoadNotes ?? "";
         }
 

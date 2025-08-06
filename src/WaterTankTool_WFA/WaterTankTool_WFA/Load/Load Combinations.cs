@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Designer_Notes;
 using WaterTankTool_WFA.Entity;
+using WaterTankTool_WFA.Solver;
 using WaterTankTool_WFA.Solver_Equation;
 
 namespace WaterTankTool_WFA.Load
@@ -61,8 +62,8 @@ namespace WaterTankTool_WFA.Load
 
             // Add predefined load combinations to column A
             string[] predefinedValues = {
-                    "D", "D + L", "D + (Lr or S)", "D + 0.75(L + S)",
-                    "D + 0.6(W or E)", "D + 0.75(L+S) + 0.75(0.6W or 0.6E)",
+                    "D", "D + L", "D + (Lr or S)", "D + 0.75L + 0.75(Lr or S)",
+                    "D + 0.6(W or E)", "D + 0.75L + 0.75(0.6W or 0.6E) + 0.75(Lr or S)",
                     "0.6D + 0.6(W or E)"
     };
 
@@ -90,7 +91,7 @@ namespace WaterTankTool_WFA.Load
             fillTableL5();
             fillTableL6();
             fillTableL7();
-     
+
 
             // Fill B and C columns without adding new rows
             addRowsValues();
@@ -117,7 +118,7 @@ namespace WaterTankTool_WFA.Load
 
             if (MiscLoad != null)
             {
-                D = Math.Round(otherWeight + MiscLoad.Miscellaneous_Load + totalSegmentWeight, 5);
+                D = Math.Round(MiscLoad.Miscellaneous_Load + totalSegmentWeight, 5);
                 calculatedP.Add(D);
                 calculatedM.Add(m);
             }
@@ -127,7 +128,7 @@ namespace WaterTankTool_WFA.Load
         private void fillTableL2()
         {
 
-            var result = Math.Round(liveLoad + D,5);
+            var result = Math.Round(liveLoad + D, 5);
 
             calculatedP.Add(result);
             calculatedM.Add(m);
@@ -136,7 +137,7 @@ namespace WaterTankTool_WFA.Load
         private void fillTableL3()
         {
 
-            var result = Math.Round((D + Math.Max(snowLoad,roofLiveLoad)),5);
+            var result = Math.Round((D + Math.Max(snowLoad, roofLiveLoad)), 5);
 
             calculatedP.Add(result);
             calculatedM.Add(m);
@@ -144,7 +145,7 @@ namespace WaterTankTool_WFA.Load
 
         private void fillTableL4()
         {
-            var result = Math.Round((D + (0.75 * (liveLoad + snowLoad))),5);
+            var result = Math.Round((D + (0.75 * (liveLoad + snowLoad))), 5);
 
             calculatedP.Add(result);
             calculatedM.Add(m);
@@ -153,23 +154,23 @@ namespace WaterTankTool_WFA.Load
         private void fillTableL5()
         {
             List<SegmentProperties> segmentData = _context.SegmentProperties.ToList();
-            if(segmentData != null)
+            if (segmentData != null)
             {
                 GetBaseMoment(segmentData);
 
             }
 
             var resultP = D;
-            var resultM = Math.Round((0.6 * (Math.Max(windBaseMoment, seismicBaseMoment))),5);
+            var resultM = Math.Round((0.6 * (Math.Max(windBaseMoment, seismicBaseMoment))), 5);
 
-            calculatedP.Add(Math.Round(resultP,5));
+            calculatedP.Add(Math.Round(resultP, 5));
             calculatedM.Add(resultM);
         }
 
         private void fillTableL6()
         {
-            var resP = Math.Round((D + (0.75 * liveLoad) + (0.75 * Math.Max(roofLiveLoad, snowLoad))),5);
-            var resM = Math.Round((0.75 * (Math.Max(0.6 * windBaseMoment, 0.6 * seismicBaseMoment))),5);
+            var resP = Math.Round((D + (0.75 * liveLoad) + (0.75 * Math.Max(roofLiveLoad, snowLoad))), 5);
+            var resM = Math.Round((0.75 * (Math.Max(0.6 * windBaseMoment, 0.6 * seismicBaseMoment))), 5);
 
             calculatedP.Add(resP);
             calculatedM.Add(resM);
@@ -177,8 +178,8 @@ namespace WaterTankTool_WFA.Load
 
         private void fillTableL7()
         {
-            var resP = Math.Round(0.6 * D,5);
-            var resM = Math.Round((0.6 * Math.Max(windBaseMoment, seismicBaseMoment)),5);
+            var resP = Math.Round(0.6 * D, 5);
+            var resM = Math.Round((0.6 * Math.Max(windBaseMoment, seismicBaseMoment)), 5);
 
             calculatedP.Add(resP);
             calculatedM.Add(resM);
@@ -202,7 +203,7 @@ namespace WaterTankTool_WFA.Load
             List<SegmentProperties> baseSegment = segment.FindAll(x => x.SegmentType == "Base");
 
             var tankProperties = _context?.TankProperties?.FirstOrDefault();
-            var seismicLoad = _context?.SeismicLoadEntity.FirstOrDefault();
+            var seismicLoad = _context?.SeismicLoadEntity?.FirstOrDefault();
             if (tankProperties == null)
             {
                 ShowError("Please add segments first! (Tank Properties were not found)");
@@ -215,8 +216,8 @@ namespace WaterTankTool_WFA.Load
 
             windBaseMoment += multi_leg_equations.F_Tank(tankSegment[0].HeightInitial, tankSegment[0].HeightFinal, tankSegment[0].Diameter, Double.Parse(tankProperties.ProjectedArea)) * Double.Parse(tankProperties.Centroid);
 
-           
-            
+
+
 
             foreach (var item in cylinderSegment)
             {
@@ -227,7 +228,7 @@ namespace WaterTankTool_WFA.Load
 
 
             }
-            
+
 
             foreach (var item in baseSegment)
             {
@@ -235,16 +236,20 @@ namespace WaterTankTool_WFA.Load
 
                 windBaseMoment += segment_Conical_Equations.Mbase(item.HeightInitial, item.HeightFinal, diameter);
 
-                var weight = segment_Conical_Equations.weight(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal,item.Thickness);
-                var com = segment_Conical_Equations.Centroid(item.HeightInitial, item.HeightFinal,(double)item.DiameterInitial,(double)item.DiameterFinal);
+                var weight = segment_Conical_Equations.weight(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal, item.Thickness);
+                var com = segment_Conical_Equations.Centroid(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal);
                 comXweight += weight * com;
 
             }
             var misc = _context?.DeadLoadEntity.FirstOrDefault();
 
-            var res = double.Parse(tankProperties.TotalWeight) + misc.Miscellaneous_Load ;
+            var res = double.Parse(tankProperties.TotalWeight) + misc.Miscellaneous_Load;
 
-            seismicBaseMoment = (comXweight / res) * 8;
+            if(seismicLoad != null)
+            {
+
+                seismicBaseMoment = (comXweight / res) * seismicLoad.V;
+            }
         }
 
         public double GetTotalSegmentLoad(List<SegmentProperties> segment)
@@ -323,7 +328,7 @@ namespace WaterTankTool_WFA.Load
             fillTableL5();
             fillTableL6();
             fillTableL7();
-       
+
 
             // Update DataGridView
             for (int i = 0; i < calculatedP.Count && i < advancedDataGridView1.Rows.Count; i++)
@@ -344,6 +349,25 @@ namespace WaterTankTool_WFA.Load
         private void Load_Combinations_Shown(object sender, EventArgs e)
         {
             advancedDataGridView1.ClearSelection();
+        }
+
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            Solver_Output solver = new Solver_Output("A", "D + 0.6(W or E)"); // A -> D + 0.6(W or E) , B -> D + 0.75L + 0.75(0.6W , C -> 0.6D + 0.6 (W pr E)
+            solver.ShowDialog();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            Solver_Output solver = new Solver_Output("B", "D + 0.75L + 0.75(0.6W or 0.6E)"); // A -> D + 0.6(W or E) , B -> D + 0.75L + 0.75(0.6W , C -> 0.6D + 0.6 (W pr E)
+            solver.ShowDialog();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Solver_Output solver = new Solver_Output("C", "0.6D + 0.6 (W or E)"); // A -> D + 0.6(W or E) , B -> D + 0.75L + 0.75(0.6W , C -> 0.6D + 0.6 (W pr E)
+            solver.ShowDialog();
         }
     }
 }

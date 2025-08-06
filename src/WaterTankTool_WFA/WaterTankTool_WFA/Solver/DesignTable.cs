@@ -49,85 +49,132 @@ namespace WaterTankTool_WFA.Solver
 
         private void ShowError(string msg, string title = "Error")
              => MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
-
         private void LoadTable2()
         {
-            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+            // 1) fetch & sort
+            var segmentList = _context.SegmentProperties
+                                      .OrderByDescending(s => s.HeightInitial)
+                                      .ToList();
+            if (segmentList.Count == 0)
+                return;
 
-            AllowableStress allow = new AllowableStress();
+            // 2) first pass: compute each segment’s geometry + r, Fl, Cc
+            var temp = new List<(
+                SegmentProperties seg,
+                double radius,
+                double thickness,
+                double rt,
+                double a,
+                double i,
+                double co,
+                double Fl,
+                double Cc,
+                double r
+            )>();
 
-            if (segmentData.Count == 0) return;
-
-            try
+            foreach (var seg in segmentList)
             {
-                tabelData2s = segmentData.Select(segment =>
+                if (seg.SegmentType == "Tanks")
                 {
-                    double dFinal = segment.DiameterFinal ?? segment.Diameter;
-                    double radius = 12 * dFinal / 2.0;
-                    double rt = Math.Round((12 * dFinal / 2.0) / segment.Thickness, 4);
-                    double i = Math.Round((Math.PI / 64) *
-                                  (Math.Pow(12 * dFinal, 4) -
-                                   Math.Pow((12 * dFinal - 2 * segment.Thickness), 4)), 4);
-                    double a = Math.Round((Math.PI / 4) *
-                                  (Math.Pow(12 * dFinal, 2) -
-                                   Math.Pow((12 * dFinal - 2 * segment.Thickness), 2)), 4);
+                    // all zero for "Tanks"
+                    temp.Add((seg, 0, 0, 0, 0, 0, 0, 0, 0, 0));
+                    continue;
+                }
 
-                    double co = Math.Round(1022 / (195 + rt), 4);
-                    double r = Math.Round(Math.Sqrt(i / a), 4);
 
-                    double Fl;
-                    double rtcValue = double.TryParse(allow.rtcLabel?.Text, out double rtc) ? rtc : 0;
-                    double fyVal = double.TryParse(allow.Fy, out double fy) ? fy : 0;
+                double dFinal = seg.DiameterFinal ?? seg.Diameter;
+                double radius = 12 * dFinal / 2.0;
+                double rt = Math.Round((12 * dFinal / 2.0) / seg.Thickness, 4);
 
-                    if (rt < rtcValue)
-                    {
-                        double v1 = Math.Round((233 * fyVal) / (2 * (166 + rt)), 4);
-                        double v2 = Math.Round(fyVal / 2, 4);
-                        Fl = Math.Min(v1, v2);
-                    }
-                    else
-                    {
-                        Fl = Math.Round((co * 29000000) / (2 * rt), 4);
-                    }
+                double iVal = Math.Round((Math.PI / 64) *
+                              (Math.Pow(12 * dFinal, 4) -
+                               Math.Pow(12 * dFinal - 2 * seg.Thickness, 4)), 4);
 
-                    double klr = Math.Round((2.1 * 2124) / r, 4);
-                    double Cc = Math.Round(Math.Sqrt((Math.Pow(Math.PI, 2) * 29000000) / Fl), 4);
+                double aVal = Math.Round((Math.PI / 4) *
+                              (Math.Pow(12 * dFinal, 2) -
+                               Math.Pow(12 * dFinal - 2 * seg.Thickness, 2)), 4);
 
-                    double Kf = klr <= 25 ? 1
-                              : klr <= Cc ? Math.Round(1 - 0.5 * Math.Pow(klr / Cc, 2), 4)
-                              : Math.Round(0.5 * Math.Pow(Cc / klr, 2), 4);
+                double co = Math.Round(1022 / (195 + rt), 4);
+                double r = Math.Round(Math.Sqrt(iVal / aVal), 4);
 
-                    double Fa = Math.Round((Fl / 1000) * Kf, 4);
-                    double Fb = Math.Round(Fl / 1000, 4);
+                // allowable-stress state
+                double rtcValue = AppState.Rtc;
+                double fyVal = double.Parse(AppState.Fy);
 
-                    return new tabelData2
-                    {
-                        Segment = segment.SegmentName,
-                        Radius = Math.Round(radius, 4),
-                        Thickness = Math.Round(segment.Thickness, 4),
-                        Rt = rt,
-                        A = a,
-                        I = i,
-                        r = r,
-                        Co = co,
-                        Fl = Math.Round(Fl / 1000, 4),
-                        KLr = klr,
-                        Cc = Cc,
-                        Kf = Kf,
-                        Fa = Fa,
-                        Fb = Fb
-                    };
-                }).ToList();
+                double Fl = rt < rtcValue
+                    ? Math.Min(
+                          Math.Round((233 * fyVal) / (2 * (166 + rt)), 4),
+                          Math.Round(fyVal / 2, 4)
+                      )
+                    : Math.Round((co * 29_000_000) / (2 * rt), 4);
 
-                
-                dataGridView1.DataSource = tabelData2s;
+                double Cc = Math.Round(Math.Sqrt((Math.Pow(Math.PI, 2) * 29_000_000) / Fl), 4);
+
+                temp.Add((seg, radius, seg.Thickness, rt, aVal, iVal, co, Fl, Cc, r));
             }
-            catch (Exception ex)
+
+            // 3) second pass: prefix sum of r to get prefix-average, numerator is HeightFinal only
+            tabelData2s = new List<tabelData2>(temp.Count);
+            double runningRsum = 0.0;
+            int revCount = 0;
+            for (int i = temp.Count - 1; i >= 0; i--)
             {
-                ShowError($"Error while computing Table-2 values: {ex.Message}");
+                revCount++;
+                // accumulate r of this segment
+                runningRsum += temp[i].r;
+
+                // average of the last revCount r’s
+                double avgR = runningRsum / revCount;
+
+                // height for *this* segment only
+                double hf = temp[i].seg.HeightFinal;
+
+                // KLr = 2 * 12 * hf / avgR
+                double klr = Math.Round((2 * 12 * hf) / avgR, 4);
+
+                // Kf, Fa, Fb as you already do...
+                double Cc = temp[i].Cc;
+                double Fl = temp[i].Fl;
+                double Kf = klr <= 25
+                    ? 1
+                    : klr <= Cc
+                        ? Math.Round(1 - 0.5 * Math.Pow(klr / Cc, 2), 4)
+                        : Math.Round(0.5 * Math.Pow(Cc / klr, 2), 4);
+
+                double Fa = Math.Round((Fl / 1000) * Kf, 4);
+                double Fb = Math.Round(Fl / 1000, 4);
+
+                tabelData2s.Add(new tabelData2
+                {
+                    Segment = temp[i].seg.SegmentName,
+                    Radius = Math.Round(temp[i].radius, 4),
+                    Thickness = Math.Round(temp[i].thickness, 4),
+                    Rt = temp[i].rt,
+                    A = temp[i].a,
+                    I = temp[i].i,
+                    r = temp[i].r,
+                    Co = temp[i].co,
+                    Fl = Math.Round(Fl / 1000, 4),
+                    KLr = klr,
+                    Cc = Cc,
+                    Kf = Kf,
+                    Fa = Fa,
+                    Fb = Fb
+                });
             }
+
+            // We built the list from bottom→top, so reverse it to restore the original order:
+            tabelData2s.Reverse();
+
+            // Bind
+            dataGridView1.DataSource = tabelData2s;
         }
+
+
+
+
+
+
 
         public IReadOnlyList<tabelData2> TableData2Results
         {

@@ -48,16 +48,22 @@ namespace WaterTankTool_WFA.Solver
         public List<WindTable> windLoadData = new List<WindTable>();
         public List<designTableData> segmentPropertiesTableData = new List<designTableData>();
         public List<tabelData2> tabelData2s = new List<tabelData2>();
+
+        public string _loadCombo;
         #endregion
 
         #region Constructor
-        public Solver_Output(WaterTank waterTankForm)
+        public Solver_Output(string loadCombo,string titleLoad)
         {
             InitializeComponent();
 
+            this.Text = $"{this.Text} ({titleLoad})";
+
             // Context (singleton)
             _context = WaterTankDbContext.GetInstance();
-            _waterTankForm = waterTankForm;
+            //_waterTankForm = waterTankForm;
+            _loadCombo = loadCombo;
+            Qwind = _context.WindLoadEntity.FirstOrDefault();
 
             if (_context.SnowLoadEntity.FirstOrDefault() == null)
             {
@@ -152,6 +158,7 @@ namespace WaterTankTool_WFA.Solver
             }
 
             var cylinderEq = new Segment_Cylinder_Equations();
+            var baseEq = new Segment_Conical_Equations();
 
             double cumulativeFwind = 0;
             foreach (var segment in segmentData)
@@ -164,35 +171,51 @@ namespace WaterTankTool_WFA.Solver
                                         cylinderEq.qzi(segment.HeightInitial),
                                         cylinderEq.qzf(segment.HeightFinal),
                                         projectedArea);
-                    loadLocation = ExtractDoubleValue(tankProperties.Centroid) + segment.HeightInitial;
+                    loadLocation = ExtractDoubleValue(tankProperties.Centroid);
                 }
-                else
+                else if(segment.SegmentType == "Cylinder")
                 {
                     fwind = cylinderEq.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
                     loadLocation = cylinderEq.L(segment.HeightInitial, segment.HeightFinal);
                 }
+                else
+                {
+                    fwind = baseEq.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
+                    loadLocation = baseEq.L(segment.HeightInitial, segment.HeightFinal);
+                }
 
-                double baseElevation = segment.HeightInitial;
+                    double baseElevation = segment.HeightInitial;
                 double armLength = loadLocation - baseElevation;
-                double farm = fwind * armLength;
-                cumulativeFwind += fwind;
 
                 double prevContrib = windLoadData
                                      .Sum(row => Double.Parse(row.Fwind) *
                                                  (Double.Parse(row.LoadLocation) - baseElevation));
 
+
+                if(_loadCombo == "A" || _loadCombo == "C")
+                {
+                    fwind = 0.6 * fwind;
+                }
+                else if (_loadCombo == "B")
+                {
+                    fwind = 0.75 * (0.6 * fwind);
+
+                }
+                cumulativeFwind += fwind;
+                double farm = fwind * armLength;
+
                 double mwind = farm + prevContrib;
 
                 windLoadData.Add(new WindTable
-                {
-                    Fwind = Math.Round(fwind, 4).ToString(),
-                    Vwind = Math.Round(cumulativeFwind, 4).ToString(),
-                    BaseElevation = Math.Round(baseElevation, 4).ToString(),
-                    LoadLocation = Math.Round(loadLocation, 4).ToString(),
-                    ArmLength = Math.Round(armLength, 4).ToString(),
-                    FArm = Math.Round(farm, 4).ToString(),
-                    Mwind = Math.Round(mwind, 4).ToString()
-                });
+                    {
+                        Fwind = Math.Round(fwind, 4).ToString(),
+                        Vwind = Math.Round(cumulativeFwind, 4).ToString(),
+                        BaseElevation = Math.Round(baseElevation, 4).ToString(),
+                        LoadLocation = Math.Round(loadLocation, 4).ToString(),
+                        ArmLength = Math.Round(armLength, 4).ToString(),
+                        FArm = Math.Round(farm, 4).ToString(),
+                        Mwind = Math.Round(mwind, 4).ToString()
+                    });
             }
 
             // ensure segment weights are loaded once (no duplicates)
@@ -201,9 +224,17 @@ namespace WaterTankTool_WFA.Solver
 
             dataGridView7.DataSource = windLoadData;
         }
-
+        private WindLoadEntity Qwind;
         private double calculateF(double qzi, double qzf, double projectedArea)
-            => (((qzi + qzf) / 2) * projectedArea) / 1000;
+        {
+       
+
+        var result1 = 30 * Qwind.Cf * (projectedArea / 1000);
+
+            var result2 = (((qzi + qzf) / 2) * Qwind.Cf * Qwind.G * (projectedArea / 1000));
+
+            return Math.Max(result1, result2);
+        }
         #endregion
 
         #region Segment Gravity Loads
@@ -213,9 +244,11 @@ namespace WaterTankTool_WFA.Solver
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
             var snowEntity = _context?.SnowLoadEntity?.FirstOrDefault();
-            if (snowEntity == null)
+            var liveLoad = _context?.LiveLoadEntity?.FirstOrDefault();
+            var deadLoad = _context?.DeadLoadEntity?.FirstOrDefault();
+            if (snowEntity == null || liveLoad == null || deadLoad==null)
             {
-                ShowError("Please add Snow Load first!");
+                ShowError("Please add all the Loads first!");
                 return;
             }
 
@@ -278,8 +311,30 @@ namespace WaterTankTool_WFA.Solver
             string snowWeightStr = snowEntity.TotalSnowLoad.ToString();
             snowWeight = snowWeightStr;
             selfWeight = foundTank.Weight_of_Steel;
+            double miscLoad = deadLoad.Miscellaneous_Load;
 
-            double miscLoad = 15;
+            double final_load = 0;
+
+            if (_loadCombo == "B")
+            {
+                var extraP_Load = (0.75 * liveLoad.Live_Load) + 0.75 * (Math.Max(liveLoad.Roof_Live_Load, snowEntity.TotalSnowLoad));
+                final_load = (double.Parse(selfWeight) + extraP_Load + miscLoad);
+                snowWeightStr = "0";
+
+            }
+            else if(_loadCombo == "C")
+            {
+                final_load = 0.6 * (double.Parse(selfWeight)  + miscLoad);
+                waterWeight = (0.6 * (double.Parse(waterWeight))).ToString();
+
+            }
+            else if (_loadCombo == "A")
+            {
+                final_load = (double.Parse(selfWeight) + miscLoad);
+                snowWeightStr = "0";
+
+            }
+
 
             var cylinderEq = new Segment_Cylinder_Equations();
             var conicalEq = new Segment_Conical_Equations();
@@ -290,8 +345,8 @@ namespace WaterTankTool_WFA.Solver
                 .Select(_ => new segmentGravityLoad
                 {
                     waterWeight = waterWeight,
-                    snowWeight = (double.Parse(snowWeightStr) + miscLoad).ToString(),
-                    selfWeight = Math.Round(waterWeightDbl, 4).ToString()
+                    snowWeight = snowWeightStr,
+                    selfWeight = (final_load).ToString("f5")
                 }).ToList();
 
             // Cylinder
@@ -338,6 +393,7 @@ namespace WaterTankTool_WFA.Solver
         {
             List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
             segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+            var deadLoad = _context?.DeadLoadEntity?.FirstOrDefault();
 
             if (segmentData.Count == 0)
             {
@@ -395,7 +451,7 @@ namespace WaterTankTool_WFA.Solver
             }
             string snowWeightStr = snowEntity.TotalSnowLoad.ToString();
 
-            double miscLoad = 15;
+            double miscLoad = deadLoad != null ? deadLoad.Miscellaneous_Load : 15;
 
             // Build cumulative self-weight list (res[i] holds Σ selfWeight[0..i])
             List<string> cumulative = new();
@@ -418,7 +474,12 @@ namespace WaterTankTool_WFA.Solver
                                : "0";
 
                 double snowDbl = double.TryParse(snowWeightStr, out double sn) ? sn : 0;
-                string snowSum = (snowDbl + miscLoad).ToString();
+                string snowSum = (snowDbl).ToString();
+
+                if(_loadCombo == "A" || _loadCombo == "B")
+                {
+                    snowSum = "0";
+                }
 
                 return new segmentGravityLoad
                 {

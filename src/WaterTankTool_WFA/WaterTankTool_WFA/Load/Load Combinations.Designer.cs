@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             advancedDataGridView1 = new Zuby.ADGV.AdvancedDataGridView();
             groupBox2 = new GroupBox();
@@ -57,8 +57,8 @@
             advancedDataGridView1.AllowUserToAddRows = false;
             advancedDataGridView1.AllowUserToDeleteRows = false;
             advancedDataGridView1.AllowUserToResizeRows = false;
-            dataGridViewCellStyle2.BackColor = Color.FromArgb(224, 224, 224);
-            advancedDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(224, 224, 224);
+            advancedDataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             advancedDataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             advancedDataGridView1.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             advancedDataGridView1.BackgroundColor = SystemColors.ControlLight;
@@ -104,32 +104,35 @@
             // button1
             // 
             button1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button1.Location = new Point(6, 31);
+            button1.Location = new Point(309, 31);
             button1.Name = "button1";
             button1.Size = new Size(109, 23);
             button1.TabIndex = 5;
             button1.Text = "0.6D + 0.6(W or E)";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
             button2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
             button2.Location = new Point(153, 31);
             button2.Name = "button2";
-            button2.Size = new Size(114, 23);
+            button2.Size = new Size(131, 23);
             button2.TabIndex = 6;
             button2.Text = "D + 0.75L + 0.75(0.6W or 0.6E) + 0.75(Lr or S)";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click_1;
             // 
             // button3
             // 
             button3.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            button3.Location = new Point(312, 31);
+            button3.Location = new Point(13, 31);
             button3.Name = "button3";
             button3.Size = new Size(106, 23);
             button3.TabIndex = 7;
             button3.Text = "D + 0.6(W or E)";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click_1;
             // 
             // groupBox4
             // 

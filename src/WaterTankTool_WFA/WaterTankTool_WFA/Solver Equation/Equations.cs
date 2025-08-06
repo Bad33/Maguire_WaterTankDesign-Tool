@@ -92,9 +92,9 @@ namespace WaterTankTool_WFA.Solver_Equation
             if (Qwind != null)
             {
 
-                var value1 = Qwind.Q * kzi(heightInitial) * Qwind.G;
-                var value2 = 30 * Qwind.Cf;
-                result = Math.Max(value1,value2);
+                var value1 = Qwind.Q * kzi(heightInitial)  ;
+                //var value2 = 30 * Qwind.Cf;
+                result = value1;
             }
 
             return result;
@@ -106,9 +106,9 @@ namespace WaterTankTool_WFA.Solver_Equation
             if (Qwind != null)
             {
 
-                var value1 = Qwind.Q * kzf(heightFinal) * Qwind.G;
-                var value2 = 30 * Qwind.Cf;
-                result = Math.Max(value1, value2);
+                var value1 = Qwind.Q * kzf(heightFinal);
+                //var value2 = 30 * Qwind.Cf;
+                result = value1;
             }
 
             return result;
@@ -276,8 +276,8 @@ namespace WaterTankTool_WFA.Solver_Equation
             {
 
                 var value1 = Qwind.Q * kzi(heightInitial) * Qwind.G;
-                var value2 = 30 * Qwind.Cf;
-                result = Math.Max(value1, value2);
+                //var value2 = 30 * Qwind.Cf;
+                result = value1;
             }
 
             return Math.Round(result,5);
@@ -290,8 +290,8 @@ namespace WaterTankTool_WFA.Solver_Equation
             {
 
                 var value1 = Qwind.Q * kzf(heightFinal) * Qwind.G;
-                var value2 = 30 * Qwind.Cf;
-                result = Math.Max(value1, value2);
+                //var value2 = 30 * Qwind.Cf;
+                result = value1;
             }
 
             return Math.Round(result,5);
@@ -465,8 +465,8 @@ namespace WaterTankTool_WFA.Solver_Equation
             {
 
                 var value1 = Qwind.Q * kzi(heightInitial) * Qwind.G;
-                var value2 = 30 * Qwind.Cf;
-                result = Math.Max(value1, value2);
+                //var value2 = 30 * Qwind.Cf;
+                result = value1;
             }
 
             return result;
@@ -479,8 +479,8 @@ namespace WaterTankTool_WFA.Solver_Equation
             {
 
                 var value1 = Qwind.Q * kzf(heightFinal) * Qwind.G;
-                var value2 = 30 * Qwind.Cf;
-                result = Math.Max(value1, value2);
+                //var value2 = 30 * Qwind.Cf;
+                result = value1;
             }
 
             return result;

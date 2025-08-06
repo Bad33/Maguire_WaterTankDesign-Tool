@@ -29,7 +29,7 @@ namespace WaterTankTool_WFA.Solver
             tableLayoutPanel1.Controls.Clear();
 
             // static labels
-            string[] leftLabels = { "Fv", "k", "l", "(R/t)c", "E" };
+            string[] leftLabels = { "Fy", "K", "L", "(R/t)c", "E" };
             string[] rightLabels = { "psi", null, "in", null, "psi" };
 
             for (int i = 0; i < leftLabels.Length; i++)
@@ -38,13 +38,13 @@ namespace WaterTankTool_WFA.Solver
             // Dropdown for Fy
             ComboBox fyBox = new ComboBox { Dock = DockStyle.Fill };
             fyBox.Items.AddRange(new[] { "30000", "32000", "34000", "36000", "38000", "40000" });
-            fyBox.SelectedItem = "36000";
-            Fy = "36000";
+            fyBox.SelectedItem = AppState.Fy;
+
             tableLayoutPanel1.Controls.Add(fyBox, 1, 0);
 
             // Fixed cells
             tableLayoutPanel1.Controls.Add(new Label { Text = "2" }, 1, 1);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "2124" }, 1, 2);
+            //tableLayoutPanel1.Controls.Add(new Label { Text = "2124" }, 1, 2);
             rtcLabel = new Label();
             tableLayoutPanel1.Controls.Add(rtcLabel, 1, 3);
             tableLayoutPanel1.Controls.Add(new Label { Text = "29000000" }, 1, 4);
@@ -53,14 +53,17 @@ namespace WaterTankTool_WFA.Solver
                 if (rightLabels[i] != null)
                     tableLayoutPanel1.Controls.Add(new Label { Text = rightLabels[i] }, 2, i);
 
-            UpdateRtcLabel(Fy);
+            UpdateRtcLabel(AppState.Fy);
 
             fyBox.SelectedIndexChanged += (_, __) =>
             {
-                Fy = fyBox.SelectedItem!.ToString();
-                UpdateRtcLabel(Fy);
-                this.DialogResult = DialogResult.OK;
-                this.Close();        //Add colose dialog
+                var sel = fyBox.SelectedItem!.ToString()!;
+                AppState.Fy = sel;                 // write back
+                UpdateRtcLabel(sel);
+                AppState.Rtc = int.Parse(rtcLabel.Text);
+
+                // close the dialog to signal “OK”
+
             };
         }
 
@@ -76,6 +79,18 @@ namespace WaterTankTool_WFA.Solver
                 "40000" => "299",
                 _ => "0"
             };
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
         }
     }
 }

@@ -59,10 +59,10 @@
             "Centroid": "159.10",
             "height": "39.1126 meters",
             "Weight_of_Water": "1283 Kips",
-            "Weight_of_Steel": "66.2382 Kips",
+            "Weight_of_Steel": "66.2382",
             "Total_Weight": "1349.2382 Kips",
             "Projected_Area": "966.01 ft²",
-            "thickness": "0.0"
+            "thickness": "0.375"
 
 
         },

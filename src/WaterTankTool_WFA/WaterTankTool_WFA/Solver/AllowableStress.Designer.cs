@@ -30,6 +30,8 @@
         {
             groupBox1 = new GroupBox();
             tableLayoutPanel1 = new TableLayoutPanel();
+            button1 = new Button();
+            button2 = new Button();
             groupBox1.SuspendLayout();
             SuspendLayout();
             // 
@@ -62,11 +64,35 @@
             tableLayoutPanel1.Size = new Size(375, 138);
             tableLayoutPanel1.TabIndex = 0;
             // 
+            // button1
+            // 
+            button1.Location = new Point(315, 188);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 23);
+            button1.TabIndex = 1;
+            button1.Text = "Cancel";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
+            // 
+            // button2
+            // 
+            button2.Location = new Point(223, 188);
+            button2.Name = "button2";
+            button2.Size = new Size(75, 23);
+            button2.TabIndex = 2;
+            button2.Text = "Accept";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
+            // 
             // AllowableStress
             // 
+            AcceptButton = button2;
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(405, 187);
+            CancelButton = button1;
+            ClientSize = new Size(405, 223);
+            Controls.Add(button2);
+            Controls.Add(button1);
             Controls.Add(groupBox1);
             Name = "AllowableStress";
             ShowIcon = false;
@@ -79,5 +105,7 @@
 
         private GroupBox groupBox1;
         private TableLayoutPanel tableLayoutPanel1;
+        private Button button1;
+        private Button button2;
     }
 }

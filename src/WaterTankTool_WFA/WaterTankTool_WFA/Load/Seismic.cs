@@ -106,7 +106,8 @@ namespace WaterTankTool_WFA.Load
                 Ts = double.Parse(textBox2.Text),
                 Sa = double.Parse(textBox9.Text),
                 Lambda = double.Parse(textBox1.Text),
-                Ai = double.Parse(textBox10.Text)
+                Ai = double.Parse(textBox10.Text),
+                V = double.Parse(textBox13.Text)
             };
 
 
@@ -143,6 +144,7 @@ namespace WaterTankTool_WFA.Load
                 existingData.Sa = seismicLoad.Sa;
                 existingData.Lambda = seismicLoad.Lambda;
                 existingData.Ai = seismicLoad.Ai;
+                existingData.V = seismicLoad.V;
             }
 
             // Save changes to the database
@@ -297,7 +299,7 @@ namespace WaterTankTool_WFA.Load
                 var totalLoad = lc.GetTotalSegmentLoad(segmentData);
 
                 var v = res * totalLoad;
-                AppState.SeismicV = v;
+                
                 textBox13.Text = v.ToString();
 
 
