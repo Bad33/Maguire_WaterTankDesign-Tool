@@ -104,7 +104,7 @@
             // 
             // textBox4
             // 
-            textBox4.Location = new Point(159, 25);
+            textBox4.Location = new Point(160, 20);
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(97, 23);
             textBox4.TabIndex = 13;
@@ -231,6 +231,7 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Live_Load";

@@ -127,6 +127,10 @@ namespace WaterTankTool_WFA.Load
 
             AddOrUpdateWindLoad(windLoad);
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+            if(result == DialogResult.OK)
+            {
+                this.Close();
+            }
 
         }
 

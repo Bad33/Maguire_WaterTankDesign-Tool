@@ -87,13 +87,10 @@ partial class WaterTank
         toolStripTextBox2 = new ToolStripTextBox();
         toolStripButton9 = new ToolStripButton();
         panel1 = new Panel();
-        panel2 = new Panel();
-        button1 = new Button();
         menuStrip1.SuspendLayout();
         toolStrip1.SuspendLayout();
         toolStrip3.SuspendLayout();
         toolStrip2.SuspendLayout();
-        panel2.SuspendLayout();
         SuspendLayout();
         // 
         // menuStrip1
@@ -471,28 +468,12 @@ partial class WaterTank
         panel1.Name = "panel1";
         panel1.Paint += panel1_Paint;
         // 
-        // panel2
-        // 
-        panel2.BackColor = SystemColors.ButtonFace;
-        panel2.Controls.Add(button1);
-        resources.ApplyResources(panel2, "panel2");
-        panel2.Name = "panel2";
-        // 
-        // button1
-        // 
-        button1.BackColor = SystemColors.ActiveCaption;
-        resources.ApplyResources(button1, "button1");
-        button1.Name = "button1";
-        button1.UseVisualStyleBackColor = false;
-        button1.Click += button1_Click;
-        // 
         // WaterTank
         // 
         resources.ApplyResources(this, "$this");
         AutoScaleMode = AutoScaleMode.Dpi;
         BackColor = SystemColors.Control;
         Controls.Add(panel1);
-        Controls.Add(panel2);
         Controls.Add(toolStrip2);
         Controls.Add(statusStrip2);
         Controls.Add(toolStrip3);
@@ -514,7 +495,6 @@ partial class WaterTank
         toolStrip3.PerformLayout();
         toolStrip2.ResumeLayout(false);
         toolStrip2.PerformLayout();
-        panel2.ResumeLayout(false);
         ResumeLayout(false);
         PerformLayout();
     }

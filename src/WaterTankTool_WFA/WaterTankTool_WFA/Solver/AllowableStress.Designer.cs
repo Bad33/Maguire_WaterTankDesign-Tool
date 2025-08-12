@@ -94,6 +94,7 @@
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Name = "AllowableStress";
             ShowIcon = false;
             Text = "AllowableStress";

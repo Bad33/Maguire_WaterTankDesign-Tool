@@ -159,6 +159,7 @@
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Dead_Load";

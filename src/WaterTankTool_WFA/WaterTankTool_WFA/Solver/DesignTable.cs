@@ -119,6 +119,31 @@ namespace WaterTankTool_WFA.Solver
             int revCount = 0;
             for (int i = temp.Count - 1; i >= 0; i--)
             {
+                var cur = temp[i];
+
+                // If it's a tank row, force zeros and do NOT affect the rolling average
+                if (cur.seg.SegmentType == "Tanks")
+                {
+                    tabelData2s.Add(new tabelData2
+                    {
+                        Segment = cur.seg.SegmentName,
+                        Radius = 0,
+                        Thickness = 0,
+                        Rt = 0,
+                        A = 0,
+                        I = 0,
+                        r = 0,
+                        Co = 0,
+                        Fl = 0,
+                        KLr = 0,
+                        Cc = 0,
+                        Kf = 0,
+                        Fa = 0,
+                        Fb = 0
+                    });
+                    continue; // <-- skip KLr/Kf/Fa/Fb math
+                }
+
                 revCount++;
                 // accumulate r of this segment
                 runningRsum += temp[i].r;

@@ -126,6 +126,7 @@
             Controls.Add(groupBox1);
             Controls.Add(textBox1);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(2);
             Name = "Water_Load";
             ShowIcon = false;

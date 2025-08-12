@@ -44,6 +44,10 @@ namespace WaterTankTool_WFA.Load
             };
             AddOrUpdateDeadLoad(deadload);
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+            if(result == DialogResult.OK)
+            {
+                this.Close();
+            }
 
         }
 

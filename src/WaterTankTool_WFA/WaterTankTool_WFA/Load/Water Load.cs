@@ -36,6 +36,10 @@ namespace WaterTankTool_WFA.Load
         private void button1_Click(object sender, EventArgs e)
         {
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+            if(result == DialogResult.OK)
+            {
+                this.Close();
+            }
 
         }
     }

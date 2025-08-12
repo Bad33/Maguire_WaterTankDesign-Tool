@@ -171,7 +171,7 @@ namespace WaterTankTool_WFA.Solver
                                         cylinderEq.qzi(segment.HeightInitial),
                                         cylinderEq.qzf(segment.HeightFinal),
                                         projectedArea);
-                    loadLocation = ExtractDoubleValue(tankProperties.Centroid);
+                    loadLocation = segment.HeightInitial + ExtractDoubleValue(tankProperties.Centroid);
                 }
                 else if(segment.SegmentType == "Cylinder")
                 {
@@ -229,7 +229,7 @@ namespace WaterTankTool_WFA.Solver
         {
        
 
-        var result1 = 30 * Qwind.Cf * (projectedArea / 1000);
+            var result1 = 30 * Qwind.Cf * (projectedArea / 1000);
 
             var result2 = (((qzi + qzf) / 2) * Qwind.Cf * Qwind.G * (projectedArea / 1000));
 
@@ -555,6 +555,7 @@ namespace WaterTankTool_WFA.Solver
 
             segmentPropertiesTableData = segmentData.Select(segment =>
             {
+                double thickness = 0;
                 double dFinal = segment.DiameterFinal ?? segment.Diameter;
                 double A = Math.Round((Math.PI / 4) *
                          (Math.Pow(12 * dFinal, 2) -
@@ -565,12 +566,23 @@ namespace WaterTankTool_WFA.Solver
                           Math.Pow((12 * dFinal - 2 * segment.Thickness), 4)), 4);
 
                 double S = Math.Round((I * 2) / (12 * dFinal), 4);
+                thickness = segment.Thickness;
+                if (segment.SegmentType == "Tanks")
+                {
+                    // all zero for "Tanks"
+                    dFinal = 0;
+                    thickness = 0;
+                    A = 0;
+                    I = 0;
+                    S = 0;
+
+                }
 
                 return new designTableData
                 {
                     Segment = segment.SegmentName,
-                    Diameter = 12 * dFinal,
-                    Thickness = segment.Thickness,
+                    Diameter = Math.Round(12 * dFinal,4),
+                    Thickness = thickness,
                     A = A,
                     I = I,
                     S = S

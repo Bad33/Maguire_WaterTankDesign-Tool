@@ -510,3 +510,6 @@ C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_Wate
 C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\WaterTankTool_WFA.pdb
 C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\WaterTankTool_WFA.genruntimeconfig.cache
 C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\ref\WaterTankTool_WFA.dll
+C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\WaterTankTool_WFA.Load.Load_Combinations.resources
+C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\WaterTankTool_WFA.Solver.AllowableStress.resources
+C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\obj\Release\net8.0-windows\WaterTankTool_WFA.Solver.DesignTable.resources

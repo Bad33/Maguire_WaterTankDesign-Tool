@@ -114,6 +114,11 @@ namespace WaterTankTool_WFA.Load
 
             AddOrUpdateSeismicLoad(seismicLoad);
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+
+            if(result == DialogResult.OK)
+            {
+                this.Close();
+            }
         }
 
         public void AddOrUpdateSeismicLoad(SeismicLoadEntity seismicLoad)
@@ -298,8 +303,8 @@ namespace WaterTankTool_WFA.Load
 
                 var totalLoad = lc.GetTotalSegmentLoad(segmentData);
 
-                var v = res * totalLoad;
-                
+                var v = Math.Round(res * totalLoad, 4);
+
                 textBox13.Text = v.ToString();
 
 
@@ -377,6 +382,16 @@ namespace WaterTankTool_WFA.Load
 
             // Immediately save changes to the single JSON file
             NotesManager.SaveNotes();
+        }
+
+        private void textBox13_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox11_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -84,6 +84,7 @@
             Controls.Add(button1);
             Controls.Add(numericUpDown1);
             Controls.Add(label1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
             Name = "AddNoOfColumns";
             ShowIcon = false;

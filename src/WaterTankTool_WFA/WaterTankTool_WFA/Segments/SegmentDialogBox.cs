@@ -162,15 +162,15 @@ namespace WaterTankTool_WFA
 
         private void FillTankCombo()
         {
-            if (_segmentType != "Tanks") return;   // dropdown is irrelevant
+            if (_segmentType != "Tanks" || comboBox1 == null) return;   // dropdown is irrelevant
 
             comboBox1.BeginUpdate();
             comboBox1.Items.Clear();
 
             if (_tankType == TankType.SingleColumn)
             {
-                // restore the original designer list
-                comboBox1.Items.AddRange(_singleColumnItems!.ToArray());
+                if (_singleColumnItems != null)
+                    comboBox1.Items.AddRange(_singleColumnItems.ToArray());
             }
             else   // Multi‑column
             {
@@ -181,7 +181,6 @@ namespace WaterTankTool_WFA
                 }
             }
 
-            // pick first item if nothing selected
             if (comboBox1.Items.Count > 0 && comboBox1.SelectedIndex == -1)
                 comboBox1.SelectedIndex = 0;
 
@@ -191,27 +190,19 @@ namespace WaterTankTool_WFA
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Get the newly selected tank type.
-            string selectedTank = comboBox1.SelectedItem.ToString();
+            if (comboBox1?.SelectedItem == null)
+                return;
 
-            // Optionally update the private field.
+            string selectedTank = comboBox1.SelectedItem.ToString() ?? "";
             _selectedTankCapacity = selectedTank;
 
-
-            // Look up the corresponding dimensions from your JSON or data source.
             if (tankData?.Tanks != null)
             {
                 dimensions = tankData.Tanks.FirstOrDefault(data => data.Type == selectedTank);
                 if (dimensions != null)
                 {
-                    // Update input fields based on the new selection.
                     maskedTextBox2.Text = ExtractNumericValue(dimensions.Diameter);
                     maskedTextBox3.Text = ExtractNumericValue(dimensions.Thickness);
-                    // Optionally, update Height if it's part of the tank's data:
-                    //maskedTextBox1.Text = dimensions.HeightInitial.ToString();
-                    //maskedTextBox4.Text = dimensions.HeightFinal.ToString();
-
-                    // Recalculate if needed.
                     DoCalculations();
                 }
                 else
@@ -224,7 +215,6 @@ namespace WaterTankTool_WFA
                 Console.WriteLine("Tank data is not available.");
             }
         }
-
 
 
         public void showInputFieldsOnType()
@@ -267,12 +257,17 @@ namespace WaterTankTool_WFA
 
         private void InputFields_TextChanged(object sender, EventArgs e)
         {
-            if (maskedTextBox1.Text != "" && _selectedTankCapacity != null)
+            if (!string.IsNullOrWhiteSpace(maskedTextBox1.Text) && _selectedTankCapacity != null)
             {
-               maskedTextBox4.Text = (Double.Parse(maskedTextBox1.Text) + Double.Parse(ExtractNumericValue(dimensions.Height))).ToString("F4");
-
+                if (dimensions != null &&
+                    double.TryParse(maskedTextBox1.Text, out double h1) &&
+                    double.TryParse(ExtractNumericValue(dimensions.Height), out double h2))
+                {
+                    maskedTextBox4.Text = (h1 + h2).ToString("F4");
+                }
             }
             DoCalculations();
+
         }
 
         private void ModifyDialogBox()
@@ -425,10 +420,11 @@ namespace WaterTankTool_WFA
         private void Save_ClickBase(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(richTextBox1.Text) ||
-             string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
-             string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
-             string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
-             string.IsNullOrWhiteSpace(maskedTextBox4.Text) || string.IsNullOrWhiteSpace(maskedTextBox5.Text))
+                string.IsNullOrWhiteSpace(maskedTextBox2.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox3.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox1.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox4.Text) ||
+                string.IsNullOrWhiteSpace(maskedTextBox5.Text))
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
@@ -437,30 +433,33 @@ namespace WaterTankTool_WFA
             if (!double.TryParse(maskedTextBox2.Text, out double diameterInitial) ||
                 !double.TryParse(maskedTextBox3.Text, out double diameterFinal) ||
                 !double.TryParse(maskedTextBox1.Text, out double heightInitial) ||
-                !double.TryParse(maskedTextBox4.Text, out double heightFinal) || !double.TryParse(maskedTextBox5.Text, out double thickness))
+                !double.TryParse(maskedTextBox4.Text, out double heightFinal) ||
+                !double.TryParse(maskedTextBox5.Text, out double thickness))
             {
                 MessageBox.Show("Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            var diameter = Math.Round(((double)(diameterFinal + diameterInitial)) / 2, 4);
+            var diameter = Math.Round((diameterFinal + diameterInitial) / 2, 4);
 
-            //using (var context = WaterTankDbContext.GetInstance())
-            //{
             SegmentProperties segmentProperties;
-
-
-
 
             if (_dialogType == "Modify")
             {
                 segmentProperties = _context.SegmentProperties.FirstOrDefault(item => item.SegmentNumber == _segmentNumber);
 
-                ValidateSegment(segmentProperties);
-
                 if (segmentProperties == null)
                 {
                     MessageBox.Show("Error: Segment not found!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                try
+                {
+                    ValidateSegment(segmentProperties);
+                }
+                catch (ValidationException ve)
+                {
+                    MessageBox.Show($"Validation error: {ve.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
@@ -485,11 +484,17 @@ namespace WaterTankTool_WFA
                     HeightFinal = heightFinal,
                     DiameterInitial = diameterInitial,
                     DiameterFinal = diameterFinal
-
                 };
 
-                ValidateSegment(segmentProperties);
-
+                try
+                {
+                    ValidateSegment(segmentProperties);
+                }
+                catch (ValidationException ve)
+                {
+                    MessageBox.Show($"Validation error: {ve.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
 
                 _context.SegmentProperties.Add(segmentProperties);
             }
@@ -498,17 +503,12 @@ namespace WaterTankTool_WFA
             {
                 int rowsAffected = _context.SaveChanges();
                 successDialog(rowsAffected);
-                //WaterTank form1 = new WaterTank();
-                //form1.OnSegmentAdded();
-                //_waterTankForm.OnSegmentAdded();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while saving data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            //}
         }
-
         // ======================================================================
         //  Save_ClickCylinder  –  full, self-contained method
         //  • Validates input fields

@@ -567,7 +567,46 @@ namespace WaterTankTool_WFA
             snow_Load.ShowDialog();
         }
 
-        private void openToolStripMenuItem_Click(object sender, EventArgs e) { }
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Project Files (*.proj)|*.proj";
+                openFileDialog.Title = "Open Project";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string projectPath = openFileDialog.FileName;
+
+                    try
+                    {
+                        // Optional: Load project metadata if available
+                        string projectFolder = Path.GetDirectoryName(projectPath);
+                        string metaPath = Path.Combine(projectFolder, "project.json");
+
+                        TankType projectTankType = _tankType; // Default to current
+                        if (File.Exists(metaPath))
+                        {
+                            var metadataJson = File.ReadAllText(metaPath);
+                            var metadata = System.Text.Json.JsonSerializer.Deserialize<ProjectMetadata>(metadataJson);
+                            if (metadata != null)
+                            {
+                                projectTankType = metadata.Type;
+                            }
+                        }
+
+                        // Call the same startup form handler you use for new projects
+                        _startupForm.OpenProject(projectPath, projectTankType);
+                        MessageBox.Show("Project opened successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error opening project: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
         private void splitContainer1_Panel1_Paint_1(object sender, PaintEventArgs e) { }
         private void newToolStripButton_Click(object sender, EventArgs e) { CreateNewProject(); }
         private void splitContainer2_Panel2_Paint_1(object sender, PaintEventArgs e) { }
@@ -636,7 +675,7 @@ namespace WaterTankTool_WFA
                 RowHeadersVisible = false,
                 AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
             };
-            panel2.Controls.Add(dataGridView1);
+            //panel2.Controls.Add(dataGridView1);
         }
 
         private void button1_Click(object sender, EventArgs e)

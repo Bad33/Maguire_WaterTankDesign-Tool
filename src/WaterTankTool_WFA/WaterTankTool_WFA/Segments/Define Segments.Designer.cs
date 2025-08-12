@@ -129,6 +129,7 @@
             ClientSize = new Size(878, 303);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             MinimumSize = new Size(850, 250);
             Name = "Define_Segments";
             ShowIcon = false;

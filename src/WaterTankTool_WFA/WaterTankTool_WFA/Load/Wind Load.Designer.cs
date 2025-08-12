@@ -368,6 +368,7 @@
             Controls.Add(groupBox1);
             Controls.Add(button2);
             Controls.Add(button1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(2);
             MaximizeBox = false;
             Name = "Wind_Load";

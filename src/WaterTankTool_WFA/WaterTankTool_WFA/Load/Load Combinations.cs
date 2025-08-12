@@ -55,16 +55,14 @@ namespace WaterTankTool_WFA.Load
             advancedDataGridView1.Columns["P"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             advancedDataGridView1.Columns["M"].AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
 
-            // Set FillWeight: 50%, 25%, 25%
             advancedDataGridView1.Columns["Load Combination"].FillWeight = 50;
             advancedDataGridView1.Columns["P"].FillWeight = 25;
             advancedDataGridView1.Columns["M"].FillWeight = 25;
 
-            // Add predefined load combinations to column A
             string[] predefinedValues = {
-                    "D", "D + L", "D + (Lr or S)", "D + 0.75L + 0.75(Lr or S)",
-                    "D + 0.6(W or E)", "D + 0.75L + 0.75(0.6W or 0.6E) + 0.75(Lr or S)",
-                    "0.6D + 0.6(W or E)"
+        "D", "D + L", "D + (Lr or S)", "D + 0.75L + 0.75(Lr or S)",
+        "D + 0.6(W or E)", "D + 0.75L + 0.75(0.6W or 0.6E) + 0.75(Lr or S)",
+        "0.6D + 0.6(W or E)"
     };
 
             foreach (var val in predefinedValues)
@@ -73,29 +71,41 @@ namespace WaterTankTool_WFA.Load
                 advancedDataGridView1.Rows[index].Cells["Load Combination"].Value = val;
             }
 
+            // Defensive fetching of loads
             var _liveLoad = _context.LiveLoadEntity.FirstOrDefault();
-            liveLoad = _liveLoad.Live_Load;
             var _snowLoad = _context.SnowLoadEntity.FirstOrDefault();
+            var _windLoad = _context.WindLoadEntity.FirstOrDefault();
+
+            if (_liveLoad == null || _snowLoad == null || _windLoad == null)
+            {
+                ShowError("Missing required load data (live, snow, or wind load). Please ensure all loads are added.");
+                return;
+            }
+
+            liveLoad = _liveLoad.Live_Load;
             snowLoad = _snowLoad.TotalSnowLoad;
             roofLiveLoad = _liveLoad.Roof_Live_Load;
-
-            var _windLoad = _context.WindLoadEntity.FirstOrDefault();
             windLoad = _windLoad.Q;
 
-
             // Fill calculation data
-            fillTableL1();
-            fillTableL2();
-            fillTableL3();
-            fillTableL4();
-            fillTableL5();
-            fillTableL6();
-            fillTableL7();
+            try
+            {
+                fillTableL1();
+                fillTableL2();
+                fillTableL3();
+                fillTableL4();
+                fillTableL5();
+                fillTableL6();
+                fillTableL7();
 
-
-            // Fill B and C columns without adding new rows
-            addRowsValues();
+                addRowsValues();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"An error occurred during calculation: {ex.Message}");
+            }
         }
+
 
 
         private void addRowsValues()
@@ -113,17 +123,24 @@ namespace WaterTankTool_WFA.Load
             var MiscLoad = _context.DeadLoadEntity.FirstOrDefault();
             List<SegmentProperties> segmentData = _context.SegmentProperties.ToList();
 
+            if (MiscLoad == null)
+            {
+                ShowError("Miscellaneous (dead) load data is missing.");
+                return;
+            }
+            if (segmentData == null || segmentData.Count == 0)
+            {
+                ShowError("Segment data is missing.");
+                return;
+            }
 
             var totalLoad = GetTotalSegmentLoad(segmentData);
 
-            if (MiscLoad != null)
-            {
-                D = Math.Round(MiscLoad.Miscellaneous_Load + totalSegmentWeight, 5);
-                calculatedP.Add(D);
-                calculatedM.Add(m);
-            }
-
+            D = Math.Round(MiscLoad.Miscellaneous_Load + totalSegmentWeight, 5);
+            calculatedP.Add(D);
+            calculatedM.Add(m);
         }
+
 
         private void fillTableL2()
         {
