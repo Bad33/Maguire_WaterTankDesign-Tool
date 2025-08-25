@@ -33,8 +33,8 @@ namespace WaterTankTool_WFA
             NotesManager.LoadNotes();
 
             // If no tank type saved yet, ask once
-            if (AppState.CurrentTankType == TankType.None)
-            {
+            //if (AppState.CurrentTankType == TankType.None)
+            //{
                 using (var dlg = new TankTypeSelectionForm())
                 {
                     if (dlg.ShowDialog() != DialogResult.OK ||
@@ -46,7 +46,7 @@ namespace WaterTankTool_WFA
                     // Persist immediately after the user chooses
                     AppState.Save();
                 }
-            }
+            //}
 
             try
             {
