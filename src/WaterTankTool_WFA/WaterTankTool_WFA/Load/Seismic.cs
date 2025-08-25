@@ -293,7 +293,7 @@ namespace WaterTankTool_WFA.Load
                 var val2 = (0.36 * S1 * Ie) / Ri;
 
                 var res = Math.Max(val1, val2);
-                textBox10.Text = Math.Round((double)res, 4).ToString();
+                textBox10.Text = Math.Round((double)res, 5).ToString();
 
 
                 List<SegmentProperties> segmentData = _context.SegmentProperties.ToList();

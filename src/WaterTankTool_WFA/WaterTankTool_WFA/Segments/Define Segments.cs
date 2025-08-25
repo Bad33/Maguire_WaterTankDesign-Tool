@@ -99,73 +99,83 @@ namespace WaterTankTool_WFA
 
         private void button3_Click(object sender, EventArgs e)
         {
+            // Ensure a row is selected
             if (dataGridView1.SelectedRows.Count == 0)
             {
                 MessageBox.Show("Please select a row to delete");
                 return;
             }
 
+            // Read key values from the grid safely
             DataGridViewRow selRow = dataGridView1.SelectedRows[0];
-            int segNumber = (int)selRow.Cells[0].Value;
+
+            if (selRow.Cells[0].Value == null || selRow.Cells[1].Value == null)
+            {
+                MessageBox.Show("Selected row is invalid.");
+                return;
+            }
+
+            int segNumber;
+            if (!int.TryParse(selRow.Cells[0].Value.ToString(), out segNumber))
+            {
+                MessageBox.Show("Unable to read segment number.");
+                return;
+            }
+
             string segName = selRow.Cells[1].Value.ToString();
 
-            // ---------------------------------------------
-            // MULTILEG: get the base part before last '_n'
-            // ---------------------------------------------
-            List<SegmentProperties> segmentsToDelete;
-            string confirmMessage;
+            // Fetch the segment from DB
+            var seg = _context.SegmentProperties
+                              .FirstOrDefault(s => s.SegmentNumber == segNumber);
 
-            if (_tankType == TankType.MultiColumn)
+            if (seg == null)
             {
-                int idx = segName.LastIndexOf('_');
-                string baseName = (idx > 0 && int.TryParse(segName[(idx + 1)..], out _))
-                                ? segName[..idx]
-                                : segName;
-
-                // SQL-translateable predicate (StartsWith / ==)
-                segmentsToDelete = _context.SegmentProperties
-                                           .Where(s => s.SegmentName == baseName
-                                                   || s.SegmentName.StartsWith(baseName + "_"))
-                                           .ToList();
-
-                confirmMessage = segmentsToDelete.Count == 1
-                    ? $"Do you want to delete {segName}?"
-                    : $"Do you want to delete ALL {segmentsToDelete.Count} columns of '{baseName}'?";
-            }
-            else
-            {
-                var seg = _context.SegmentProperties
-                                  .FirstOrDefault(s => s.SegmentNumber == segNumber);
-
-                if (seg == null)
-                {
-                    MessageBox.Show("Selected segment not found");
-                    return;
-                }
-
-                segmentsToDelete = new() { seg };
-                confirmMessage = $"Do you want to delete {segName}?";
+                MessageBox.Show("Selected segment not found.");
+                return;
             }
 
-            // ---------------------------------------------
-            // Confirm & delete
-            // ---------------------------------------------
-            if (MessageBox.Show(confirmMessage, "Confirm Delete",
-                                buttons, MessageBoxIcon.Question) != DialogResult.Yes)
+            // Confirm deletion (single row only)
+            string confirmMessage = $"Do you want to delete {segName}?";
+            var confirm = MessageBox.Show(confirmMessage, "Confirm Delete",
+                                          buttons, MessageBoxIcon.Question);
+
+            if (confirm != DialogResult.Yes)
                 return;
 
-            // If you still want to wipe TankProperties like before:
-            _context.TankProperties.RemoveRange(_context.TankProperties);
-
-            _context.SegmentProperties.RemoveRange(segmentsToDelete);
-            _context.SaveChanges();
-
-            LoadData();
-            if (segmentsToDelete[0].SegmentType == "Tanks")
+            try
             {
-                _waterTankForm.OnSegmentDeleted();  // notify parent form
-            }// refresh grid
+                // If you still intend to clear TankProperties like before,
+                // leave this as-is; otherwise remove this line.
+                _context.TankProperties.RemoveRange(_context.TankProperties);
+
+                // Delete ONLY the selected segment
+                _context.SegmentProperties.Remove(seg);
+
+                int rows = _context.SaveChanges();
+
+                if (rows > 0)
+                {
+                    // Refresh grid
+                    LoadData();
+
+                    // Notify parent form if a tank was deleted (so it can refresh drawing/state)
+                    if (seg.SegmentType == "Tanks")
+                    {
+                        _waterTankForm?.OnSegmentDeleted();
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Nothing was deleted. Please try again.");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error while deleting: {ex.Message}", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
 
 

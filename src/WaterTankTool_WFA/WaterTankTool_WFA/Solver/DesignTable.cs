@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -49,12 +50,20 @@ namespace WaterTankTool_WFA.Solver
 
         private void ShowError(string msg, string title = "Error")
              => MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+        private static int SegmentTypeOrder(string t)
+            => t == "Tanks" ? 0
+             : t == "Cylinder" ? 1
+             : t == "Riser" ? 2
+             : 3; // Base/others last
         private void LoadTable2()
         {
             // 1) fetch & sort
-            var segmentList = _context.SegmentProperties
-                                      .OrderByDescending(s => s.HeightInitial)
-                                      .ToList();
+            List<SegmentProperties> segmentList = _context?.SegmentProperties?.ToList() ?? new();
+            segmentList = segmentList
+                .OrderBy(s => SegmentTypeOrder(s.SegmentType))
+                .ThenByDescending(s => s.HeightFinal)
+                .ToList();
             if (segmentList.Count == 0)
                 return;
 
@@ -153,9 +162,24 @@ namespace WaterTankTool_WFA.Solver
 
                 // height for *this* segment only
                 double hf = temp[i].seg.HeightFinal;
+                double hi = temp[i].seg.HeightInitial;
 
-                // KLr = 2 * 12 * hf / avgR
-                double klr = Math.Round((2 * 12 * hf) / avgR, 4);
+                double height = hf - hi;
+                var kValue = 0;
+                double klr = 0;
+                if (AppState.CurrentTankType == TankType.SingleColumn)
+                {
+                    kValue = 2;
+                    klr = Math.Round((kValue * 12 * hf) / avgR, 4);
+
+                }
+                else
+                {
+                    kValue = 1;
+                    klr = Math.Round((kValue * 12 * (height / temp[i].r)), 4);
+
+                }
+         
 
                 // Kf, Fa, Fb as you already do...
                 double Cc = temp[i].Cc;
@@ -188,7 +212,7 @@ namespace WaterTankTool_WFA.Solver
                 });
             }
 
-            // We built the list from bottom→top, so reverse it to restore the original order:
+            // built the list from bottom→top, so reverse it to restore the original order:
             tabelData2s.Reverse();
 
             // Bind

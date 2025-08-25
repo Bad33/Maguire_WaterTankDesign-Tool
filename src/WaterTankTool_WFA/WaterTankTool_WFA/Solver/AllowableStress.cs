@@ -42,8 +42,19 @@ namespace WaterTankTool_WFA.Solver
 
             tableLayoutPanel1.Controls.Add(fyBox, 1, 0);
 
-            // Fixed cells
-            tableLayoutPanel1.Controls.Add(new Label { Text = "2" }, 1, 1);
+            string kValue = "";
+
+            if (AppState.CurrentTankType == TankType.SingleColumn)
+            {
+                kValue = "2";
+
+            }
+            else
+                kValue = "1";
+
+
+                // Fixed cells
+            tableLayoutPanel1.Controls.Add(new Label { Text = kValue }, 1, 1);
             //tableLayoutPanel1.Controls.Add(new Label { Text = "2124" }, 1, 2);
             rtcLabel = new Label();
             tableLayoutPanel1.Controls.Add(rtcLabel, 1, 3);

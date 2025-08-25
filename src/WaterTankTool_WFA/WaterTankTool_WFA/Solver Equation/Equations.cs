@@ -347,11 +347,11 @@ namespace WaterTankTool_WFA.Solver_Equation
         public double ProjectedArea(double heightInitial, double heightfinal, double diameter)
         {
             var height = heightfinal - heightInitial;
-            var result = (Math.Round(Math.PI, 4) * height * (diameter / 2));
+            var result =  height * diameter * AppState.NoOfColumns;
             return result;
         }
 
-        public double weightOfPedestal(double heightInitial, double heightFinal, double Diameter, double t)
+        public double weightOfPedestal(double heightInitial, double heightFinal, double Diameter, double t,string segmentType)
         {
             var thickness = unitsConverter.inch_TO_Ft(t);
 
@@ -363,7 +363,30 @@ namespace WaterTankTool_WFA.Solver_Equation
 
             var segmentVolume = outerVolume - innerVolume;
 
-            var weight = (segmentVolume * ConstantsClass.rs) / 1000;
+            double add = 0;
+
+            double weight = 0;
+
+            if (heightInitial == 0 && segmentType == "Cylinder")
+            {
+                add = (AppState.crossBracing / AppState.NoOfSegment);
+                weight = ((segmentVolume * ConstantsClass.rs * AppState.NoOfColumns) / 1000) + add;
+            }
+            else if(heightInitial > 0 && segmentType == "Cylinder")
+            {
+                add = ((AppState.struts / (AppState.NoOfSegment - 1)) + (AppState.crossBracing / AppState.NoOfSegment));
+                weight = ((segmentVolume * ConstantsClass.rs * AppState.NoOfColumns) / 1000) + add;
+
+            }
+
+            else if(segmentType == "Riser")
+            {
+                add = 0;
+                weight = ((segmentVolume * ConstantsClass.rs) / 1000) + add;
+
+            }
+
+              
 
             return weight;
         }
@@ -486,12 +509,23 @@ namespace WaterTankTool_WFA.Solver_Equation
             return result;
         }
 
-        public double F(double heightInitial, double heightFinal, double diameter)
-        {
-            var height = heightFinal - heightInitial;
-            var result1 = 30 * Qwind.Cf * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
 
-            var result2 = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * Qwind.Cf * Qwind.G * (ProjectedArea(heightInitial, heightFinal, diameter) / 1000);
+        public double F(double heightInitial, double heightFinal, double diameter,string segmentType)
+        {
+            Segment_Cylinder_Equations c1 = new Segment_Cylinder_Equations();
+            double projectArea = 0;
+            if(segmentType == "Riser")
+            {
+                projectArea = c1.ProjectedArea(heightInitial, heightFinal, diameter);
+            }
+            else
+            {
+                projectArea = ProjectedArea(heightInitial, heightFinal, diameter);
+            }
+            var height = heightFinal - heightInitial;
+            var result1 = 30 * Qwind.Cf * (projectArea / 1000);
+
+            var result2 = ((qzi(heightInitial) + qzf(heightFinal)) / 2) * Qwind.Cf * Qwind.G * (projectArea / 1000);
 
 
             return Math.Max(result1, result2);
@@ -530,9 +564,9 @@ namespace WaterTankTool_WFA.Solver_Equation
         }
 
 
-        public double Mbase(double heightInitial, double heightFinal, double diameter)
+        public double Mbase(double heightInitial, double heightFinal, double diameter,string segmentType)
         {
-            var result = L(heightInitial, heightFinal) * F(heightInitial, heightFinal, diameter);
+            var result = L(heightInitial, heightFinal) * F(heightInitial, heightFinal, diameter, segmentType);
             return result;
         }
     }

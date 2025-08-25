@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Designer_Notes;
@@ -8,7 +7,6 @@ namespace WaterTankTool_WFA
 {
     static class Program
     {
-
         public static DIContainer _diContainer;
 
         [DllImport("Shcore.dll")]
@@ -17,21 +15,36 @@ namespace WaterTankTool_WFA
         [STAThread]
         static void Main()
         {
-            SetProcessDpiAwareness(2);
+            try { SetProcessDpiAwareness(2); } catch { /* ignore */ }
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // Load persisted AppState BEFORE anything uses it
+            AppState.Load();
+
+            // Save on normal app exit
+            Application.ApplicationExit += (_, __) =>
+            {
+                try { AppState.Save(); } catch { }
+            };
 
             _diContainer = new DIContainer();
             NotesManager.LoadNotes();
 
-            TankType selectedType = TankType.None;
-            using (var dlg = new TankTypeSelectionForm())
+            // If no tank type saved yet, ask once
+            if (AppState.CurrentTankType == TankType.None)
             {
-                if (dlg.ShowDialog() != DialogResult.OK ||
-                    AppState.CurrentTankType == TankType.None)
+                using (var dlg = new TankTypeSelectionForm())
                 {
-                    
-                    return;
+                    if (dlg.ShowDialog() != DialogResult.OK ||
+                        AppState.CurrentTankType == TankType.None)
+                    {
+                        return; // user cancelled without selecting
+                    }
+
+                    // Persist immediately after the user chooses
+                    AppState.Save();
                 }
             }
 
@@ -43,13 +56,8 @@ namespace WaterTankTool_WFA
             {
                 MessageBox.Show("Application crashed: " + ex);
             }
-            
         }
 
-        public static DIContainer GetContainer()
-        {
-            return _diContainer;
-        }
-    
+        public static DIContainer GetContainer() => _diContainer;
     }
 }

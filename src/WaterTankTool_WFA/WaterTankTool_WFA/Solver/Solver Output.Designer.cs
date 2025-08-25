@@ -45,6 +45,7 @@
             DataGridViewCellStyle dataGridViewCellStyle14 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle15 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle16 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle17 = new DataGridViewCellStyle();
             printDialog1 = new PrintDialog();
             printDocument1 = new System.Drawing.Printing.PrintDocument();
             groupBox1 = new GroupBox();
@@ -89,6 +90,12 @@
             groupBox3 = new GroupBox();
             groupBox2 = new GroupBox();
             groupBox5 = new GroupBox();
+            groupBox6 = new GroupBox();
+            dataGridView2 = new DataGridView();
+            Column1 = new DataGridViewTextBoxColumn();
+            Column2 = new DataGridViewTextBoxColumn();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView7).BeginInit();
@@ -100,6 +107,8 @@
             groupBox3.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox5.SuspendLayout();
+            groupBox6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).BeginInit();
             SuspendLayout();
             // 
             // printDialog1
@@ -291,7 +300,7 @@
             dataGridView6.Columns.AddRange(new DataGridViewColumn[] { Column24, Column25, Column26 });
             dataGridViewCellStyle8.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle8.BackColor = SystemColors.Window;
-            dataGridViewCellStyle8.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle8.Font = new Font("Segoe UI", 8.25F);
             dataGridViewCellStyle8.ForeColor = SystemColors.ControlText;
             dataGridViewCellStyle8.SelectionBackColor = Color.DodgerBlue;
             dataGridViewCellStyle8.SelectionForeColor = SystemColors.HighlightText;
@@ -302,7 +311,7 @@
             dataGridView6.ReadOnly = true;
             dataGridViewCellStyle9.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle9.BackColor = SystemColors.Control;
-            dataGridViewCellStyle9.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle9.Font = new Font("Segoe UI", 8.25F);
             dataGridViewCellStyle9.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle9.SelectionBackColor = SystemColors.GradientActiveCaption;
             dataGridViewCellStyle9.SelectionForeColor = SystemColors.HighlightText;
@@ -344,7 +353,7 @@
             dataGridView4.Columns.AddRange(new DataGridViewColumn[] { Column21, Column22, Column23 });
             dataGridViewCellStyle11.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle11.BackColor = SystemColors.Window;
-            dataGridViewCellStyle11.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle11.Font = new Font("Segoe UI", 8.25F);
             dataGridViewCellStyle11.ForeColor = SystemColors.ControlText;
             dataGridViewCellStyle11.SelectionBackColor = Color.DodgerBlue;
             dataGridViewCellStyle11.SelectionForeColor = SystemColors.HighlightText;
@@ -356,7 +365,7 @@
             dataGridView4.ReadOnly = true;
             dataGridViewCellStyle12.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle12.BackColor = SystemColors.Control;
-            dataGridViewCellStyle12.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            dataGridViewCellStyle12.Font = new Font("Segoe UI", 8.25F);
             dataGridViewCellStyle12.ForeColor = SystemColors.WindowText;
             dataGridViewCellStyle12.SelectionBackColor = SystemColors.GradientActiveCaption;
             dataGridViewCellStyle12.SelectionForeColor = SystemColors.HighlightText;
@@ -541,12 +550,64 @@
             groupBox5.Name = "groupBox5";
             groupBox5.TabStop = false;
             // 
+            // groupBox6
+            // 
+            groupBox6.Controls.Add(dataGridView2);
+            resources.ApplyResources(groupBox6, "groupBox6");
+            groupBox6.Name = "groupBox6";
+            groupBox6.TabStop = false;
+            // 
+            // dataGridView2
+            // 
+            dataGridView2.AllowUserToDeleteRows = false;
+            dataGridViewCellStyle17.BackColor = Color.LightGray;
+            dataGridView2.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle17;
+            dataGridView2.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView2.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
+            dataGridView2.BackgroundColor = SystemColors.ButtonFace;
+            dataGridView2.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView2.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4 });
+            resources.ApplyResources(dataGridView2, "dataGridView2");
+            dataGridView2.Name = "dataGridView2";
+            dataGridView2.ReadOnly = true;
+            dataGridView2.RowHeadersVisible = false;
+            dataGridView2.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            // 
+            // Column1
+            // 
+            Column1.DataPropertyName = "Fseismic";
+            resources.ApplyResources(Column1, "Column1");
+            Column1.Name = "Column1";
+            Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            Column2.DataPropertyName = "Weight";
+            resources.ApplyResources(Column2, "Column2");
+            Column2.Name = "Column2";
+            Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            Column3.DataPropertyName = "Centroid";
+            resources.ApplyResources(Column3, "Column3");
+            Column3.Name = "Column3";
+            Column3.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            Column4.DataPropertyName = "Ai_W_Arm";
+            resources.ApplyResources(Column4, "Column4");
+            Column4.Name = "Column4";
+            Column4.ReadOnly = true;
+            // 
             // Solver_Output
             // 
             AccessibleRole = AccessibleRole.None;
             resources.ApplyResources(this, "$this");
             AutoScaleMode = AutoScaleMode.Dpi;
             BackColor = SystemColors.ButtonHighlight;
+            Controls.Add(groupBox6);
             Controls.Add(groupBox5);
             Controls.Add(groupBox2);
             Controls.Add(statusStrip2);
@@ -572,6 +633,8 @@
             groupBox3.ResumeLayout(false);
             groupBox2.ResumeLayout(false);
             groupBox5.ResumeLayout(false);
+            groupBox6.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -624,5 +687,11 @@
         private GroupBox groupBox3;
         private GroupBox groupBox2;
         private GroupBox groupBox5;
+        private GroupBox groupBox6;
+        private DataGridView dataGridView2;
+        private DataGridViewTextBoxColumn Column1;
+        private DataGridViewTextBoxColumn Column2;
+        private DataGridViewTextBoxColumn Column3;
+        private DataGridViewTextBoxColumn Column4;
     }
 }

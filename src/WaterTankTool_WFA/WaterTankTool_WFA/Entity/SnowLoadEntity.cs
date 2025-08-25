@@ -21,8 +21,6 @@ namespace WaterTankTool_WFA.Entity
 
         public double ImportanceFactor { get; set; }
 
-
-
         public String Exposure {  get; set; }
         public double ExposureFactor { get; set; }
         public double AreaSubjectedToSnow {  get; set; }

@@ -219,6 +219,9 @@ namespace WaterTankTool_WFA.Load
 
             List<SegmentProperties> baseSegment = segment.FindAll(x => x.SegmentType == "Base");
 
+            List<SegmentProperties> riserSegment = segment.FindAll(x => x.SegmentType == "Riser");
+
+
             var tankProperties = _context?.TankProperties?.FirstOrDefault();
             var seismicLoad = _context?.SeismicLoadEntity?.FirstOrDefault();
             if (tankProperties == null)
@@ -234,30 +237,59 @@ namespace WaterTankTool_WFA.Load
             windBaseMoment += multi_leg_equations.F_Tank(tankSegment[0].HeightInitial, tankSegment[0].HeightFinal, tankSegment[0].Diameter, Double.Parse(tankProperties.ProjectedArea)) * Double.Parse(tankProperties.Centroid);
 
 
+            
 
 
-            foreach (var item in cylinderSegment)
+            if(AppState.CurrentTankType == TankType.MultiColumn)
             {
-                windBaseMoment += segment_Cylinder_Equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter);
-                var weightC = segment_Cylinder_Equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness);
-                var comC = segment_Cylinder_Equations.Centroid(item.HeightInitial, item.HeightFinal);
-                comXweight += weightC * comC;
+                var segmentType = "Riser";
+                foreach (var item in cylinderSegment)
+                {
+                    windBaseMoment += multi_leg_equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter, segmentType);
+                    var weightC = multi_leg_equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness, segmentType);
+                    var comC = multi_leg_equations.Centroid(item.HeightInitial, item.HeightFinal);
+                    comXweight += weightC * comC;
 
 
+                }
+
+                foreach (var item in riserSegment)
+                {
+
+                    windBaseMoment += multi_leg_equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter,segmentType);
+
+                    var weight = multi_leg_equations.weightOfPedestal(item.HeightInitial, item.HeightFinal,item.Diameter, item.Thickness, segmentType);
+                    var com = multi_leg_equations.Centroid(item.HeightInitial, item.HeightFinal);
+                    comXweight += weight * com;
+
+                }
+            }
+            else
+            {
+                foreach (var item in cylinderSegment)
+                {
+                    windBaseMoment += segment_Cylinder_Equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter);
+                    var weightC = segment_Cylinder_Equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness);
+                    var comC = segment_Cylinder_Equations.Centroid(item.HeightInitial, item.HeightFinal);
+                    comXweight += weightC * comC;
+
+
+                }
+
+                foreach (var item in baseSegment)
+                {
+                    var diameter = ((double)item.DiameterFinal + (double)item.DiameterInitial) / 2;
+
+                    windBaseMoment += segment_Conical_Equations.Mbase(item.HeightInitial, item.HeightFinal, diameter);
+
+                    var weight = segment_Conical_Equations.weight(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal, item.Thickness);
+                    var com = segment_Conical_Equations.Centroid(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal);
+                    comXweight += weight * com;
+
+                }
             }
 
 
-            foreach (var item in baseSegment)
-            {
-                var diameter = ((double)item.DiameterFinal + (double)item.DiameterInitial) / 2;
-
-                windBaseMoment += segment_Conical_Equations.Mbase(item.HeightInitial, item.HeightFinal, diameter);
-
-                var weight = segment_Conical_Equations.weight(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal, item.Thickness);
-                var com = segment_Conical_Equations.Centroid(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal);
-                comXweight += weight * com;
-
-            }
             var misc = _context?.DeadLoadEntity.FirstOrDefault();
 
             var res = double.Parse(tankProperties.TotalWeight) + misc.Miscellaneous_Load;
@@ -273,6 +305,7 @@ namespace WaterTankTool_WFA.Load
         {
             Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
             Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
+            Multileg_Cylinders multileg = new Multileg_Cylinders();
 
             segment.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
 
@@ -287,21 +320,37 @@ namespace WaterTankTool_WFA.Load
 
             List<SegmentProperties> baseSegment = segment.FindAll(x => x.SegmentType == "Base");
 
+            List<SegmentProperties> riserSegment = segment.FindAll(x => x.SegmentType == "Riser");
+
+            
 
 
             totalSegmentWeight = double.Parse(tankProperties.TotalWeight);
 
-            foreach (var item in cylinderSegment)
+            if(AppState.CurrentTankType == TankType.MultiColumn)
             {
-                totalSegmentWeight += segment_Cylinder_Equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness);
-            }
+                foreach (var item in cylinderSegment)
+                {
+                    totalSegmentWeight += multileg.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness,"Cylinder");
+                }
 
-            foreach (var item in baseSegment)
+                foreach (var item in riserSegment)
+                {
+                    totalSegmentWeight += multileg.weightOfPedestal(item.HeightInitial, item.HeightFinal, (double)item.Diameter, item.Thickness, "Riser");
+                }
+            }
+            else
             {
-                totalSegmentWeight += segment_Conical_Equations.weight(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal, item.Thickness);
+                foreach (var item in cylinderSegment)
+                {
+                    totalSegmentWeight += segment_Cylinder_Equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness);
+                }
+
+                foreach (var item in baseSegment)
+                {
+                    totalSegmentWeight += segment_Conical_Equations.weight(item.HeightInitial, item.HeightFinal, (double)item.DiameterInitial, (double)item.DiameterFinal, item.Thickness);
+                }
             }
-
-
 
             return totalSegmentWeight;
         }
