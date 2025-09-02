@@ -89,7 +89,7 @@
             textBox2.Name = "textBox2";
             textBox2.ReadOnly = true;
             textBox2.Size = new Size(100, 23);
-            textBox2.TabIndex = 3;
+            textBox2.TabIndex = 31;
             textBox2.Text = "1.2";
             textBox2.TextChanged += textBox2_TextChanged;
             // 
@@ -205,7 +205,7 @@
             comboBox1.Location = new Point(167, 95);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(100, 23);
-            comboBox1.TabIndex = 17;
+            comboBox1.TabIndex = 3;
             comboBox1.Text = "Select Risk Category";
             comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
@@ -223,7 +223,7 @@
             textBox5.Location = new Point(167, 127);
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(100, 23);
-            textBox5.TabIndex = 19;
+            textBox5.TabIndex = 4;
             textBox5.TextChanged += textBox5_TextChanged;
             // 
             // label10
@@ -251,7 +251,7 @@
             comboBox2.Location = new Point(167, 193);
             comboBox2.Name = "comboBox2";
             comboBox2.Size = new Size(100, 23);
-            comboBox2.TabIndex = 22;
+            comboBox2.TabIndex = 5;
             comboBox2.Text = "Select Exposure";
             comboBox2.SelectedIndexChanged += comboBox2_SelectedIndexChanged;
             // 
@@ -269,7 +269,7 @@
             textBox6.Location = new Point(167, 231);
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(100, 23);
-            textBox6.TabIndex = 24;
+            textBox6.TabIndex = 6;
             textBox6.TextChanged += textBox6_TextChanged;
             // 
             // textBox7

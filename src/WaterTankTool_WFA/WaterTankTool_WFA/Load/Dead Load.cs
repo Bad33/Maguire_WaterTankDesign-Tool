@@ -24,7 +24,11 @@ namespace WaterTankTool_WFA.Load
             var context = WaterTankDbContext.GetInstance();
             _context = context;
 
-
+            var existingData = _context.DeadLoadEntity.FirstOrDefault();
+            if(existingData != null)
+            {
+                textBox2.Text = existingData.Miscellaneous_Load.ToString();
+            }
             richTextBox1.Text = NotesManager.Notes.DeadLoadNotes ?? "";
         }
 

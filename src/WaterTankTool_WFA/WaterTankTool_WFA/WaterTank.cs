@@ -64,6 +64,7 @@ namespace WaterTankTool_WFA
             panel1.MouseUp += panel1_MouseUp;
             panel1.MouseClick += panel1_MouseClick;
             this.Resize += (s, e) => this.Invalidate();
+            UpdateLoadStatus();
         }
 
         private void InitializeStatusStrip2()
@@ -216,7 +217,7 @@ namespace WaterTankTool_WFA
             }
         }
 
-        private void UpdateLoadStatus()
+        public void UpdateLoadStatus()
         {
             var liveLoad = context.LiveLoadEntity.FirstOrDefault();
             var seismicLoad = context.SeismicLoadEntity.FirstOrDefault();
@@ -312,7 +313,7 @@ namespace WaterTankTool_WFA
 
         private void seismicLoadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Seismic seismic = new Seismic();
+            Seismic seismic = new Seismic(this);
             seismic.ShowDialog();
         }
 
@@ -658,7 +659,7 @@ namespace WaterTankTool_WFA
         }
         private void toolStripButton8_Click(object sender, EventArgs e)
         {
-            Seismic seismic = new Seismic();
+            Seismic seismic = new Seismic(this);
             seismic.ShowDialog();
         }
         private void toolStripButton9_Click(object sender, EventArgs e)

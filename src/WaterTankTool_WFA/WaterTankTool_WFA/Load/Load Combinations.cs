@@ -6,12 +6,15 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Designer_Notes;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Solver;
 using WaterTankTool_WFA.Solver_Equation;
+using WaterTankTool_WFA.Tanks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WaterTankTool_WFA.Load
 {
@@ -32,7 +35,7 @@ namespace WaterTankTool_WFA.Load
         double snowLoad = 0;
         double seismicLoad = 0;
         double windBaseMoment = 0;  // W
-        double seismicBaseMoment = 0; // E
+        public double seismicBaseMoment = 0; // E
 
         double roofLiveLoad = 0; // Lr
 
@@ -202,6 +205,7 @@ namespace WaterTankTool_WFA.Load
             calculatedM.Add(resM);
         }
 
+        TankData tankData = new TankData();
 
         public void GetBaseMoment(List<SegmentProperties> segment)
         {
@@ -230,39 +234,91 @@ namespace WaterTankTool_WFA.Load
 
             }
             double comXweight = 0;
-            comXweight += double.Parse(tankProperties.TotalWeight) * double.Parse(tankProperties.Centroid);
+            var misc = _context?.DeadLoadEntity.FirstOrDefault();
+            double res = 0;
+            double weightOfSteel = 0;
+
+            comXweight += double.Parse(tankProperties.TotalWeight) *( double.Parse(tankProperties.Centroid) + segment[0].HeightInitial);
 
 
+            string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                  ? "MultiLeg-Tanks.json"
+                  : "tanks.json";
 
-            windBaseMoment += multi_leg_equations.F_Tank(tankSegment[0].HeightInitial, tankSegment[0].HeightFinal, tankSegment[0].Diameter, Double.Parse(tankProperties.ProjectedArea)) * Double.Parse(tankProperties.Centroid);
+            string jsonPath = System.IO.Path.Combine(Application.StartupPath, fileName);
 
-
-            
-
-
-            if(AppState.CurrentTankType == TankType.MultiColumn)
+            if (!File.Exists(jsonPath))
             {
-                var segmentType = "Riser";
+                ShowError($"{fileName} file not found.");
+                return;
+            }
+
+            if (!TryReadJson(jsonPath, out string json)) return;
+
+            TanksData data;
+            try
+            {
+                data = JsonSerializer.Deserialize<TanksData>(json);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to parse {fileName}: {ex.Message}");
+                return;
+            }
+
+            // Find matching tank record
+            string tankCapacity = segment[0].SegmentName;
+            Tank foundTank = data?.tanks?.Find(t => t.type == tankCapacity);
+
+            GetTanksJsonData();
+
+            var _tank = tankData.Tanks.FirstOrDefault(data => data.Type == foundTank.type);
+
+            var otherTakWeight = "0";
+
+            if (_tank != null)
+            {
+                otherTakWeight = _tank.Weight_of_Bowl_and_cone;
+            }
+
+
+
+
+            windBaseMoment += multi_leg_equations.F_Tank(tankSegment[0].HeightInitial, tankSegment[0].HeightFinal, tankSegment[0].Diameter, Double.Parse(tankProperties.ProjectedArea)) * (Double.Parse(tankProperties.Centroid) + tankSegment[0].HeightInitial);
+
+            weightOfSteel += double.Parse(tankProperties.WeightOfSteel) + double.Parse(otherTakWeight);
+
+           
+
+
+
+            if (AppState.CurrentTankType == TankType.MultiColumn)
+            {
+
                 foreach (var item in cylinderSegment)
                 {
-                    windBaseMoment += multi_leg_equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter, segmentType);
-                    var weightC = multi_leg_equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness, segmentType);
+                    windBaseMoment += multi_leg_equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter, "Cylinder");
+                    var weightC = multi_leg_equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness, "Cylinder");
                     var comC = multi_leg_equations.Centroid(item.HeightInitial, item.HeightFinal);
                     comXweight += weightC * comC;
 
-
+                    weightOfSteel += weightC;
                 }
 
                 foreach (var item in riserSegment)
                 {
 
-                    windBaseMoment += multi_leg_equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter,segmentType);
+                    windBaseMoment += multi_leg_equations.Mbase(item.HeightInitial, item.HeightFinal, item.Diameter, "Riser");
 
-                    var weight = multi_leg_equations.weightOfPedestal(item.HeightInitial, item.HeightFinal,item.Diameter, item.Thickness, segmentType);
+                    var weight = multi_leg_equations.weightOfPedestal(item.HeightInitial, item.HeightFinal, item.Diameter, item.Thickness, "Riser");
                     var com = multi_leg_equations.Centroid(item.HeightInitial, item.HeightFinal);
                     comXweight += weight * com;
+                    weightOfSteel += weight;
+
 
                 }
+                res = double.Parse(tankProperties.WeightOfWater) + weightOfSteel;
+
             }
             else
             {
@@ -287,17 +343,58 @@ namespace WaterTankTool_WFA.Load
                     comXweight += weight * com;
 
                 }
+
+                 res = double.Parse(tankProperties.TotalWeight) + misc.Miscellaneous_Load;
+
             }
 
 
-            var misc = _context?.DeadLoadEntity.FirstOrDefault();
 
-            var res = double.Parse(tankProperties.TotalWeight) + misc.Miscellaneous_Load;
 
-            if(seismicLoad != null)
+            if (seismicLoad != null)
             {
 
                 seismicBaseMoment = (comXweight / res) * seismicLoad.V;
+            }
+        }
+
+        private bool TryReadJson(string path, out string json)
+        {
+            json = null!;
+            try
+            {
+                json = File.ReadAllText(path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to read '{path}': {ex.Message}");
+                return false;
+            }
+        }
+
+        private void GetTanksJsonData()
+        {
+            try
+            {
+                string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                                  ? "MultiLeg-Tanks.json"
+                                  : "tanks.json";
+
+                string jsonPath = System.IO.Path.Combine(Application.StartupPath, fileName);
+
+                if (!File.Exists(jsonPath))
+                {
+                    MessageBox.Show($"{fileName} not found in application folder.");
+                    return;
+                }
+
+                string jsonString = File.ReadAllText(jsonPath);
+                tankData = JsonSerializer.Deserialize<TankData>(jsonString);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while reading tank JSON: {ex.Message}");
             }
         }
 

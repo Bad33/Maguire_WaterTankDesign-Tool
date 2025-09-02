@@ -18,11 +18,13 @@ namespace WaterTankTool_WFA.Load
     {
         private WaterTankDbContext _context;
 
-        public Seismic()
+        public WaterTank _waterTankForm;
+        public Seismic(WaterTank waterTank)
         {
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
             _context = context;
+            _waterTankForm = waterTank;
             richTextBox1.Text = NotesManager.Notes.SeismicLoadNotes ?? "";
 
             ShowInputField();
@@ -39,11 +41,14 @@ namespace WaterTankTool_WFA.Load
         }
         private void ShowInputField()
         {
+            Load_Combinations load_Combinations = new Load_Combinations();
+            var seismic_base_moment = load_Combinations.seismicBaseMoment;
+
             var existingData = _context.SeismicLoadEntity.FirstOrDefault();
             if (existingData != null)
             {
-                numericUpDown2.Text = existingData.Ss.ToString();
-                numericUpDown1.Text = existingData.S1.ToString();
+                textBox14.Text = existingData.Ss.ToString();
+                textBox15.Text = existingData.S1.ToString();
                 comboBox1.Text = existingData.SiteClass.ToString();
                 textBox5.Text = existingData.Fa.ToString();
                 textBox4.Text = existingData.Fv.ToString();
@@ -58,6 +63,7 @@ namespace WaterTankTool_WFA.Load
                 textBox1.Text = existingData.Lambda.ToString();
                 textBox10.Text = existingData.Ai.ToString();
             }
+            textBox16.Text = seismic_base_moment.ToString("F5");
         }
 
 
@@ -65,8 +71,8 @@ namespace WaterTankTool_WFA.Load
         {
             List<string> allowedValues = new List<string> { "A", "B", "C", "D", "E", "F" };
 
-            if (string.IsNullOrWhiteSpace(numericUpDown2.Text) ||
-                 string.IsNullOrWhiteSpace(numericUpDown1.Text) ||
+            if (string.IsNullOrWhiteSpace(textBox14.Text) ||
+                 string.IsNullOrWhiteSpace(textBox15.Text) ||
                  string.IsNullOrWhiteSpace(comboBox1.Text) || string.IsNullOrWhiteSpace(textBox1.Text) || string.IsNullOrWhiteSpace(textBox2.Text) || string.IsNullOrWhiteSpace(textBox3.Text) ||
                 string.IsNullOrWhiteSpace(textBox4.Text) || string.IsNullOrWhiteSpace(textBox5.Text) || string.IsNullOrWhiteSpace(textBox6.Text) || string.IsNullOrWhiteSpace(textBox7.Text) ||
                 string.IsNullOrWhiteSpace(textBox8.Text) || string.IsNullOrWhiteSpace(textBox9.Text) || string.IsNullOrWhiteSpace(textBox10.Text) || string.IsNullOrWhiteSpace(textBox11.Text) || string.IsNullOrWhiteSpace(textBox12.Text))
@@ -92,8 +98,8 @@ namespace WaterTankTool_WFA.Load
 
             var seismicLoad = new SeismicLoadEntity
             {
-                Ss = (double)numericUpDown2.Value,
-                S1 = (double)numericUpDown1.Value,
+                Ss = double.Parse(textBox14.Text),
+                S1 = double.Parse(textBox15.Text),
                 SiteClass = comboBox1.Text,
                 Fa = double.Parse(textBox5.Text),
                 Fv = double.Parse(textBox4.Text),
@@ -113,6 +119,7 @@ namespace WaterTankTool_WFA.Load
 
 
             AddOrUpdateSeismicLoad(seismicLoad);
+            _waterTankForm.UpdateLoadStatus();
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
 
             if(result == DialogResult.OK)
@@ -168,10 +175,10 @@ namespace WaterTankTool_WFA.Load
 
         private void setFaFvValues()
         {
-            if (numericUpDown1 != null && numericUpDown2 != null)
+            if (textBox15 != null && textBox14 != null)
             {
-                double fvValue = SiteClassTable.GetFvValue(comboBox1.Text, double.Parse(numericUpDown1.Text));
-                double faValue = SiteClassTable.GetFaValue(comboBox1.Text, double.Parse(numericUpDown2.Text));
+                double fvValue = SiteClassTable.GetFvValue(comboBox1.Text, double.Parse(textBox15.Text));
+                double faValue = SiteClassTable.GetFaValue(comboBox1.Text, double.Parse(textBox14.Text));
 
                 textBox4.Text = fvValue.ToString();
                 textBox5.Text = faValue.ToString();
@@ -224,7 +231,7 @@ namespace WaterTankTool_WFA.Load
         {
             if (textBox4 != null && textBox4.Text != "NaN")
             {
-                var Sm1 = double.Parse(textBox4.Text) * (double)numericUpDown1.Value;
+                var Sm1 = double.Parse(textBox4.Text) * double.Parse(textBox15.Text);
                 double Sd1 = Math.Round(((double)2 / 3) * Sm1, 4);
 
                 textBox6.Text = Sd1.ToString();
@@ -239,7 +246,7 @@ namespace WaterTankTool_WFA.Load
         {
             if (textBox5 != null && textBox5.Text != "NaN")
             {
-                var Sms = double.Parse(textBox5.Text) * (double)numericUpDown2.Value;
+                var Sms = double.Parse(textBox5.Text) * double.Parse(textBox14.Text);
                 double Sds = Math.Round(((double)2 / 3) * Sms, 4);
                 textBox7.Text = Sds.ToString();
                 //textBox9.Text = Sds.ToString();
@@ -286,7 +293,7 @@ namespace WaterTankTool_WFA.Load
                 var Sa = double.Parse(textBox9.Text);
                 var Ie = double.Parse(textBox11.Text);
                 var Ri = double.Parse(textBox3.Text);
-                var S1 = double.Parse(numericUpDown1.Text);
+                var S1 = double.Parse(textBox15.Text);
 
                 var val1 = (lambda * Sa * Ie) / Ri;
 
@@ -315,7 +322,7 @@ namespace WaterTankTool_WFA.Load
         private bool validFields()
         {
             var res = false;
-            if (textBox1.Text != "" && textBox9.Text != "" && textBox11.Text != "" && textBox3.Text != "" && textBox3.Text != "" && numericUpDown1.Text != "" && textBox1.Text != null && textBox9.Text != null && textBox11.Text != null && textBox3.Text != null && textBox3.Text != null && numericUpDown1.Text != null)
+            if (textBox1.Text != "" && textBox9.Text != "" && textBox11.Text != "" && textBox3.Text != "" && textBox3.Text != "" && textBox15.Text != "" && textBox1.Text != null && textBox9.Text != null && textBox11.Text != null && textBox3.Text != null && textBox3.Text != null && textBox15.Text != null)
             {
                 res = true;
             }
