@@ -67,7 +67,7 @@ namespace WaterTankTool_WFA
             DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
             int materialNumber = (int)selectedRow.Cells[0].Value;
 
-            Material_Property_Data dialog = new Material_Property_Data("Modify", materialNumber);
+            Material_Property_Data dialog = new Material_Property_Data("Modify", materialNumber,_waterTankForm);
 
             dialog.ShowDialog();
             MaterialListView();

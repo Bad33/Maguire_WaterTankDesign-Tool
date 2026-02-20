@@ -42,17 +42,8 @@ partial class WaterTank
         printPreviewToolStripMenuItem = new ToolStripMenuItem();
         toolStripSeparator4 = new ToolStripSeparator();
         exitToolStripMenuItem = new ToolStripMenuItem();
-        editToolStripMenuItem = new ToolStripMenuItem();
-        undoToolStripMenuItem = new ToolStripMenuItem();
-        redoToolStripMenuItem = new ToolStripMenuItem();
-        toolStripSeparator5 = new ToolStripSeparator();
-        cutToolStripMenuItem = new ToolStripMenuItem();
-        copyToolStripMenuItem = new ToolStripMenuItem();
-        pasteToolStripMenuItem = new ToolStripMenuItem();
-        toolStripSeparator6 = new ToolStripSeparator();
-        selectAllToolStripMenuItem = new ToolStripMenuItem();
         toolsToolStripMenuItem = new ToolStripMenuItem();
-        optionsToolStripMenuItem = new ToolStripMenuItem();
+        materialToolStripMenuItem = new ToolStripMenuItem();
         loadToolStripMenuItem = new ToolStripMenuItem();
         liveLoadToolStripMenuItem = new ToolStripMenuItem();
         deadLoadToolStripMenuItem = new ToolStripMenuItem();
@@ -60,7 +51,7 @@ partial class WaterTank
         snowLoadToolStripMenuItem = new ToolStripMenuItem();
         windLoadToolStripMenuItem = new ToolStripMenuItem();
         seismicLoadToolStripMenuItem = new ToolStripMenuItem();
-        materialToolStripMenuItem = new ToolStripMenuItem();
+        optionsToolStripMenuItem = new ToolStripMenuItem();
         solveToolStripMenuItem = new ToolStripMenuItem();
         aboutToolStripMenuItem = new ToolStripMenuItem();
         toolStrip1 = new ToolStrip();
@@ -73,15 +64,20 @@ partial class WaterTank
         toolStrip3 = new ToolStrip();
         toolStripButton3 = new ToolStripButton();
         pasteToolStripButton1 = new ToolStripButton();
-        toolStripButton4 = new ToolStripButton();
-        toolStripSeparator7 = new ToolStripSeparator();
+        toolStripSeparator9 = new ToolStripSeparator();
         toolStripButton6 = new ToolStripButton();
+        toolStripSeparator7 = new ToolStripSeparator();
+        toolStripButton7 = new ToolStripButton();
+        toolStripButton4 = new ToolStripButton();
+        toolStripSeparator10 = new ToolStripSeparator();
+        toolStripButton10 = new ToolStripButton();
+        toolStripButton1 = new ToolStripButton();
         toolStripButton2 = new ToolStripDropDownButton();
-        liveLoadToolStripMenuItem1 = new ToolStripMenuItem();
-        snowLoadToolStripMenuItem1 = new ToolStripMenuItem();
-        windLoadToolStripMenuItem1 = new ToolStripMenuItem();
-        seismicLoadToolStripMenuItem1 = new ToolStripMenuItem();
-        toolStripButton5 = new ToolStripButton();
+        toolStripButton11 = new ToolStripButton();
+        toolStripButton8 = new ToolStripButton();
+        toolStripSeparator11 = new ToolStripSeparator();
+        toolStripButton13 = new ToolStripButton();
+        toolStripButton12 = new ToolStripButton();
         statusStrip2 = new StatusStrip();
         toolStrip2 = new ToolStrip();
         toolStripLabel1 = new ToolStripLabel();
@@ -89,6 +85,7 @@ partial class WaterTank
         toolStripSeparator8 = new ToolStripSeparator();
         toolStripLabel2 = new ToolStripLabel();
         toolStripTextBox2 = new ToolStripTextBox();
+        toolStripButton9 = new ToolStripButton();
         panel1 = new Panel();
         menuStrip1.SuspendLayout();
         toolStrip1.SuspendLayout();
@@ -102,7 +99,7 @@ partial class WaterTank
         resources.ApplyResources(menuStrip1, "menuStrip1");
         menuStrip1.GripMargin = new Padding(3);
         menuStrip1.ImageScalingSize = new Size(24, 24);
-        menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, editToolStripMenuItem, toolsToolStripMenuItem, aboutToolStripMenuItem });
+        menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, aboutToolStripMenuItem });
         menuStrip1.Name = "menuStrip1";
         menuStrip1.RenderMode = ToolStripRenderMode.System;
         menuStrip1.ShowItemToolTips = true;
@@ -166,64 +163,18 @@ partial class WaterTank
         exitToolStripMenuItem.Name = "exitToolStripMenuItem";
         resources.ApplyResources(exitToolStripMenuItem, "exitToolStripMenuItem");
         // 
-        // editToolStripMenuItem
-        // 
-        editToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { undoToolStripMenuItem, redoToolStripMenuItem, toolStripSeparator5, cutToolStripMenuItem, copyToolStripMenuItem, pasteToolStripMenuItem, toolStripSeparator6, selectAllToolStripMenuItem });
-        editToolStripMenuItem.Name = "editToolStripMenuItem";
-        resources.ApplyResources(editToolStripMenuItem, "editToolStripMenuItem");
-        // 
-        // undoToolStripMenuItem
-        // 
-        undoToolStripMenuItem.Name = "undoToolStripMenuItem";
-        resources.ApplyResources(undoToolStripMenuItem, "undoToolStripMenuItem");
-        // 
-        // redoToolStripMenuItem
-        // 
-        redoToolStripMenuItem.Name = "redoToolStripMenuItem";
-        resources.ApplyResources(redoToolStripMenuItem, "redoToolStripMenuItem");
-        // 
-        // toolStripSeparator5
-        // 
-        toolStripSeparator5.Name = "toolStripSeparator5";
-        resources.ApplyResources(toolStripSeparator5, "toolStripSeparator5");
-        // 
-        // cutToolStripMenuItem
-        // 
-        resources.ApplyResources(cutToolStripMenuItem, "cutToolStripMenuItem");
-        cutToolStripMenuItem.Name = "cutToolStripMenuItem";
-        // 
-        // copyToolStripMenuItem
-        // 
-        resources.ApplyResources(copyToolStripMenuItem, "copyToolStripMenuItem");
-        copyToolStripMenuItem.Name = "copyToolStripMenuItem";
-        // 
-        // pasteToolStripMenuItem
-        // 
-        resources.ApplyResources(pasteToolStripMenuItem, "pasteToolStripMenuItem");
-        pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
-        // 
-        // toolStripSeparator6
-        // 
-        toolStripSeparator6.Name = "toolStripSeparator6";
-        resources.ApplyResources(toolStripSeparator6, "toolStripSeparator6");
-        // 
-        // selectAllToolStripMenuItem
-        // 
-        selectAllToolStripMenuItem.Name = "selectAllToolStripMenuItem";
-        resources.ApplyResources(selectAllToolStripMenuItem, "selectAllToolStripMenuItem");
-        // 
         // toolsToolStripMenuItem
         // 
-        toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { optionsToolStripMenuItem, loadToolStripMenuItem, materialToolStripMenuItem, solveToolStripMenuItem });
+        toolsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { materialToolStripMenuItem, loadToolStripMenuItem, optionsToolStripMenuItem, solveToolStripMenuItem });
         toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
         resources.ApplyResources(toolsToolStripMenuItem, "toolsToolStripMenuItem");
         toolsToolStripMenuItem.Click += toolsToolStripMenuItem_Click;
         // 
-        // optionsToolStripMenuItem
+        // materialToolStripMenuItem
         // 
-        optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-        resources.ApplyResources(optionsToolStripMenuItem, "optionsToolStripMenuItem");
-        optionsToolStripMenuItem.Click += optionsToolStripMenuItem_Click;
+        materialToolStripMenuItem.Name = "materialToolStripMenuItem";
+        resources.ApplyResources(materialToolStripMenuItem, "materialToolStripMenuItem");
+        materialToolStripMenuItem.Click += materialToolStripMenuItem_Click;
         // 
         // loadToolStripMenuItem
         // 
@@ -267,11 +218,11 @@ partial class WaterTank
         resources.ApplyResources(seismicLoadToolStripMenuItem, "seismicLoadToolStripMenuItem");
         seismicLoadToolStripMenuItem.Click += seismicLoadToolStripMenuItem_Click;
         // 
-        // materialToolStripMenuItem
+        // optionsToolStripMenuItem
         // 
-        materialToolStripMenuItem.Name = "materialToolStripMenuItem";
-        resources.ApplyResources(materialToolStripMenuItem, "materialToolStripMenuItem");
-        materialToolStripMenuItem.Click += materialToolStripMenuItem_Click;
+        optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+        resources.ApplyResources(optionsToolStripMenuItem, "optionsToolStripMenuItem");
+        optionsToolStripMenuItem.Click += optionsToolStripMenuItem_Click;
         // 
         // solveToolStripMenuItem
         // 
@@ -337,7 +288,7 @@ partial class WaterTank
         toolStrip3.BackColor = SystemColors.ControlLight;
         toolStrip3.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip3.ImageScalingSize = new Size(24, 24);
-        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripButton4, toolStripSeparator7, toolStripButton6, toolStripButton2, toolStripButton5 });
+        toolStrip3.Items.AddRange(new ToolStripItem[] { toolStripButton3, pasteToolStripButton1, toolStripSeparator9, toolStripButton6, toolStripSeparator7, toolStripButton7, toolStripButton4, toolStripSeparator10, toolStripButton10, toolStripButton1, toolStripButton2, toolStripButton11, toolStripButton8, toolStripSeparator11, toolStripButton13, toolStripButton12 });
         toolStrip3.Name = "toolStrip3";
         // 
         // toolStripButton3
@@ -356,17 +307,10 @@ partial class WaterTank
         pasteToolStripButton1.Name = "pasteToolStripButton1";
         pasteToolStripButton1.Click += pasteToolStripButton1_Click;
         // 
-        // toolStripButton4
+        // toolStripSeparator9
         // 
-        toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        resources.ApplyResources(toolStripButton4, "toolStripButton4");
-        toolStripButton4.Name = "toolStripButton4";
-        toolStripButton4.Click += toolStripButton4_Click;
-        // 
-        // toolStripSeparator7
-        // 
-        toolStripSeparator7.Name = "toolStripSeparator7";
-        resources.ApplyResources(toolStripSeparator7, "toolStripSeparator7");
+        toolStripSeparator9.Name = "toolStripSeparator9";
+        resources.ApplyResources(toolStripSeparator9, "toolStripSeparator9");
         // 
         // toolStripButton6
         // 
@@ -375,43 +319,89 @@ partial class WaterTank
         toolStripButton6.Name = "toolStripButton6";
         toolStripButton6.Click += toolStripButton6_Click;
         // 
+        // toolStripSeparator7
+        // 
+        toolStripSeparator7.Name = "toolStripSeparator7";
+        resources.ApplyResources(toolStripSeparator7, "toolStripSeparator7");
+        // 
+        // toolStripButton7
+        // 
+        toolStripButton7.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton7.Image = Properties.Resources.wind;
+        resources.ApplyResources(toolStripButton7, "toolStripButton7");
+        toolStripButton7.Name = "toolStripButton7";
+        toolStripButton7.Click += toolStripButton7_Click;
+        // 
+        // toolStripButton4
+        // 
+        toolStripButton4.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        resources.ApplyResources(toolStripButton4, "toolStripButton4");
+        toolStripButton4.Name = "toolStripButton4";
+        toolStripButton4.Click += toolStripButton4_Click;
+        // 
+        // toolStripSeparator10
+        // 
+        toolStripSeparator10.Name = "toolStripSeparator10";
+        resources.ApplyResources(toolStripSeparator10, "toolStripSeparator10");
+        // 
+        // toolStripButton10
+        // 
+        toolStripButton10.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton10.Image = Properties.Resources.icons8_hex_wrench_96;
+        resources.ApplyResources(toolStripButton10, "toolStripButton10");
+        toolStripButton10.Name = "toolStripButton10";
+        toolStripButton10.Click += toolStripButton10_Click;
+        // 
+        // toolStripButton1
+        // 
+        toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton1.Image = Properties.Resources.snowflake;
+        resources.ApplyResources(toolStripButton1, "toolStripButton1");
+        toolStripButton1.Name = "toolStripButton1";
+        toolStripButton1.Click += toolStripButton1_Click_1;
+        // 
         // toolStripButton2
         // 
         toolStripButton2.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        toolStripButton2.DropDownItems.AddRange(new ToolStripItem[] { liveLoadToolStripMenuItem1, snowLoadToolStripMenuItem1, windLoadToolStripMenuItem1, seismicLoadToolStripMenuItem1 });
         resources.ApplyResources(toolStripButton2, "toolStripButton2");
         toolStripButton2.Name = "toolStripButton2";
+        toolStripButton2.ShowDropDownArrow = false;
+        toolStripButton2.Click += toolStripButton2_Click;
         // 
-        // liveLoadToolStripMenuItem1
+        // toolStripButton11
         // 
-        liveLoadToolStripMenuItem1.Name = "liveLoadToolStripMenuItem1";
-        resources.ApplyResources(liveLoadToolStripMenuItem1, "liveLoadToolStripMenuItem1");
-        liveLoadToolStripMenuItem1.Click += liveLoadToolStripMenuItem1_Click;
+        toolStripButton11.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton11.Image = Properties.Resources.drops;
+        resources.ApplyResources(toolStripButton11, "toolStripButton11");
+        toolStripButton11.Name = "toolStripButton11";
+        toolStripButton11.Click += toolStripButton11_Click;
         // 
-        // snowLoadToolStripMenuItem1
+        // toolStripButton8
         // 
-        snowLoadToolStripMenuItem1.Name = "snowLoadToolStripMenuItem1";
-        resources.ApplyResources(snowLoadToolStripMenuItem1, "snowLoadToolStripMenuItem1");
-        snowLoadToolStripMenuItem1.Click += snowLoadToolStripMenuItem1_Click;
+        toolStripButton8.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton8.Image = Properties.Resources.seismic;
+        resources.ApplyResources(toolStripButton8, "toolStripButton8");
+        toolStripButton8.Name = "toolStripButton8";
+        toolStripButton8.Click += toolStripButton8_Click;
         // 
-        // windLoadToolStripMenuItem1
+        // toolStripSeparator11
         // 
-        windLoadToolStripMenuItem1.Name = "windLoadToolStripMenuItem1";
-        resources.ApplyResources(windLoadToolStripMenuItem1, "windLoadToolStripMenuItem1");
-        windLoadToolStripMenuItem1.Click += windLoadToolStripMenuItem1_Click;
+        toolStripSeparator11.Name = "toolStripSeparator11";
+        resources.ApplyResources(toolStripSeparator11, "toolStripSeparator11");
         // 
-        // seismicLoadToolStripMenuItem1
+        // toolStripButton13
         // 
-        seismicLoadToolStripMenuItem1.Name = "seismicLoadToolStripMenuItem1";
-        resources.ApplyResources(seismicLoadToolStripMenuItem1, "seismicLoadToolStripMenuItem1");
-        seismicLoadToolStripMenuItem1.Click += seismicLoadToolStripMenuItem1_Click;
+        resources.ApplyResources(toolStripButton13, "toolStripButton13");
+        toolStripButton13.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton13.Name = "toolStripButton13";
+        toolStripButton13.Click += toolStripButton13_Click;
         // 
-        // toolStripButton5
+        // toolStripButton12
         // 
-        toolStripButton5.DisplayStyle = ToolStripItemDisplayStyle.Image;
-        resources.ApplyResources(toolStripButton5, "toolStripButton5");
-        toolStripButton5.Name = "toolStripButton5";
-        toolStripButton5.Click += toolStripButton5_Click;
+        toolStripButton12.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        resources.ApplyResources(toolStripButton12, "toolStripButton12");
+        toolStripButton12.Name = "toolStripButton12";
+        toolStripButton12.Click += toolStripButton12_Click;
         // 
         // statusStrip2
         // 
@@ -427,7 +417,7 @@ partial class WaterTank
         resources.ApplyResources(toolStrip2, "toolStrip2");
         toolStrip2.GripStyle = ToolStripGripStyle.Hidden;
         toolStrip2.ImageScalingSize = new Size(24, 24);
-        toolStrip2.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripTextBox1, toolStripSeparator8, toolStripLabel2, toolStripTextBox2 });
+        toolStrip2.Items.AddRange(new ToolStripItem[] { toolStripLabel1, toolStripTextBox1, toolStripSeparator8, toolStripLabel2, toolStripTextBox2, toolStripButton9 });
         toolStrip2.Name = "toolStrip2";
         // 
         // toolStripLabel1
@@ -437,6 +427,7 @@ partial class WaterTank
         // 
         // toolStripTextBox1
         // 
+        toolStripTextBox1.BackColor = SystemColors.Control;
         toolStripTextBox1.Name = "toolStripTextBox1";
         toolStripTextBox1.ReadOnly = true;
         resources.ApplyResources(toolStripTextBox1, "toolStripTextBox1");
@@ -459,12 +450,23 @@ partial class WaterTank
         resources.ApplyResources(toolStripTextBox2, "toolStripTextBox2");
         toolStripTextBox2.Click += toolStripTextBox2_Click;
         // 
+        // toolStripButton9
+        // 
+        toolStripButton9.Alignment = ToolStripItemAlignment.Right;
+        toolStripButton9.DisplayStyle = ToolStripItemDisplayStyle.Image;
+        toolStripButton9.Image = Properties.Resources.export;
+        resources.ApplyResources(toolStripButton9, "toolStripButton9");
+        toolStripButton9.Name = "toolStripButton9";
+        toolStripButton9.TextDirection = ToolStripTextDirection.Vertical270;
+        toolStripButton9.Click += toolStripButton9_Click;
+        // 
         // panel1
         // 
         resources.ApplyResources(panel1, "panel1");
+        panel1.BackColor = SystemColors.ControlLightLight;
         panel1.BorderStyle = BorderStyle.Fixed3D;
         panel1.Name = "panel1";
-        panel1.Paint += panel1_Paint_1;
+        panel1.Paint += panel1_Paint;
         // 
         // WaterTank
         // 
@@ -513,15 +515,6 @@ partial class WaterTank
     private ToolStripMenuItem printPreviewToolStripMenuItem;
     private ToolStripSeparator toolStripSeparator4;
     private ToolStripMenuItem exitToolStripMenuItem;
-    private ToolStripMenuItem editToolStripMenuItem;
-    private ToolStripMenuItem undoToolStripMenuItem;
-    private ToolStripMenuItem redoToolStripMenuItem;
-    private ToolStripSeparator toolStripSeparator5;
-    private ToolStripMenuItem cutToolStripMenuItem;
-    private ToolStripMenuItem copyToolStripMenuItem;
-    private ToolStripMenuItem pasteToolStripMenuItem;
-    private ToolStripSeparator toolStripSeparator6;
-    private ToolStripMenuItem selectAllToolStripMenuItem;
     private ToolStripMenuItem toolsToolStripMenuItem;
     private ToolStripMenuItem optionsToolStripMenuItem;
     private ToolStripButton newToolStripButton;
@@ -552,13 +545,23 @@ partial class WaterTank
     private ToolStripMenuItem deadLoadToolStripMenuItem;
     private ToolStripMenuItem waterLoadToolStripMenuItem;
     private ToolStripMenuItem aboutToolStripMenuItem;
-    private ToolStripButton toolStripButton5;
     private ToolStripButton toolStripButton6;
     private Panel panel1;
     private SplitContainer splitContainer1;
     private ToolStripDropDownButton toolStripButton2;
-    private ToolStripMenuItem liveLoadToolStripMenuItem1;
-    private ToolStripMenuItem snowLoadToolStripMenuItem1;
-    private ToolStripMenuItem windLoadToolStripMenuItem1;
-    private ToolStripMenuItem seismicLoadToolStripMenuItem1;
+    private ToolStripButton toolStripButton1;
+    private ToolStripButton toolStripButton7;
+    private ToolStripButton toolStripButton8;
+    private ToolStripSeparator toolStripSeparator9;
+    private ToolStripButton toolStripButton9;
+    private GroupBox groupBox1;
+    private SplitContainer splitContainer2;
+    private Panel panel2;
+    private Button button1;
+    private ToolStripSeparator toolStripSeparator10;
+    private ToolStripButton toolStripButton10;
+    private ToolStripButton toolStripButton11;
+    private ToolStripSeparator toolStripSeparator11;
+    private ToolStripButton toolStripButton12;
+    private ToolStripButton toolStripButton13;
 }

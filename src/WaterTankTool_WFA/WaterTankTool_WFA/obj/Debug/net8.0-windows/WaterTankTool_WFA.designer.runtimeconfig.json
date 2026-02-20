@@ -12,8 +12,8 @@
       }
     ],
     "additionalProbingPaths": [
-      "C:\\Users\\DTS Loaner 25\\.dotnet\\store\\|arch|\\|tfm|",
-      "C:\\Users\\DTS Loaner 25\\.nuget\\packages",
+      "C:\\Users\\nikhil.chaudhary\\.dotnet\\store\\|arch|\\|tfm|",
+      "C:\\Users\\nikhil.chaudhary\\.nuget\\packages",
       "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
     ],
     "configProperties": {

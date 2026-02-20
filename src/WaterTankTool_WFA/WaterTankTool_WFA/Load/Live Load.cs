@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using WaterTankTool_WFA.Entity;
+using WaterTankTool_WFA.Designer_Notes;
 
 namespace WaterTankTool_WFA.Load
 {
@@ -21,101 +22,118 @@ namespace WaterTankTool_WFA.Load
             InitializeComponent();
             var context = WaterTankDbContext.GetInstance();
             _context = context;
-            ShowInputField();
-        }
 
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-            TotalLoad();
-        }
+            var snowLoad = _context.SnowLoadEntity.FirstOrDefault();
+            if (snowLoad != null)
+                textBox2.Text = snowLoad.AreaSubjectedToSnow.ToString();
 
-        private void TotalLoad()
-        {
-            if (textBox1 != null && textBox1.Text != "" && textBox2 != null && textBox2.Text != "")
+            var existing = _context.LiveLoadEntity.FirstOrDefault();
+            if (existing != null)
             {
-                var load = double.Parse(textBox1.Text);
-                var area = double.Parse(textBox2.Text);
-                var total = (load * area) / 1000;
-                textBox3.Text = Math.Round(total, 4).ToString();
+                textBox4.Text = existing.Live_Load.ToString();
+                textBox1.Text = existing.Roof_Live_Load.ToString();
+                textBox3.Text = existing.Design_Roof_Live_Load.ToString();
             }
-        }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-            TotalLoad();
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-            TotalLoad();
-        }
-
-        private void ShowInputField()
-        {
-            var existingData = _context.LiveLoadEntity.FirstOrDefault();
-            if(existingData != null)
-            {
-                textBox1.Text = existingData.Live_Load.ToString();
-                textBox2.Text = existingData.Area_Exposed.ToString();
-                textBox3.Text = existingData.Total_Load.ToString();
-            }
+            richTextBox1.Text = NotesManager.Notes.LiveLoadNotes ?? "";
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(textBox1.Text) ||
-                 string.IsNullOrWhiteSpace(textBox2.Text) ||
-                 string.IsNullOrWhiteSpace(textBox3.Text))
+            if (!AreAllRequiredFieldsFilled())
             {
                 MessageBox.Show("Please fill in all fields.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!double.TryParse(textBox1.Text, out double live_Load) ||
-                !double.TryParse(textBox2.Text, out double area) ||
-                !double.TryParse(textBox3.Text, out double total))
+            if (!double.TryParse(textBox4.Text, out double liveLoad) ||
+                !double.TryParse(textBox1.Text, out double roofLiveLoad) ||
+                !double.TryParse(textBox3.Text, out double designRoofLiveLoad))
             {
                 MessageBox.Show("Please enter valid numbers.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-
-            var liveLoad = new LiveLoadEntity
+            var LiveLoad = new LiveLoadEntity
             {
-                Live_Load = double.Parse(textBox1.Text),
-                Area_Exposed = double.Parse(textBox2.Text),
-                Total_Load = double.Parse(textBox3.Text),
-
+                Live_Load = liveLoad,
+                Roof_Live_Load = roofLiveLoad,
+                Design_Roof_Live_Load = designRoofLiveLoad
             };
 
-
-            AddOrUpdateLiveLoad(liveLoad);
+            AddOrUpdateLiveLoad(LiveLoad);
             DialogResult result = MessageBox.Show("Data saved successfully!", "Confirmation", MessageBoxButtons.OK);
+            if(result == DialogResult.OK)
+            {
+                this.Close();
+            }
         }
 
- 
-
-        public void AddOrUpdateLiveLoad(LiveLoadEntity liveLoad)
+        public void AddOrUpdateLiveLoad(LiveLoadEntity LiveLoad)
         {
-            //Check if any WindLoadEntity data already exists in the table
-                var existingData = _context.LiveLoadEntity.FirstOrDefault();
+            var existingData = _context.LiveLoadEntity.FirstOrDefault();
 
             if (existingData == null)
             {
-                // If no data exists, add the new WindLoadEntity to the table
-                _context.LiveLoadEntity.Add(liveLoad);
+                _context.LiveLoadEntity.Add(LiveLoad);
             }
             else
             {
-                // If data exists, update the existing data with new values
-                existingData.Live_Load = liveLoad.Live_Load;
-                existingData.Area_Exposed = liveLoad.Area_Exposed;
-                existingData.Total_Load = liveLoad.Total_Load;
-
+                existingData.Live_Load = LiveLoad.Live_Load;
+                existingData.Roof_Live_Load = LiveLoad.Roof_Live_Load;
+                existingData.Design_Roof_Live_Load = LiveLoad.Design_Roof_Live_Load;
             }
 
-            // Save changes to the database
             _context.SaveChanges();
         }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+            NotesManager.Notes.LiveLoadNotes = richTextBox1.Text;
+            NotesManager.SaveNotes();
+        }
+
+        private void Live_Load_Load(object sender, EventArgs e)
+        {
+            var snowLoad = _context.SnowLoadEntity.FirstOrDefault();
+            if (snowLoad != null)
+            {
+                textBox2.Text = snowLoad.AreaSubjectedToSnow.ToString();
+            }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrWhiteSpace(textBox1.Text) && !string.IsNullOrWhiteSpace(textBox2.Text))
+            {
+                if (double.TryParse(textBox1.Text, out double roof) &&
+                    double.TryParse(textBox2.Text, out double area))
+                {
+                    var result = Math.Round((roof * area) / 1000, 5);
+                    textBox3.Text = result.ToString();
+                }
+                else
+                {
+                    textBox3.Text = string.Empty;
+                }
+            }
+            else
+            {
+                textBox3.Text = string.Empty;
+            }
+        }
+
+        // Helper: Check if a textbox is filled (not null, not empty, not whitespace)
+        private bool IsTextBoxFilled(System.Windows.Forms.TextBox tb) =>
+            tb != null && !string.IsNullOrWhiteSpace(tb.Text);
+
+        // Helper: All required fields filled?
+        private bool AreAllRequiredFieldsFilled()
+        {
+            return IsTextBoxFilled(textBox1) &&
+                   IsTextBoxFilled(textBox2) &&
+                   IsTextBoxFilled(textBox3) &&
+                   IsTextBoxFilled(textBox4);
+        }
     }
-   }
+}

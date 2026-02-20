@@ -32,5 +32,12 @@ namespace WaterTankTool_WFA.Tanks
 
         [JsonPropertyName("thickness")]
         public string Thickness { get; set; }
+
+        [JsonPropertyName("Centroid")]
+        public string Centroid { get; set; }
+
+        [JsonPropertyName("Weight_of_Bowl_and_cone")]
+        public string Weight_of_Bowl_and_cone { get; set; }
+
     }
 }

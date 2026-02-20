@@ -20,6 +20,9 @@ namespace WaterTankTool_WFA
         private WaterTankDbContext _context;
 
         List<string> ggwp = new List<string>();
+
+        private TankType _type;
+        private int _noOfCol;
         public AddSegmentSection(WaterTank waterTankForm)
         {
 
@@ -30,6 +33,27 @@ namespace WaterTankTool_WFA
             setComboboxItems();
 
         }
+
+        public AddSegmentSection(WaterTank waterTankForm, TankType tankType)
+        {
+            _type = tankType;
+            _waterTankForm = waterTankForm;
+            InitializeComponent();
+            _context = WaterTankDbContext.GetInstance();
+
+            setComboboxItems();
+
+            if (_type == TankType.MultiColumn)
+            {
+                label2.Text = "Columns";
+                label3.Visible = false;
+                pictureBox2.Visible = false;
+            }
+
+        }
+
+
+
 
         private void setComboboxItems()
         {
@@ -52,12 +76,61 @@ namespace WaterTankTool_WFA
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType,_waterTankForm);
-            this.Close();
-            DialogResult result = segmentDialogBox.ShowDialog();
-            if (result == DialogResult.OK || result == DialogResult.Cancel)
+
+            var columnCount = _context.SegmentProperties.Where(x => x.SegmentType == "Cylinder").ToList();
+
+
+            if(_type == TankType.MultiColumn && SegmentType == "Cylinder" && columnCount.Count() == 0)
             {
+                MultiColumn.Segments.AddNoOfColumns addNoOfColumns = new MultiColumn.Segments.AddNoOfColumns(_waterTankForm,SegmentType);
+                DialogResult result2 = addNoOfColumns.ShowDialog();
+                if (result2 == DialogResult.OK || result2 == DialogResult.Cancel)
+                {
+
+                    this.Close();
+                }
+
+            }
+            else if (_type == TankType.MultiColumn && SegmentType == "Cylinder" && columnCount.Count() > 0)
+            {
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm);
+
+                DialogResult result2 = segmentDialogBox.ShowDialog();
+                if (result2 == DialogResult.OK)
+                {
+                    SegmentDialogBox segmentDialogBoxRizor = new SegmentDialogBox("Riser", _waterTankForm, "Add Riser");
+                    this.Close();
+                    DialogResult result1 = segmentDialogBoxRizor.ShowDialog();
+                    this.Close();
+                }
+                else if (result2 == DialogResult.Cancel)
+                {
+                    this.Close();
+                }
+            }
+            else if (_type == TankType.MultiColumn && SegmentType == "Tanks" )
+            {
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm);
                 this.Close();
+                DialogResult result1 = segmentDialogBox.ShowDialog();
+                if (result1 == DialogResult.OK || result1 == DialogResult.Cancel)
+                {
+
+                    this.Close();
+                }
+         
+            }
+
+            else
+            {
+                SegmentDialogBox segmentDialogBox = new SegmentDialogBox(SegmentType, _waterTankForm);
+                this.Close();
+                DialogResult result = segmentDialogBox.ShowDialog();
+                if (result == DialogResult.OK || result == DialogResult.Cancel)
+                {
+                    this.Close();
+                }
+
             }
         }
 
@@ -102,12 +175,12 @@ namespace WaterTankTool_WFA
             _selectedPictureBox = (PictureBox)sender;
             _selectedPictureBox.BorderStyle = BorderStyle.Fixed3D;
 
-            TanksList tanksList = new TanksList(_waterTankForm);
-            DialogResult result = tanksList.ShowDialog();
-            if (result == DialogResult.OK || result == DialogResult.Cancel)
-            {
-                this.Close();
-            }
+            //TanksList tanksList = new TanksList(_waterTankForm);
+            //DialogResult result = tanksList.ShowDialog();
+            //if (result == DialogResult.OK || result == DialogResult.Cancel)
+            //{
+            //    this.Close();
+            //}
 
 
         }

@@ -200,6 +200,7 @@
             Controls.Add(button1);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(2);
             MaximizeBox = false;
             Name = "AddSegmentSection";

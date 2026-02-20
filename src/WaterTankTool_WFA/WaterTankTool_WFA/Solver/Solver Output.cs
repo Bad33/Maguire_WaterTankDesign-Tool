@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region Using directives
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,526 +7,1471 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Printing;
 using System.Globalization;
+using System.IO;
 using System.Linq;
-
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using WaterTankTool_WFA.Entity;
 using WaterTankTool_WFA.Migrations;
 using WaterTankTool_WFA.Solver_Equation;
+using WaterTankTool_WFA.Tanks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Rectangle = System.Drawing.Rectangle;
+#endregion
 
 namespace WaterTankTool_WFA.Solver
 {
-
-
     public partial class Solver_Output : Form
     {
+        #region Fields / Properties
+        private readonly WaterTankDbContext _context;
+        private readonly WaterTank _waterTankForm;
 
-        private WaterTankDbContext _context;
+        private readonly UnitsConverter inchToFtConverter = new UnitsConverter();   //  kept; not used here but left intact
+
+        private Label rtcLabel;                 // set in LoadAllowableCompressiveStress()
+
+        // Exposed to other members
         public string waterWeight;
         public string snowWeight;
         public string selfWeight;
-
-        private Label rtcLabel;
-
         public string Fy;
 
-        public segmentGravityLoad segmentGravityLoad;
-
+        // Data caches
         public List<string> selfWeightData = new List<string>();
-
         public List<segmentGravityLoad> cummulativeLoadData = new List<segmentGravityLoad>();
-
         public List<WindTable> windLoadData = new List<WindTable>();
-
         public List<designTableData> segmentPropertiesTableData = new List<designTableData>();
-
         public List<tabelData2> tabelData2s = new List<tabelData2>();
+        public List<SeismicLoad> seismicLoads = new List<SeismicLoad>();
 
-        public Solver_Output()
+        public string _loadCombo;
+        #endregion
+
+        #region Constructor
+        public Solver_Output(string loadCombo,string titleLoad)
         {
             InitializeComponent();
 
-            var context = WaterTankDbContext.GetInstance();
-            _context = context;
+            this.Text = $"{this.Text} ({titleLoad})";
 
-            LoadData();
+            // Context (singleton)
+            _context = WaterTankDbContext.GetInstance();
+            //_waterTankForm = waterTankForm;
+            _loadCombo = loadCombo;
+            Qwind = _context.WindLoadEntity.FirstOrDefault();
 
-            LoadAllowableCompressiveStress();
+            if (_context.SnowLoadEntity.FirstOrDefault() == null)
+            {
+                ShowError("Please add Snow Load first!");   // shows once
+                return;                                     // skip the rest
+            }
+            var solverForm = new DesignTable();
+            tabelData2s = (List<tabelData2>)solverForm.TableData2Results;
 
+            try
+            {
+                LoadData();
+                LoadSegmentWeightData();
+                LoadCummulativeWeightData();
+                WindLoadPerSegment();
+                LoadCheckTableData();
+                SeismicLoadTable();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Unexpected error while initialising Solver Output: {ex.Message}");
+            }
+        }
+        #endregion
 
-            LoadSegmentWeightData();
+        #region *** Utilities ***
 
-            LoadCummulativeWeightData();
+        /// <summary> Small helper to show consistent error pop-ups. </summary>
+        private void ShowError(string msg, string title = "Error")
+            => MessageBox.Show(msg, title, MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-            WindLoadPerSegment();
-
-            LoadTable2();
-
-            LoadCheckTableData();
+        /// <summary> Reads a JSON file safely. </summary>
+        private bool TryReadJson(string path, out string json)
+        {
+            json = null!;
+            try
+            {
+                json = File.ReadAllText(path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to read '{path}': {ex.Message}");
+                return false;
+            }
         }
 
-        private void WindLoadPerSegment()
+        /// <summary> Converts a string that may contain units / text to a double. </summary>
+        public static double ExtractDoubleValue(string input)
         {
-            var segmentData = _context.SegmentProperties.ToList();
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+            string[] parts = input?.Split() ?? Array.Empty<string>();
+            if (parts.Length == 0 || !double.TryParse(parts[0], out double result))
+                throw new FormatException($"Unable to parse '{input}' as a double.");
+            return result;
+        }
 
-            Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
-            Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
+        /// <summary> Helper to add a red status label once. </summary>
+        private void AddStatusLabel(string message)
+        {
+            if (statusStrip2.Items.OfType<ToolStripStatusLabel>().Any(l => l.Text == message)) return;
 
-            
-            double cumulativeFwind = 0;
-
-            foreach (var segment in segmentData)
+            statusStrip2.Items.Add(new ToolStripStatusLabel
             {
-                double fwind = segment_Cylinder_Equations.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter);
-                double loadlocation = segment_Cylinder_Equations.L(segment.HeightInitial, segment.HeightFinal);
-                double baseElevation = segment.HeightInitial;
-                double armLength = loadlocation - baseElevation;
-                double farm = fwind * armLength;
+                ForeColor = Color.Red,
+                Text = message
+            });
+        }
+        #endregion
 
-                cumulativeFwind += fwind;  // cumulative addition
+        // Order: Tanks (0), Cylinder (1), Riser (2), Base (3, if present)
+        // then by HeightFinal descending.
+        private static int SegmentTypeOrder(string t)
+            => t == "Tanks" ? 0
+             : t == "Cylinder" ? 1
+             : t == "Riser" ? 2
+             : 3; // Base/others last
 
-                windLoadData.Add(new WindTable
+
+
+        private void SeismicLoadTable()
+        {
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
+            segmentData = segmentData
+                .OrderBy(s => SegmentTypeOrder(s.SegmentType))
+                .ThenByDescending(s => s.HeightFinal)
+                .ToList();
+
+            var areaC1 = segmentData
+                    .Where(x => x.SegmentType == "Cylinder")
+                    .OrderBy(x => x.HeightInitial)  // lowest HeightInitial first
+                    .Select((segment, index) =>
+                    {
+                        return Math.Round((Math.PI / 4) *
+                         (Math.Pow(12 * segment.Diameter, 2) -
+                          Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+                    })
+                    .FirstOrDefault();  // only return the first (lowest)
+
+            var areaR1 = segmentData
+                    .Where(x => x.SegmentType == "Riser")
+                    .OrderBy(x => x.HeightInitial)  // lowest HeightInitial first
+                    .Select(segment =>
+                    {
+                        return Math.Round((Math.PI / 4) *
+                         (Math.Pow(12 * segment.Diameter, 2) -
+                          Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+                    })
+                    .FirstOrDefault();
+
+
+            var _seismicLoads = _context.SeismicLoadEntity.FirstOrDefault();
+            var tankProperties = _context?.TankProperties?.FirstOrDefault();
+            if (tankProperties == null)
+            {
+                ShowError("Please add segments first! (Tank Properties were not found)");
+                return;
+            }
+
+            var cylinderEq = new Segment_Cylinder_Equations();
+            var baseEq = new Segment_Conical_Equations();
+            var multicolumn = new Multileg_Cylinders();
+
+            double seismic_V = _seismicLoads.V;
+
+
+
+            double weight = 0;
+            double centroid = 0;
+            double mSeismic = 0;
+            double tankCentroid = 0;
+
+            foreach (SegmentProperties segment in segmentData)
+            {
+                if(segment.SegmentType == "Tanks")
                 {
-                    Fwind = fwind.ToString(),
-                    Vwind = cumulativeFwind.ToString(), // cumulative sum updated per iteration
-                    BaseElevation = segment.HeightInitial.ToString(),
-                    LoadLocation = loadlocation.ToString(),
-                    ArmLength = armLength.ToString(),
-                    FArm = farm.ToString(),
-                    Mwind = segment_Cylinder_Equations.Mbase(segment.HeightInitial, segment.HeightFinal, segment.Diameter).ToString()
+                    weight = Double.Parse(tankProperties.TotalWeight);
+                    centroid = Double.Parse(tankProperties.Centroid) + segment.HeightInitial;
+                    tankCentroid = centroid;
+                    mSeismic = 0;
+                }
+                else if(segment.SegmentType == "Cylinder" )
+                {
+                    weight = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness)
+                                : multicolumn.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness,segment.SegmentType);
+
+                    centroid = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.Centroid(segment.HeightInitial, segment.HeightFinal)
+                                : multicolumn.Centroid(segment.HeightInitial, segment.HeightFinal);
+
+                    var eq = (Double.Parse(tankProperties.TotalWeight) * (areaC1 / ((AppState.NoOfColumns * areaC1) + areaR1)) * (tankCentroid - segment.HeightInitial));
+
+                    double extra = 0;
+
+                    if (seismicLoads.Count() > 1)
+                    {
+                        foreach (var ele in seismicLoads.Skip(1))
+                        
+                            extra += ele.Weight * (ele.Centroid - segment.HeightInitial);
+                    }
+                    extra += weight / AppState.NoOfColumns * (centroid - segment.HeightInitial);
+                    mSeismic =  eq + extra;
+
+                }
+                else if(segment.SegmentType == "Riser")
+                {
+                    weight = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness)
+                             : multicolumn.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness, segment.SegmentType);
+
+                    centroid = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.Centroid(segment.HeightInitial, segment.HeightFinal)
+                                : multicolumn.Centroid(segment.HeightInitial, segment.HeightFinal);
+
+                    var eq = (Double.Parse(tankProperties.TotalWeight) * (areaR1 / ((AppState.NoOfColumns * areaC1) + areaR1)) * (tankCentroid - segment.HeightInitial));
+
+                    double extra = 0;
+
+                    var riserSegment = segmentData.FindAll(ele => ele.SegmentType == "Cylinder" || ele.SegmentType=="Tanks");
+                    
+                    if (seismicLoads.Count() > riserSegment.Count())
+                    {
+                        foreach (var ele in seismicLoads.Skip(riserSegment.Count()))
+
+                            extra += ele.Weight * (ele.Centroid - segment.HeightInitial);
+                    }
+                    extra += weight * (centroid - segment.HeightInitial);
+
+                    mSeismic = eq + extra;
+
+                }
+                else
+                {
+                    weight = baseEq.weight(segment.HeightInitial, segment.HeightFinal, (double)segment.DiameterInitial, (double)segment.DiameterFinal, segment.Thickness);
+                    centroid = baseEq.Centroid(segment.HeightInitial, segment.HeightFinal, (double)segment.DiameterInitial, (double)segment.DiameterFinal);
+
+                    mSeismic = 0;
+
+                }
+
+
+
+
+                if (_loadCombo == "A" || _loadCombo == "C")
+                {
+
+                    seismic_V = 0.6 * seismic_V;
+                    mSeismic = 0.6 * _seismicLoads.Ai * mSeismic;
+                }
+                else if (_loadCombo == "B")
+                {
+
+                    seismic_V = 0.75 * (0.6 * seismic_V);
+                    mSeismic = 0.6 * _seismicLoads.Ai * mSeismic;
+
+
+                }
+
+                seismicLoads.Add(new SeismicLoad
+                {
+                    Fseismic = Math.Round(seismic_V,4),
+                    Weight = Math.Round(segment.SegmentType == "Cylinder"?weight/AppState.NoOfColumns:weight,4),
+                    Centroid = Math.Round(centroid,4),
+                    Ai_W_Arm = Math.Round(mSeismic,4)
                 });
             }
 
 
-            dataGridView7.DataSource = windLoadData;
 
-
+            dataGridView2.DataSource = seismicLoads;
+                
         }
 
+
+        #region Wind Load
+        private void WindLoadPerSegment()
+        {
+            // Defensive fetch
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
+            segmentData = segmentData
+                .OrderBy(s => SegmentTypeOrder(s.SegmentType))
+                .ThenByDescending(s => s.HeightFinal)
+                .ToList();
+
+
+            double prevContribMulti = 0;
+
+
+            var tankProperties = _context?.TankProperties?.FirstOrDefault();
+            if (tankProperties == null)
+            {
+                ShowError("Please add segments first! (Tank Properties were not found)");
+                return;
+            }
+
+            double projectedArea;
+            try
+            {
+                projectedArea = ExtractDoubleValue(tankProperties.ProjectedArea);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Invalid projected area in Tank Properties: {ex.Message}");
+                return;
+            }
+
+            var cylinderEq = new Segment_Cylinder_Equations();
+            var baseEq = new Segment_Conical_Equations();
+            var multicolumn = new Multileg_Cylinders();
+            var areaC1 = segmentData
+                .Where(x => x.SegmentType == "Cylinder")
+                .OrderBy(x => x.HeightInitial)  // lowest HeightInitial first
+                .Select((segment, index) =>
+                {
+                    return Math.Round((Math.PI / 4) *
+                     (Math.Pow(12 * segment.Diameter, 2) -
+                      Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+                })
+                .FirstOrDefault();  // only return the first (lowest)
+
+            var areaR1 = segmentData
+                    .Where(x => x.SegmentType == "Riser")
+                    .OrderBy(x => x.HeightInitial)  // lowest HeightInitial first
+                    .Select(segment =>
+                    {
+                        return Math.Round((Math.PI / 4) *
+                         (Math.Pow(12 * segment.Diameter, 2) -
+                          Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+                    })
+                    .FirstOrDefault();
+
+
+            double cumulativeFwind = 0;
+            double commonvar = 0;
+            foreach (var segment in segmentData)
+            {
+                double fwind, loadLocation;
+
+                if (segment.SegmentType == "Tanks")
+                {
+                    fwind = calculateF(
+                                        cylinderEq.qzi(segment.HeightInitial),
+                                        cylinderEq.qzf(segment.HeightFinal),
+                                        projectedArea);
+                    commonvar = fwind;
+
+                    if (_loadCombo == "A" || _loadCombo == "C")
+                    {
+                       
+                        commonvar = 0.6 * commonvar;
+                    }
+                    else if (_loadCombo == "B")
+                    {
+        
+                        commonvar = 0.75 * (0.6 * commonvar);
+
+                    }
+
+                    loadLocation = segment.HeightInitial + ExtractDoubleValue(tankProperties.Centroid);
+                }
+                else if(segment.SegmentType == "Cylinder")
+                {
+                    fwind = AppState.CurrentTankType == TankType.SingleColumn?cylinderEq.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter): multicolumn.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter,"Cylinder")/AppState.NoOfColumns;
+                    loadLocation = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.L(segment.HeightInitial, segment.HeightFinal) : multicolumn.L(segment.HeightInitial, segment.HeightFinal);
+                }
+                else
+                {
+                    fwind = AppState.CurrentTankType == TankType.SingleColumn ? baseEq.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter) : multicolumn.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter, "Riser");
+
+                    loadLocation = AppState.CurrentTankType == TankType.SingleColumn ? baseEq.L(segment.HeightInitial, segment.HeightFinal) : multicolumn.L(segment.HeightInitial, segment.HeightFinal);
+
+                }
+
+                double baseElevation = segment.HeightInitial;
+                double armLength = loadLocation - baseElevation;
+
+                double prevContrib = windLoadData
+                                     .Sum(row => Double.Parse(row.Fwind) *
+                                                 (Double.Parse(row.LoadLocation) - baseElevation));
+
+
+
+
+
+                if (segment.SegmentType == "Tanks")
+                {
+                    prevContribMulti = windLoadData
+                     .Sum(row => Double.Parse(row.Fwind) * (areaR1 / ((AppState.NoOfColumns * areaC1) + areaR1)) *
+                                 ((Double.Parse(row.LoadLocation) - segment.HeightInitial)));
+                }
+                if (segment.SegmentType == "Cylinder")
+                {
+                    var prevSegment = segmentData.Find(x =>
+                        x.HeightInitial == segment.HeightFinal && x.SegmentType == segment.SegmentType);
+
+                    var refRow = windLoadData
+                        .OrderBy(r => Double.Parse(r.BaseElevation))
+                        .FirstOrDefault(r => Double.Parse(r.BaseElevation) > segment.HeightInitial);
+
+                    if (refRow != null)
+                    {
+                        var scale = areaC1 / ((AppState.NoOfColumns * areaC1) + areaR1);
+                        prevContribMulti = Double.Parse(windLoadData[0].Fwind) * scale *
+                                            (Double.Parse(windLoadData[0].LoadLocation) - segment.HeightInitial);
+                    }
+                    double _extra = 0;
+
+                    if (prevSegment != null && windLoadData.Count > 0)
+                    {
+                        foreach (var ele in windLoadData.Skip(1))
+                        {
+                            _extra += Double.Parse(ele.Fwind) *
+                                      (Double.Parse(ele.LoadLocation) - segment.HeightInitial);
+                        }
+
+
+
+                        prevContribMulti += _extra;
+                    }
+                }
+                else if (segment.SegmentType == "Riser")
+                {
+                    var refRow = windLoadData
+                        .OrderBy(r => Double.Parse(r.BaseElevation))
+                        .FirstOrDefault(r => Double.Parse(r.BaseElevation) > segment.HeightInitial);
+
+                    if (refRow != null)
+                    {
+                        var scaleR = areaR1 / ((AppState.NoOfColumns * areaC1) + areaR1);
+                        prevContribMulti = Double.Parse(windLoadData[0].Fwind) * scaleR *
+                                            (Double.Parse(windLoadData[0].LoadLocation) - segment.HeightInitial);
+                    }
+
+                    var riserSegment = segmentData.FindAll(ele => ele.SegmentType == "Cylinder" || ele.SegmentType=="Tanks");
+
+                    if (windLoadData.Count > riserSegment.Count())
+                    {
+                        double extra = 0;
+                        foreach (var ele in windLoadData.Skip(riserSegment.Count()))
+                            extra += Double.Parse(ele.Fwind) *
+                                     (Double.Parse(ele.LoadLocation) - segment.HeightInitial);
+
+                        prevContribMulti += extra;
+                    }
+                }
+
+
+
+                if (_loadCombo == "A" || _loadCombo == "C")
+                {
+                    fwind = 0.6 * fwind;
+
+                }
+                else if (_loadCombo == "B")
+                {
+                    fwind = 0.75 * (0.6 * fwind);
+
+
+                }
+                if (AppState.CurrentTankType == TankType.SingleColumn)
+                {
+
+                    cumulativeFwind += fwind;
+                }
+                else
+                {
+
+                    if (segment.SegmentType == "Tanks")
+                    {
+                        cumulativeFwind = fwind;
+                    }
+                    else if (segment.SegmentType == "Cylinder")
+                    {
+                        
+                        var gg = commonvar * (areaC1 / ((AppState.NoOfColumns * areaC1) + areaR1)) + fwind;
+
+                        cumulativeFwind = (cumulativeFwind == 0) ? cumulativeFwind + gg : cumulativeFwind + fwind;
+
+                    }
+                    else
+                    {
+                        var gg = commonvar * (areaR1 / ((AppState.NoOfColumns * areaC1) + areaR1)) + fwind;
+
+                        cumulativeFwind = (cumulativeFwind == 0) ? cumulativeFwind + gg : cumulativeFwind + fwind;
+
+                    }
+                }
+                double farm = fwind * armLength;
+
+                double mwind = AppState.CurrentTankType == TankType.SingleColumn?farm + prevContrib : farm + prevContribMulti;
+
+                
+                windLoadData.Add(new WindTable
+                    {
+                        Fwind = Math.Round(fwind, 4).ToString(),
+                        Vwind = Math.Round(cumulativeFwind, 4).ToString(),
+                        BaseElevation = Math.Round(baseElevation, 4).ToString(),
+                        LoadLocation = Math.Round(loadLocation, 4).ToString(),
+                        ArmLength = Math.Round(armLength, 4).ToString(),
+                        FArm = Math.Round(farm, 4).ToString(),
+                        Mwind = Math.Round(mwind, 4).ToString()
+                    });
+                if (segment.SegmentType == "Tanks")
+                {
+                    cumulativeFwind = 0;
+                    prevContribMulti = 0;
+                }
+
+                if (segment.SegmentType == "Cylinder")
+                {
+                    bool isLastCylinder = !segmentData
+                        .SkipWhile(s => s != segment)   // look at remaining segments
+                        .Skip(1)                        // skip current one
+                        .Any(s => s.SegmentType == "Cylinder");
+
+                    if (isLastCylinder)
+                    {
+                        cumulativeFwind = 0;
+                        prevContribMulti = 0;
+
+                    }
+                }
+
+            }
+
+            // ensure segment weights are loaded once (no duplicates)
+            if (selfWeightData.Count == 0)
+                LoadSegmentWeightData();
+
+            dataGridView7.DataSource = windLoadData;
+        }
+        private WindLoadEntity Qwind;
+        private double calculateF(double qzi, double qzf, double projectedArea)
+        {
+       
+
+            var result1 = 30 * Qwind.Cf * (projectedArea / 1000);
+
+            var result2 = (((qzi + qzf) / 2) * Qwind.Cf * Qwind.G * (projectedArea / 1000));
+
+            return Math.Max(result1, result2);
+        }
+        #endregion
+
+        #region Segment Gravity Loads
         private void LoadSegmentWeightData()
         {
-            var segmentData = _context.SegmentProperties.ToList();
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
+            segmentData = segmentData
+                .OrderBy(s => SegmentTypeOrder(s.SegmentType))
+                .ThenByDescending(s => s.HeightFinal)
+                .ToList();
 
-            string json = File.ReadAllText("../../../tanks.json");
 
-            if (segmentData.Count > 0)
+            var snowEntity = _context?.SnowLoadEntity?.FirstOrDefault();
+            var liveLoad = _context?.LiveLoadEntity?.FirstOrDefault();
+            var deadLoad = _context?.DeadLoadEntity?.FirstOrDefault();
+            if (snowEntity == null || liveLoad == null || deadLoad==null)
             {
+                ShowError("Please add all the Loads first!");
+                return;
+            }
 
-                var tankCapacity = segmentData[0].SegmentName;
+            if (segmentData.Count == 0)
+            {
+                AddStatusLabel("No Segments Added. Please add the segments to see the output.");
+                return;
+            }
 
-                TanksData data = JsonSerializer.Deserialize<TanksData>(json);
-                Tank foundTank = data.tanks.Find(t => t.type == tankCapacity);
+            // Choose the correct file depending on tank type
+            string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                              ? "MultiLeg-Tanks.json"
+                              : "tanks.json";
+
+            string jsonPath = Path.Combine(Application.StartupPath, fileName);
+
+            if (!File.Exists(jsonPath))
+            {
+                ShowError($"{fileName} file not found.");
+                return;
+            }
+
+            if (!TryReadJson(jsonPath, out string json)) return;
+
+            TanksData data;
+            try
+            {
+                data = JsonSerializer.Deserialize<TanksData>(json);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to parse {fileName}: {ex.Message}");
+                return;
+            }
+
+            // Find matching tank record
+            string tankCapacity = segmentData[0].SegmentName;
+            Tank foundTank = data?.tanks?.Find(t => t.type == tankCapacity);
+
+            if (foundTank == null)
+            {
+                ShowError($"Tank type '{tankCapacity}' not found in {fileName}!");
+                return;
+            }
+
+            // … proceed with foundTank …
 
 
+            string numericPart = new(foundTank.Weight_of_Water
+                                      .Where(c => char.IsDigit(c) || c == '.' || c == '-').ToArray());
 
-                waterWeight = foundTank.Weight_of_Water;
-                snowWeight = _context.SnowLoadEntity.FirstOrDefault().Total_Load.ToString();
-                selfWeight = foundTank.Weight_of_Steel;
+            if (!double.TryParse(numericPart, NumberStyles.Any, CultureInfo.InvariantCulture,
+                                 out double waterWeightDbl))
+            {
+                ShowError("Failed to parse Weight_of_Water.");
+                return;
+            }
+            waterWeight = numericPart;
 
-                string numericPart = new string(selfWeight
-                 .Where(c => char.IsDigit(c) || c == '.' || c == '-')
-                 .ToArray());
-                var result = double.Parse(numericPart, CultureInfo.InvariantCulture);
+            string snowWeightStr = snowEntity.TotalSnowLoad.ToString();
+            snowWeight = snowWeightStr;
+            selfWeight = foundTank.Weight_of_Steel;
+            double miscLoad = 0;
 
-                Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
-                Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
+            if(AppState.CurrentTankType == TankType.SingleColumn)
+            {
+                miscLoad = deadLoad.Miscellaneous_Load;
+            }
 
-                var viewModelData = segmentData.FindAll(x => x.SegmentType == "Tanks").Select(segment => new segmentGravityLoad
+            double final_load = 0;
+
+            if (_loadCombo == "B")
+            {
+                var extraP_Load = (0.75 * liveLoad.Live_Load) + 0.75 * (Math.Max(liveLoad.Roof_Live_Load, snowEntity.TotalSnowLoad));
+                final_load = (double.Parse(selfWeight) + extraP_Load + miscLoad);
+                snowWeightStr = "0";
+
+            }
+            else if(_loadCombo == "C")
+            {
+                final_load = 0.6 * (double.Parse(selfWeight)  + miscLoad);
+                waterWeight = (0.6 * (double.Parse(waterWeight))).ToString();
+
+            }
+            else if (_loadCombo == "A")
+            {
+                final_load = (double.Parse(selfWeight) + miscLoad);
+                snowWeightStr = "0";
+
+            }
+
+
+            var cylinderEq = new Segment_Cylinder_Equations();
+            var conicalEq = new Segment_Conical_Equations();
+
+            var cylinderMultileg = new Multileg_Cylinders();
+
+            List<segmentGravityLoad> viewModelData1 = new List<segmentGravityLoad>();
+            List<segmentGravityLoad> viewModelData2 = new List<segmentGravityLoad>();
+            // Tanks
+            // Tanks (usually single row, order doesn’t matter)
+
+
+            // Tanks first (HeightFinal desc)
+            var viewModelData = segmentData
+                .Where(x => x.SegmentType == "Tanks")
+                .OrderByDescending(x => x.HeightFinal)
+                .Select(segment => new segmentGravityLoad
                 {
-
                     waterWeight = waterWeight,
-                    snowWeight = snowWeight,
-                    selfWeight = result.ToString(),
+                    snowWeight = snowWeightStr,
+                    selfWeight = final_load.ToString("f5")
+                })
+                .ToList();
 
 
-                }).ToList();
-
-
-
-                var viewModelData1 = segmentData.FindAll(x => x.SegmentType == "Cylinder").Select(segment => new segmentGravityLoad
-                {
-
-                    waterWeight = "0",
-                    snowWeight = "0",
-                    selfWeight = segment_Cylinder_Equations.weightOfPedestal(
-                                    segment.HeightInitial,
-                                    segment.HeightFinal,
-                                    segment.Diameter,
-                                    segment.Thickness).ToString()
-
-
-                }).ToList();
-
-                var viewModelData2 = segmentData.FindAll(x => x.SegmentType == "Base").Select(segment => new segmentGravityLoad
-                {
-
-                    waterWeight = "0",
-                    snowWeight = "0",
-                    selfWeight = segment_Conical_Equations.weight(
-                                    segment.HeightInitial,
-                                    segment.HeightFinal,
-                                    (double)segment.DiameterInitial,
-                                    (double)segment.DiameterFinal,
-                                    segment.Thickness).ToString()
-
-
-                }).ToList();
-
-
-                var combineViewModel = viewModelData.Concat(viewModelData1).Concat(viewModelData2).ToList();
-
-                foreach (var item in combineViewModel)
-                {
-                    selfWeightData.Add(item.selfWeight);
-                }
-
-                dataGridView4.DataSource = combineViewModel;
-            }
-            else
+            if (AppState.CurrentTankType == TankType.SingleColumn)
             {
-                //MessageBox.Show("Muji");
-                Label label = new Label();
-                label.Text = "No Segments Added. Please add the segments to see the output.";
-                label.ForeColor = Color.Red;
-                
-                statusStrip2.Items.Add(label.Text);
-                //label.Controls.Add(statusStrip2);
+                // Cylinders next (single column)
+                viewModelData1 = segmentData
+                    .Where(x => x.SegmentType == "Cylinder")
+                    .OrderByDescending(x => x.HeightFinal)
+                    .Select(segment => new segmentGravityLoad
+                    {
+                        waterWeight = "0",
+                        snowWeight = "0",
+                        selfWeight = Math.Round(
+                            cylinderEq.weightOfPedestal(
+                                segment.HeightInitial,
+                                segment.HeightFinal,
+                                segment.Diameter,
+                                segment.Thickness
+                            ), 4).ToString()
+                    })
+                    .ToList();
+
+                // Base last (single column)
+                viewModelData2 = segmentData
+                    .Where(x => x.SegmentType == "Base")
+                    .OrderByDescending(x => x.HeightFinal)
+                    .Select(segment => new segmentGravityLoad
+                    {
+                        waterWeight = "0",
+                        snowWeight = "0",
+                        selfWeight = Math.Round(
+                            conicalEq.weight(
+                                segment.HeightInitial,
+                                segment.HeightFinal,
+                                (double)segment.DiameterInitial,
+                                (double)segment.DiameterFinal,
+                                segment.Thickness
+                            ), 4).ToString()
+                    })
+                    .ToList();
+            }
+            else // MultiColumn
+            {
+                // Cylinders next (multi-leg) — per-column weight; keep your division by NoOfColumns
+                viewModelData1 = segmentData
+                    .Where(x => x.SegmentType == "Cylinder")
+                    .OrderByDescending(x => x.HeightFinal)
+                    .Select(segment => new segmentGravityLoad
+                    {
+                        waterWeight = "0",
+                        snowWeight = "0",
+                        selfWeight = Math.Round(
+                            cylinderMultileg.weightOfPedestal(
+                                segment.HeightInitial,
+                                segment.HeightFinal,
+                                segment.Diameter,
+                                segment.Thickness,
+                                "Cylinder"
+                            ) / AppState.NoOfColumns, 4).ToString()
+                    })
+                    .ToList();
+
+                // Riser last (multi-leg)
+                viewModelData2 = segmentData
+                .Where(x => x.SegmentType == "Riser")
+                    .OrderByDescending(x => x.HeightFinal)
+                    .Select(segment => new segmentGravityLoad
+                    {
+                        waterWeight = "0",
+                        snowWeight = "0",
+                        selfWeight = Math.Round(
+                            cylinderMultileg.weightOfPedestal(
+                                segment.HeightInitial,
+                                segment.HeightFinal,
+                                segment.Diameter,
+                                segment.Thickness,
+                                "Riser"
+                            ), 4).ToString()
+                    })
+                    .ToList();
             }
 
-        }
+            // Combine in the desired order for the grid
+            var combined = viewModelData
+                .Concat(viewModelData1)
+                .Concat(viewModelData2)
+                .ToList();
 
+
+
+            selfWeightData.AddRange(combined.Select(x => x.selfWeight));
+
+            dataGridView4.DataSource = combined;
+
+            AddStatusLabel("Double-click a cell in the Segment Check Table to change thickness. (It’s recommended to change T by ±25 % each time) | For more info open Help.");
+        }
+        #endregion
+        TankData tankData = new TankData();
+        TankDataDimensions dimensions = new TankDataDimensions();
+        #region Cumulative Gravity Loads
         private void LoadCummulativeWeightData()
         {
-            var segmentData = _context.SegmentProperties.ToList();
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
+            segmentData = segmentData
+                .OrderBy(s => SegmentTypeOrder(s.SegmentType))
+                .ThenByDescending(s => s.HeightFinal)
+                .ToList();
 
-            string json = File.ReadAllText("../../../tanks.json");
+            var deadLoad = _context?.DeadLoadEntity?.FirstOrDefault();
 
-            if (segmentData.Count > 0)
+            if (segmentData.Count == 0)
             {
-                var tankCapacity = segmentData[0].SegmentName;
+                ShowError("No segment data found. Please add segments before proceeding.");
+                return;
+            }
+            // Choose the correct file depending on tank type
+            string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                              ? "MultiLeg-Tanks.json"
+                              : "tanks.json";
 
-                TanksData data = JsonSerializer.Deserialize<TanksData>(json);
-                Tank foundTank = data.tanks.Find(t => t.type == tankCapacity);
+            string jsonPath = Path.Combine(Application.StartupPath, fileName);
+
+            if (!File.Exists(jsonPath))
+            {
+                ShowError($"{fileName} file not found.");
+                return;
+            }
+
+            if (!TryReadJson(jsonPath, out string json)) return;
+
+            TanksData data;
+            try
+            {
+                data = JsonSerializer.Deserialize<TanksData>(json);
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Failed to parse {fileName}: {ex.Message}");
+                return;
+            }
+
+            // Find matching tank record
+            string tankCapacity = segmentData[0].SegmentName;
+            Tank foundTank = data?.tanks?.Find(t => t.type == tankCapacity);
+
+            if (foundTank == null)
+            {
+                ShowError($"Tank type '{tankCapacity}' not found in {fileName}!");
+                return;
+            }
+
+            // … proceed with foundTank …
 
 
+            string numericPart = new(foundTank.Weight_of_Water
+                                      .Where(c => char.IsDigit(c) || c == '.' || c == '-').ToArray());
+            string waterWeightStr = numericPart;
 
-                
+           
 
-                string numericPart = new string(foundTank.Weight_of_Water
-                         .Where(c => char.IsDigit(c) || c == '.' || c == '-')
-                         .ToArray());
-                waterWeight = numericPart;
+            var snowEntity = _context?.SnowLoadEntity?.FirstOrDefault();
+            if (snowEntity == null)
+            {
+                ShowError("Please add Snow Load first!");
+                return;
+            }
+            string snowWeightStr = snowEntity.TotalSnowLoad.ToString();
 
-                snowWeight = _context.SnowLoadEntity.FirstOrDefault().Total_Load.ToString();
-                selfWeight = foundTank.Weight_of_Steel;
-                int cumulativeIndex = 0;
+            double miscLoad = deadLoad != null ? deadLoad.Miscellaneous_Load : 15;
 
-
-                Segment_Cylinder_Equations segment_Cylinder_Equations = new Segment_Cylinder_Equations();
-                Segment_Conical_Equations segment_Conical_Equations = new Segment_Conical_Equations();
-
-                List<string> res = new List<string>();
-                for (int i = 0; i < selfWeightData.Count; i++)
+            // Build cumulative self-weight list (res[i] holds Σ selfWeight[0..i])
+            List<string> cumulative = new();
+            for (int i = 0; i < selfWeightData.Count; i++)
+            {
+                if (!double.TryParse(selfWeightData[i], out double thisWeight))
                 {
-                    if (i == 0)
-                    {
-                        res.Add(selfWeightData[i]);
-
-                    }
-                    else
-                    {
-                        var gg = Double.Parse(selfWeightData[i]) + Double.Parse(res[i - 1]);
-                        res.Add(gg.ToString());
-                    }
+                    ShowError($"Invalid selfWeight '{selfWeightData[i]}' at index {i}.");
+                    return;
                 }
+                double previous = i == 0 ? 0
+                                         : double.Parse(cumulative[i - 1]);
+                cumulative.Add((thisWeight + previous).ToString());
+            }
 
+
+
+
+
+
+
+
+         
+
+            var cylinderEq = new Segment_Cylinder_Equations();
+            var conicalEq = new Segment_Conical_Equations();
+
+            var cylinderMultileg = new Multileg_Cylinders();
+
+
+            List<segmentGravityLoad> viewModelData = new List<segmentGravityLoad>();
+
+            List<segmentGravityLoad> viewModelData1 = new List<segmentGravityLoad>();
+            List<segmentGravityLoad> viewModelData2 = new List<segmentGravityLoad>();
+            var _selfTankWeight = "";
+
+            if (AppState.CurrentTankType == TankType.SingleColumn)
+            {
                 cummulativeLoadData = segmentData.Select((segment, index) =>
                 {
-                    // Accumulate selfWeight in each iteration
+                    _selfTankWeight = index < cumulative.Count
+                                   ? Math.Round(double.Parse(cumulative[index]), 4).ToString()
+                                   : "0";
+
+                    double snowDbl = double.TryParse(snowWeightStr, out double sn) ? sn : 0;
+                    string snowSum = (snowDbl).ToString();
+
+                    if (_loadCombo == "A" || _loadCombo == "B")
+                    {
+                        snowSum = "0";
+                    }
+
                     return new segmentGravityLoad
                     {
-                        waterWeight = waterWeight,
-                        snowWeight = snowWeight,
-                        selfWeight = res[index], // Store the cumulative value
-
+                        waterWeight = waterWeightStr,
+                        snowWeight = snowSum,
+                        selfWeight = _selfTankWeight
                     };
                 }).ToList();
-
-                dataGridView6.DataSource = cummulativeLoadData;
-
             }
-
-
-        }
-
-        private void LoadCheckTableData()
-        {
-            var segmentData = _context.SegmentProperties.ToList();
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
-
-            if (segmentData.Count > 0)
+            else // MultiColumn
             {
-                var viewModelData = segmentData.Select((segment,index) => 
-                {
+                //string otherTankWeight = foundTank;
 
-                    double fa = 0;
-                    double fb = 0;
-                    string check = null;
-
-                    if (segmentData[index].SegmentType == "Tanks")
+                viewModelData = segmentData
+                    .Where(x => x.SegmentType == "Tanks")
+                    .OrderByDescending(x => x.HeightFinal)
+                    .Select((segment, index) =>
                     {
-                        fa = 0;
-                        fb = 0;
-                        check = "NA";
+                        _selfTankWeight = index < cumulative.Count
+                   ? Math.Round(double.Parse(cumulative[index]), 4).ToString()
+                   : "0";
+
+                       
+                        return new segmentGravityLoad
+                        {
+                            waterWeight = waterWeightStr,
+                            snowWeight = snowWeightStr,
+                            selfWeight = _selfTankWeight
+                        };
+                    })
+                    .ToList();
+
+                // Cylinders next (multi-leg) — per-column weight; keep your division by NoOfColumns
+                var areaC1 = segmentData
+                    .Where(x => x.SegmentType == "Cylinder")
+                    .OrderBy(x => x.HeightInitial)  // lowest HeightInitial first
+                    .Select((segment,index) =>
+                    {
+                        return Math.Round((Math.PI / 4) *
+                         (Math.Pow(12 * segment.Diameter, 2) -
+                          Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+                    })
+                    .FirstOrDefault();  // only return the first (lowest)
+
+                var areaR1 = segmentData
+                        .Where(x => x.SegmentType == "Riser")
+                        .OrderBy(x => x.HeightInitial)  // lowest HeightInitial first
+                        .Select(segment =>
+                        {
+                            return Math.Round((Math.PI / 4) *
+                             (Math.Pow(12 * segment.Diameter, 2) -
+                              Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+                        })
+                        .FirstOrDefault();  // only return the first (lowest)
+                                            // Cylinders (multi-leg) — keep your order and water split logic,
+                                            // but make selfWeight cumulative after the first row.
+                var cylindersOrdered = segmentData
+                    .Where(x => x.SegmentType == "Cylinder")
+                    .OrderByDescending(x => x.HeightFinal)
+                    .ToList();
+
+
+                double prevSelfWeight = 0.0; // cumulative tracker (per row)
+
+                for (int i = 0; i < cylindersOrdered.Count; i++)
+                {
+                    var segment = cylindersOrdered[i];
+
+                    // area for water split (unchanged logic)
+                    var area = Math.Round(
+                        (Math.PI / 4) * (Math.Pow(12 * segment.Diameter, 2) -
+                                         Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+
+                    var _waterWeight = (area / ((AppState.NoOfColumns * areaC1 + areaR1)) * Double.Parse(waterWeightStr));
+
+                    // per-column self weight for this cylinder
+                    double perColCylinderSelf = cylinderMultileg.weightOfPedestal(
+                        segment.HeightInitial,
+                        segment.HeightFinal,
+                        segment.Diameter,
+                        segment.Thickness,
+                        "Cylinder") / AppState.NoOfColumns;
+
+                    // first row: your original formula (perColCylinderSelf + tank share)
+                    // subsequent rows: cumulative = previous selfWeight + perColCylinderSelf
+                    double selfW;
+                    if (i == 0)
+                    {
+                        selfW = Math.Round(
+                            perColCylinderSelf + (Double.Parse(_selfTankWeight) / AppState.NoOfColumns), 4);
                     }
                     else
                     {
-                        fa = (Double.Parse(cummulativeLoadData[index].waterWeight) + Double.Parse(cummulativeLoadData[index].snowWeight) + Double.Parse(cummulativeLoadData[index].selfWeight)) / segmentPropertiesTableData[index].A;
-                        fb = (Double.Parse(windLoadData[index].Mwind) * 12) / segmentPropertiesTableData[index].S;
-
-                        if((fa + fb) == 0)
-                        {
-                            check = "NA";
-                        }
-                        else
-                        {
-                            check = ((fa / tabelData2s[index].Fa) + (fb / tabelData2s[index].Fb)).ToString();
-
-                        }
+                        selfW = Math.Round(prevSelfWeight + perColCylinderSelf, 4);
                     }
 
-
-                    return new CheckTableData
+                    viewModelData1.Add(new segmentGravityLoad
                     {
+                        waterWeight = _waterWeight.ToString("F5"),
+                        snowWeight = "0",
+                        selfWeight = selfW.ToString()
+                    });
 
-                        Segment = segment.SegmentName,
-                        fa = fa,
-                        fb = fb,
-                        check = check,
-
-
-                        //A = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2))),
-                    };
-
-
-
-                }).ToList();
-
-                dataGridView1.DataSource = viewModelData;
-            }
-
-        }
-
-        private void LoadTable2()
-        {
-            var segmentData = _context.SegmentProperties.ToList();
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
-
-            if (segmentData.Count > 0)
-            {
-
-                tabelData2s = segmentData.Select(segment =>
-                {
-                    var rt = (segment.Diameter / 2) / segment.Thickness;
-                    var i = Math.Round((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4)), 4);
-                    var a = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2)));
-                    var co = 1022 / (195 + rt);
-                    var r = Math.Sqrt(i / a);
-                    double Fl = 0;
-                    if (rt <= Double.Parse(rtcLabel.Text))
-                    {
-                        Fl = (233 * Double.Parse(Fy)) / (2 * (166 + rt));
-                    }
-                    else if (rt > Double.Parse(rtcLabel.Text))
-                    {
-                        Fl = (co * 29000000) / (2 * rt);
-                    }
-
-                    var klr = (2.1 * 2124) / r;
-
-                    var cc = Math.Sqrt((Math.Pow(Math.PI, 2) * 29000000) / Fl);
-
-                    double kf = 0;
-
-                    if (klr <= 25)
-                    {
-                        kf = 1;
-                    }
-                    else if (klr > 25 && klr <= cc)
-                    {
-                        kf = 1 - (0.5 * Math.Pow((klr / cc), 2));
-                    }
-                    else if (klr > cc)
-                    {
-                        kf = (0.5 * Math.Pow((cc / klr), 2));
-                    }
-
-                    var fa = Fl * kf;
-                    var fb = Fl;
-
-                    return new tabelData2
-                    {
-                        Segment = segment.SegmentName,
-                        Radius = segment.Diameter / 2,
-                        Thickness = segment.Thickness,
-                        Rt = rt,
-                        A = a,
-                        I = i,
-                        r = r,
-                        Co = co,
-                        Fl = Fl,
-                        KLr = klr,
-                        Cc = cc,
-                        Kf = kf,
-                        Fa = fa,
-                        Fb = fb,
-                    };
-
-
-                }).ToList();
-
-                dataGridView3.DataSource = tabelData2s;
-            }
-
-        }
-
-
-        private void LoadAllowableCompressiveStress()
-        {
-            // Clear any existing controls if needed
-            tableLayoutPanel1.Controls.Clear();
-
-            // Left column labels (static text)
-            tableLayoutPanel1.Controls.Add(new Label { Text = "Fv" }, 0, 0);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "k" }, 0, 1);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "l" }, 0, 2);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "(R/t)c" }, 0, 3);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "E" }, 0, 4);
-
-            // ComboBox for the first row, second column
-            ComboBox dropdown = new ComboBox();
-            dropdown.Dock = DockStyle.Fill;
-            dropdown.Margin = new Padding(0);
-            dropdown.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-
-            tableLayoutPanel1.Controls.Add(dropdown, 1, 0);
-            dropdown.Items.Add("30000");
-            dropdown.Items.Add("32000");
-            dropdown.Items.Add("34000");
-            dropdown.Items.Add("36000");
-            dropdown.Items.Add("38000");
-            dropdown.Items.Add("40000");
-            dropdown.SelectedItem = dropdown.Items[3]; // Set default to "36000"
-            Fy = dropdown.SelectedItem.ToString();
-            // Other static labels
-            tableLayoutPanel1.Controls.Add(new Label { Text = "2.1" }, 1, 1);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "2124" }, 1, 2);
-
-            // Create the rtc label that will be updated dynamically
-            rtcLabel = new Label();
-            tableLayoutPanel1.Controls.Add(rtcLabel, 1, 3);
-            UpdateRtcLabel(dropdown.SelectedItem.ToString()); // Set initial value
-
-            tableLayoutPanel1.Controls.Add(new Label { Text = "29000000" }, 1, 4);
-
-            // Right column (unit labels)
-            tableLayoutPanel1.Controls.Add(new Label { Text = "psi" }, 2, 0);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "in" }, 2, 2);
-            tableLayoutPanel1.Controls.Add(new Label { Text = "psi" }, 2, 4);
-
-            // Attach event handler so that when the dropdown value changes, the rtc label updates
-            dropdown.SelectedIndexChanged += (sender, e) =>
-            {
-                ComboBox cb = sender as ComboBox;
-                if (cb?.SelectedItem != null)
-                {
-                    Fy = cb.SelectedItem.ToString();
-                    UpdateRtcLabel(cb.SelectedItem.ToString());
-                    LoadTable2();
-
+                    prevSelfWeight = selfW; // carry forward for cumulative sum
                 }
-            };
-        }
 
-        private void UpdateRtcLabel(string selectedValue)
+
+
+                GetTanksJsonData();
+
+                var tankProperties = tankData.Tanks.FirstOrDefault(data => data.Type == foundTank.type);
+
+                var otherTakWeight = "0";
+
+                if (tankProperties != null)
+                {
+                    otherTakWeight = tankProperties.Weight_of_Bowl_and_cone;
+                }
+
+
+                // Riser last (multi-leg)
+                // Riser (multi-leg): first = highest HeightInitial uses original formula,
+                // subsequent = cumulative (prev selfWeight + current riser weight)
+                var risersOrdered = segmentData
+                    .Where(x => x.SegmentType == "Riser")
+                    .OrderByDescending(x => x.HeightInitial)   // ensure "first" = highest HeightInitial
+                    .ToList();
+
+                viewModelData2 = new List<segmentGravityLoad>();
+                double prevRiserSelf = 0.0;
+
+                for (int i = 0; i < risersOrdered.Count; i++)
+                {
+                    var segment = risersOrdered[i];
+
+                    // area for water split (unchanged)
+                    var area = Math.Round(
+                        (Math.PI / 4) * (Math.Pow(12 * segment.Diameter, 2) -
+                                         Math.Pow((12 * segment.Diameter - 2 * segment.Thickness), 2)), 4);
+                    var _waterWeight = (area / ((AppState.NoOfColumns * areaC1 + areaR1)) * Double.Parse(waterWeightStr));
+
+                    // this riser's self-weight (no column division for riser per your original code)
+                    double thisRiserWeight = cylinderMultileg.weightOfPedestal(
+                        segment.HeightInitial,
+                        segment.HeightFinal,
+                        segment.Diameter,
+                        segment.Thickness,
+                        "Riser");
+
+                    double selfW;
+                    if (i == 0)
+                    {
+                        // first riser: original formula
+                        selfW = Math.Round(thisRiserWeight + Double.Parse(otherTakWeight), 4);
+                    }
+                    else
+                    {
+                        // cumulative from previous
+                        selfW = Math.Round(prevRiserSelf + thisRiserWeight, 4);
+                    }
+
+                    viewModelData2.Add(new segmentGravityLoad
+                    {
+                        waterWeight = _waterWeight.ToString("F5"),
+                        snowWeight = "0",
+                        selfWeight = selfW.ToString()
+                    });
+
+                    prevRiserSelf = selfW; // carry forward
+                }
+
+
+               cummulativeLoadData = viewModelData
+                    .Concat(viewModelData1)
+                    .Concat(viewModelData2)
+                    .ToList();
+            }
+
+            // Combine in the desired order for the grid
+
+
+
+
+            //selfWeightData.AddRange(combined.Select(x => x.selfWeight));
+
+            dataGridView6.DataSource = cummulativeLoadData;
+
+
+
+
+
+
+
+
+            //dataGridView6.DataSource = cummulativeLoadData;
+        }
+        #endregion
+        private TankType _tankType;
+
+
+        private void GetTanksJsonData()
         {
-            string rtc;
-            // Map the selected value to the appropriate computed string
-            if (selectedValue == "36000")
+            try
             {
-                rtc = "403";
+                string fileName = AppState.CurrentTankType == TankType.MultiColumn
+                                  ? "MultiLeg-Tanks.json"
+                                  : "tanks.json";
+
+                string jsonPath = Path.Combine(Application.StartupPath, fileName);
+
+                if (!File.Exists(jsonPath))
+                {
+                    MessageBox.Show($"{fileName} not found in application folder.");
+                    return;
+                }
+
+                string jsonString = File.ReadAllText(jsonPath);
+                tankData = JsonSerializer.Deserialize<TankData>(jsonString);
             }
-            else if (selectedValue == "32000")
+            catch (Exception ex)
             {
-                rtc = "377";
+                Console.WriteLine($"An error occurred while reading tank JSON: {ex.Message}");
             }
-            else if (selectedValue == "34000")
-            {
-                rtc = "354";
-            }
-            else if (selectedValue == "38000")
-            {
-                rtc = "316";
-            }
-            else if (selectedValue == "40000")
-            {
-                rtc = "299";
-            }
-            else if (selectedValue == "30000")
-            {
-                // Provide a value for "30000", for example:
-                rtc = "420";  // Change this value as needed
-            }
-            else
-            {
-                rtc = "0";
-            }
-            rtcLabel.Text = rtc;
         }
+        #region Check Table (fa / fb / check)
+        private void LoadCheckTableData()
+        {
 
 
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
+            segmentData = segmentData
+                .OrderBy(s => SegmentTypeOrder(s.SegmentType))
+                .ThenByDescending(s => s.HeightFinal)
+                .ToList();
+
+            if (segmentData.Count == 0) return;
+
+            var viewModel = segmentData.Select((segment, i) =>
+            {
+                double fa = 0, fb = 0;
+                string chk = "NA";
+
+                if (segment.SegmentType != "Tanks")
+                {
+                    fa = Math.Round(
+                            (Double.Parse(cummulativeLoadData[i].waterWeight) +
+                             Double.Parse(cummulativeLoadData[i].snowWeight) +
+                             Double.Parse(cummulativeLoadData[i].selfWeight)) /
+                            segmentPropertiesTableData[i].A, 4);
+
+                    fb = Math.Round(
+                            (Double.Parse(windLoadData[i].Mwind) * 12) /
+                             segmentPropertiesTableData[i].S, 4);
+
+                    if ((fa + fb) != 0)
+                        chk = Math.Round(
+                                (fa / tabelData2s[i].Fa) +
+                                (fb / tabelData2s[i].Fb), 4).ToString();
+                }
+
+                return new CheckTableData
+                {
+                    SegmentID = segment.SegmentNumber,
+                    Segment = segment.SegmentName,
+                    fa = fa,
+                    fb = fb,
+                    check = chk
+                };
+            }).ToList();
+
+            dataGridView1.DataSource = viewModel;
+            dataGridView1.Columns["SegmentID"].Visible = false;
+        }
+        #endregion
+
+
+
+
+
+        #region Segment Properties Table (dataGridView5)
         private void LoadData()
         {
-            var segmentData = _context.SegmentProperties.ToList();
+            List<SegmentProperties> segmentData = _context?.SegmentProperties?.ToList() ?? new();
+            segmentData = segmentData
+                .OrderBy(s => SegmentTypeOrder(s.SegmentType))
+                .ThenByDescending(s => s.HeightFinal)
+                .ToList();
 
 
-            segmentData.Sort((x, y) => y.HeightInitial.CompareTo(x.HeightInitial));
+            if (segmentData.Count == 0) return;
 
-            if (segmentData.Count > 0)
+            segmentPropertiesTableData = segmentData.Select(segment =>
             {
+                double thickness = 0;
+                double dFinal = segment.DiameterFinal ?? segment.Diameter;
+                double A = Math.Round((Math.PI / 4) *
+                         (Math.Pow(12 * dFinal, 2) -
+                          Math.Pow((12 * dFinal - 2 * segment.Thickness), 2)), 4);
 
-                segmentPropertiesTableData = segmentData.Select(segment => new designTableData
+                double I = Math.Round((Math.PI / 64) *
+                         (Math.Pow(12 * dFinal, 4) -
+                          Math.Pow((12 * dFinal - 2 * segment.Thickness), 4)), 4);
+
+                double S = Math.Round((I * 2) / (12 * dFinal), 4);
+                thickness = segment.Thickness;
+                if (segment.SegmentType == "Tanks")
+                {
+                    // all zero for "Tanks"
+                    dFinal = 0;
+                    thickness = 0;
+                    A = 0;
+                    I = 0;
+                    S = 0;
+
+                }
+
+                return new designTableData
                 {
                     Segment = segment.SegmentName,
-                    Diameter = segment.Diameter,
-                    Thickness = segment.Thickness,
+                    Diameter = Math.Round(12 * dFinal,4),
+                    Thickness = thickness,
+                    A = A,
+                    I = I,
+                    S = S
+                };
+            }).ToList();
 
-                    // Compute Eq as before
-                    A = Math.Round((Math.PI / 4) * (Math.Pow(segment.Diameter, 2) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 2))),
+            dataGridView5.DataSource = segmentPropertiesTableData;
+        }
+        #endregion
 
-                    I = Math.Round((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4)), 4),
+        #region --- Printing ---
+        #region --- Printing (multi-table per page, paginated) ---
 
-                    S = Math.Round(((Math.PI / 64) * (Math.Pow(segment.Diameter, 4) - Math.Pow((segment.Diameter - (2 * segment.Thickness)), 4))) / (2 * segment.Diameter), 4),
+        private List<(string Title, DataGridView Grid)> _printItems;
+        private int _printItemIdx = 0;
+        private int _printRowIdx = 0;
+        private bool _printingHeader = true;
+        private float _currentY = 0f;
 
-                }).ToList();
+        private void PreparePrintItems()
+        {
+            _printItems = new List<(string Title, DataGridView Grid)>
+    {
+        ("Check Table Data", dataGridView1),
+        ("Segment Properties Data", dataGridView5),
+        ("Wind Load Data", dataGridView7),
+        ("Cumulative Gravity Loads", dataGridView6),
+        ("Segment Weights", dataGridView4),
+        ("Seismic Load Data", dataGridView2)
+    }
+            .Where(x => x.Grid != null && x.Grid.Columns.Count > 0 && x.Grid.Rows.Count > 0)
+            .ToList();
 
-                dataGridView5.DataSource = segmentPropertiesTableData;
-            }
-
+            _printItemIdx = 0;
+            _printRowIdx = 0;
+            _printingHeader = true;
+            _currentY = 0f; // will be set to margin.Top on first PrintPage
         }
 
+        private float DrawTableTitle(Graphics g, RectangleF area, string title, System.Drawing.Font fTitle)
+        {
+            g.DrawString(title, fTitle, Brushes.Black, area.Left, area.Top);
+            return area.Top + fTitle.GetHeight(g) + 14;
+        }
 
-        private void tableLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        // returns (nextRowIndex, newY)
+        private (int nextRow, float newY) DrawGridPage(Graphics g, RectangleF area, DataGridView dgv, System.Drawing.Font f, int startRow, bool drawHeader)
+        {
+            float rowH = f.GetHeight(g) + 8;
+            float x = area.Left;
+            float y = area.Top;
+            float availableW = area.Width;
+
+            float[] colWidths;
+            {
+                float sum = dgv.Columns.Cast<DataGridViewColumn>().Sum(c => (float)Math.Max(1, c.Width));
+                colWidths = dgv.Columns.Cast<DataGridViewColumn>()
+                            .Select(c => availableW * ((float)Math.Max(1, c.Width) / sum))
+                            .ToArray();
+            }
+
+            if (drawHeader)
+            {
+                // if not enough room for header alone, bail to next page
+                if (y + rowH > area.Bottom) return (startRow, y);
+                for (int c = 0; c < dgv.Columns.Count; c++)
+                {
+                    var rect = new RectangleF(x, y, colWidths[c], rowH);
+                    g.DrawRectangle(Pens.Black, rect.X, rect.Y, rect.Width, rect.Height);
+                    g.DrawString(dgv.Columns[c].HeaderText, f, Brushes.Black, rect);
+                    x += colWidths[c];
+                }
+                y += rowH;
+            }
+
+            int r = startRow;
+            for (; r < dgv.Rows.Count; r++)
+            {
+                if (dgv.Rows[r].IsNewRow) continue;
+                if (y + rowH > area.Bottom) break;
+
+                x = area.Left;
+                for (int c = 0; c < dgv.Columns.Count; c++)
+                {
+                    var val = dgv.Rows[r].Cells[c].Value;
+                    var rect = new RectangleF(x, y, colWidths[c], rowH);
+                    g.DrawRectangle(Pens.Black, rect.X, rect.Y, rect.Width, rect.Height);
+                    g.DrawString(Convert.ToString(val), f, Brushes.Black, rect);
+                    x += colWidths[c];
+                }
+                y += rowH;
+            }
+
+            return (r, y);
+        }
+
+        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
+        {
+            var margin = e.MarginBounds;
+            var fTitle = new System.Drawing.Font("Arial", 12, FontStyle.Bold);
+            var f = new System.Drawing.Font("Arial", 10);
+
+            if (_currentY <= 0f) _currentY = margin.Top;
+
+            while (_printItemIdx < _printItems.Count)
+            {
+                var (title, dgv) = _printItems[_printItemIdx];
+
+                float neededHeader = fTitle.GetHeight(e.Graphics) + 14;
+                float minRowH = f.GetHeight(e.Graphics) + 8;
+
+                // ensure at least room for header + one row; if not, new page
+                if (_printingHeader && (_currentY + neededHeader + minRowH > margin.Bottom))
+                {
+                    e.HasMorePages = true;
+                    _currentY = margin.Top;
+                    return;
+                }
+
+                if (_printingHeader)
+                    _currentY = DrawTableTitle(e.Graphics, new RectangleF(margin.Left, _currentY, margin.Width, margin.Bottom - _currentY), title, fTitle);
+
+                var tableArea = new RectangleF(margin.Left, _currentY, margin.Width, margin.Bottom - _currentY);
+                var (nextRow, newY) = DrawGridPage(e.Graphics, tableArea, dgv, f, _printRowIdx, _printingHeader);
+
+                if (nextRow == _printRowIdx) // nothing fit—force new page
+                {
+                    e.HasMorePages = true;
+                    _currentY = margin.Top;
+                    _printingHeader = false; // we already drew header; continue rows next page
+                    return;
+                }
+
+                _currentY = newY;
+
+                if (nextRow < dgv.Rows.Count)
+                {
+                    _printRowIdx = nextRow;
+                    _printingHeader = false; // continue same table on next page
+                    e.HasMorePages = true;
+                    _currentY = margin.Top;
+                    return;
+                }
+                else
+                {
+                    // finished this table; add spacing and try to print next one on same page
+                    _printItemIdx++;
+                    _printRowIdx = 0;
+                    _printingHeader = true;
+
+                    _currentY += 24; // spacer before next table
+
+                    // if the spacer pushes us over page, move to next page
+                    if (_currentY + neededHeader + minRowH > margin.Bottom)
+                    {
+                        e.HasMorePages = true;
+                        _currentY = margin.Top;
+                        return;
+                    }
+                }
+            }
+
+            e.HasMorePages = false;
+            _currentY = margin.Top;
+        }
+
+        private void printToolStripButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                PreparePrintItems();
+                var doc = new PrintDocument();
+                doc.DocumentName = "Output Data";
+                doc.PrintPage += PrintDocument_PrintPage;
+
+                using var dlg = new PrintDialog { Document = doc };
+                if (dlg.ShowDialog() == DialogResult.OK) doc.Print();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Printing failed: {ex.Message}");
+            }
+        }
+        #endregion
+
+
+        #endregion
+
+        #region --- Event Handlers (grid formatting / double-click) ---
+
+        private void dataGridView1_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex].Name != "Check" || e.Value == null) return;
+
+            if (double.TryParse(e.Value.ToString(), out double val))
+                e.CellStyle.ForeColor = (val >= 0.95 || val <= 0.75) ? Color.Red : Color.Black;
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0 || e.RowIndex >= dataGridView1.Rows.Count)
+            {
+                ShowError("Please select a valid row to modify.");
+                return;
+            }
+
+            if (dataGridView1.Rows[e.RowIndex].DataBoundItem is not CheckTableData check) return;
+
+            SegmentDialogBox dlg = new SegmentDialogBox(check.SegmentID, "Modify", _waterTankForm);
+            if (dlg.ShowDialog() != DialogResult.OK) return;
+
+            // refresh all dependent tables
+            try
+            {
+                selfWeightData.Clear();
+                windLoadData.Clear();
+                LoadData();
+                LoadSegmentWeightData();
+                LoadCummulativeWeightData();
+                WindLoadPerSegment();
+                LoadCheckTableData();
+            }
+            catch (Exception ex)
+            {
+                ShowError($"Error while refreshing data after modification: {ex.Message}");
+            }
+        }
+
+        private void helpToolStripButton_Click(object sender, EventArgs e)
+        {
+            using Help h = new Help();
+            h.ShowDialog();
+        }
+        #endregion
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
@@ -533,146 +1479,19 @@ namespace WaterTankTool_WFA.Solver
         private void dataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
-
-        }
-
-        private void Solver_Output_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private float PrintTableData(Graphics g, List<string> data, float xPos, float yPos, System.Drawing.Font printFont, PrintPageEventArgs e)
-        {
-            foreach (string item in data)
-            {
-                g.DrawString(item, printFont, Brushes.Black, xPos, yPos);
-                yPos += printFont.GetHeight(); // Move to the next line
-                if (yPos > e.MarginBounds.Bottom) // Check if we've reached the bottom of the page
-                {
-                    return yPos; // Return the current yPos to signal that we need more pages
-                }
-            }
-            return yPos;
-        }
-
-
-        private List<string> GetTable1Data()
-        {
-            // ... your logic to retrieve data from table 1
-            // Example:
-            return new List<string> { "Row 1, Col 1", "Row 1, Col 2", "Row 2, Col 1", "Row 2, Col 2" };
-        }
-        private void PrintDocument_PrintPage(object sender, PrintPageEventArgs e)
-        {
-            //Graphics g = e.Graphics;
-            //float yPos = e.MarginBounds.Top; // Starting Y position
-            //float xPos = e.MarginBounds.Left; // Starting X position
-            //System.Drawing.Font printFont = new System.Drawing.Font("Arial", 12);
-
-            //// Example: Assuming you have lists of data for each table
-            //List<string> table1Data = GetTable1Data(); // Your method to get table 1 data
-            //                                           //List<string> table2Data = GetTable2Data(); 
-            //                                           // ... and so on for other tables
-
-            //// Print Table 1
-            //yPos = PrintTableData(g, table1Data, xPos, yPos, printFont, e);
-
-            //// Print Table 2 (move down a bit for spacing)
-            ////yPos += 20;  
-            ////yPos = PrintTableData(g, table2Data, xPos, yPos, printFont);
-            //// ... print other tables
-
-            //// Check if more pages needed (for long tables)
-            //e.HasMorePages = (yPos < e.MarginBounds.Bottom); // Example condition
-        }
-
-        private void printToolStripButton_Click(object sender, EventArgs e)
-        {
-
-            PrintDocument printDocument = new PrintDocument();
-            printDocument.PrintPage += PrintDocument_PrintPage;
-            printDocument.DocumentName = "My Print Job"; // Set a document name (optional)
-
-            PrintDialog printDialog = new PrintDialog();
-            printDialog.Document = printDocument;
-
-            if (printDialog.ShowDialog() == DialogResult.OK)
-            {
-                printDocument.Print();
-            }
-
-
-            // This is the working code to print each tables in separate page in PDF
-            using (MemoryStream ms = new MemoryStream())
-            using (Document doc = new Document(PageSize.A4, 25, 25, 30, 30))
-            using (PdfWriter writer = PdfWriter.GetInstance(doc, ms))
-            {
-                doc.Open();
-
-                foreach (GroupBox groupBox in this.Controls.OfType<GroupBox>()) // Iterate through GroupBoxes on the form
-                {
-                    // 1. Calculate total content height within the GroupBox (for scrolling)
-                    int totalContentHeight = 0;
-                    foreach (Control c in groupBox.Controls)
-                    {
-                        totalContentHeight = Math.Max(totalContentHeight, c.Bottom);
-                    }
-
-                    int printableHeight = 700; // Adjust as needed
-                    int numPages = (int)Math.Ceiling((double)totalContentHeight / printableHeight);
-
-                    for (int i = 0; i < numPages; i++)
-                    {
-                        Bitmap bmp = new Bitmap(groupBox.Width, printableHeight);
-                        using (Graphics g = Graphics.FromImage(bmp))
-                        {
-                            Rectangle clipRect = new Rectangle(0, i * printableHeight, bmp.Width, printableHeight);
-                            g.SetClip(clipRect);
-
-                            g.TranslateTransform(0, -i * printableHeight);
-                            groupBox.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
-                            g.ResetTransform();
-                        }
-
-                        iTextSharp.text.Image pdfImage = iTextSharp.text.Image.GetInstance(bmp, ImageFormat.Png);
-                        pdfImage.ScaleToFit(doc.PageSize.Width - doc.LeftMargin - doc.RightMargin, doc.PageSize.Height - doc.TopMargin - doc.BottomMargin);
-                        pdfImage.Alignment = iTextSharp.text.Image.ALIGN_CENTER;
-                        doc.Add(pdfImage);
-
-                        if (i < numPages - 1) doc.NewPage();
-                    }
-                    if (groupBox != this.Controls.OfType<GroupBox>().Last()) doc.NewPage(); // New page after each groupbox except the last one
-                }
-
-
-                doc.Close();
-
-                SaveFileDialog sfd = new SaveFileDialog();
-                sfd.Filter = "PDF files (*.pdf)|*.pdf";
-                if (sfd.ShowDialog() == DialogResult.OK)
-                    File.WriteAllBytes(sfd.FileName, ms.ToArray());
-            }
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
         }
     }
+
+    #region --- DTO / ViewModel classes (unchanged) ---
 
     public class designTableData
     {
         public string Segment { get; set; }
-        public Double Diameter { get; set; }
-        public Double Thickness { get; set; }
-        public Double A { get; set; }
-        public Double I { get; set; }
-        public Double S { get; set; }
+        public double Diameter { get; set; }
+        public double Thickness { get; set; }
+        public double A { get; set; }
+        public double I { get; set; }
+        public double S { get; set; }
     }
 
     public class segmentGravityLoad
@@ -689,40 +1508,24 @@ namespace WaterTankTool_WFA.Solver
         public double selfWeight { get; set; }
     }
 
-    public class tabelData2
+    public class SeismicLoad
     {
-        public string Segment { get; set; }
-        public double Radius { get; set; }
-
-        public double Thickness { get; set; }
-        public double Rt { get; set; }
-        public double A { get; set; }
-
-        public double I { get; set; }
-
-        public double r { get; set; }
-
-        public double Co { get; set; }
-
-        public double Fl { get; set; }
-        public double KLr { get; set; }
-
-        public double Cc { get; set; }
-
-        public double Kf { get; set; }
-
-        public double Fa { get; set; }
-
-        public double Fb { get; set; }
+        public double Fseismic { get; set; }
+        public double Weight { get; set; }
+        public double Centroid { get; set; }
+        public double Ai_W_Arm { get; set; }
     }
+
 
     public class CheckTableData
     {
+        public int SegmentID { get; set; }
         public string Segment { get; set; }
         public double fa { get; set; }
         public double fb { get; set; }
-        public string check {  get; set; }
+        public string check { get; set; }
     }
+
     public class TanksData
     {
         public List<Tank> tanks { get; set; }
@@ -745,16 +1548,33 @@ namespace WaterTankTool_WFA.Solver
         public string Fwind { get; set; }
         public string Vwind { get; set; }
         public string BaseElevation { get; set; }
-
         public string LoadLocation { get; set; }
-
         public string ArmLength { get; set; }
-
         public string FArm { get; set; }
-
         public string Mwind { get; set; }
+
+        // ==================================================================
+        //  Designer-generated event hooks – keep these methods even if empty
+        // ==================================================================
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // No action needed – left for Designer compatibility
+        }
+
+        private void dataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            // No action needed – left for Designer compatibility
+        }
+
+        private void Solver_Output_Load(object sender, EventArgs e)
+        {
+            // Form-load logic is already handled in the constructor.
+            // Keep this stub so the Designer remains happy.
+        }
 
     }
 
 
+
+    #endregion
 }

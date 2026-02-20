@@ -118,6 +118,7 @@
             dataGridView1.Size = new Size(839, 132);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
+            dataGridView1.CellFormatting += dataGridView1_CellFormatting_1;
             // 
             // Define_Segments
             // 
@@ -128,6 +129,7 @@
             ClientSize = new Size(878, 303);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
+            FormBorderStyle = FormBorderStyle.FixedDialog;
             MinimumSize = new Size(850, 250);
             Name = "Define_Segments";
             ShowIcon = false;

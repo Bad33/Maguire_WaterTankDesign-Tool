@@ -35,6 +35,7 @@
             Save = new Button();
             button2 = new Button();
             groupBox1 = new GroupBox();
+            comboBox1 = new ComboBox();
             label1 = new Label();
             richTextBox1 = new RichTextBox();
             groupBox2 = new GroupBox();
@@ -143,6 +144,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(comboBox1);
             groupBox1.Controls.Add(label1);
             groupBox1.Controls.Add(richTextBox1);
             groupBox1.Location = new Point(8, 13);
@@ -155,10 +157,21 @@
             groupBox1.Text = "Segment";
             groupBox1.Enter += groupBox1_Enter;
             // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Items.AddRange(new object[] { "50,000 gallon", "75,000 gallon", "100,000 gallon", "125,000 gallon", "150,000 gallon", "200,000 gallon", "250,000 gallon", "300,000 gallon", "400,000 gallon", "500,000 gallon", "600,000 gallon", "750,000 gallon" });
+            comboBox1.Location = new Point(139, 21);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(178, 23);
+            comboBox1.TabIndex = 5;
+            comboBox1.UseWaitCursor = true;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged_1;
+            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(11, 26);
+            label1.Location = new Point(11, 23);
             label1.Margin = new Padding(2, 0, 2, 0);
             label1.Name = "label1";
             label1.Size = new Size(89, 15);
@@ -168,10 +181,10 @@
             // 
             // richTextBox1
             // 
-            richTextBox1.Location = new Point(139, 25);
+            richTextBox1.Location = new Point(139, 20);
             richTextBox1.Margin = new Padding(2);
             richTextBox1.Name = "richTextBox1";
-            richTextBox1.Size = new Size(178, 19);
+            richTextBox1.Size = new Size(178, 24);
             richTextBox1.TabIndex = 4;
             richTextBox1.Text = "";
             richTextBox1.TextChanged += richTextBox1_TextChanged;
@@ -198,7 +211,7 @@
             groupBox2.Margin = new Padding(2);
             groupBox2.Name = "groupBox2";
             groupBox2.Padding = new Padding(2);
-            groupBox2.Size = new Size(466, 104);
+            groupBox2.Size = new Size(466, 110);
             groupBox2.TabIndex = 14;
             groupBox2.TabStop = false;
             groupBox2.Text = "Input";
@@ -206,12 +219,13 @@
             // 
             // maskedTextBox5
             // 
-            maskedTextBox5.Location = new Point(110, 79);
+            maskedTextBox5.Location = new Point(107, 78);
             maskedTextBox5.Margin = new Padding(2);
             maskedTextBox5.Name = "maskedTextBox5";
-            maskedTextBox5.Size = new Size(87, 23);
+            maskedTextBox5.Size = new Size(89, 23);
             maskedTextBox5.TabIndex = 21;
             maskedTextBox5.MaskInputRejected += maskedTextBox5_MaskInputRejected;
+            maskedTextBox5.TextChanged += InputFields_TextChanged;
             // 
             // label26
             // 
@@ -227,7 +241,7 @@
             // label25
             // 
             label25.AutoSize = true;
-            label25.Location = new Point(11, 76);
+            label25.Location = new Point(11, 80);
             label25.Margin = new Padding(2, 0, 2, 0);
             label25.Name = "label25";
             label25.Size = new Size(58, 15);
@@ -282,7 +296,7 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(251, 53);
+            label6.Location = new Point(251, 59);
             label6.Margin = new Padding(2, 0, 2, 0);
             label6.Name = "label6";
             label6.Size = new Size(71, 15);
@@ -292,7 +306,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(251, 24);
+            label5.Location = new Point(251, 30);
             label5.Margin = new Padding(2, 0, 2, 0);
             label5.Name = "label5";
             label5.Size = new Size(75, 15);
@@ -302,7 +316,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(11, 52);
+            label4.Location = new Point(11, 54);
             label4.Margin = new Padding(2, 0, 2, 0);
             label4.Name = "label4";
             label4.Size = new Size(58, 15);
@@ -496,6 +510,7 @@
             textBox3.ReadOnly = true;
             textBox3.Size = new Size(89, 23);
             textBox3.TabIndex = 11;
+            textBox3.TextChanged += textBox3_TextChanged;
             // 
             // textBox2
             // 
@@ -543,9 +558,9 @@
             label12.Location = new Point(251, 61);
             label12.Margin = new Padding(2, 0, 2, 0);
             label12.Name = "label12";
-            label12.Size = new Size(25, 15);
+            label12.Size = new Size(23, 15);
             label12.TabIndex = 6;
-            label12.Text = "Qzf";
+            label12.Text = "qzf";
             // 
             // label11
             // 
@@ -553,9 +568,9 @@
             label11.Location = new Point(251, 32);
             label11.Margin = new Padding(2, 0, 2, 0);
             label11.Name = "label11";
-            label11.Size = new Size(24, 15);
+            label11.Size = new Size(22, 15);
             label11.TabIndex = 5;
-            label11.Text = "Qzi";
+            label11.Text = "qzi";
             // 
             // label10
             // 
@@ -683,5 +698,6 @@
         private Label label26;
         private Label label25;
         private MaskedTextBox maskedTextBox5;
+        private ComboBox comboBox1;
     }
 }

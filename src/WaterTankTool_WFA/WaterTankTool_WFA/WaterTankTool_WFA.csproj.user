@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <_LastSelectedProfileId>C:\Users\DTS Loaner 25\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
+    <_LastSelectedProfileId>C:\Users\nikhil.chaudhary\Desktop\Nikhil\Maguire Water Tank Project\Maguire_WaterTankDesign-Tool\src\WaterTankTool_WFA\WaterTankTool_WFA\Properties\PublishProfiles\FolderProfile.pubxml</_LastSelectedProfileId>
   </PropertyGroup>
   <ItemGroup>
     <Compile Update="About\About.cs">
@@ -22,7 +22,16 @@
     <Compile Update="LoadingWindow.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Update="Load\Load Combinations.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Load\Snow Load.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MultiColumn\Segments\AddNoOfColumns.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="MultiColumn\Segments\DefineMultiLegSegments.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Segments\AddSegmentSection.cs">
@@ -34,16 +43,25 @@
     <Compile Update="Segments\Define Segments.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="Solver\AllowableStress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Solver\DesignTable.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Solver\Help.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Solver\Solver Output.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="SplashScreen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="StartupForm.cs">
+    <Compile Update="TankTypeCard.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Update="WaterTank.cs">
+    <Compile Update="TankTypeSelectionForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Load\Dead Load.cs">
@@ -71,6 +89,9 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Tanks\TanksList.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="WaterTank.cs">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>

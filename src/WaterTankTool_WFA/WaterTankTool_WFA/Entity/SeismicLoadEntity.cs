@@ -29,5 +29,7 @@ namespace WaterTankTool_WFA.Entity
         public double Sa { get; set; }
         public double Lambda { get; set; }
         public double Ai { get; set; }
+
+        public double V { get; set; }
     }
 }
