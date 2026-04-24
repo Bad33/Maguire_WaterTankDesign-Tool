@@ -54,7 +54,7 @@ namespace WaterTankTool_WFA.Solver
         #endregion
 
         #region Constructor
-        public Solver_Output(string loadCombo,string titleLoad)
+        public Solver_Output(string loadCombo, string titleLoad)
         {
             InitializeComponent();
 
@@ -198,17 +198,17 @@ namespace WaterTankTool_WFA.Solver
 
             foreach (SegmentProperties segment in segmentData)
             {
-                if(segment.SegmentType == "Tanks")
+                if (segment.SegmentType == "Tanks")
                 {
                     weight = Double.Parse(tankProperties.TotalWeight);
                     centroid = Double.Parse(tankProperties.Centroid) + segment.HeightInitial;
                     tankCentroid = centroid;
                     mSeismic = 0;
                 }
-                else if(segment.SegmentType == "Cylinder" )
+                else if (segment.SegmentType == "Cylinder")
                 {
                     weight = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness)
-                                : multicolumn.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness,segment.SegmentType);
+                                : multicolumn.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness, segment.SegmentType);
 
                     centroid = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.Centroid(segment.HeightInitial, segment.HeightFinal)
                                 : multicolumn.Centroid(segment.HeightInitial, segment.HeightFinal);
@@ -220,14 +220,14 @@ namespace WaterTankTool_WFA.Solver
                     if (seismicLoads.Count() > 1)
                     {
                         foreach (var ele in seismicLoads.Skip(1))
-                        
+
                             extra += ele.Weight * (ele.Centroid - segment.HeightInitial);
                     }
                     extra += weight / AppState.NoOfColumns * (centroid - segment.HeightInitial);
-                    mSeismic =  eq + extra;
+                    mSeismic = eq + extra;
 
                 }
-                else if(segment.SegmentType == "Riser")
+                else if (segment.SegmentType == "Riser")
                 {
                     weight = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness)
                              : multicolumn.weightOfPedestal(segment.HeightInitial, segment.HeightFinal, segment.Diameter, segment.Thickness, segment.SegmentType);
@@ -239,8 +239,8 @@ namespace WaterTankTool_WFA.Solver
 
                     double extra = 0;
 
-                    var riserSegment = segmentData.FindAll(ele => ele.SegmentType == "Cylinder" || ele.SegmentType=="Tanks");
-                    
+                    var riserSegment = segmentData.FindAll(ele => ele.SegmentType == "Cylinder" || ele.SegmentType == "Tanks");
+
                     if (seismicLoads.Count() > riserSegment.Count())
                     {
                         foreach (var ele in seismicLoads.Skip(riserSegment.Count()))
@@ -281,17 +281,17 @@ namespace WaterTankTool_WFA.Solver
 
                 seismicLoads.Add(new SeismicLoad
                 {
-                    Fseismic = Math.Round(seismic_V,4),
-                    Weight = Math.Round(segment.SegmentType == "Cylinder"?weight/AppState.NoOfColumns:weight,4),
-                    Centroid = Math.Round(centroid,4),
-                    Ai_W_Arm = Math.Round(mSeismic,4)
+                    Fseismic = Math.Round(seismic_V, 4),
+                    Weight = Math.Round(segment.SegmentType == "Cylinder" ? weight / AppState.NoOfColumns : weight, 4),
+                    Centroid = Math.Round(centroid, 4),
+                    Ai_W_Arm = Math.Round(mSeismic, 4)
                 });
             }
 
 
 
             dataGridView2.DataSource = seismicLoads;
-                
+
         }
 
 
@@ -369,21 +369,21 @@ namespace WaterTankTool_WFA.Solver
 
                     if (_loadCombo == "A" || _loadCombo == "C")
                     {
-                       
+
                         commonvar = 0.6 * commonvar;
                     }
                     else if (_loadCombo == "B")
                     {
-        
+
                         commonvar = 0.75 * (0.6 * commonvar);
 
                     }
 
                     loadLocation = segment.HeightInitial + ExtractDoubleValue(tankProperties.Centroid);
                 }
-                else if(segment.SegmentType == "Cylinder")
+                else if (segment.SegmentType == "Cylinder")
                 {
-                    fwind = AppState.CurrentTankType == TankType.SingleColumn?cylinderEq.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter): multicolumn.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter,"Cylinder")/AppState.NoOfColumns;
+                    fwind = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter) : multicolumn.F(segment.HeightInitial, segment.HeightFinal, segment.Diameter, "Cylinder") / AppState.NoOfColumns;
                     loadLocation = AppState.CurrentTankType == TankType.SingleColumn ? cylinderEq.L(segment.HeightInitial, segment.HeightFinal) : multicolumn.L(segment.HeightInitial, segment.HeightFinal);
                 }
                 else
@@ -454,7 +454,7 @@ namespace WaterTankTool_WFA.Solver
                                             (Double.Parse(windLoadData[0].LoadLocation) - segment.HeightInitial);
                     }
 
-                    var riserSegment = segmentData.FindAll(ele => ele.SegmentType == "Cylinder" || ele.SegmentType=="Tanks");
+                    var riserSegment = segmentData.FindAll(ele => ele.SegmentType == "Cylinder" || ele.SegmentType == "Tanks");
 
                     if (windLoadData.Count > riserSegment.Count())
                     {
@@ -494,7 +494,7 @@ namespace WaterTankTool_WFA.Solver
                     }
                     else if (segment.SegmentType == "Cylinder")
                     {
-                        
+
                         var gg = commonvar * (areaC1 / ((AppState.NoOfColumns * areaC1) + areaR1)) + fwind;
 
                         cumulativeFwind = (cumulativeFwind == 0) ? cumulativeFwind + gg : cumulativeFwind + fwind;
@@ -510,19 +510,19 @@ namespace WaterTankTool_WFA.Solver
                 }
                 double farm = fwind * armLength;
 
-                double mwind = AppState.CurrentTankType == TankType.SingleColumn?farm + prevContrib : farm + prevContribMulti;
+                double mwind = AppState.CurrentTankType == TankType.SingleColumn ? farm + prevContrib : farm + prevContribMulti;
 
-                
+
                 windLoadData.Add(new WindTable
-                    {
-                        Fwind = Math.Round(fwind, 4).ToString(),
-                        Vwind = Math.Round(cumulativeFwind, 4).ToString(),
-                        BaseElevation = Math.Round(baseElevation, 4).ToString(),
-                        LoadLocation = Math.Round(loadLocation, 4).ToString(),
-                        ArmLength = Math.Round(armLength, 4).ToString(),
-                        FArm = Math.Round(farm, 4).ToString(),
-                        Mwind = Math.Round(mwind, 4).ToString()
-                    });
+                {
+                    Fwind = Math.Round(fwind, 4).ToString(),
+                    Vwind = Math.Round(cumulativeFwind, 4).ToString(),
+                    BaseElevation = Math.Round(baseElevation, 4).ToString(),
+                    LoadLocation = Math.Round(loadLocation, 4).ToString(),
+                    ArmLength = Math.Round(armLength, 4).ToString(),
+                    FArm = Math.Round(farm, 4).ToString(),
+                    Mwind = Math.Round(mwind, 4).ToString()
+                });
                 if (segment.SegmentType == "Tanks")
                 {
                     cumulativeFwind = 0;
@@ -555,7 +555,7 @@ namespace WaterTankTool_WFA.Solver
         private WindLoadEntity Qwind;
         private double calculateF(double qzi, double qzf, double projectedArea)
         {
-       
+
 
             var result1 = 30 * Qwind.Cf * (projectedArea / 1000);
 
@@ -578,7 +578,7 @@ namespace WaterTankTool_WFA.Solver
             var snowEntity = _context?.SnowLoadEntity?.FirstOrDefault();
             var liveLoad = _context?.LiveLoadEntity?.FirstOrDefault();
             var deadLoad = _context?.DeadLoadEntity?.FirstOrDefault();
-            if (snowEntity == null || liveLoad == null || deadLoad==null)
+            if (snowEntity == null || liveLoad == null || deadLoad == null)
             {
                 ShowError("Please add all the Loads first!");
                 return;
@@ -645,7 +645,7 @@ namespace WaterTankTool_WFA.Solver
             selfWeight = foundTank.Weight_of_Steel;
             double miscLoad = 0;
 
-            if(AppState.CurrentTankType == TankType.SingleColumn)
+            if (AppState.CurrentTankType == TankType.SingleColumn)
             {
                 miscLoad = deadLoad.Miscellaneous_Load;
             }
@@ -659,9 +659,9 @@ namespace WaterTankTool_WFA.Solver
                 snowWeightStr = "0";
 
             }
-            else if(_loadCombo == "C")
+            else if (_loadCombo == "C")
             {
-                final_load = 0.6 * (double.Parse(selfWeight)  + miscLoad);
+                final_load = 0.6 * (double.Parse(selfWeight) + miscLoad);
                 waterWeight = (0.6 * (double.Parse(waterWeight))).ToString();
 
             }
@@ -853,7 +853,7 @@ namespace WaterTankTool_WFA.Solver
                                       .Where(c => char.IsDigit(c) || c == '.' || c == '-').ToArray());
             string waterWeightStr = numericPart;
 
-           
+
 
             var snowEntity = _context?.SnowLoadEntity?.FirstOrDefault();
             if (snowEntity == null)
@@ -886,7 +886,7 @@ namespace WaterTankTool_WFA.Solver
 
 
 
-         
+
 
             var cylinderEq = new Segment_Cylinder_Equations();
             var conicalEq = new Segment_Conical_Equations();
@@ -937,7 +937,7 @@ namespace WaterTankTool_WFA.Solver
                    ? Math.Round(double.Parse(cumulative[index]), 4).ToString()
                    : "0";
 
-                       
+
                         return new segmentGravityLoad
                         {
                             waterWeight = waterWeightStr,
@@ -951,7 +951,7 @@ namespace WaterTankTool_WFA.Solver
                 var areaC1 = segmentData
                     .Where(x => x.SegmentType == "Cylinder")
                     .OrderBy(x => x.HeightInitial)  // lowest HeightInitial first
-                    .Select((segment,index) =>
+                    .Select((segment, index) =>
                     {
                         return Math.Round((Math.PI / 4) *
                          (Math.Pow(12 * segment.Diameter, 2) -
@@ -1087,10 +1087,10 @@ namespace WaterTankTool_WFA.Solver
                 }
 
 
-               cummulativeLoadData = viewModelData
-                    .Concat(viewModelData1)
-                    .Concat(viewModelData2)
-                    .ToList();
+                cummulativeLoadData = viewModelData
+                     .Concat(viewModelData1)
+                     .Concat(viewModelData2)
+                     .ToList();
             }
 
             // Combine in the desired order for the grid
@@ -1234,7 +1234,7 @@ namespace WaterTankTool_WFA.Solver
                 return new designTableData
                 {
                     Segment = segment.SegmentName,
-                    Diameter = Math.Round(12 * dFinal,4),
+                    Diameter = Math.Round(12 * dFinal, 4),
                     Thickness = thickness,
                     A = A,
                     I = I,
@@ -1477,6 +1477,11 @@ namespace WaterTankTool_WFA.Solver
         }
 
         private void dataGridView5_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
 
         }

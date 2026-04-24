@@ -619,6 +619,7 @@
             Controls.Add(button1);
             Controls.Add(groupBox1);
             Margin = new Padding(2);
+            MaximizeBox = false;
             Name = "Seismic";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;

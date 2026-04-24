@@ -37,9 +37,10 @@
             // 
             // button1
             // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             button1.Location = new Point(632, 12);
             button1.Name = "button1";
-            button1.Size = new Size(165, 23);
+            button1.Size = new Size(185, 23);
             button1.TabIndex = 0;
             button1.Text = "Allowable Stress";
             button1.UseVisualStyleBackColor = true;
@@ -47,10 +48,12 @@
             // 
             // groupBox1
             // 
+            groupBox1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            groupBox1.AutoSize = true;
             groupBox1.Controls.Add(dataGridView1);
             groupBox1.Location = new Point(22, 50);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(775, 219);
+            groupBox1.Size = new Size(795, 228);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Design Table";
@@ -68,17 +71,18 @@
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(769, 197);
+            dataGridView1.Size = new Size(789, 206);
             dataGridView1.TabIndex = 0;
             // 
             // DesignTable
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(809, 289);
+            ClientSize = new Size(829, 298);
             Controls.Add(groupBox1);
             Controls.Add(button1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "DesignTable";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;
@@ -86,6 +90,7 @@
             groupBox1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

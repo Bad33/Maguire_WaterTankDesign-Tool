@@ -128,6 +128,7 @@
             Controls.Add(label1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
             Margin = new Padding(2);
+            MaximizeBox = false;
             Name = "Water_Load";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterParent;

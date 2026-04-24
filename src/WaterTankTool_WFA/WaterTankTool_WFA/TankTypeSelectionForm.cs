@@ -11,50 +11,88 @@ namespace WaterTankTool_WFA
         public TankTypeSelectionForm()
         {
             InitializeComponent();
+
+            // Smooth rendering
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint |
+                          ControlStyles.UserPaint |
+                          ControlStyles.OptimizedDoubleBuffer, true);
+            this.UpdateStyles();
+
             BuildUI();
         }
 
         private void BuildUI()
         {
+            // --- Form ---
             this.Text = "Select Water Tank Type";
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.ClientSize = new Size(760, 400);
-            this.BackColor = ColorTranslator.FromHtml("#55959e");
-           
+            this.ClientSize = new Size(860, 500);
+            this.BackColor = ColorTranslator.FromHtml("#4F8D95");
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.ShowIcon = false;
+            this.Font = new Font("Segoe UI", 10F);
+            this.KeyPreview = true;
 
+            this.KeyDown += (s, e) =>
+            {
+                if (e.KeyCode == Keys.Escape)
+                    this.DialogResult = DialogResult.Cancel;
+            };
+
+            // Main layout
             var mainPanel = new TableLayoutPanel
             {
-                RowCount = 2,
+                RowCount = 3,
                 ColumnCount = 1,
                 Dock = DockStyle.Fill,
-                Padding = new Padding(0, 0, 0, 32),
+                Padding = new Padding(18, 14, 18, 12),
                 BackColor = Color.Transparent,
             };
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 80));
-            mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 95));   // header
+            mainPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100));   // cards
+            mainPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 34));   // footer
             this.Controls.Add(mainPanel);
+
+            // Header
+            var headerPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent
+            };
 
             var title = new Label
             {
                 Text = "Select Water Tank Type",
-                Font = new Font("Segoe UI", 18, FontStyle.Bold),
+                Font = new Font("Segoe UI Semibold", 20, FontStyle.Bold),
                 ForeColor = Color.White,
-                Dock = DockStyle.Fill,
-                Height = 80,
-                TextAlign = ContentAlignment.MiddleCenter
+                Dock = DockStyle.Top,
+                Height = 52,
+                TextAlign = ContentAlignment.BottomCenter
             };
-            mainPanel.Controls.Add(title, 0, 0);
 
+            var subtitle = new Label
+            {
+                Text = "Choose the structural configuration to start your project",
+                Font = new Font("Segoe UI", 10, FontStyle.Regular),
+                ForeColor = Color.FromArgb(230, 245, 245, 245),
+                Dock = DockStyle.Top,
+                Height = 28,
+                TextAlign = ContentAlignment.TopCenter
+            };
+
+            headerPanel.Controls.Add(subtitle);
+            headerPanel.Controls.Add(title);
+            mainPanel.Controls.Add(headerPanel, 0, 0);
+
+            // Cards panel
             var cardsPanel = new TableLayoutPanel
             {
                 RowCount = 1,
                 ColumnCount = 2,
                 Dock = DockStyle.Fill,
-                Padding = new Padding(60, 18, 60, 0),
+                Padding = new Padding(50, 10, 50, 10),
                 BackColor = Color.Transparent
             };
             cardsPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -67,14 +105,17 @@ namespace WaterTankTool_WFA
                 Label = "Single Column",
                 CardImage = Properties.Resources.Sheldon_IA_New_Tank_Paint_2,
                 CardTankType = TankType.SingleColumn,
-                Margin = new Padding(26, 8, 26, 8),
+                Margin = new Padding(18, 10, 18, 10),
+                Dock = DockStyle.Fill
             };
+
             cardSingle.CardClick += (s, e) =>
             {
-                AppState.CurrentTankType = TankType.SingleColumn;   // ① set global
-                SelectedTankType = TankType.SingleColumn;   // ② keep local return value
+                AppState.CurrentTankType = TankType.SingleColumn;
+                SelectedTankType = TankType.SingleColumn;
                 this.DialogResult = DialogResult.OK;
             };
+
             cardsPanel.Controls.Add(cardSingle, 0, 0);
 
             // Card 2: Multi Column
@@ -83,28 +124,37 @@ namespace WaterTankTool_WFA
                 Label = "Multi-Column",
                 CardImage = Properties.Resources.Katy,
                 CardTankType = TankType.MultiColumn,
-                Margin = new Padding(26, 8, 26, 8),
+                Margin = new Padding(18, 10, 18, 10),
+                Dock = DockStyle.Fill
             };
+
             cardMulti.CardClick += (s, e) =>
             {
-                AppState.CurrentTankType = TankType.MultiColumn;    // ①
-                SelectedTankType = TankType.MultiColumn;    // ②
+                AppState.CurrentTankType = TankType.MultiColumn;
+                SelectedTankType = TankType.MultiColumn;
                 this.DialogResult = DialogResult.OK;
             };
+
             cardsPanel.Controls.Add(cardMulti, 1, 0);
 
             // Footer
+            var footerPanel = new Panel
+            {
+                Dock = DockStyle.Fill,
+                BackColor = Color.Transparent
+            };
+
             var footer = new Label
             {
-                Text = "© 2024 SDSU - Iron Maguire",
-                Dock = DockStyle.Bottom,
-                Height = 26,
-                ForeColor = Color.LightGray,
-                Font = new Font("Segoe UI", 9),
+                Text = "© 2024 SDSU • Maguire Iron • Water Tank Design Tool",
+                Dock = DockStyle.Fill,
+                ForeColor = Color.FromArgb(220, 235, 235, 235),
+                Font = new Font("Segoe UI", 8.8F, FontStyle.Regular),
                 TextAlign = ContentAlignment.MiddleCenter
             };
-            this.Controls.Add(footer);
-            footer.BringToFront();
+
+            footerPanel.Controls.Add(footer);
+            mainPanel.Controls.Add(footerPanel, 0, 2);
         }
     }
 }

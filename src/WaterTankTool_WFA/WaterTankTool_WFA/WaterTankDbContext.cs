@@ -21,6 +21,13 @@ public class WaterTankDbContext : DbContext
 
     public DbSet<DeadLoadEntity> DeadLoadEntity { get; set; }
 
+
+    //Foundations
+    public DbSet<AnchorBoltEntity> AnchorBoltEntity { get; set; }
+
+    public DbSet<BasePlateEntity> BasePlateEntity { get; set; }
+
+
     // Private constructor to prevent direct instantiation
 
     public WaterTankDbContext() : base() { }

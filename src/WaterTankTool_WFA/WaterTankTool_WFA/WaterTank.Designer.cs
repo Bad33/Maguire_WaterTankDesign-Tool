@@ -53,7 +53,17 @@ partial class WaterTank
         seismicLoadToolStripMenuItem = new ToolStripMenuItem();
         optionsToolStripMenuItem = new ToolStripMenuItem();
         solveToolStripMenuItem = new ToolStripMenuItem();
+        foundationToolStripMenuItem = new ToolStripMenuItem();
+        materialToolStripMenuItem1 = new ToolStripMenuItem();
+        geoTechnicalPropertiesToolStripMenuItem = new ToolStripMenuItem();
+        loadToolStripMenuItem1 = new ToolStripMenuItem();
+        anchorToolStripMenuItem = new ToolStripMenuItem();
+        basePlateToolStripMenuItem = new ToolStripMenuItem();
+        designToolStripMenuItem = new ToolStripMenuItem();
+        riserToolStripMenuItem = new ToolStripMenuItem();
+        analyzeToolStripMenuItem = new ToolStripMenuItem();
         aboutToolStripMenuItem = new ToolStripMenuItem();
+        exportOutputToolStripMenuItem = new ToolStripMenuItem();
         toolStrip1 = new ToolStrip();
         newToolStripButton = new ToolStripButton();
         openToolStripButton = new ToolStripButton();
@@ -99,7 +109,7 @@ partial class WaterTank
         resources.ApplyResources(menuStrip1, "menuStrip1");
         menuStrip1.GripMargin = new Padding(3);
         menuStrip1.ImageScalingSize = new Size(24, 24);
-        menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, aboutToolStripMenuItem });
+        menuStrip1.Items.AddRange(new ToolStripItem[] { fileToolStripMenuItem, toolsToolStripMenuItem, foundationToolStripMenuItem, aboutToolStripMenuItem, exportOutputToolStripMenuItem });
         menuStrip1.Name = "menuStrip1";
         menuStrip1.RenderMode = ToolStripRenderMode.System;
         menuStrip1.ShowItemToolTips = true;
@@ -230,11 +240,70 @@ partial class WaterTank
         resources.ApplyResources(solveToolStripMenuItem, "solveToolStripMenuItem");
         solveToolStripMenuItem.Click += solveToolStripMenuItem_Click;
         // 
+        // foundationToolStripMenuItem
+        // 
+        foundationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { materialToolStripMenuItem1, geoTechnicalPropertiesToolStripMenuItem, loadToolStripMenuItem1, anchorToolStripMenuItem, basePlateToolStripMenuItem, designToolStripMenuItem, riserToolStripMenuItem, analyzeToolStripMenuItem });
+        foundationToolStripMenuItem.Name = "foundationToolStripMenuItem";
+        resources.ApplyResources(foundationToolStripMenuItem, "foundationToolStripMenuItem");
+        // 
+        // materialToolStripMenuItem1
+        // 
+        materialToolStripMenuItem1.Name = "materialToolStripMenuItem1";
+        resources.ApplyResources(materialToolStripMenuItem1, "materialToolStripMenuItem1");
+        materialToolStripMenuItem1.Click += materialToolStripMenuItem1_Click;
+        // 
+        // geoTechnicalPropertiesToolStripMenuItem
+        // 
+        geoTechnicalPropertiesToolStripMenuItem.Name = "geoTechnicalPropertiesToolStripMenuItem";
+        resources.ApplyResources(geoTechnicalPropertiesToolStripMenuItem, "geoTechnicalPropertiesToolStripMenuItem");
+        geoTechnicalPropertiesToolStripMenuItem.Click += geoTechnicalPropertiesToolStripMenuItem_Click;
+        // 
+        // loadToolStripMenuItem1
+        // 
+        loadToolStripMenuItem1.Name = "loadToolStripMenuItem1";
+        resources.ApplyResources(loadToolStripMenuItem1, "loadToolStripMenuItem1");
+        loadToolStripMenuItem1.Click += loadToolStripMenuItem1_Click;
+        // 
+        // anchorToolStripMenuItem
+        // 
+        anchorToolStripMenuItem.Name = "anchorToolStripMenuItem";
+        resources.ApplyResources(anchorToolStripMenuItem, "anchorToolStripMenuItem");
+        anchorToolStripMenuItem.Click += anchorToolStripMenuItem_Click;
+        // 
+        // basePlateToolStripMenuItem
+        // 
+        basePlateToolStripMenuItem.Name = "basePlateToolStripMenuItem";
+        resources.ApplyResources(basePlateToolStripMenuItem, "basePlateToolStripMenuItem");
+        basePlateToolStripMenuItem.Click += basePlateToolStripMenuItem_Click;
+        // 
+        // designToolStripMenuItem
+        // 
+        designToolStripMenuItem.Name = "designToolStripMenuItem";
+        resources.ApplyResources(designToolStripMenuItem, "designToolStripMenuItem");
+        designToolStripMenuItem.Click += designToolStripMenuItem_Click;
+        // 
+        // riserToolStripMenuItem
+        // 
+        riserToolStripMenuItem.Name = "riserToolStripMenuItem";
+        resources.ApplyResources(riserToolStripMenuItem, "riserToolStripMenuItem");
+        // 
+        // analyzeToolStripMenuItem
+        // 
+        analyzeToolStripMenuItem.Name = "analyzeToolStripMenuItem";
+        resources.ApplyResources(analyzeToolStripMenuItem, "analyzeToolStripMenuItem");
+        analyzeToolStripMenuItem.Click += analyzeToolStripMenuItem_Click;
+        // 
         // aboutToolStripMenuItem
         // 
         aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
         resources.ApplyResources(aboutToolStripMenuItem, "aboutToolStripMenuItem");
         aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+        // 
+        // exportOutputToolStripMenuItem
+        // 
+        exportOutputToolStripMenuItem.Name = "exportOutputToolStripMenuItem";
+        resources.ApplyResources(exportOutputToolStripMenuItem, "exportOutputToolStripMenuItem");
+        exportOutputToolStripMenuItem.Click += exportOutputToolStripMenuItem_Click;
         // 
         // toolStrip1
         // 
@@ -564,4 +633,14 @@ partial class WaterTank
     private ToolStripSeparator toolStripSeparator11;
     private ToolStripButton toolStripButton12;
     private ToolStripButton toolStripButton13;
+    private ToolStripMenuItem foundationToolStripMenuItem;
+    private ToolStripMenuItem designToolStripMenuItem;
+    private ToolStripMenuItem basePlateToolStripMenuItem;
+    private ToolStripMenuItem anchorToolStripMenuItem;
+    private ToolStripMenuItem exportOutputToolStripMenuItem;
+    private ToolStripMenuItem analyzeToolStripMenuItem;
+    private ToolStripMenuItem materialToolStripMenuItem1;
+    private ToolStripMenuItem geoTechnicalPropertiesToolStripMenuItem;
+    private ToolStripMenuItem loadToolStripMenuItem1;
+    private ToolStripMenuItem riserToolStripMenuItem;
 }

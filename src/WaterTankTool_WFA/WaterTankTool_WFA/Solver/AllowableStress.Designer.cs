@@ -95,8 +95,10 @@
             Controls.Add(button1);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            MaximizeBox = false;
             Name = "AllowableStress";
             ShowIcon = false;
+            StartPosition = FormStartPosition.CenterParent;
             Text = "AllowableStress";
             groupBox1.ResumeLayout(false);
             ResumeLayout(false);

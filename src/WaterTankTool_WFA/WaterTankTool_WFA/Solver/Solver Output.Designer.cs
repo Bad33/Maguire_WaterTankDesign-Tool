@@ -80,7 +80,6 @@
             Fb = new DataGridViewTextBoxColumn();
             Check = new DataGridViewTextBoxColumn();
             toolStrip1 = new ToolStrip();
-            saveToolStripButton = new ToolStripButton();
             printToolStripButton = new ToolStripButton();
             toolStripSeparator = new ToolStripSeparator();
             helpToolStripButton = new ToolStripButton();
@@ -96,6 +95,7 @@
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
             Column4 = new DataGridViewTextBoxColumn();
+            toolStripButton1 = new ToolStripButton();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView5).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dataGridView7).BeginInit();
@@ -478,15 +478,9 @@
             // toolStrip1
             // 
             toolStrip1.BackColor = Color.WhiteSmoke;
-            toolStrip1.Items.AddRange(new ToolStripItem[] { saveToolStripButton, printToolStripButton, toolStripSeparator, helpToolStripButton });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton1, printToolStripButton, toolStripSeparator, helpToolStripButton });
             resources.ApplyResources(toolStrip1, "toolStrip1");
             toolStrip1.Name = "toolStrip1";
-            // 
-            // saveToolStripButton
-            // 
-            saveToolStripButton.DisplayStyle = ToolStripItemDisplayStyle.Image;
-            resources.ApplyResources(saveToolStripButton, "saveToolStripButton");
-            saveToolStripButton.Name = "saveToolStripButton";
             // 
             // printToolStripButton
             // 
@@ -601,6 +595,15 @@
             Column4.Name = "Column4";
             Column4.ReadOnly = true;
             // 
+            // toolStripButton1
+            // 
+            toolStripButton1.Checked = true;
+            toolStripButton1.CheckState = CheckState.Checked;
+            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton1.Image = Properties.Resources.export1;
+            resources.ApplyResources(toolStripButton1, "toolStripButton1");
+            toolStripButton1.Name = "toolStripButton1";
+            // 
             // Solver_Output
             // 
             AccessibleRole = AccessibleRole.None;
@@ -693,5 +696,6 @@
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
+        private ToolStripButton toolStripButton1;
     }
 }

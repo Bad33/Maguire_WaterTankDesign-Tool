@@ -402,7 +402,7 @@ namespace WaterTankTool_WFA
                     Padding = new Padding(5),
                     Margin = new Padding(0, 5, 0, 5)
                 };
-                projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(97, 97, 102); };
+                projectButton.MouseEnter += (s, e) => { projectButton.BackColor = Color.FromArgb(78, 104, 132); };
                 projectButton.MouseLeave += (s, e) => { projectButton.BackColor = Color.Transparent; };
                 projectButton.Click += async (s, e) => { await OpenProject(proj.ProjectFilePath, proj.Type); };
 
@@ -426,7 +426,7 @@ namespace WaterTankTool_WFA
                 Margin = new Padding(0, 5, 0, 5)
             };
             button.FlatAppearance.BorderSize = 0;
-            button.MouseEnter += (s, e) => { button.BackColor = Color.FromArgb(65, 65, 70); };
+            button.MouseEnter += (s, e) => { button.BackColor = Color.FromArgb(78, 104, 132); };
             button.MouseLeave += (s, e) => { button.BackColor = Color.Transparent; };
             return button;
         }
@@ -661,6 +661,41 @@ namespace WaterTankTool_WFA
                         AreaSubjectedToSnow REAL    NOT NULL CHECK(AreaSubjectedToSnow >= 0),
                         TotalSnowLoad       REAL    NOT NULL CHECK(TotalSnowLoad       >= 0)
                     );
+                    
+                    CREATE TABLE IF NOT EXISTS AnchorBoltEntity (
+                        Id      INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Nb      INTEGER NOT NULL CHECK(Nb >= 0),
+                        Db      REAL    NOT NULL CHECK(Db >= 0),
+                        Dh      REAL    NOT NULL CHECK(Dh >= 0),
+                        Rb      REAL    NOT NULL CHECK(Rb >= 0),
+                        Ab      REAL    NOT NULL,
+                        ThetaSeg REAL,
+                        Ns      INTEGER,
+                        Tbp     REAL    NOT NULL CHECK(Tbp >= 0),
+                        Fy      REAL,
+                        Fu      REAL,
+                        Tu      REAL    NOT NULL CHECK(Tu >= 0),
+                        Vu      REAL    NOT NULL CHECK(Vu >= 0),
+                        Phi     REAL,
+                        E       REAL,
+                        S       REAL,
+                        Nbs     INTEGER
+                    );
+
+                    CREATE TABLE IF NOT EXISTS BasePlateEntity (
+                        Id      INTEGER PRIMARY KEY AUTOINCREMENT,
+                        Dbp     REAL    NOT NULL CHECK(Dbp >= 0),
+                        Ro      REAL    NOT NULL CHECK(Ro >= 0),
+                        Ri      REAL    NOT NULL CHECK(Ri >= 0),
+                        Theta   REAL    NOT NULL,
+                        T       REAL    NOT NULL CHECK(T >= 0),
+                        N       INTEGER NOT NULL CHECK(N >= 0),
+                        Rs      REAL    NOT NULL CHECK(Rs >= 0),
+                        Nh      INTEGER NOT NULL CHECK(Nh >= 0),
+                        Dh      REAL    NOT NULL CHECK(Dh >= 0),
+                        A       REAL,
+                        Rb      REAL
+                    );
                 ";
 
                 using (var command = new System.Data.SQLite.SQLiteCommand(createTableSQL, connection))
@@ -670,97 +705,7 @@ namespace WaterTankTool_WFA
                 connection.Close();
             }
         }
-        private void EnsureDatabaseSchema(string dbFilePath)
-        {
-            using (var connection = new System.Data.SQLite.SQLiteConnection($"Data Source={dbFilePath};Version=3;"))
-            {
-                connection.Open();
-
-                string createTableSQL = @"
-            CREATE TABLE IF NOT EXISTS SegmentProperties (
-                SegmentNumber INTEGER PRIMARY KEY AUTOINCREMENT,
-                SegmentName TEXT NOT NULL,
-                SegmentType TEXT NOT NULL,
-                Diameter REAL CHECK(Diameter >= 0),
-                Thickness REAL CHECK(Thickness >= 0),
-                HeightInitial REAL CHECK(HeightInitial >= 0),
-                HeightFinal REAL CHECK(HeightFinal >= 0),
-                DiameterInitial REAL CHECK(DiameterInitial >= 0),
-                DiameterFinal REAL CHECK(DiameterFinal >= 0)
-            );
-            CREATE TABLE IF NOT EXISTS MaterialProperties (
-                MaterialNumber INTEGER PRIMARY KEY AUTOINCREMENT,
-                MaterialName TEXT NOT NULL,
-                MaterialType TEXT NOT NULL,
-                Density INTEGER NOT NULL CHECK(Density >= 0),
-                ModulusOfElasticity INTEGER NOT NULL CHECK(ModulusOfElasticity >= 0),
-                TensileYieldStress INTEGER NOT NULL CHECK(TensileYieldStress >= 0),
-                TensileUltimateStress INTEGER NOT NULL CHECK(TensileUltimateStress >= 0)
-            );
-            CREATE TABLE IF NOT EXISTS TankProperties (
-                TankNumber INTEGER PRIMARY KEY AUTOINCREMENT,
-                Capacity TEXT,
-                WeightOfWater TEXT,
-                WeightOfSteel TEXT,
-                TotalWeight TEXT,
-                ProjectedArea TEXT
-            );
-            CREATE TABLE IF NOT EXISTS WindLoadEntity (
-                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Exposure TEXT NOT NULL,
-                Kzt REAL NOT NULL CHECK(Kzt >= 0),
-                Ke REAL NOT NULL CHECK(Ke >= 0),
-                Kd REAL NOT NULL CHECK(Kd >= 0),
-                G REAL NOT NULL CHECK(G >= 0),
-                I REAL NOT NULL CHECK(I >= 0),
-                V REAL NOT NULL CHECK(V >= 0),
-                Zg REAL NOT NULL CHECK(Zg >= 0),
-                alpha REAL NOT NULL CHECK(alpha >= 0),
-                lambda REAL NOT NULL CHECK(lambda >= 0),
-                Cf REAL NOT NULL CHECK(Cf >= 0),
-                Q REAL NOT NULL CHECK(Q >= 0)
-            );
-            CREATE TABLE IF NOT EXISTS SeismicLoadEntity (
-                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Ss REAL NOT NULL CHECK(Ss >= 0),
-                S1 REAL NOT NULL CHECK(S1 >= 0),
-                SiteClass TEXT NOT NULL,
-                Fa REAL NOT NULL CHECK(Fa >= 0),
-                Fv REAL NOT NULL CHECK(Fv >= 0),
-                Sds REAL NOT NULL CHECK(Sds >= 0),
-                Sd1 REAL NOT NULL CHECK(Sd1 >= 0),
-                Ri REAL NOT NULL CHECK(Ri >= 0),
-                Ie REAL NOT NULL CHECK(Ie >= 0),
-                Tl REAL NOT NULL CHECK(Tl >= 0),
-                Ti REAL NOT NULL CHECK(Ti >= 0),
-                Ts REAL NOT NULL CHECK(Ts >= 0),
-                Sa REAL NOT NULL CHECK(Sa >= 0),
-                Lambda REAL NOT NULL CHECK(Lambda >= 0),
-                Ai REAL NOT NULL CHECK(Ai >= 0)
-            );
-            CREATE TABLE IF NOT EXISTS LiveLoadEntity (
-                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Live_Load REAL NOT NULL CHECK(Live_Load >= 0),
-                Area_Exposed REAL NOT NULL CHECK(Area_Exposed >= 0),
-                Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
-            );
-            CREATE TABLE IF NOT EXISTS SnowLoadEntity (
-                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Snow_Pressure REAL NOT NULL CHECK(Snow_Pressure >= 0),
-                Area_Subjected REAL NOT NULL CHECK(Area_Subjected >= 0),
-                Total_Load REAL NOT NULL CHECK(Total_Load >= 0)
-            );
-        ";
-
-                using (var command = new System.Data.SQLite.SQLiteCommand(createTableSQL, connection))
-                {
-                    command.ExecuteNonQuery();
-                }
-
-                connection.Close();
-            }
-        }
-
+      
         public static class Prompt
         {
             public static string ShowDialog(string text, string caption)

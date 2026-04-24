@@ -8,9 +8,11 @@ using System.Linq;
 using System.Windows.Forms;
 using WaterTankTool_WFA.Custom_Design_Control;
 using WaterTankTool_WFA.Entity;
+using WaterTankTool_WFA.Foundation_Design;
 using WaterTankTool_WFA.Load;
-using WaterTankTool_WFA.Solver;
 using WaterTankTool_WFA.MultiColumn.Segments;
+using WaterTankTool_WFA.Output.SpheroidTank;
+using WaterTankTool_WFA.Solver;
 
 namespace WaterTankTool_WFA
 {
@@ -328,6 +330,7 @@ namespace WaterTankTool_WFA
             About about = new About();
             about.ShowDialog();
         }
+
 
         private void solveToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -716,6 +719,65 @@ namespace WaterTankTool_WFA
         {
             DesignTable designTable = new DesignTable();
             designTable.ShowDialog();
+        }
+
+        private void basePlateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            BasePlateParameters basePlateParameters = new BasePlateParameters();
+            basePlateParameters.ShowDialog();
+        }
+
+        private void anchorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AnchorBoltParameters anchorBoltParameters = new AnchorBoltParameters();
+            anchorBoltParameters.ShowDialog();
+        }
+
+        private void sideChairsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exportOutputToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+
+            var builder = new FabricationOutputRowBuilder(this);
+            var row = builder.BuildFromCurrentDesign();
+
+
+            var exporter = new ExportFabricationOutput();
+            exporter.RunExport(row, this);
+        }
+
+        private void analyzeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OutputModal outputModal = new OutputModal();
+            outputModal.ShowDialog();
+        }
+
+        private void designToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RingWallFoundation ringWallFoundation = new RingWallFoundation();
+            ringWallFoundation.ShowDialog();
+        }
+
+        private void materialToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FoundationMaterial foundationMaterial = new FoundationMaterial();
+            foundationMaterial.ShowDialog();
+        }
+
+        private void geoTechnicalPropertiesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            GeoTechnicalProperties geoTechnicalProperties = new GeoTechnicalProperties();
+            geoTechnicalProperties.ShowDialog();
+        }
+
+        private void loadToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FoundationLoad foundationLoad = new FoundationLoad();
+            foundationLoad.ShowDialog();
         }
     }
 }

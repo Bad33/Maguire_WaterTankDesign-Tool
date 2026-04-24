@@ -7,14 +7,41 @@
     <Compile Update="About\About.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="CircularProgressBar.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Update="Custom Design Control\StructuralDrawingForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Custom Design Control\TankDesign.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Foundation Design\AnchorBoltParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Design\BasePlateParameters.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Design\FoundationLoad.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Design\FoundationMaterial.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Design\GeoTechnicalProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Design\OutputModal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Design\RingWallFoundation.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Properties\AnchorBoltProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Properties\BasePlateProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Foundation Properties\RingWallProperties.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Update="Help.cs">
       <SubType>Form</SubType>
@@ -55,11 +82,8 @@
     <Compile Update="Solver\Solver Output.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="SplashScreen.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Update="TankTypeCard.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Update="TankTypeSelectionForm.cs">
       <SubType>Form</SubType>

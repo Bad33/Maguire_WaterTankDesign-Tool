@@ -49,13 +49,14 @@
             groupBox1.Controls.Add(button1);
             groupBox1.Location = new Point(12, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(845, 92);
+            groupBox1.Size = new Size(845, 124);
             groupBox1.TabIndex = 0;
             groupBox1.TabStop = false;
             groupBox1.Text = "Segments Action";
             // 
             // button3
             // 
+            button3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             button3.Location = new Point(580, 36);
             button3.Name = "button3";
             button3.Size = new Size(166, 34);
@@ -66,6 +67,7 @@
             // 
             // button2
             // 
+            button2.Anchor = AnchorStyles.Top;
             button2.Location = new Point(310, 36);
             button2.Name = "button2";
             button2.Size = new Size(167, 34);
@@ -91,7 +93,7 @@
             groupBox2.Controls.Add(dataGridView1);
             groupBox2.Location = new Point(12, 125);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(845, 154);
+            groupBox2.Size = new Size(845, 186);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "Segment List";
@@ -115,7 +117,7 @@
             dataGridView1.RowTemplate.ReadOnly = true;
             dataGridView1.RowTemplate.Resizable = DataGridViewTriState.False;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(839, 132);
+            dataGridView1.Size = new Size(839, 164);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             dataGridView1.CellFormatting += dataGridView1_CellFormatting_1;
@@ -126,7 +128,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            ClientSize = new Size(878, 303);
+            ClientSize = new Size(878, 335);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             FormBorderStyle = FormBorderStyle.FixedDialog;

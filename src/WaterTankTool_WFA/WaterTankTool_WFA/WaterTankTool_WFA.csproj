@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="ClosedXML" Version="0.105.0" />
       <PackageReference Include="DG.AdvancedDataGridView" Version="1.2.30115.18" />
       <PackageReference Include="iTextSharp" Version="5.5.13.4" />
       <PackageReference Include="MetroModernUI" Version="1.4.0" />
@@ -71,6 +72,10 @@
         <Generator>SettingsSingleFileGenerator</Generator>
         <LastGenOutput>Settings.Designer.cs</LastGenOutput>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Output\MultiLegTank\" />
     </ItemGroup>
 
 </Project>
