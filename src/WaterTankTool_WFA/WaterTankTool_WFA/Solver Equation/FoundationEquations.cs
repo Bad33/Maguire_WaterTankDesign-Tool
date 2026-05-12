@@ -298,5 +298,383 @@ namespace WaterTankTool_WFA.Solver_Equation
                 return Math.Round(y, 5);
             }
         }
+
+        public class RingWallEquations
+        {
+            private double R(double value)
+            {
+                return Math.Round(value, 5);
+            }
+
+            // ==============================
+            // 3.1 Geometry Calculation
+            // ==============================
+
+            // 1) Rin = Rcl - B/2
+            public double InnerRadiusOfFooting(double radiusToFoundationCenterline, double footingBaseWidth)
+            {
+                return R(radiusToFoundationCenterline - (footingBaseWidth / 2.0));
+            }
+
+            // 2) Rout = Rcl + B/2
+            public double OuterRadiusOfFooting(double radiusToFoundationCenterline, double footingBaseWidth)
+            {
+                return R(radiusToFoundationCenterline + (footingBaseWidth / 2.0));
+            }
+
+            // 3) A = π(Rout² - Rin²)
+            public double FootingPlanArea(double outerRadius, double innerRadius)
+            {
+                return R(Math.PI * (Math.Pow(outerRadius, 2) - Math.Pow(innerRadius, 2)));
+            }
+
+            // 4) Rrw = Rcl + trw/2
+            public double RingWallCenterlineRadius(double radiusToFoundationCenterline, double ringWallThickness)
+            {
+                return R(radiusToFoundationCenterline + (ringWallThickness / 2.0));
+            }
+
+            // ==============================
+            // 3.2 Service Load Calculation
+            // ==============================
+
+            // 5) Ww = Vwater / 7.48052 * γw / 1000
+            public double WaterWeight(double waterVolumeGallons, double unitWeightWater)
+            {
+                return R((waterVolumeGallons / 7.48052) * (unitWeightWater / 1000.0));
+            }
+
+            // 8) Wf = A * tedge * γc / 1000
+            public double FootingSelfWeight(double footingPlanArea, double footingEdgeThickness, double concreteUnitWeight)
+            {
+                return R(footingPlanArea * footingEdgeThickness * (concreteUnitWeight / 1000.0));
+            }
+
+            // 9) Vs = Ww + Wtank + Wsup + Wf
+            public double TotalServiceVerticalLoad(double waterWeight, double tankDeadLoad, double superimposedLoad, double footingSelfWeight)
+            {
+                return R(waterWeight + tankDeadLoad + superimposedLoad + footingSelfWeight);
+            }
+
+            // 10) qallow = input / 1000
+            public double AllowableSoilBearingPressure(double allowableSoilBearing)
+            {
+                return R(allowableSoilBearing / 1000.0);
+            }
+
+            // 11) qs = Vs / A
+            public double ServiceBearingPressure(double totalServiceVerticalLoad, double footingPlanArea)
+            {
+                if (footingPlanArea <= 0) return 0;
+                return R(totalServiceVerticalLoad / footingPlanArea);
+            }
+
+            // 12) Ub = qs / qallow
+            public double BearingUtilizationRatio(double serviceBearingPressure, double allowableSoilBearingPressure)
+            {
+                if (allowableSoilBearingPressure <= 0) return 0;
+                return R(serviceBearingPressure / allowableSoilBearingPressure);
+            }
+
+            public bool BearingPass(double bearingUtilizationRatio)
+            {
+                return bearingUtilizationRatio <= 1.0;
+            }
+
+            // ==============================
+            // 3.3 Flexural Design
+            // ==============================
+
+            // 13) d = tedge * 12 - cc
+            public double EffectiveDepth(double footingEdgeThicknessFt, double concreteCoverIn)
+            {
+                return R((footingEdgeThicknessFt * 12.0) - concreteCoverIn);
+            }
+
+            // 14) b = 12 in
+            public double StripWidth()
+            {
+                return 12.0;
+            }
+
+            // 18) Beta one factor
+            public double BetaOneFactor(double concreteStrength)
+            {
+                if (concreteStrength <= 4000)
+                    return 0.85;
+
+                double betaOne = 0.85 - (0.05 * ((concreteStrength - 4000.0) / 1000.0));
+                return R(Math.Max(0.65, betaOne));
+            }
+
+            // 19) εty = fy / Es
+            public double YieldStrain(double steelYieldStrength, double steelModulus)
+            {
+                if (steelModulus <= 0) return 0;
+                return R(steelYieldStrength / steelModulus);
+            }
+
+            // 20) a = As * fy / (0.85 * fc' * b)
+            public double CompressionBlockDepth(double steelArea, double steelYieldStrength, double concreteStrength, double stripWidth)
+            {
+                double denominator = 0.85 * concreteStrength * stripWidth;
+                if (denominator <= 0) return 0;
+
+                return R((steelArea * steelYieldStrength) / denominator);
+            }
+
+            // 21) c = a / β1
+            public double NeutralAxisDepth(double compressionBlockDepth, double betaOne)
+            {
+                if (betaOne <= 0) return 0;
+                return R(compressionBlockDepth / betaOne);
+            }
+
+            // 22) εt = 0.003 * (d - c) / c
+            public double NetTensileStrain(double effectiveDepth, double neutralAxisDepth)
+            {
+                if (neutralAxisDepth <= 0) return 0;
+                return R(0.003 * ((effectiveDepth - neutralAxisDepth) / neutralAxisDepth));
+            }
+
+            // 23) phi
+            public double StrengthReductionFactor(double netTensileStrain, double yieldStrain)
+            {
+                if (netTensileStrain >= yieldStrain + 0.003)
+                    return 0.90;
+
+                if (netTensileStrain <= yieldStrain)
+                    return 0.65;
+
+                return R(0.65 + 0.25 * ((netTensileStrain - yieldStrain) / 0.003));
+            }
+
+            // 24) Mn = As * fy * (d - a/2)
+            public double NominalMomentCapacity(double steelArea, double steelYieldStrength, double effectiveDepth, double compressionBlockDepth)
+            {
+                return R(steelArea * steelYieldStrength * (effectiveDepth - (compressionBlockDepth / 2.0)));
+            }
+
+            // 25) phiMn = phi * Mn / 1000
+            public double DesignMomentStrength(double phi, double nominalMomentCapacity)
+            {
+                return R((phi * nominalMomentCapacity) / 1000.0);
+            }
+
+            // 26) Uf = Mu / phiMn
+            public double FlexuralUtilizationRatio(double factoredMoment, double designMomentStrength)
+            {
+                if (designMomentStrength <= 0) return 0;
+                return R(factoredMoment / designMomentStrength);
+            }
+
+            public bool FlexurePass(double flexuralUtilizationRatio)
+            {
+                return flexuralUtilizationRatio <= 1.0;
+            }
+
+            // 27) Mnreq = Mu * 1000 / 0.9
+            public double RequiredNominalMomentForSteelDesign(double factoredMoment)
+            {
+                return R((factoredMoment * 1000.0) / 0.9);
+            }
+
+            // 28) Asreq
+            public double RequiredSteelArea(double steelYieldStrength, double effectiveDepth, double concreteStrength,
+                                            double stripWidth, double requiredNominalMoment)
+            {
+                double k = Math.Pow(steelYieldStrength, 2) / (2.0 * 0.85 * concreteStrength * stripWidth);
+                double term = Math.Pow(steelYieldStrength * effectiveDepth, 2) - (4.0 * k * requiredNominalMoment);
+
+                if (k <= 0 || term < 0) return 0;
+
+                double asReq = ((steelYieldStrength * effectiveDepth) - Math.Sqrt(term)) / (2.0 * k);
+                return R(asReq);
+            }
+
+            // 29) Asprov = Abar * 12 / sprov
+            public double ProvidedSteelArea(double barArea, double providedSpacing)
+            {
+                if (providedSpacing <= 0) return 0;
+                return R((barArea * 12.0) / providedSpacing);
+            }
+
+            // 30) sreq = Abar * 12 / Asreq
+            public double RequiredBarSpacing(double barArea, double requiredSteelArea)
+            {
+                if (requiredSteelArea <= 0) return 0;
+                return R((barArea * 12.0) / requiredSteelArea);
+            }
+
+            // ==============================
+            // 3.4 One-Way Shear Check
+            // ==============================
+
+            // 33) h = tedge * 12
+            public double TotalMemberThickness(double footingEdgeThicknessFt)
+            {
+                return R(footingEdgeThicknessFt * 12.0);
+            }
+
+            // 34) λs = min(1, 2 / (1 + d/10))
+            public double SizeEffectFactor(double effectiveDepth)
+            {
+                return R(Math.Min(1.0, 2.0 / (1.0 + (effectiveDepth / 10.0))));
+            }
+
+            // 35) ρw = As / bd
+            public double ReinforcementRatio(double steelArea, double stripWidth, double effectiveDepth)
+            {
+                double denominator = stripWidth * effectiveDepth;
+                if (denominator <= 0) return 0;
+
+                return R(steelArea / denominator);
+            }
+
+            // 36) Ag = b * h
+            public double GrossConcreteArea(double stripWidth, double totalMemberThickness)
+            {
+                return R(stripWidth * totalMemberThickness);
+            }
+
+            // 37) Placeholder: replace with exact Excel logic when available
+            public double NominalOneWayShearStrength(double concreteStrength, double stripWidth, double effectiveDepth,
+                                                     double lambda, double sizeEffectFactor)
+            {
+                double vn = 2.0 * lambda * sizeEffectFactor * Math.Sqrt(concreteStrength) * stripWidth * effectiveDepth;
+                return R(vn);
+            }
+
+            // 38) phiVn = phi * Vn / 1000
+            public double DesignOneWayShearStrength(double phi, double nominalShearStrength)
+            {
+                return R((phi * nominalShearStrength) / 1000.0);
+            }
+
+            // 39) Uv = Vu / phiVn
+            public double OneWayShearUtilizationRatio(double shearDemand, double designShearStrength)
+            {
+                if (designShearStrength <= 0) return 0;
+                return R(shearDemand / designShearStrength);
+            }
+
+            public bool OneWayShearPass(double utilizationRatio)
+            {
+                return utilizationRatio <= 1.0;
+            }
+
+            // ==============================
+            // 3.5 Punching Shear Check
+            // ==============================
+
+            // 42) alpha_s
+            public double ColumnLocationFactor(string columnLocation)
+            {
+                if (string.IsNullOrWhiteSpace(columnLocation))
+                    return 40.0;
+
+                switch (columnLocation.Trim().ToLower())
+                {
+                    case "interior":
+                        return 40.0;
+                    case "edge":
+                        return 30.0;
+                    case "corner":
+                        return 20.0;
+                    default:
+                        return 40.0;
+                }
+            }
+
+            // 43) vc1 = 4λ√fc'
+            public double PunchingShearStressLimit1(double lambda, double concreteStrength)
+            {
+                return R(4.0 * lambda * Math.Sqrt(concreteStrength));
+            }
+
+            // vc2 = (2 + 4/beta)λ√fc'
+            public double PunchingShearStressLimit2(double beta, double lambda, double concreteStrength)
+            {
+                if (beta <= 0) return 0;
+                return R((2.0 + (4.0 / beta)) * lambda * Math.Sqrt(concreteStrength));
+            }
+
+            // vc3 = (2 + alpha_s*d/b0)λ√fc'
+            public double PunchingShearStressLimit3(double alphaS, double effectiveDepth, double criticalPerimeter,
+                                                    double lambda, double concreteStrength)
+            {
+                if (criticalPerimeter <= 0) return 0;
+                return R((2.0 + ((alphaS * effectiveDepth) / criticalPerimeter)) * lambda * Math.Sqrt(concreteStrength));
+            }
+
+            // 44) vc = min(vc1, vc2, vc3)
+            public double GoverningPunchingShearStress(double vc1, double vc2, double vc3)
+            {
+                return R(Math.Min(vc1, Math.Min(vc2, vc3)));
+            }
+
+            // 45) Vnp = vc * b0 * d
+            public double NominalPunchingShearStrength(double governingShearStress, double criticalPerimeter, double effectiveDepth)
+            {
+                return R(governingShearStress * criticalPerimeter * effectiveDepth);
+            }
+
+            // 46) phiVnp = phi * Vnp / 1000
+            public double DesignPunchingShearStrength(double phi, double nominalPunchingShearStrength)
+            {
+                return R((phi * nominalPunchingShearStrength) / 1000.0);
+            }
+
+            // 47) Up = Vup / phiVnp
+            public double PunchingShearUtilizationRatio(double punchingShearDemand, double designPunchingShearStrength)
+            {
+                if (designPunchingShearStrength <= 0) return 0;
+                return R(punchingShearDemand / designPunchingShearStrength);
+            }
+
+            public bool PunchingShearPass(double utilizationRatio)
+            {
+                return utilizationRatio <= 1.0;
+            }
+
+            // ==============================
+            // 3.6 Concrete Bearing Check
+            // ==============================
+
+            // 48) Rn
+            public double NominalConcreteBearingStrength(double concreteStrength, double loadedAreaA1,
+                                                         double supportingAreaA2, bool enhancementPermitted)
+            {
+                if (loadedAreaA1 <= 0) return 0;
+
+                if (enhancementPermitted)
+                {
+                    double rnEnhanced = 0.85 * concreteStrength * loadedAreaA1 * Math.Sqrt(supportingAreaA2 / loadedAreaA1);
+                    double rnLimit = 2.0 * (0.85 * concreteStrength * loadedAreaA1);
+
+                    return R(Math.Min(rnEnhanced, rnLimit));
+                }
+
+                return R(0.85 * concreteStrength * loadedAreaA1);
+            }
+
+            // 49) phiRn = phi * Rn / 1000
+            public double DesignConcreteBearingStrength(double phi, double nominalBearingStrength)
+            {
+                return R((phi * nominalBearingStrength) / 1000.0);
+            }
+
+            // 50) Ubr = Bu / phiRn
+            public double ConcreteBearingUtilizationRatio(double bearingDemand, double designBearingStrength)
+            {
+                if (designBearingStrength <= 0) return 0;
+                return R(bearingDemand / designBearingStrength);
+            }
+
+            public bool ConcreteBearingPass(double utilizationRatio)
+            {
+                return utilizationRatio <= 1.0;
+            }
+        }
     }
 }

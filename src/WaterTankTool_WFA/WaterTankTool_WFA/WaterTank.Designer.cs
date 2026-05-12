@@ -60,7 +60,6 @@ partial class WaterTank
         anchorToolStripMenuItem = new ToolStripMenuItem();
         basePlateToolStripMenuItem = new ToolStripMenuItem();
         designToolStripMenuItem = new ToolStripMenuItem();
-        riserToolStripMenuItem = new ToolStripMenuItem();
         analyzeToolStripMenuItem = new ToolStripMenuItem();
         aboutToolStripMenuItem = new ToolStripMenuItem();
         exportOutputToolStripMenuItem = new ToolStripMenuItem();
@@ -242,38 +241,38 @@ partial class WaterTank
         // 
         // foundationToolStripMenuItem
         // 
-        foundationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { materialToolStripMenuItem1, geoTechnicalPropertiesToolStripMenuItem, loadToolStripMenuItem1, anchorToolStripMenuItem, basePlateToolStripMenuItem, designToolStripMenuItem, riserToolStripMenuItem, analyzeToolStripMenuItem });
+        foundationToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { materialToolStripMenuItem1, geoTechnicalPropertiesToolStripMenuItem, loadToolStripMenuItem1, anchorToolStripMenuItem, basePlateToolStripMenuItem, designToolStripMenuItem, analyzeToolStripMenuItem });
         foundationToolStripMenuItem.Name = "foundationToolStripMenuItem";
         resources.ApplyResources(foundationToolStripMenuItem, "foundationToolStripMenuItem");
         // 
         // materialToolStripMenuItem1
         // 
-        materialToolStripMenuItem1.Name = "materialToolStripMenuItem1";
         resources.ApplyResources(materialToolStripMenuItem1, "materialToolStripMenuItem1");
+        materialToolStripMenuItem1.Name = "materialToolStripMenuItem1";
         materialToolStripMenuItem1.Click += materialToolStripMenuItem1_Click;
         // 
         // geoTechnicalPropertiesToolStripMenuItem
         // 
-        geoTechnicalPropertiesToolStripMenuItem.Name = "geoTechnicalPropertiesToolStripMenuItem";
         resources.ApplyResources(geoTechnicalPropertiesToolStripMenuItem, "geoTechnicalPropertiesToolStripMenuItem");
+        geoTechnicalPropertiesToolStripMenuItem.Name = "geoTechnicalPropertiesToolStripMenuItem";
         geoTechnicalPropertiesToolStripMenuItem.Click += geoTechnicalPropertiesToolStripMenuItem_Click;
         // 
         // loadToolStripMenuItem1
         // 
-        loadToolStripMenuItem1.Name = "loadToolStripMenuItem1";
         resources.ApplyResources(loadToolStripMenuItem1, "loadToolStripMenuItem1");
+        loadToolStripMenuItem1.Name = "loadToolStripMenuItem1";
         loadToolStripMenuItem1.Click += loadToolStripMenuItem1_Click;
         // 
         // anchorToolStripMenuItem
         // 
-        anchorToolStripMenuItem.Name = "anchorToolStripMenuItem";
         resources.ApplyResources(anchorToolStripMenuItem, "anchorToolStripMenuItem");
+        anchorToolStripMenuItem.Name = "anchorToolStripMenuItem";
         anchorToolStripMenuItem.Click += anchorToolStripMenuItem_Click;
         // 
         // basePlateToolStripMenuItem
         // 
-        basePlateToolStripMenuItem.Name = "basePlateToolStripMenuItem";
         resources.ApplyResources(basePlateToolStripMenuItem, "basePlateToolStripMenuItem");
+        basePlateToolStripMenuItem.Name = "basePlateToolStripMenuItem";
         basePlateToolStripMenuItem.Click += basePlateToolStripMenuItem_Click;
         // 
         // designToolStripMenuItem
@@ -282,15 +281,10 @@ partial class WaterTank
         resources.ApplyResources(designToolStripMenuItem, "designToolStripMenuItem");
         designToolStripMenuItem.Click += designToolStripMenuItem_Click;
         // 
-        // riserToolStripMenuItem
-        // 
-        riserToolStripMenuItem.Name = "riserToolStripMenuItem";
-        resources.ApplyResources(riserToolStripMenuItem, "riserToolStripMenuItem");
-        // 
         // analyzeToolStripMenuItem
         // 
-        analyzeToolStripMenuItem.Name = "analyzeToolStripMenuItem";
         resources.ApplyResources(analyzeToolStripMenuItem, "analyzeToolStripMenuItem");
+        analyzeToolStripMenuItem.Name = "analyzeToolStripMenuItem";
         analyzeToolStripMenuItem.Click += analyzeToolStripMenuItem_Click;
         // 
         // aboutToolStripMenuItem

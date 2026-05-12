@@ -278,7 +278,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = button2;
-            ClientSize = new Size(320, 395);
+            ClientSize = new Size(306, 381);
             Controls.Add(groupBox2);
             Controls.Add(button2);
             Controls.Add(button1);
