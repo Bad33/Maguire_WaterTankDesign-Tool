@@ -261,7 +261,7 @@ namespace WaterTankTool_WFA
             };
             Label copyrightText = new Label
             {
-                Text = "© 2024 SDSU - Iron Maguire. All Rights Reserved.\n",
+                Text = "Tank\n",
                 Font = new Font("Segoe UI", 8, FontStyle.Regular),
                 ForeColor = Color.White,
                 AutoSize = true,
