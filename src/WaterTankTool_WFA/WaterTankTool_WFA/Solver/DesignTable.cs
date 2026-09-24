@@ -34,8 +34,8 @@ namespace WaterTankTool_WFA.Solver
 
             if (_context.SnowLoadEntity.FirstOrDefault() == null)
             {
-                ShowError("Please add Snow Load first!");   // shows once
-                return;                                     // skip the rest
+                ShowError("Please add Snow Load first!");   
+                return;                                     
             }
 
             try
@@ -150,7 +150,7 @@ namespace WaterTankTool_WFA.Solver
                         Fa = 0,
                         Fb = 0
                     });
-                    continue; // <-- skip KLr/Kf/Fa/Fb math
+                    continue; 
                 }
 
                 revCount++;
@@ -181,7 +181,7 @@ namespace WaterTankTool_WFA.Solver
                 }
          
 
-                // Kf, Fa, Fb as you already do...
+              
                 double Cc = temp[i].Cc;
                 double Fl = temp[i].Fl;
                 double Kf = klr <= 25
