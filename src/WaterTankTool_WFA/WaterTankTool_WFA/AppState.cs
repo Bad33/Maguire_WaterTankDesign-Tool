@@ -7,7 +7,7 @@ namespace WaterTankTool_WFA
 {
     public static class AppState
     {
-        // ====== Your state (with defaults) ======
+ 
         public static int NoOfColumns { get; set; } = 1;
         public static TankType CurrentTankType { get; set; } = TankType.None;
         public static string Fy { get; set; } = "36000";
@@ -16,11 +16,11 @@ namespace WaterTankTool_WFA
         public static double struts { get; set; } = 0;
         public static double crossBracing { get; set; } = 0;
 
-        // ====== Persistence ======
+
         private static readonly JsonSerializerOptions JsonOpts = new()
         {
             WriteIndented = true,
-            // Store enums as strings so renumbering won't break old files
+
             Converters = { new JsonStringEnumConverter() }
         };
 
@@ -33,7 +33,7 @@ namespace WaterTankTool_WFA
 
         public static void Load()
         {
-            if (_loadedOnce) return; // guard against double-load
+            if (_loadedOnce) return; 
             _loadedOnce = true;
 
             try
@@ -59,7 +59,7 @@ namespace WaterTankTool_WFA
             }
             catch
             {
-                // Corrupt or unreadable file → ignore and keep defaults
+             
             }
         }
 
@@ -86,7 +86,7 @@ namespace WaterTankTool_WFA
             }
             catch
             {
-                // Swallow errors (e.g., disk locked). You can log if you have logging.
+                
             }
         }
 
