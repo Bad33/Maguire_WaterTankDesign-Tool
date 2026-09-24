@@ -146,7 +146,7 @@ namespace WaterTankTool_WFA
 
             var footer = new Label
             {
-                Text = "© 2024 SDSU • Maguire Iron • Water Tank Design Tool",
+                Text = "Water Tank Design Tool",
                 Dock = DockStyle.Fill,
                 ForeColor = Color.FromArgb(220, 235, 235, 235),
                 Font = new Font("Segoe UI", 8.8F, FontStyle.Regular),
