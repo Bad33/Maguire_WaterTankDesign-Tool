@@ -34,7 +34,7 @@ namespace WaterTankTool_WFA.Foundation_Design
         {
             try
             {
-                // load first record; change this if later you support multiple anchor bolt records
+            
                 _existingAnchorBolt = _context.AnchorBoltEntity.FirstOrDefault();
 
                 if (_existingAnchorBolt == null)
@@ -71,8 +71,7 @@ namespace WaterTankTool_WFA.Foundation_Design
         {
             try
             {
-                // if record exists -> update it
-                // else -> create new one
+ 
                 var entity = _existingAnchorBolt ?? new AnchorBoltEntity();
 
                 entity.Nb = ParseIntRequired(textBox1, "Total Number");
